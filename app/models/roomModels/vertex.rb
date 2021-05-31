@@ -19,7 +19,7 @@ class Vertex
   end
 
   def setID(id)
-    this.id=id
+    @id=id
   end
 
   def getID
@@ -27,7 +27,7 @@ class Vertex
   end
 
   def setName(name)
-    this.name=name
+    @name=name
   end
 
   def getName
@@ -35,7 +35,7 @@ class Vertex
   end
 
   def setgraphicID(graphicID)
-    this.graphicID=graphicID
+    @graphicID=graphicID
   end
 
   def getgraphicID
@@ -43,8 +43,8 @@ class Vertex
   end
 
   def setPosition(x,y)
-    this.x = x
-    this.y = y
+    @x = x
+    @y = y
   end
 
   def getPosition
@@ -52,8 +52,8 @@ class Vertex
   end
 
   def setDimension(width,height)
-    this.width = width
-    this.height = height
+    @width = width
+    @height = height
   end
 
   def getDimensions
