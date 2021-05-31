@@ -8,6 +8,16 @@ class Vertex
   int width
   int height
 
+  def initialize(id,name,graphicID,x,y,width,height)
+    this.id=id
+    this.name=name
+    this.graphicID=graphicID
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+  end
+
   def setID(id)
     this.id=id
   end
