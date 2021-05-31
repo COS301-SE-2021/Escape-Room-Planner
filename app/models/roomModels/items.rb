@@ -1,0 +1,2 @@
+class Items < Vertex
+end

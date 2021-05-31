@@ -1,0 +1,2 @@
+class Clues < Items
+end
