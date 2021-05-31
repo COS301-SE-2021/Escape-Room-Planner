@@ -1,7 +1,7 @@
 class Puzzle < Vertex
 
   def initialize(e, d)
-    @estimateTime = e
+    @estimatetime = e
     @description = d
   end
 

@@ -1,6 +1,5 @@
 class Vertex
 
-  
   def initialize(id, name, graphicid, x, y, width, height)
     @id = id
     @name = name
