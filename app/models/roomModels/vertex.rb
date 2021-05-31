@@ -4,52 +4,52 @@ class Vertex
   def initialize(id, name, graphicID, x, y, width, height)
     @id = id
     @name = name
-    @graphicID = graphicID
-    @x = x
-    @y = y
+    @graphicid = graphicID
+    @xpos = x
+    @ypos = y
     @width = width
     @height = height
   end
 
-  def setID(id)
+  def setid(id)
     @id = id
   end
 
-  def getID
+  def getid
     @id
   end
 
-  def setName(name)
+  def setname(name)
     @name = name
   end
 
-  def getName
+  def getname
     @name
   end
 
-  def setgraphicID(graphicID)
-    @graphicID = graphicID
+  def setgraphicid(graphicid)
+    @graphicid = graphicid
   end
 
-  def getgraphicID
-     @graphicID
+  def getgraphicid
+     @graphicid
   end
 
-  def setPosition(x, y)
-    @x = x
-    @y = y
+  def setposition(x, y)
+    @xpos = x
+    @ypos = y
   end
 
-  def getPosition
-    [@x, @y]
+  def getposition
+    [@xpos, @ypos]
   end
 
-  def setDimension(width, height)
+  def setdimension(width, height)
     @width = width
     @height = height
   end
 
-  def getDimensions
+  def getdimensions
     [@width, @height]
   end
 
