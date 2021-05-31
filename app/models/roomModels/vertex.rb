@@ -1,6 +1,6 @@
 class Vertex
 
-
+  
   def initialize(id, name, graphicID, x, y, width, height)
     @id = id
     @name = name
@@ -16,7 +16,7 @@ class Vertex
   end
 
   def getID
-    return id
+    @id
   end
 
   def setName(name)
@@ -24,7 +24,7 @@ class Vertex
   end
 
   def getName
-    return name
+    @name
   end
 
   def setgraphicID(graphicID)
@@ -32,7 +32,7 @@ class Vertex
   end
 
   def getgraphicID
-    return graphicID
+     @graphicID
   end
 
   def setPosition(x, y)
@@ -41,7 +41,7 @@ class Vertex
   end
 
   def getPosition
-    return x, y
+    [@x, @y]
   end
 
   def setDimension(width, height)
@@ -50,7 +50,7 @@ class Vertex
   end
 
   def getDimensions
-    return width, height
+    [@width, @height]
   end
 
 end
