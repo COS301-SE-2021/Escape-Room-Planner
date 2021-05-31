@@ -1,12 +1,12 @@
 class Vertex
 
-  var id
-  var name
-  var graphicID
-  var x
-  var y
-  var width
-  var height
+  id
+  name
+  graphicID
+  x
+  y
+  width
+  height
 
   def initialize(id,name,graphicID,x,y,width,height)
     this.id=id
