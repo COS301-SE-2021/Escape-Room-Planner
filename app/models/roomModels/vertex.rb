@@ -9,13 +9,13 @@ class Vertex
   height
 
   def initialize(id,name,graphicID,x,y,width,height)
-    this.id=id
-    this.name=name
-    this.graphicID=graphicID
-    this.x = x
-    this.y = y
-    this.width = width
-    this.height = height
+    @id=id
+    @name=name
+    @graphicID=graphicID
+    @x = x
+    @y = y
+    @width = width
+    @height = height
   end
 
   def setID(id)
