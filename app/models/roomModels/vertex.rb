@@ -1,10 +1,10 @@
 class Vertex
 
   
-  def initialize(id, name, graphicID, x, y, width, height)
+  def initialize(id, name, graphicid, x, y, width, height)
     @id = id
     @name = name
-    @graphicid = graphicID
+    @graphicid = graphicid
     @xpos = x
     @ypos = y
     @width = width
