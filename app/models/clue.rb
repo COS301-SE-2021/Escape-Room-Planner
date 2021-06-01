@@ -1,0 +1,2 @@
+class PClue < Vertex
+end
