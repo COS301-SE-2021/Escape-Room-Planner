@@ -1,0 +1,2 @@
+class Vertex < ApplicationRecord
+end
