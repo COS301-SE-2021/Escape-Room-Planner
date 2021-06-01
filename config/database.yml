@@ -9,8 +9,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
-d
-evelopment:
+development:
   adapter: postgresql
   database: EscapeRoomPlanner
   username: postgres
