@@ -1,3 +1,3 @@
-class Puzzle < Vertex
+class Keys < Vertex
 
 end

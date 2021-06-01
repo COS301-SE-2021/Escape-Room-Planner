@@ -1,2 +1,2 @@
-class PClue < Vertex
+class Clue < Vertex
 end
