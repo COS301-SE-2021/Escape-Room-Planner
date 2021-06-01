@@ -1,0 +1,2 @@
+class EscapeRoom < ApplicationRecord
+end
