@@ -9,11 +9,12 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
+
 development:
   adapter: postgresql
   database: EscapeRoomPlanner
   username: postgres
-  password:
+  password: Pat02052
   host: localhost
   encoding: UTF8
 # Warning: The database defined as "test" will be erased and
