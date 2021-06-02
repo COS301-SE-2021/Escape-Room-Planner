@@ -24,7 +24,7 @@ test:
   adapter: postgresql
   database: TestEscapeRoomPlanner
   username: postgres
-  password: Egor63775
+  password: #password
   host: localhost
   encoding: UTF8
 
