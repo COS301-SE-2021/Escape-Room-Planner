@@ -66,7 +66,7 @@ class VertexTest < ActiveSupport::TestCase
 
   test 'cannot save vertex without graphic id' do
     vertex = Vertex.new(type: 'Keys', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
-                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        graphicid: nil, nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
                         clue: 'tc1', escape_room_id: 1)
     assert_not vertex.save, 'Saved a vertex without height'
   end
