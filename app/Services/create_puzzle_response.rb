@@ -1,25 +1,11 @@
 class CreatePuzzleResponse
 
-  attr_accessor :time,:pieces, :description
+  attr_accessor id, :time, :description
 
-    def initialize(time, pieces, description)
-      @time = time
-      @pieces = pieces
-      @description = description
-    end
+  def initialize(id, time, description)
+    @id = id
+    @time = time
+    @description = description
+  end
 
-    # get method
-    def get_time
-      @time
-    end
-
-    # get method
-    def get_pieces
-      @pieces
-    end
-
-    # get method
-    def get_description
-      @description
-    end
 end
