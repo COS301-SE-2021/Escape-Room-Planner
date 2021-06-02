@@ -10,16 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_01_164445) do
+
+ActiveRecord::Schema.define(version: 2021_06_02_081240) do
+
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "escape_rooms", force: :cascade do |t|
-    t.string "startVertex"
-    t.string "endVertex"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "endVertex"
+    t.string "startVertex"
   end
 
   create_table "vertices", force: :cascade do |t|
@@ -36,7 +38,6 @@ ActiveRecord::Schema.define(version: 2021_06_01_164445) do
     t.time "estimatedTime"
     t.string "description"
     t.string "clue"
-    t.string "escape_rooms_id"
     t.bigint "escape_room_id", default: 1, null: false
     t.index ["escape_room_id"], name: "index_vertices_on_escape_room_id"
   end
