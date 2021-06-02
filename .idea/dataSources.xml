@@ -10,5 +10,12 @@
       <jdbc-url>jdbc:postgresql://127.0.0.1:5432/EscapeRoomPlanner</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="postgre@HEROKU" uuid="c6b34757-dd09-4bee-a9ed-e96a02c2eba8">
+      <driver-ref>postgresql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://ec2-52-87-107-83.compute-1.amazonaws.com:5432/df997a649khaf3</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>
