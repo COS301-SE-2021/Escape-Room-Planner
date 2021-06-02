@@ -1,11 +1,9 @@
 class CreatePuzzleResponse
 
-  attr_accessor id, :time, :description
+  attr_accessor :id
 
-  def initialize(id, time, description)
+  def initialize(id)
     @id = id
-    @time = time
-    @description = description
   end
 
 end

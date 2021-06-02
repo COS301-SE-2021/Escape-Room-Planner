@@ -7,8 +7,8 @@ class RoomServices
     end
 
     @puzzle = Puzzle.new
-    @puzle.save
-    @response = CreatePuzzleResponse.new(@puzzle.time, @puzzle.pieces, @puzzle.description)
+    @puzzle.save
+    @response = CreatePuzzleResponse.new(@puzzle.id)
 
     # Return the response
     @response
