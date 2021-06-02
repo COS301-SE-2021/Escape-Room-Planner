@@ -6,4 +6,5 @@ class RoomServices
       @response = CreateEscaperoomResponse.new(@escapeRoom.id)
       @response
    end
+
 end
