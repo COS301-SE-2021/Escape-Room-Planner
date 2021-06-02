@@ -8,7 +8,7 @@ class CreateCLueRequest
     @clue = c
   end
   #get Method
-  def getClue(c)
+  def clue(c)
     @clue
   end
 end
