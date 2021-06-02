@@ -9,27 +9,27 @@ class PuzzleTest < ActiveSupport::TestCase
 
   def test_createPuzzle
 
-    # beforetest=EscapeRoom.count
+    beforetest=Puzzle.count
     req = CreatePuzzleRequest.new("30", 30, "Recreate the image")
     rs = PuzzleServices.new
-    rs.create(req)
+    rs.createPuzzle(req)
 
-    assert_not_equal(EscapeRoom.count, beforetest)
+    assert_not_equal(Puzzle.count, beforetest)
   end
 
-  def test_checkCreateEscapeRoomSaved
-    req = CreateEscaperoomRequest.new
-    rs = RoomServices.new
-    resp = rs.createEscapeRoom(req)
+  def test_checkCreatePuzzleSaved
+    req = CreatePuzzleRequest.new
+    rs = PuzzleServices.new
+    resp = rs.createPuzzle(req)
 
     assert_not_equal(resp.id, 0)
   end
 
-  def test_checkCreateEscapeRoomNullRequest
+  def test_checkCreatePuzzleNullRequest
     req = nil
     rs = RoomServices.new
-    exception = assert_raise(StandardError){rs.createEscapeRoom(req)}
-    assert_equal("CreateEscaperoomRequest null", exception.message)
+    exception = assert_raise(StandardError){rs.createPuzzle(req)}
+    assert_equal("CreatePuzzleRequest null", exception.message)
   end
 
 end
