@@ -15,7 +15,7 @@ class VertexTest < ActiveSupport::TestCase
     assert_not vertex.save, 'Saved a vertex with non-defined type'
   end
 
-  test 'cannot insert a vertex without reference to a room' do
+  test 'cannot save a vertex without reference to a room' do
     vertex = Vertex.new(type: 'Keys', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
                         graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
                         clue: 'tc1', escape_room_id: nil)
@@ -24,8 +24,8 @@ class VertexTest < ActiveSupport::TestCase
 
   test 'cannot save vertex with incorrect escape room id' do
     vertex = Vertex.new(type: 'Keys', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
-                       graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
-                       clue: 'tc1', escape_room_id: 10)
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: 10)
     assert_not vertex.save, 'Saved a vertex with incorrect escape room reference'
   end
 
@@ -72,19 +72,30 @@ class VertexTest < ActiveSupport::TestCase
   end
 
   test 'cannot save puzzle without estimated time' do
-    vertex = Puzzle.new( name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+    vertex = Puzzle.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
                         graphicid: 'tc1', nextV: 'tc1', estimatedTime: nil, description: 'tc1',
                         clue: 'tc1', escape_room_id: 1)
-    assert_not vertex.save, 'Saved a vertex without estimate time'
+    assert_not vertex.save, 'Saved a puzzle without estimate time'
   end
 
   test 'cannot save puzzle without description' do
-
+    vertex = Puzzle.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: nil,
+                        clue: 'tc1', escape_room_id: 1)
+    assert_not vertex.save, 'Saved a puzzle without description'
   end
 
-  test 'cannot save clue without clue' do
+  test 'cannot save clue without clue text' do
+    vertex = Clue.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                      graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                      clue: nil, escape_room_id: 1)
+    assert_not vertex.save, 'Saved a clue without clue text'
   end
 
-  test 'cannot save container' do
+  test 'can save container' do
+    vertex = Container.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                           graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                           clue: nil, escape_room_id: 1)
+    assert vertex.save
   end
 end
