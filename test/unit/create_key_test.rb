@@ -1,6 +1,6 @@
 require 'minitest/autorun'
-require_relative '../../app/Services/Room/CreateKeyRequest'
-require_relative '../../app/Services/Room/CreateKeyResponse'
+require_relative '../../app/Services/Room/eKeyRequest'
+require_relative '../../app/Services/Room/eKeyResponse'
 
 
 class CreateKeyTest < Minitest::Unit::TestCase
