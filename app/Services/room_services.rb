@@ -1,6 +1,6 @@
 class RoomServices
 
-   def createescaperoom(request)
+   def createEscapeRoom(request)
       @escapeRoom = EscapeRoom.new
       @escapeRoom.save
       @response = CreateEscaperoomResponse.new(@escapeRoom.id)
