@@ -2,52 +2,59 @@ require 'test_helper'
 
 class VertexTest < ActiveSupport::TestCase
   test 'cannot store vertex without type' do
-    vertex = Vertex.new(:type => nil, :name => "tc1", :posx => 1.0, :posy => 1.0, :width => 1.0, :height => 1.0,
-                        :graphicid => "tc1", :nextV => 'tc1', :estimatedTime => Time.now, :description => 'tc1',
-                        :clue => 'tc1', :escape_room_id => 1) # creates a vertex of type null
+    vertex = Vertex.new(type: nil, name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: 1) # creates a vertex of type null
     assert_not vertex.save, 'Saved a vertex without a type'
   end
 
   test 'cannot insert a vertex without reference to a room' do
-    vertex = Vertex.new(:type => 'Key', :name => "tc1", :posx => 1.0, :posy => 1.0, :width => 1.0, :height => 1.0,
-                        :graphicid => "tc1", :nextV => 'tc1', :estimatedTime => Time.now, :description => 'tc1',
-                        :clue => 'tc1', :escape_room_id => nil)
+    vertex = Vertex.new(type: 'Key', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: nil)
     assert_not vertex.save, 'Saved a vertex without a reference to a room'
   end
 
   test 'cannot save vertex with incorrect escape room id' do
-    vertex = Vertex.new(:type => 'Key', :name => "tc1", :posx => 1.0, :posy => 1.0, :width => 1.0, :height => 1.0,
-                       :graphicid => "tc1", :nextV => 'tc1', :estimatedTime => Time.now, :description => 'tc1',
-                       :clue => 'tc1', :escape_room_id => 10)
+    vertex = Vertex.new(type: 'Key', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                       graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                       clue: 'tc1', escape_room_id: 10)
     assert_not vertex.save, 'Saved a vertex with incorrect escape room reference'
   end
 
   test 'cannot save vertex without name' do
-    vertex = Vertex.new(:type => 'Key', :name => nil, :posx => 1.0, :posy => 1.0, :width => 1.0, :height => 1.0,
-                        :graphicid => "tc1", :nextV => 'tc1', :estimatedTime => Time.now, :description => 'tc1',
-                        :clue => 'tc1', :escape_room_id => 1)
+    vertex = Vertex.new(type: 'Key', name: nil, posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: 1)
     assert_not vertex.save, 'Saved a vertex without a name'
   end
 
   test 'cannot save vertex without pos x' do
-    vertex = Vertex.new(:type => 'Key', :name => "tc1", :posx => nil, :posy => 1.0, :width => 1.0, :height => 1.0,
-                        :graphicid => "tc1", :nextV => 'tc1', :estimatedTime => Time.now, :description => 'tc1',
-                        :clue => 'tc1', :escape_room_id => 1)
+    vertex = Vertex.new(type: 'Key', name: 'tc1', posx: nil, posy: 1.0, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: 1)
     assert_not vertex.save, 'Saved a vertex without an x coordinate'
   end
 
   test 'cannot save vertex without pos y' do
-    vertex = Vertex.new(:type => 'Key', :name => "tc1", :posx => 1.0, :posy => nil, :width => 1.0, :height => 1.0,
-                        :graphicid => "tc1", :nextV => 'tc1', :estimatedTime => Time.now, :description => 'tc1',
-                        :clue => 'tc1', :escape_room_id => 1)
+    vertex = Vertex.new(type: 'Key', name: 'tc1', posx: 1.0, posy: nil, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: 1)
     assert_not vertex.save, 'Saved a vertex without a y coordinate'
   end
 
   test 'cannot save vertex without width' do
-
+    vertex = Vertex.new(type: 'Key', name: 'tc1', posx: 1.0, posy: 1.0, width: nil, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: 1)
+    assert_not vertex.save, 'Saved a vertex without width'
   end
 
   test 'cannot save vertex without height' do
+    vertex = Vertex.new(type: 'Key', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: nil,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: 'tc1', escape_room_id: 1)
+    assert_not vertex.save, 'Saved a vertex without height'
   end
 
   test 'cannot save vertex without graphic id' do
