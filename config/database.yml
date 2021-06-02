@@ -14,7 +14,7 @@ development:
   adapter: postgresql
   database: EscapeRoomPlanner
   username: postgres
-  password: Pat02052
+  password:
   host: localhost
   encoding: UTF8
 
@@ -22,7 +22,7 @@ test:
   adapter: postgresql
   database: EscapeRoomPlanner
   username: postgres
-  password: Pat02052
+  password:
   host: localhost
   encoding: UTF8
 # Warning: The database defined as "test" will be erased and
