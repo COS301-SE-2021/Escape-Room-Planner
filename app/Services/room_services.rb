@@ -11,8 +11,9 @@ class RoomServices
       @response
    end
 
+   #no request data so there's nothing to set
    def createKey(request)
-      @key = key.new
+      @key = Keys.new
       @key.save
       @response = CreateKeyResponse.new(@key.id)
       @response
