@@ -7,4 +7,10 @@ class RoomServices
       @response
    end
 
+   def createClue(request)
+      @clue = Clue.new(request.clue)
+      @clue.save
+      @response = CreateClueResponse.new(@clue.id)
+      @response
+   end
 end
