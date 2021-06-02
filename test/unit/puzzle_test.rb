@@ -22,12 +22,12 @@ class PuzzleTest < ActiveSupport::TestCase
     rs = PuzzleServices.new
     resp = rs.createPuzzle(req)
 
-    assert_not_equal(resp.id, 0)
+    assert_not_equal(resp.time, 0)
   end
 
   def test_checkCreatePuzzleNullRequest
     req = nil
-    rs = RoomServices.new
+    rs = PuzzleServices.new
     exception = assert_raise(StandardError){rs.createPuzzle(req)}
     assert_equal("CreatePuzzleRequest null", exception.message)
   end
