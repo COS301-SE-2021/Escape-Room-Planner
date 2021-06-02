@@ -7,5 +7,5 @@ class Vertex < ApplicationRecord
   # validates :estimatedTime
   # validates :description
   # validates :clue
-  validates :escape_room_id
+  # validates :escape_room_id
 end
