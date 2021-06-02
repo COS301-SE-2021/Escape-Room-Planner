@@ -1,6 +1,6 @@
 class PuzzleServices
   def createPuzzle(request)
-    
+
     if (request == nil)
       raise "Create Request is Null"
     end
