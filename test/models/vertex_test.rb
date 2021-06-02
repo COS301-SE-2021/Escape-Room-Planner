@@ -2,11 +2,13 @@ require 'test_helper'
 
 class VertexTest < ActiveSupport::TestCase
   test 'cannot store vertex without type' do
-    vertex = Vertex.new # creates a vertex of type null
+    vertex = Vertex.new() # creates a vertex of type null
     assert_not vertex.save, 'Saved a vertex without a type'
   end
 
   test 'cannot save vertex without escape room id' do
+    vertex = Vertex.new # creates a vertex of type null
+    assert_not vertex.save, 'Saved a vertex without an escape room id'
   end
 
   test 'cannot save vertex without name' do
