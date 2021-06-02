@@ -1,4 +1,3 @@
-
 class CreateRoomRequest
 
 end
