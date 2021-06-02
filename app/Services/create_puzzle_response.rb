@@ -1,4 +1,5 @@
 class CreatePuzzleResponse
+
   attr_accessor :time,:pieces, :description
 
     def initialize(time, pieces, description)

@@ -1,4 +1,5 @@
-class PuzzleServices
+class RoomServices
+
   def createPuzzle(request)
 
     if (request == nil)
