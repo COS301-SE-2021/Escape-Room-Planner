@@ -1,0 +1,34 @@
+class CreatePuzzleRequest
+    def initialize(time, pieces, description)
+          @time = time
+          @pieces = pieces
+          @description = description
+    end
+
+    #get method
+    def time
+        @time
+    end
+    #set method
+    def time=(time)
+        @time = time
+    end
+
+    #get method
+    def pieces
+        @pieces
+    end
+    #set method
+    def pieces=(pieces)
+        @pieces = pieces
+    end
+
+    #get method
+    def description
+        @description
+    end
+    #set method
+    def description=(description)
+        @description = description
+    end
+end
