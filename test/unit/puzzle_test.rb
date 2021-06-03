@@ -10,6 +10,7 @@ class PuzzleTest < ActiveSupport::TestCase
     roomID = room.id
     req = CreatePuzzleRequest.new
     req.roomID = roomID
+    req.name = ""
     req.description = ""
     req.estimatedTime = Time.now
     req.graphicid = ""
@@ -31,7 +32,7 @@ class PuzzleTest < ActiveSupport::TestCase
     roomID = room.id
     req = CreatePuzzleRequest.new
     req.roomID = roomID
-    req.roomID = roomID
+    req.name = ""
     req.description = ""
     req.estimatedTime = Time.now
     req.graphicid = ""
