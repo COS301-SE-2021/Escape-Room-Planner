@@ -87,10 +87,31 @@ class VertexTest < ActiveSupport::TestCase
     assert_not vertex.save, 'Saved a clue without clue text'
   end
 
-  test 'can save container' do
+  test 'can save valid container' do
     vertex = Container.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
                            graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
                            clue: nil, escape_room_id: 1)
+    assert vertex.save
+  end
+
+  test 'can save valid clue' do
+    vertex = Clue.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                      graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                      clue: 'test clue', escape_room_id: 1)
+    assert vertex.save
+  end
+
+  test 'can save valid puzzle' do
+    vertex = Puzzle.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: nil, escape_room_id: 1)
+    assert vertex.save
+  end
+
+  test 'can save valid key' do
+    vertex = Keys.new(name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
+                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
+                        clue: nil, escape_room_id: 1)
     assert vertex.save
   end
 end
