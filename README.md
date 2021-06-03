@@ -11,8 +11,11 @@ SRS Document: https://www.overleaf.com/read/scwrrchtjrdv <br>
 Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1
 
 
-Demo 1 Video <a href="https://drive.google.com/file/d/1VtmkSUeQapy-gyjzaYj9HEbwj1sxbXGJ/view"> here </a>
+Demo 1 Video
 
+<a href="https://drive.google.com/file/d/1VtmkSUeQapy-gyjzaYj9HEbwj1sxbXGJ/view"> SRS </a>
+
+<a href="https://drive.google.com/file/d/18oJmJ5V3iW2OtqRNgZ6lAsLhN4sm4L43/view?usp=sharing"> Testing </a>
 
 <figcaption>Patric Edwards</figcaption>
 <img src="https://media-exp1.licdn.com/dms/image/C4E03AQFQKbfxwCC34w/profile-displayphoto-shrink_800_800/0/1618567484082?e=1628121600&v=beta&t=5rXbdwkUjsTv8ePwINdrc7unpIbnHsQgxxPcvAcMRMw" alt="drawing" width="200"/>
