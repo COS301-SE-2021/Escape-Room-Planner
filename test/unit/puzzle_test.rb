@@ -1,8 +1,7 @@
-require 'test_helper'
-require './app/Services/puzzle_services'
-require './app/Services/create_puzzle_request'
-require './app/Services/create_puzzle_response'
-
+require '../test_helper'
+# require '../app/Services/puzzle_services'
+# require './app/Services/create_puzzle_request'
+# require './app/Services/create_puzzle_response'
 
 
 class PuzzleTest < ActiveSupport::TestCase
@@ -10,7 +9,7 @@ class PuzzleTest < ActiveSupport::TestCase
   def test_createPuzzle
 
     beforetest=Puzzle.count
-    req = CreatePuzzleRequest.new("30", 30, "Recreate the image")
+    req = CreatePuzzleRequest.new("30", "Recreate the image")
     rs = PuzzleServices.new
     rs.createPuzzle(req)
 
