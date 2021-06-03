@@ -1,4 +1,7 @@
+[![Build Status](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner.svg?branch=master)](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner)
+
 #Project Name: Escape-Room-Planner <br>
+
 Project Owner: EPI-USE Labs <br>
 Project Description: 
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
