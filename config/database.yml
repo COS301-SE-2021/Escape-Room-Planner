@@ -22,12 +22,9 @@ development:
 
 test:
   adapter: postgresql
-  database: df997a649khaf3
-  username: uofgtgilasgnct
-  port: 5432
-  password: ENV['HEROKU_DB_PASS']
-  host: ec2-52-87-107-83.compute-1.amazonaws.com
-  URL: jdbc:postgres://uofgtgilasgnct:fc1f7847b8c9bbf72d2be65b67eadf82d74c52e72e4e9e849c150652b7262573@ec2-52-87-107-83.compute-1.amazonaws.com:5432/df997a649khaf3
+  database: TestEscapeRoomPlanner
+  username: postgres
+  password: #pass
   encoding: UTF8
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
