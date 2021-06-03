@@ -10,6 +10,13 @@ class PuzzleTest < ActiveSupport::TestCase
     roomID = room.id
     req = CreatePuzzleRequest.new
     req.roomID = roomID
+    req.description = ""
+    req.estimatedTime = Time.now
+    req.graphicid = ""
+    req.height = 0
+    req.width = 0
+    req.posx = 0
+    req.posy = 0
     rs = RoomServices.new
     rs.createPuzzle(req)
 
@@ -24,6 +31,14 @@ class PuzzleTest < ActiveSupport::TestCase
     roomID = room.id
     req = CreatePuzzleRequest.new
     req.roomID = roomID
+    req.roomID = roomID
+    req.description = ""
+    req.estimatedTime = Time.now
+    req.graphicid = ""
+    req.height = 0
+    req.width = 0
+    req.posx = 0
+    req.posy = 0
     rs = RoomServices.new
     resp = rs.createPuzzle(req)
 
