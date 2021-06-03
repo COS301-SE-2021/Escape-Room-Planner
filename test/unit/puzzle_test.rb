@@ -31,7 +31,6 @@ class PuzzleTest < ActiveSupport::TestCase
     roomID = room.id
     req = CreatePuzzleRequest.new
     req.roomID = roomID
-    req.roomID = roomID
     req.name = 'test'
     req.description = 'test'
     req.estimatedTime = Time.now
