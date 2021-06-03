@@ -29,9 +29,13 @@ Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/proj
 ##Profiles
 
 Patric Edwards [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][1].
+
 Donavan Tristan Roux [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][2].
+
 Egor Kharatyan [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][3].
+
 Kayla Latty [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][4].
+
 Maseko Nqedile [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][5].
 
 [1]: https://www.linkedin.com/in/patric-edwards-220879204/
