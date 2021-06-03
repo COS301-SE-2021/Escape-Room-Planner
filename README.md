@@ -33,4 +33,9 @@ Donavan Tristan Roux [<img src="https://pngmind.com/wp-content/uploads/2019/08/L
 Egor Kharatyan [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][3].
 Kayla Latty [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][4].
 Maseko Nqedile [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][5].
+
 [1]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
+[2]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
+[3]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
+[4]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
+[5]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
