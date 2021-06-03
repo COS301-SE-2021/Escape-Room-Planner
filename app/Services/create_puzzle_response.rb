@@ -1,9 +1,10 @@
 class CreatePuzzleResponse
 
-  attr_accessor :id
+  attr_accessor :id, :success
 
-  def initialize(id)
+  def initialize(id, success)
     @id = id
+    @success = success
   end
 
 end

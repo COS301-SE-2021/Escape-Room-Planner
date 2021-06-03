@@ -1,6 +1,6 @@
 class CreatePuzzleRequest
 
-  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :nextV, :estimatedTime, :description
+  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :nextV, :estimatedTime, :description, :roomID
   
   def initialize
     @name = ''
@@ -12,6 +12,7 @@ class CreatePuzzleRequest
     @nextV = ''
     @estimatedTime = Time.now
     @description = ''
+    @roomID = 0
   end
 
 end
