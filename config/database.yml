@@ -20,7 +20,7 @@ development:
 
 test:
   adapter: postgresql
-  database: EscapeRoomPlanner
+  database: TestEscapeRoomPlanner
   username: postgres
   password:
   host: localhost
