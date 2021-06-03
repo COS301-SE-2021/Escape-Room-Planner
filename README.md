@@ -23,5 +23,14 @@ Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/proj
 <img src="https://media-exp1.licdn.com/dms/image/C4E03AQHh0m-cWuPkwA/profile-displayphoto-shrink_800_800/0/1618642120802?e=1628121600&v=beta&t=NWwJ7Qlxr5AIcirm0UFXGjaklZQ-zVDF9Oc1ADeRmbk" alt="drawing" width="200"/>
 
 <br>
-<figcaption>MASEKO NQEDILE</figcaption>
+<figcaption>Maseko Nqedile</figcaption>
 <img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_800_800/0/1618731388530?e=1628121600&v=beta&t=S0Om7jjeeWL5_yeW-zOlvmTSVAvZthRiUCZbsrAjuJE" alt="drawing" width="200"/>
+
+##LinkedIn Profiles
+
+Patric Edwards [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][1].
+Donavan Tristan Roux [<img src="Linkedin.png" width="25px"/>][2].
+Egor Kharatyan [<img src="Linkedin.png" width="25px"/>][3].
+Kayla Latty [<img src="Linkedin.png" width="25px"/>][4].
+Maseko Nqedile [<img src="Linkedin.png" width="25px"/>][5].
+[1]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
