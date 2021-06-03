@@ -1,24 +1,24 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-#one:
-#  id: 1
-#  type: Key
-#  name: one
-#  posx: 1
-#  posy: 1
-#  width: 1.5
-#  height: 1.5
-#  graphicid: MyString
-#  escape_room_id: 1
-#
-#two:
-#
-#  id: 2
-#  type: Clue
-#  name: two
-#  posx: 1
-#  posy: 1
-#  width: 1.5
-#  height: 1.5
-#  graphicid: MyString
-#  escape_room_id: 1
+one:
+  id: 1
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+two:
+
+  id: 2
+  type: Clue
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1

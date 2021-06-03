@@ -15,8 +15,12 @@ module Api
 
       #Get Room
       def show
-        room = EscapeRoom.find(params[:id])
-        render json: {status: 'SUCCESS', message: 'Vertex:', data: room}, status: :ok
+        begin
+          room= EscapeRoom.find(params[:id])
+          render json: {status: 'SUCCESS', message: 'Vertex:', data: room}, status: :ok
+        rescue StandardError
+          render json: {status: 'Fail', message: 'Id might not exist'}, status: :not_found
+        end
       end
 
       #Create Escape Room
