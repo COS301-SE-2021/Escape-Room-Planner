@@ -10,9 +10,10 @@ class PuzzleTest < ActiveSupport::TestCase
     roomID = room.id
     req = CreatePuzzleRequest.new
     req.roomID = roomID
-    req.description = ""
+    req.name = 'test'
+    req.description = 'test'
     req.estimatedTime = Time.now
-    req.graphicid = ""
+    req.graphicid = 'test'
     req.height = 0
     req.width = 0
     req.posx = 0
@@ -21,7 +22,6 @@ class PuzzleTest < ActiveSupport::TestCase
     rs.createPuzzle(req)
 
     assert_not_equal(Puzzle.count, beforetest)
-
   end
 
   def test_checkCreatePuzzleSaved
@@ -32,9 +32,10 @@ class PuzzleTest < ActiveSupport::TestCase
     req = CreatePuzzleRequest.new
     req.roomID = roomID
     req.roomID = roomID
-    req.description = ""
+    req.name = 'test'
+    req.description = 'test'
     req.estimatedTime = Time.now
-    req.graphicid = ""
+    req.graphicid = 'test'
     req.height = 0
     req.width = 0
     req.posx = 0

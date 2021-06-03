@@ -17,12 +17,12 @@ class RoomServices
     @puzzle.estimatedTime = request.estimatedTime
     @puzzle.description = request.description
     @puzzle.escape_room_id = request.roomID
-    
-    if @puzzle.save
-      @response = CreatePuzzleResponse.new(@puzzle.id, true)
+
+    @response = if @puzzle.save
+      CreatePuzzleResponse.new(@puzzle.id, true)
     else
-      @response = CreatePuzzleResponse.new(-1, false)
-    end
+      CreatePuzzleResponse.new(-1, false)
+                end
     # Return the response
     @response
   end
