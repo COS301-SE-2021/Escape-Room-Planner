@@ -10,13 +10,6 @@ class VertexTest < ActiveSupport::TestCase
     assert_not vertex.save, 'Saved a vertex without a type'
   end
 
-  test 'cannot store vertex with wrong type' do
-    vertex = Vertex.new(type: 'Reee', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
-                        graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
-                        clue: 'tc1', escape_room_id: 1) # creates a vertex of type null
-    assert_not vertex.save, 'Saved a vertex with non-defined type'
-  end
-
   test 'cannot save a vertex without reference to a room' do
     vertex = Vertex.new(type: 'Keys', name: 'tc1', posx: 1.0, posy: 1.0, width: 1.0, height: 1.0,
                         graphicid: 'tc1', nextV: 'tc1', estimatedTime: Time.now, description: 'tc1',
