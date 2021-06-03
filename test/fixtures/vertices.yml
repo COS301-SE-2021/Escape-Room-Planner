@@ -1,5 +1,6 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
+
 one:
   id: 1
   type: Keys
@@ -12,7 +13,6 @@ one:
   escape_room_id: 1
 
 two:
-
   id: 2
   type: Clue
   name: two
