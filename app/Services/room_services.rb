@@ -40,7 +40,7 @@ class RoomServices
 
    end
 
-  def createContainer
+  def createContainer(request)
     if (request == nil)
       raise 'CreateContainerRequest null'
     end
