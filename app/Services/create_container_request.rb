@@ -1,6 +1,6 @@
 class CreateContainerRequest
 
-  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :nextV, :containerID
+  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :nextV, :roomID
 
   def initialize
     @name = nil
@@ -9,7 +9,7 @@ class CreateContainerRequest
     @width = nil
     @height = nil
     @graphicid = nil
-    @containerID = nil
+    @roomID = nil
   end
 
 end
