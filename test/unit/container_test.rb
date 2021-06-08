@@ -43,7 +43,7 @@ class ContainerTest < ActiveSupport::TestCase
     req = nil
     rs = RoomServices.new
     exception = assert_raise(StandardError){rs.createContainer(req)}
-    assert_equal("CreatePuzzleRequest null", exception.message)
+    assert_equal("CreateContainerRequest null", exception.message)
   end
 
 end
