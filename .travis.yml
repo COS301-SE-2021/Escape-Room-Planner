@@ -1,4 +1,4 @@
-if: branch = develop
+if: branch = develop OR branch = master
 
 language: ruby
 cache:
