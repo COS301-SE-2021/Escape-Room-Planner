@@ -1,3 +1,6 @@
+require './app/Services/create_puzzle_request'
+require './app/Services/create_puzzle_response'
+require './app/Services/room_services'
 module Api
   module V1
     class VertexController < ApplicationController
@@ -8,21 +11,36 @@ module Api
       end
 
       def create
-        begin
+        
           type = params[:type]
 
-          Puzzle.create if type == 'Puzzle'
+          name=params[:name] unless params[:name].nil?
 
-          Container.create if type == 'Container'
+          graphicid=params[:graphicid] unless params[:graphicid].nil?
 
-          Keys.create if type == 'Key'
+          posy=params[:posy] unless params[:posy].nil?
 
-          Clue.create if type == 'Clue'
+          posx=params[:posx] unless params[:posx].nil?
 
-          render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{type}"}, status: :ok
+          width=params[:width] unless params[:width].nil?
+
+          height=params[:height] unless params[:height].nil?
+
+
+
+          case type
+          when 'Puzzle'
+            req = CreatePuzzleRequest.new
+            serv  = RoomServices.new
+            res=serv.createPuzzle(req)
+          else
+            render json: {status: 'Fail', message: 'Ensure type is correct with correct parameters'}, status: :not_found
+          end
+
+          render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}"}, status: :ok
         rescue StandardError
-          render json: {status: 'Fail', message: 'Ensure type is correct with correct parameters'}, status: :not_found
-        end
+          render json: {status: 'Fail', message: 'Unspecified error'}, status: :not_found
+        
       end
     end
   end
