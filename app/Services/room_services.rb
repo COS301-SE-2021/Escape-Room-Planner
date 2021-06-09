@@ -27,17 +27,30 @@ class RoomServices
     @response
   end
 
-   def createEscapeRoom(request)
+  def createEscapeRoom(request)
 
-      if  request == nil
-         raise "CreateEscaperoomRequest null"
-      end
+     if  request == nil
+        raise "CreateEscaperoomRequest null"
+     end
 
-      @escapeRoom = EscapeRoom.new
-      @escapeRoom.save
-      @response = CreateEscaperoomResponse.new(@escapeRoom.id)
-      @response
+     @escapeRoom = EscapeRoom.new
+     @escapeRoom.save
+     @response = CreateEscaperoomResponse.new(@escapeRoom.id)
+     @response
 
-   end
+ end
+
+  def removeVertex(request)
+    @response
+    vertex = Vertex.find_by_id(request.vertexID)
+    if vertex == nil
+      @response = RemoveVertexResponse.new(false)
+      @response.message = "Could not find vertex"
+    else
+      vertex.delete
+      @response = RemoveVertexResponse.new(true)
+    end
+    @response
+  end
 
 end
