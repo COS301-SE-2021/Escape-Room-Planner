@@ -11,6 +11,8 @@ class PuzzleTest < ActiveSupport::TestCase
     req = CreatePuzzleRequest.new 'test', 0, 0, 0, 0,
                                   'graphic', Time.now, 'test description', room_id
     rs = RoomServices.new
+    rs.createPuzzle(req)
+
     # assertion
     assert_not_equal(Puzzle.count, beforetest)
   end
