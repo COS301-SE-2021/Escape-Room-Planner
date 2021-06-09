@@ -44,5 +44,27 @@ class ErTest < ActiveSupport::TestCase
     assert_not_equal(Vertex.count, beforetest)
   end
 
+  def test_removeVertexResponseFailed
+
+    req = RemoveVertexRequest.new
+    req.vertexID = 6
+    req.name = "one"
+    rs = RoomServices.new
+    res = rs.removeVertex(req)
+
+    assert_equal(res.success, false)
+  end
+
+  def test_removeVertexResponseSuccess
+
+    req = RemoveVertexRequest.new
+    req.vertexID = 1
+    req.name = "one"
+    rs = RoomServices.new
+    res = rs.removeVertex(req)
+
+    assert_equal(res.success, true)
+
+  end
 
 end
