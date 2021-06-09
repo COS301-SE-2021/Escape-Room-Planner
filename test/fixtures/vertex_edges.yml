@@ -1,0 +1,7 @@
+one:
+  from_vertex_id: 1
+  to_vertex_id: 2
+
+two:
+  from_vertex_id: 1
+  to_vertex_id: 3
