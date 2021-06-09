@@ -11,10 +11,7 @@ class PuzzleTest < ActiveSupport::TestCase
     req = CreatePuzzleRequest.new 'test', 0, 0, 0, 0,
                                   'graphic', Time.now, 'test description', room_id
     rs = RoomServices.new
-    response = rs.createPuzzle(req)
-
-    puts response.to_yaml
-
+    # assertion
     assert_not_equal(Puzzle.count, beforetest)
   end
 
