@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner.svg?branch=master)](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner)
+[![Build Status](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner.svg?branch=develop)](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner)
 
 #Project Name: Escape-Room-Planner <br>
 
