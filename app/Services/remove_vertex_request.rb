@@ -1,10 +1,9 @@
-
 class RemoveVertexRequest
 
-  attr_accessor :vertextID, :name
+  attr_accessor :vertexID, :name
 
   def initialize
-    @vertextID = nil
+    @vertexID = nil
     @name = nil
   end
 

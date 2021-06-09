@@ -32,4 +32,17 @@ class ErTest < ActiveSupport::TestCase
     assert_equal("CreateEscaperoomRequest null", exception.message)
   end
 
+  def test_removeVertex
+
+    beforetest= Vertex.count
+    req = RemoveVertexRequest.new
+    req.vertexID = 1
+    req.name = "one"
+    rs = RoomServices.new
+    res = rs.removeVertex(req)
+
+    assert_not_equal(Vertex.count, beforetest)
+  end
+
+
 end

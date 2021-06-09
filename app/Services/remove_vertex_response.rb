@@ -1,6 +1,6 @@
 class RemoveVertexResponse
 
-  attr_accessor :success
+  attr_accessor :success, :message
 
   def initialize(success)
     @success = success
