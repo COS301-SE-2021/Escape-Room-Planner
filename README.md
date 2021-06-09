@@ -3,7 +3,7 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
 ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m788368677-4f8867187e66b07802dca277)
 
-#Project Name: Escape-Room-Planner <br>
+# Project Name: Escape-Room-Planner <br>
 
 Project Owner: EPI-USE Labs <br>
 Project Description: 
@@ -39,7 +39,7 @@ Demo 1 Video
 <figcaption>Maseko Nqedile</figcaption>
 <img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_800_800/0/1618731388530?e=1628121600&v=beta&t=S0Om7jjeeWL5_yeW-zOlvmTSVAvZthRiUCZbsrAjuJE" alt="drawing" width="200"/>
 
-##Profiles
+## Profiles
 
 Patric Edwards [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][1].
 
