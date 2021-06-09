@@ -13,7 +13,6 @@ class RoomServices
     @puzzle.width = request.width
     @puzzle.height = request.height
     @puzzle.graphicid = request.graphicid
-    @puzzle.nextV = request.nextV
     @puzzle.estimatedTime = request.estimatedTime
     @puzzle.description = request.description
     @puzzle.escape_room_id = request.roomID
