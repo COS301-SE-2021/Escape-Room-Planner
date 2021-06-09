@@ -1,16 +1,10 @@
 class CreateClueResponse
 
-  def initialize(i)
-    @id = i
-  end
+  attr_accessor :id, :success
 
-  #set method
-  def setID(i)
-    @id = i
-  end
-  #get method
-  def id()
-    @id
+  def initialize(id, success)
+    @id = id
+    @success = success
   end
 
 end

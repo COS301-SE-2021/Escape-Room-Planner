@@ -38,9 +38,27 @@ class RoomServices
   end
 
    def createClue(request)
-      @clue = Clue.new(request.clue)
-      @clue.save
-      @response = CreateClueResponse.new(@clue.id)
-      @response
+     if request == nil
+       return CreateClueResponse(-1, false)
+     end
+
+
+     @clue = Clue.new( request.name,
+                       request.posx,
+                       request.posy,
+                       request.width,
+                       request.height,
+                       request.graphicid,
+                       request.clue,
+                       request.roomID)
+
+     if @clue.save
+       @response = CreateClueResponse(@clue.id, true)
+     else
+       @response = CreateClueResponse(-1, false)
+     end
+
+     @response
+
    end
 end
