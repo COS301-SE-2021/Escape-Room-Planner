@@ -18,25 +18,23 @@ class RoomServices
     @puzzle.escape_room_id = request.roomID
 
     @response = if @puzzle.save
-      CreatePuzzleResponse.new(@puzzle.id, true)
-    else
-      CreatePuzzleResponse.new(-1, false)
+                  CreatePuzzleResponse.new(@puzzle.id, true)
+                else
+                  CreatePuzzleResponse.new(-1, false)
                 end
-    # Return the response
-    @response
   end
 
-   def createEscapeRoom(request)
+  def createEscapeRoom(request)
 
-      if  request == nil
-         raise "CreateEscaperoomRequest null"
-      end
+    if  request == nil
+      raise "CreateEscaperoomRequest null"
+    end
 
-      @escapeRoom = EscapeRoom.new
-      @escapeRoom.save
-      @response = CreateEscaperoomResponse.new(@escapeRoom.id)
-      @response
+     @escapeRoom = EscapeRoom.new
+     @escapeRoom.save
+     @response = CreateEscaperoomResponse.new(@escapeRoom.id)
+     @response
 
-   end
+  end
 
 end
