@@ -1,6 +1,3 @@
-require 'CreateKeyResponse'
-require 'CreateKeyRequest'
-
 
 class RoomServices
 
@@ -41,12 +38,28 @@ class RoomServices
 
   end
 
-   #no request data so there's nothing to set
    def createKey(request)
-      @key = Keys.new
-      @key.save
-      @response = CreateKeyResponse.new(@key.id)
-      @response
+
+     if(request == nil )
+       return CreateKeyResponse.new(-1, false)
+     end
+
+     @key = Keys.new(request.name,
+                     request.posx,
+                     request.posy,
+                     request.width,
+                     request.height,
+                     request.graphicid,
+                     request.roomID)
+
+     if @key.save
+       @response = CreateKeyResponse.new(@key.id, true)
+     else
+       @response = CreateKeyResponse.new(-1, false)
+     end
+
+     @response
+
    end
 
 end

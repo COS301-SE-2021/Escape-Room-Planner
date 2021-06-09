@@ -1,16 +1,30 @@
-require 'minitest/autorun'
-require_relative '../../app/Services/CreateKeyRequest'
-require_relative '../../app/Services/CreateKeyResponse'
+require 'test_helper'
 
 
-class CreateKeyTest < Minitest::Unit::TestCase
+class CreateKeyTest < ActiveSupport::TestCase
 
-  def test_CreateKeyResponse
-    key_test = CreateKeyResponse.new(1)
-    assert_equal(1, key_test.id, "Create Key Response has not set the id correctly")
+  def test_CreateKey
+
+    num_keys_before = Keys.count
+
+    escape_room = EscapeRoom.new
+    escape_room.save
+    er_id = escape_room.id
+
+    req = CreateKeyRequest.new 'test', 0, 0, 0, 0, 'graphic', er_id
+
+    rs = RoomServices.new
+    rs.createKey(req)
+
+    assert_not_equal(Keys.count, num_keys_before)
+
   end
 
-  #key doesn't have data to test
-  def test_CreateKeyRequest
+  def test_NullKey
+    req = nil
+    rs = RoomServices.new
+    response = rs.createKey(req)
+    assert_equal(false, response.success)
+
   end
 end
