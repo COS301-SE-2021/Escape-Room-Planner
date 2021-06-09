@@ -1,4 +1,5 @@
 [![Build Status](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner.svg?branch=master)](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=alert_status)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
 
 #Project Name: Escape-Room-Planner <br>
 
