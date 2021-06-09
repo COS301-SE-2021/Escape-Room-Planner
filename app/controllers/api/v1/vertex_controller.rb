@@ -12,34 +12,34 @@ module Api
 
       def create
         
-          type = params[:type]
+        type = params[:type]
 
-          name=params[:name] unless params[:name].nil?
+        name=params[:name] unless params[:name].nil?
 
-          graphicid=params[:graphicid] unless params[:graphicid].nil?
+        graphicid=params[:graphicid] unless params[:graphicid].nil?
 
-          posy=params[:posy] unless params[:posy].nil?
+        posy=params[:posy] unless params[:posy].nil?
 
-          posx=params[:posx] unless params[:posx].nil?
+        posx=params[:posx] unless params[:posx].nil?
 
-          width=params[:width] unless params[:width].nil?
+        width=params[:width] unless params[:width].nil?
 
-          height=params[:height] unless params[:height].nil?
+        height=params[:height] unless params[:height].nil?
 
 
 
-          case type
-          when 'Puzzle'
-            req = CreatePuzzleRequest.new
-            serv  = RoomServices.new
-            res=serv.createPuzzle(req)
-          else
-            render json: {status: 'Fail', message: 'Ensure type is correct with correct parameters'}, status: :not_found
-          end
+        case type
+        when 'Puzzle'
+          req = CreatePuzzleRequest.new
+          serv  = RoomServices.new
+          res=serv.createPuzzle(req)
+        else
+          render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :not_found
+        end
 
-          render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}"}, status: :ok
-        rescue StandardError
-          render json: {status: 'Fail', message: 'Unspecified error'}, status: :not_found
+        render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}"}, status: :ok
+      rescue StandardError
+        render json: {status: 'FAILED', message: 'Unspecified error'}, status: :not_found
         
       end
     end
