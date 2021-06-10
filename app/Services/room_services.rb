@@ -121,4 +121,6 @@ class RoomServices
                 end
 
   end
+
+  # my function here
 end

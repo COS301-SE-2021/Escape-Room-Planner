@@ -64,4 +64,10 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(vertex.vertices.count, 0)
   end
 
+  # make a unit test here
+  test 'sdasdasd' do
+    # dasdasdasdsa
+    # aasdasd
+    # asdasdas
+  end
 end
