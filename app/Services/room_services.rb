@@ -13,7 +13,6 @@ class RoomServices
     @puzzle.width = request.width
     @puzzle.height = request.height
     @puzzle.graphicid = request.graphicid
-    @puzzle.nextV = request.nextV
     @puzzle.estimatedTime = request.estimatedTime
     @puzzle.description = request.description
     @puzzle.escape_room_id = request.roomID
@@ -51,7 +50,6 @@ class RoomServices
     @container.width = request.width
     @container.height = request.height
     @container.graphicid = request.graphicid
-    @container.nextV = request.nextV
     @container.escape_room_id = request.roomID
 
     @response = if @container.save
