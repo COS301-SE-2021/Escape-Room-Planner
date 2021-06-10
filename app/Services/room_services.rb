@@ -48,7 +48,6 @@ class RoomServices
     @container.width = request.width
     @container.height = request.height
     @container.graphicid = request.graphicid
-    @container.nextV = request.nextV
     @container.escape_room_id = request.roomID
 
     @response = if @container.save

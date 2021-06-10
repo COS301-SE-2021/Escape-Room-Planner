@@ -18,7 +18,7 @@ class ContainerTest < ActiveSupport::TestCase
     rs = RoomServices.new
     rs.createContainer(req)
 
-    assert_not_equal(Container.count, beforetest)
+    assert_not_equal(Container.count, 1)
   end
 
   def test_checkCreateContainerSaved
