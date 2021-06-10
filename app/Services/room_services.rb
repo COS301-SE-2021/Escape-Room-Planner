@@ -1,3 +1,4 @@
+
 class RoomServices
 
   def createPuzzle(request)
@@ -34,7 +35,51 @@ class RoomServices
     @escapeRoom.save
     @response = CreateEscaperoomResponse.new(@escapeRoom.id)
     @response
+  end
 
+  def createKey(request)
+
+    if request == nil
+      return CreateKeyResponse.new(-1, false)
+    end
+
+    @key = Keys.new
+    @key.name = request.name
+    @key.posx = request.posx
+    @key.posy = request.posy
+    @key.width = request.width
+    @key.height = request.height
+    @key.graphicid = request.graphicid
+    @key.escape_room_id = request.roomID
+
+    @response = if @key.save
+                  CreateKeyResponse.new(@key.id, true)
+                else
+                  CreateKeyResponse.new(-1, false)
+                end
+
+  end
+
+  def createContainer(request)
+    if (request == nil)
+      raise 'CreateContainerRequest null'
+    end
+
+    @container = Container.new
+    @container.posx = request.posx
+    @container.posy = request.posy
+    @container.width = request.width
+    @container.height = request.height
+    @container.graphicid = request.graphicid
+    @container.escape_room_id = request.roomID
+
+    @response = if @container.save
+                  CreateContainerResponse.new(@container.id, true)
+                else
+                  CreateContainerResponse.new(-1, false)
+                end
+    # Return the response
+    @response
   end
 
   def createClue(request)
