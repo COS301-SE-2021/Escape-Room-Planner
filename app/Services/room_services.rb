@@ -70,12 +70,14 @@ class RoomServices
     @container.posy = request.posy
     @container.width = request.width
     @container.height = request.height
+    @container.name = request.name
     @container.graphicid = request.graphicid
     @container.escape_room_id = request.roomID
 
     @response = if @container.save
                   CreateContainerResponse.new(@container.id, true)
                 else
+                  puts "NOT RAN"
                   CreateContainerResponse.new(-1, false)
                 end
     # Return the response
