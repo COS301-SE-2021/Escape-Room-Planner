@@ -13,32 +13,51 @@ class RoomServices
     @puzzle.width = request.width
     @puzzle.height = request.height
     @puzzle.graphicid = request.graphicid
-    @puzzle.nextV = request.nextV
     @puzzle.estimatedTime = request.estimatedTime
     @puzzle.description = request.description
     @puzzle.escape_room_id = request.roomID
 
     @response = if @puzzle.save
-      CreatePuzzleResponse.new(@puzzle.id, true)
-    else
-      CreatePuzzleResponse.new(-1, false)
+                  CreatePuzzleResponse.new(@puzzle.id, true)
+                else
+                  CreatePuzzleResponse.new(-1, false)
                 end
-    # Return the response
-    @response
   end
 
   def createEscapeRoom(request)
 
-     if  request == nil
-        raise "CreateEscaperoomRequest null"
-     end
+    if  request == nil
+      raise "CreateEscaperoomRequest null"
+    end
 
      @escapeRoom = EscapeRoom.new
      @escapeRoom.save
      @response = CreateEscaperoomResponse.new(@escapeRoom.id)
      @response
 
- end
+  end
+
+  def createContainer(request)
+    if (request == nil)
+      raise 'CreateContainerRequest null'
+    end
+
+    @container = Container.new
+    @container.posx = request.posx
+    @container.posy = request.posy
+    @container.width = request.width
+    @container.height = request.height
+    @container.graphicid = request.graphicid
+    @container.escape_room_id = request.roomID
+
+    @response = if @container.save
+                  CreateContainerResponse.new(@container.id, true)
+                else
+                  CreateContainerResponse.new(-1, false)
+                end
+    # Return the response
+    @response
+  end
 
   def removeVertex(request)
     @response

@@ -1,9 +1,11 @@
-[![Build Status](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner.svg?branch=develop)](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner)
+[![Build Status](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner.svg?branch=develop)](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner)
 
 #Project Name: Escape-Room-Planner <br>
 
 Project Owner: EPI-USE Labs <br>
+
 Project Description:
+
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
 <br>
 Team:Five Stack <br>
@@ -53,4 +55,3 @@ Maseko Nqedile [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedi
 [3]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
 [4]: https://www.linkedin.com/in/kayla-latty-793b7320b/
 [5]: https://www.linkedin.com/in/sfiso-n-maseko-300160210/
-
