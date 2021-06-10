@@ -31,35 +31,34 @@ class RoomServices
       raise "CreateEscaperoomRequest null"
     end
 
-     @escapeRoom = EscapeRoom.new
-     @escapeRoom.save
-     @response = CreateEscaperoomResponse.new(@escapeRoom.id)
-     @response
+    @escapeRoom = EscapeRoom.new
+    @escapeRoom.save
+    @response = CreateEscaperoomResponse.new(@escapeRoom.id)
+    @response
 
   end
 
-   def createKey(request)
+  def createKey(request)
 
-     if(request == nil )
-       return CreateKeyResponse.new(-1, false)
-     end
+    if request == nil
+      return CreateKeyResponse.new(-1, false)
+    end
 
-     @key = Keys.new(request.name,
-                     request.posx,
-                     request.posy,
-                     request.width,
-                     request.height,
-                     request.graphicid,
-                     request.roomID)
+    @key = Keys.new
+    @key.name = request.name
+    @key.posx = request.posx
+    @key.posy = request.posy
+    @key.width = request.width
+    @key.height = request.height
+    @key.graphicid = request.graphicid
+    @key.escape_room_id = request.roomID
 
-     if @key.save
-       @response = CreateKeyResponse.new(@key.id, true)
-     else
-       @response = CreateKeyResponse.new(-1, false)
-     end
+    @response = if @key.save
+                  CreateKeyResponse.new(@key.id, true)
+                else
+                  CreateKeyResponse.new(-1, false)
+                end
 
-     @response
-
-   end
+  end
 
 end

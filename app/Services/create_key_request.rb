@@ -1,6 +1,6 @@
 class CreateKeyRequest
 
-  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :estimatedTime, :description, :roomID
+  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :description, :roomID
 
   def initialize(name, posx, posy, width, height, graphicid, escape_room_id)
     @name = name
