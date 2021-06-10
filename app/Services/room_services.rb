@@ -94,7 +94,7 @@ class RoomServices
     raise 'disconnect_vertices_request null' if request.nil?
 
     from_vertex = Vertex.find_by_id(request.from_vertex_id)
-    raise 'From Vertex ID could not be found' if from_vertex.nil?
+    return DisconnectVerticesResponse.new(false, 'From vertex could not be found') if from_vertex.nil?
 
     to_vertex = from_vertex.vertices.find_by_id(request.to_vertex_id)
 
