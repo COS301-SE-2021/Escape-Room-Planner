@@ -28,8 +28,8 @@ class ErTest < ActiveSupport::TestCase
   def test_checkCreateEscapeRoomNullRequest
     req = nil
     rs = RoomServices.new
-    exception = assert_raise(StandardError){rs.createEscapeRoom(req)}
-    assert_equal("CreateEscaperoomRequest null", exception.message)
+    exception = assert_raise(StandardError){ rs.createEscapeRoom(req) }
+    assert_equal('CreateEscaperoomRequest null', exception.message)
   end
 
   def test_remove_vertex
@@ -62,6 +62,13 @@ class ErTest < ActiveSupport::TestCase
 
     assert_not_equal(before_test, 0)
     assert_equal(vertex.vertices.count, 0)
+  end
+
+  def test_remove_vertex_null_request
+    req = nil
+    rs = RoomServices.new
+    exception = assert_raise(StandardError){ rs.remove_vertex(req) }
+    assert_equal('removeVertexRequest null', exception.message)
   end
 
 end
