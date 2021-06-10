@@ -58,7 +58,7 @@ class ErTest < ActiveSupport::TestCase
     before_test = vertex.vertices.count
     req = RemoveVertexRequest.new(1)
     rs = RoomServices.new
-    res = rs.remove_vertex(req)
+    rs.remove_vertex(req)
 
     assert_not_equal(before_test, 0)
     assert_equal(vertex.vertices.count, 0)
@@ -68,7 +68,47 @@ class ErTest < ActiveSupport::TestCase
     req = nil
     rs = RoomServices.new
     exception = assert_raise(StandardError){ rs.remove_vertex(req) }
+
     assert_equal('removeVertexRequest null', exception.message)
   end
 
+  def test_disconnect_vertices
+    from_vertex = Vertex.find_by_id(1)
+    req = DisconnectVerticesRequest.new(1, 2)
+    rs = RoomServices.new
+    rs.disconnect_vertices(req)
+
+    assert_nil(from_vertex.vertices.find_by_id(2))
+  end
+
+  def test_disconnect_vertices_null_request
+    rs = RoomServices.new
+    exception = assert_raise(StandardError){ rs.disconnect_vertices(nil) }
+    assert_equal('disconnect_vertices_request null', exception.message)
+  end
+
+  def test_disconnect_vertices_from_vertex_not_exist
+    req = DisconnectVerticesRequest.new(100, 1)
+    rs = RoomServices.new
+    res = rs.disconnect_vertices(req)
+
+    assert_equal(res.message, 'From vertex could not be found')
+  end
+
+  def test_disconnect_vertices_no_link
+
+    req = DisconnectVerticesRequest.new(3, 1)
+    rs = RoomServices.new
+    res = rs.disconnect_vertices(req)
+
+    assert_equal(res.message, 'There is no link between vertices')
+  end
+
+  def test_disconnect_vertices_correct_response
+    req = DisconnectVerticesRequest.new(1, 2)
+    rs = RoomServices.new
+    res = rs.disconnect_vertices(req)
+
+    assert_equal(res.success, true)
+  end
 end

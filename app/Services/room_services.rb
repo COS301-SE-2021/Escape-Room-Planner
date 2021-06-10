@@ -90,6 +90,22 @@ class RoomServices
                 end
   end
 
+  def disconnect_vertices(request)
+    raise 'disconnect_vertices_request null' if request.nil?
+
+    from_vertex = Vertex.find_by_id(request.from_vertex_id)
+    return DisconnectVerticesResponse.new(false, 'From vertex could not be found') if from_vertex.nil?
+
+    to_vertex = from_vertex.vertices.find_by_id(request.to_vertex_id)
+
+    @response = if to_vertex.nil?
+                  DisconnectVerticesResponse.new(false, 'There is no link between vertices')
+                else
+                  from_vertex.vertices.delete(request.to_vertex_id)
+                  DisconnectVerticesResponse.new(true, 'Link has been removed')
+                end
+  end
+
   def createClue(request)
 
     return CreateClueResponse.new(-1, false) if request == nil
