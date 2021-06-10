@@ -96,8 +96,14 @@ class RoomServices
     from_vertex = Vertex.find_by_id(request.from_vertex_id)
     raise 'From Vertex ID could not be found' if from_vertex.nil?
 
-    from_vertex.vertices.find(request.to_vertex_id)
+    to_vertex = from_vertex.vertices.find_by_id(request.to_vertex_id)
 
+    @response = if to_vertex.nil?
+                  DisconnectVerticesResponse.new(false, 'There is no link between vertices')
+                else
+                  from_vertex.vertices.delete(request.to_vertex_id)
+                  DisconnectVerticesResponse.new(true, 'Link has been removed')
+                end
   end
 
   def createClue(request)
