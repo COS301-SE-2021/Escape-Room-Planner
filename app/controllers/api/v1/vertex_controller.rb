@@ -57,6 +57,11 @@ module Api
         when 'Key'
           req = CreateKeyRequest.new(name,posx,posy,width,height,graphicid,roomid)
           res = serv.createKey(req)
+
+        when 'Container'
+          req = CreateContainerRequest.new
+          res = serv.createContainer(req)
+
         else
           render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :not_found
           return
