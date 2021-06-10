@@ -1,4 +1,4 @@
-class ResetRoomResponse
+class ResetEscapeRoomResponse
   attr_accessor :success, :message
 
   def initialize(success, message)

@@ -1,4 +1,4 @@
-class ResetRoomRequest
+class ResetEscapeRoomRequest
   attr_accessor :auth, :room_id
 
   def initialize(auth, room_id)

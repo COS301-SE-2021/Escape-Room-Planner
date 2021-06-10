@@ -2,6 +2,8 @@ require 'test_helper'
 require './app/Services/room_services'
 require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
+require './app/Services/create_escaperoom_request'
+require './app/Services/create_escaperoom_response'
 
 
 
@@ -65,9 +67,22 @@ class ErTest < ActiveSupport::TestCase
   end
 
   # make a unit test here
-  test 'sdasdasd' do
-    # dasdasdasdsa
-    # aasdasd
-    # asdasdas
+  test 'room does reset' do
+    req = ResetEscapeRoomRequest.new 1234, 1 # auth is trivial in here
+    before_test = Vertex.find_by(escape_room_id: 1) # just to get array of objects there
+    # TEST
+    resp = RoomServices.new.reset_room(req)
+    # ASSERT that acorrect response is received
+    assert resp.success
   end
+
+  test "no authorisation room reset" do
+    req = ResetEscapeRoomRequest.new nil, 1 # auth is trivial in here
+    before_test = Vertex.find_by(escape_room_id: 1) # just to get array of objects there
+    # TEST
+    resp = RoomServices.new.reset_room(req)
+    # ASSERT that acorrect response is received
+    assert_not resp.success
+  end
+
 end
