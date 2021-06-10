@@ -90,6 +90,16 @@ class RoomServices
                 end
   end
 
+  def disconnect_vertices(request)
+    raise 'disconnect_vertices_request null' if request.nil?
+
+    from_vertex = Vertex.find_by_id(request.from_vertex_id)
+    raise 'From Vertex ID could not be found' if from_vertex.nil?
+
+    from_vertex.vertices.find(request.to_vertex_id)
+
+  end
+
   def createClue(request)
 
     return CreateClueResponse.new(-1, false) if request == nil
