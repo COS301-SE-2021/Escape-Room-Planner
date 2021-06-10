@@ -70,6 +70,7 @@ class RoomServices
     @container.posy = request.posy
     @container.width = request.width
     @container.height = request.height
+    @container.name = request.name
     @container.graphicid = request.graphicid
     @container.escape_room_id = request.roomID
 
