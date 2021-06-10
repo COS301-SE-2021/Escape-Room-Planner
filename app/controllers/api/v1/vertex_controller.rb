@@ -1,5 +1,9 @@
 require './app/Services/create_puzzle_request'
 require './app/Services/create_puzzle_response'
+require './app/Services/create_container_response'
+require './app/Services/create_container_request'
+require './app/Services/create_key_request'
+require './app/Services/create_key_response'
 require './app/Services/room_services'
 module Api
   module V1
@@ -37,6 +41,8 @@ module Api
           return
         end
 
+        serv = RoomServices.new
+
         case type
         when 'Puzzle'
 
@@ -46,8 +52,11 @@ module Api
           end
 
           req = CreatePuzzleRequest.new(name,posx,posy,width,height,graphicid,estimated_time,description,roomid)
-          serv = RoomServices.new
           res = serv.createPuzzle(req)
+
+        when 'Key'
+          req = CreateKeyRequest.new(name,posx,posy,width,height,graphicid,roomid)
+          res = serv.createKey(req)
         else
           render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :not_found
           return
