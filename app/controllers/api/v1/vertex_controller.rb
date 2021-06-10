@@ -14,27 +14,43 @@ module Api
         
         type = params[:type]
 
-        name=params[:name] unless params[:name].nil?
+        name = params[:name] 
 
-        graphicid=params[:graphicid] unless params[:graphicid].nil?
+        graphicid = params[:graphicid] 
 
-        posy=params[:posy] unless params[:posy].nil?
+        posy = params[:posy] 
 
-        posx=params[:posx] unless params[:posx].nil?
+        posx = params[:posx] 
 
-        width=params[:width] unless params[:width].nil?
+        width = params[:width] 
 
-        height=params[:height] unless params[:height].nil?
+        height = params[:height] 
+        
+        estimated_time = params[:estimated_time]
+        
+        description = params[:description]
 
+        roomid= params[:roomid]
 
+        if name.nil? || graphicid.nil? || posy.nil? || posx.nil? || width.nil? || height.nil? || roomid.nil?
+          render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
+          return
+        end
 
         case type
         when 'Puzzle'
-          req = CreatePuzzleRequest.new
-          serv  = RoomServices.new
-          res=serv.createPuzzle(req)
+
+          if estimated_time.nil? || description.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
+            return
+          end
+
+          req = CreatePuzzleRequest.new(name,posx,posy,width,height,graphicid,estimated_time,description,roomid)
+          serv = RoomServices.new
+          res = serv.createPuzzle(req)
         else
           render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :not_found
+          return
         end
 
         render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}"}, status: :ok
