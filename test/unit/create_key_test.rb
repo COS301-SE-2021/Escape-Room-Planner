@@ -11,7 +11,7 @@ class CreateKeyTest < ActiveSupport::TestCase
     escape_room.save
     er_id = escape_room.id
 
-    req = CreateKeyRequest.new 'test', 0, 0, 0, 0, 'graphic', er_id
+    req = CreateKeyRequest.new 'test', 0, 0, 0.1, 0.1, 'graphic', er_id
 
     rs = RoomServices.new
     rs.createKey(req)

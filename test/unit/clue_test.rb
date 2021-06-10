@@ -7,7 +7,7 @@ class ClueTest < ActiveSupport::TestCase
     room = EscapeRoom.new
     room.save
     room_id = room.id
-    req = CreateClueRequest.new 'test', 0, 0, 0, 0,
+    req = CreateClueRequest.new 'test', 0, 0, 0.1, 0.1,
                                 'graphic', 'clue', room_id
 
     rs = RoomServices.new
