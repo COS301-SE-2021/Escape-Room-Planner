@@ -2,7 +2,7 @@ class RoomServices
 
   def createPuzzle(request)
 
-    if (request == nil)
+    if (request.nil?)
       raise 'CreatePuzzleRequest null'
     end
 
@@ -26,8 +26,8 @@ class RoomServices
 
   def createEscapeRoom(request)
 
-    if  request == nil
-      raise "CreateEscaperoomRequest null"
+    if  request.nil?
+      raise 'CreateEscaperoomRequest null'
     end
 
      @escapeRoom = EscapeRoom.new
@@ -38,7 +38,7 @@ class RoomServices
   end
 
   def createContainer(request)
-    if (request == nil)
+    if (request.nil?)
       raise 'CreateContainerRequest null'
     end
 
@@ -62,12 +62,13 @@ class RoomServices
   def removeVertex(request)
     @response
     vertex = Vertex.find_by_id(request.vertexID)
-    if vertex == nil
-      @response = RemoveVertexResponse.new(false)
-      @response.message = "Could not find vertex"
+    if vertex.nil?
+      @response = RemoveVertexResponse.new(false, 'Vertex could not be found')
+      @response.message = 'Could not find vertex'
     else
+      vertex.vertices = []
       vertex.delete
-      @response = RemoveVertexResponse.new(true)
+      @response = RemoveVertexResponse.new(true, 'Vertex has been removed with all links')
     end
     @response
   end

@@ -35,9 +35,7 @@ class ErTest < ActiveSupport::TestCase
   def test_removeVertex
 
     beforetest= Vertex.count
-    req = RemoveVertexRequest.new
-    req.vertexID = 1
-    req.name = "one"
+    req = RemoveVertexRequest.new(1)
     rs = RoomServices.new
     res = rs.removeVertex(req)
 
@@ -46,9 +44,7 @@ class ErTest < ActiveSupport::TestCase
 
   def test_removeVertexResponseFailed
 
-    req = RemoveVertexRequest.new
-    req.vertexID = 6
-    req.name = "one"
+    req = RemoveVertexRequest.new(6)
     rs = RoomServices.new
     res = rs.removeVertex(req)
 
@@ -57,9 +53,7 @@ class ErTest < ActiveSupport::TestCase
 
   def test_removeVertexResponseSuccess
 
-    req = RemoveVertexRequest.new
-    req.vertexID = 1
-    req.name = "one"
+    req = RemoveVertexRequest.new(1)
     rs = RoomServices.new
     res = rs.removeVertex(req)
 
