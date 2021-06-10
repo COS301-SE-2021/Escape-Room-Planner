@@ -35,7 +35,6 @@ class RoomServices
     @escapeRoom.save
     @response = CreateEscaperoomResponse.new(@escapeRoom.id)
     @response
-
   end
 
   def createKey(request)
@@ -83,4 +82,29 @@ class RoomServices
     @response
   end
 
+  def createClue(request)
+
+    if request == nil
+      return CreateClueResponse.new(-1, false)
+    end
+
+
+    @clue = Clue.new
+    @clue.name = request.name
+    @clue.posx = request.posx
+    @clue.posy = request.posy
+    @clue.width = request.width
+    @clue.height = request.height
+    @clue.graphicid = request.graphicid
+    @clue.clue = request.clue
+    @clue.escape_room_id = request.roomID
+
+    @response = if @clue.save
+                  CreateClueResponse.new(@clue.id, true)
+                else
+                  CreateClueResponse.new(-1, false)
+                end
+
+  end
+  
 end
