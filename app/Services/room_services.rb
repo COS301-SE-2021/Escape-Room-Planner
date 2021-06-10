@@ -30,35 +30,36 @@ class RoomServices
       raise "CreateEscaperoomRequest null"
     end
 
-     @escapeRoom = EscapeRoom.new
-     @escapeRoom.save
-     @response = CreateEscaperoomResponse.new(@escapeRoom.id)
-     @response
+    @escapeRoom = EscapeRoom.new
+    @escapeRoom.save
+    @response = CreateEscaperoomResponse.new(@escapeRoom.id)
+    @response
 
   end
 
-   def createClue(request)
-     if request == nil
-       return CreateClueResponse(-1, false)
-     end
+  def createClue(request)
+
+    if request == nil
+      return CreateClueResponse.new(-1, false)
+    end
 
 
-     @clue = Clue.new( request.name,
-                       request.posx,
-                       request.posy,
-                       request.width,
-                       request.height,
-                       request.graphicid,
-                       request.clue,
-                       request.roomID)
+    @clue = Clue.new
+    @clue.name = request.name
+    @clue.posx = request.posx
+    @clue.posy = request.posy
+    @clue.width = request.width
+    @clue.height = request.height
+    @clue.graphicid = request.graphicid
+    @clue.clue = request.clue
+    @clue.escape_room_id = request.roomID
 
-     if @clue.save
-       @response = CreateClueResponse(@clue.id, true)
-     else
-       @response = CreateClueResponse(-1, false)
-     end
+    @response = if @clue.save
+                  CreateClueResponse.new(@clue.id, true)
+                else
+                  CreateClueResponse.new(-1, false)
+                end
 
-     @response
-
-   end
+  end
+  
 end

@@ -1,4 +1,4 @@
-class CreateCLueRequest
+class CreateClueRequest
   attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :clue, :roomID
 
   def initialize(name, posx, posy, width, height, graphicid, clue, escape_room_id)
