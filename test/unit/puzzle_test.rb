@@ -8,7 +8,7 @@ class PuzzleTest < ActiveSupport::TestCase
     room = EscapeRoom.new
     room.save
     room_id = room.id
-    req = CreatePuzzleRequest.new 'test', 0, 0, 0, 0,
+    req = CreatePuzzleRequest.new 'test', 0, 0, 0.2, 0.2,
                                   'graphic', Time.now, 'test description', room_id
     rs = RoomServices.new
     rs.createPuzzle(req)

@@ -6,7 +6,7 @@ class ContainerTest < ActiveSupport::TestCase
 
     beforetest = Container.count
     roomID = 1
-    req = CreateContainerRequest.new(0, 0, 0, 0, "test", roomID, "d")
+    req = CreateContainerRequest.new(0, 0, 0.1, 0.1, "test", roomID, "d")
     rs = RoomServices.new
     rs.createContainer(req)
 
