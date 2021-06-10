@@ -3,9 +3,7 @@ class RoomServices
 
   def createPuzzle(request)
 
-    if (request.nil?)
-      raise 'CreatePuzzleRequest null'
-    end
+    raise 'CreatePuzzleRequest null' if request.nil?
 
     @puzzle = Puzzle.new
     @puzzle.name = request.name
@@ -27,9 +25,7 @@ class RoomServices
 
   def createEscapeRoom(request)
 
-    if  request.nil?
-      raise 'CreateEscaperoomRequest null'
-    end
+    raise 'CreateEscaperoomRequest null' if request.nil?
 
     @escapeRoom = EscapeRoom.new
     @escapeRoom.save
@@ -39,9 +35,7 @@ class RoomServices
 
   def createKey(request)
 
-    if request == nil
-      return CreateKeyResponse.new(-1, false)
-    end
+    return CreateKeyResponse.new(-1, false) if request == nil
 
     @key = Keys.new
     @key.name = request.name
@@ -61,9 +55,7 @@ class RoomServices
   end
 
   def createContainer(request)
-    if (request.nil?)
-      raise 'CreateContainerRequest null'
-    end
+    raise 'CreateContainerRequest null' if request.nil?
 
     @container = Container.new
     @container.posx = request.posx
@@ -82,25 +74,24 @@ class RoomServices
     @response
   end
 
-  def removeVertex(request)
-    @response
+  # @param [Object] request
+  def remove_vertex(request)
+
+    raise 'removeVertexRequest null' if request.nil?
+
     vertex = Vertex.find_by_id(request.vertexID)
-    if vertex.nil?
-      @response = RemoveVertexResponse.new(false, 'Vertex could not be found')
-      @response.message = 'Could not find vertex'
-    else
-      vertex.vertices = []
-      vertex.delete
-      @response = RemoveVertexResponse.new(true, 'Vertex has been removed with all links')
-    end
-    @response
+
+    @response = if vertex.nil?
+                  RemoveVertexResponse.new(false, 'Vertex could not be found')
+                else
+                  vertex.destroy
+                  RemoveVertexResponse.new(true, 'Vertex has been removed with all links')
+                end
   end
 
   def createClue(request)
 
-    if request == nil
-      return CreateClueResponse.new(-1, false)
-    end
+    return CreateClueResponse.new(-1, false) if request == nil
 
 
     @clue = Clue.new
