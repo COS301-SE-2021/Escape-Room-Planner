@@ -77,7 +77,6 @@ class RoomServices
     @response = if @container.save
                   CreateContainerResponse.new(@container.id, true)
                 else
-                  puts "NOT RAN"
                   CreateContainerResponse.new(-1, false)
                 end
     # Return the response
