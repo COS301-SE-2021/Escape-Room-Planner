@@ -1,3 +1,4 @@
+
 class RoomServices
 
   def createPuzzle(request)
@@ -30,10 +31,32 @@ class RoomServices
       raise 'CreateEscaperoomRequest null'
     end
 
-     @escapeRoom = EscapeRoom.new
-     @escapeRoom.save
-     @response = CreateEscaperoomResponse.new(@escapeRoom.id)
-     @response
+    @escapeRoom = EscapeRoom.new
+    @escapeRoom.save
+    @response = CreateEscaperoomResponse.new(@escapeRoom.id)
+    @response
+  end
+
+  def createKey(request)
+
+    if request == nil
+      return CreateKeyResponse.new(-1, false)
+    end
+
+    @key = Keys.new
+    @key.name = request.name
+    @key.posx = request.posx
+    @key.posy = request.posy
+    @key.width = request.width
+    @key.height = request.height
+    @key.graphicid = request.graphicid
+    @key.escape_room_id = request.roomID
+
+    @response = if @key.save
+                  CreateKeyResponse.new(@key.id, true)
+                else
+                  CreateKeyResponse.new(-1, false)
+                end
 
   end
 
@@ -73,4 +96,28 @@ class RoomServices
     @response
   end
 
+  def createClue(request)
+
+    if request == nil
+      return CreateClueResponse.new(-1, false)
+    end
+
+
+    @clue = Clue.new
+    @clue.name = request.name
+    @clue.posx = request.posx
+    @clue.posy = request.posy
+    @clue.width = request.width
+    @clue.height = request.height
+    @clue.graphicid = request.graphicid
+    @clue.clue = request.clue
+    @clue.escape_room_id = request.roomID
+
+    @response = if @clue.save
+                  CreateClueResponse.new(@clue.id, true)
+                else
+                  CreateClueResponse.new(-1, false)
+                end
+
+  end
 end
