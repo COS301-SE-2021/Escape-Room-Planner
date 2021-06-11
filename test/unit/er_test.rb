@@ -3,8 +3,6 @@ require './app/Services/room_services'
 require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
 
-
-
 class ErTest < ActiveSupport::TestCase
 
   def test_createEscapeRoom
@@ -62,6 +60,24 @@ class ErTest < ActiveSupport::TestCase
 
     assert_not_equal(before_test, 0)
     assert_equal(vertex.vertices.count, 0)
+  end
+
+  test 'room does reset' do
+    req = ResetEscapeRoomRequest.new 1234, 1 # auth is trivial in here
+    before_test = Vertex.find_by(escape_room_id: 1) # just to get array of objects there
+    # TEST
+    resp = RoomServices.new.reset_room(req)
+    # ASSERT that acorrect response is received
+    assert resp.success
+  end
+
+  test "no authorisation room reset" do
+    req = ResetEscapeRoomRequest.new nil, 1 # auth is trivial in here
+    before_test = Vertex.find_by(escape_room_id: 1) # just to get array of objects there
+    # TEST
+    resp = RoomServices.new.reset_room(req)
+    # ASSERT that acorrect response is received
+    assert_not resp.success
   end
 
   def test_remove_vertex_null_request

@@ -128,4 +128,21 @@ class RoomServices
                 end
 
   end
+
+  def reset_room(request)
+    raise 'Request null' if request.nil?
+
+    # from request we will be able to authorize the user
+    # from request we get the room id which to reset
+
+    # do authentication here later
+
+    @response = if request.auth.nil?
+                  ResetEscapeRoomResponse.new(false, 'Authorization failed')
+                elsif Vertex.destroy_by(escape_room_id: request.room_id).nil?
+                  ResetEscapeRoomResponse.new(true, 'The room is already empty, but I cleaned it again <3')
+                else
+                  ResetEscapeRoomResponse.new(true, 'The room has been reset to default state')
+                end
+  end
 end
