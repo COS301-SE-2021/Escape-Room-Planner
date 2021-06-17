@@ -13,7 +13,7 @@
 .right-container {
   height: 100%;
   width: 50%;
-  background: blueviolet;
+  background-image: linear-gradient(to bottom right, #9400d3, #cc00cc,#ff0090, #ff0090);
   border-radius: 40px;
   float: right;
 }
@@ -84,13 +84,18 @@
   color: white;
 }
 
+#button button:hover {
+  background: #cc00cc;
+  font-size: 20px;
+}
+
 form {
-  height: 60%;
+  height: 50%;
   width: 100%;
 }
 
 form input {
-  height: 25%;
+  height: 30%;
   width: 90%;
   outline: none;
   border-radius: 10px;
@@ -101,4 +106,22 @@ form input {
   margin-bottom: 20px;
   padding-left: 10px;
   font-size: 17px;
+}
+
+.sign-in {
+  height: 17%;
+  width: 65%;
+  margin: 0 auto;
+  border-radius: 20px;
+}
+
+.sign-in button {
+  height: 100%;
+  width: 100%;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  font-size: 20px;
+  outline: none;
+  background: #00cc99;
 }
