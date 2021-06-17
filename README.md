@@ -6,7 +6,9 @@
 # Project Name: Escape-Room-Planner <br>
 
 Project Owner: EPI-USE Labs <br>
-Project Description: 
+
+Project Description:
+
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
 <br>
 Team:Five Stack <br>
