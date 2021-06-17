@@ -1,0 +1,77 @@
+
+.screen {}
+
+.container {
+  margin: 0 auto;
+  height: 500px;
+  width: 900px;
+  margin-top: 100px;
+  background: aquamarine;
+  border-radius: 40px;
+}
+
+.right-container {
+  height: 100%;
+  width: 50%;
+  background: blueviolet;
+  border-radius: 40px;
+  float: right;
+}
+
+.left-container {
+  height: 100%;
+  width: 50%;
+  background: aqua;
+  float: left;
+}
+
+.title {
+  height: 50px;
+  width: 50%;
+  margin: 0 auto;
+  background: blue;
+}
+
+.title h1 {
+  font-family: 'Abel';
+  font-size: 40px;
+  text-align: center;
+}
+
+#info {
+  margin: 0 auto;
+  height: 40%;
+  width: 80%;
+}
+
+#info h2 {
+  text-align: center;
+  font-size: 23px;
+  color: azure;
+}
+
+#info h1 {
+  text-align: center;
+  color: azure;
+  font-family: 'Abel';
+  font-size: 50px;
+}
+
+#button {
+  margin: 0 auto;
+  width: 40%;
+  height: 10%;
+  margin-top: 100px;
+}
+
+#button button {
+  width: 99%;
+  height: 99%;
+  border-radius: 20px;
+  outline: none;
+  border: white 1px groove;
+  background: transparent;
+  font-family: 'Abel';
+  font-size: 18px;
+  color: white;
+}
