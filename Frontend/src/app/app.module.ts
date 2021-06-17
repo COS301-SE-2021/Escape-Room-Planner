@@ -5,6 +5,7 @@ import { appRoutingModule } from './app.routing';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
+import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import { SignupComponent } from './pages/signup/signup.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    RoomCreatorComponent
   ],
   providers: [],
   bootstrap: [AppComponent]
