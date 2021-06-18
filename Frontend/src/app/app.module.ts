@@ -11,7 +11,7 @@ import { RoomCreatorComponent } from './pages/room-creator/room-creator.componen
 @NgModule({
   imports: [
     BrowserModule,
-    appRoutingModule
+    appRoutingModule,
   ],
   declarations: [
     AppComponent,
