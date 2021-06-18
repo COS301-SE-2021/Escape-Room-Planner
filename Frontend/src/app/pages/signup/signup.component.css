@@ -118,15 +118,20 @@ form input {
   margin-top: 50px;
 }
 
+form input:hover {
+  border: #20b2aa 2px solid;
+  height: 21%;
+}
+
 .sign-in button {
-  height: 100%;
+  height: 98%;
   width: 100%;
   border-radius: 20px;
-  border: none;
-  color: white;
+  border: #20b2aa 2px solid;
+  color: #20b2aa;
   font-size: 20px;
   outline: none;
-  background: #0000ff;
+  background: white;
   font-family: Abel;
 }
 
