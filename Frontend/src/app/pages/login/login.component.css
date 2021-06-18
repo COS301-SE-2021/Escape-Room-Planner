@@ -3,8 +3,8 @@
 
 .container {
   margin: 0 auto;
-  height: 500px;
-  width: 900px;
+  height: 450px;
+  width: 850px;
   margin-top: 100px;
   border-radius: 40px;
   border: darkgrey 1px solid;
@@ -12,8 +12,8 @@
 
 .right-container {
   height: 100%;
-  width: 50%;
-  background-image: linear-gradient(to bottom right, #9400d3, #cc00cc,#ff0090, #ff0090);
+  width: 45%;
+  background-image: linear-gradient(to bottom right, #00fa9a,#00fa9a, #20b2aa, #0000ff, #0000cd);
   border-radius: 40px;
   float: right;
 }
@@ -30,7 +30,7 @@
 
 .left-container {
   height: 100%;
-  width: 50%;
+  width: 55%;
   float: left;
 }
 
@@ -50,11 +50,12 @@
   margin: 0 auto;
   height: 40%;
   width: 80%;
+  padding-top: 20px;
 }
 
-#info h2 {
+#info p {
   text-align: center;
-  font-size: 23px;
+  font-size: 20px;
   color: azure;
 }
 
@@ -70,6 +71,7 @@
   width: 40%;
   height: 10%;
   margin-top: 100px;
+  font-family: "open sans";
 }
 
 #button button {
@@ -85,7 +87,7 @@
 }
 
 #button button:hover {
-  background: #cc00cc;
+  background-image: linear-gradient(to bottom right, #20b2aa, #20b2aa, #0000ff, #0000cd);
   font-size: 20px;
 }
 
@@ -95,7 +97,7 @@ form {
 }
 
 form input {
-  height: 30%;
+  height: 33%;
   width: 90%;
   outline: none;
   border-radius: 10px;
@@ -123,5 +125,10 @@ form input {
   color: white;
   font-size: 20px;
   outline: none;
-  background: #00cc99;
+  background: #0000ff;
+  font-family: Abel;
+}
+
+.sign-in button:hover {
+  font-size: 22px;
 }
