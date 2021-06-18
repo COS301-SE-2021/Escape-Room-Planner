@@ -44,6 +44,7 @@
   font-family: 'Abel';
   font-size: 40px;
   text-align: center;
+  color: #32de84;
 }
 
 #info {
@@ -120,7 +121,7 @@ form input {
 }
 
 form input:hover {
-  border: #20b2aa 2px solid;
+  border: #32de84 2px solid;
   height: 21%;
 }
 
@@ -128,8 +129,8 @@ form input:hover {
   height: 98%;
   width: 100%;
   border-radius: 20px;
-  border: #20b2aa 2px solid;
-  color: #20b2aa;
+  border: #32de84 2px solid;
+  color: #32de84;
   font-size: 20px;
   outline: none;
   background: white;

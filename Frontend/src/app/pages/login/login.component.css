@@ -38,6 +38,7 @@
   height: 50px;
   width: 50%;
   margin: 0 auto;
+  color: #32de84;
 }
 
 .title h1 {
@@ -122,8 +123,8 @@ form input {
   height: 98%;
   width: 100%;
   border-radius: 20px;
-  border: #20b2aa 2px solid;
-  color: #20b2aa;
+  border: #32de84 2px solid;
+  color: #32de84;
   font-size: 20px;
   outline: none;
   background: white;
@@ -131,7 +132,7 @@ form input {
 }
 
 form input:hover {
-  border: #20b2aa 2px solid;
+  border: #32de84 2px solid;
   height: 31%;
 }
 
