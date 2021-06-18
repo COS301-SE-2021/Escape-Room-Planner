@@ -20,7 +20,7 @@
 
 .details {
   width: 90%;
-  height: 60%;
+  height: 70%;
   margin: 0 auto;
   margin-top: 20px;
   text-align: center;
@@ -92,12 +92,12 @@
 }
 
 form {
-  height: 50%;
+  height: 60%;
   width: 100%;
 }
 
 form input {
-  height: 33%;
+  height: 25%;
   width: 90%;
   outline: none;
   border-radius: 10px;
@@ -115,6 +115,7 @@ form input {
   width: 65%;
   margin: 0 auto;
   border-radius: 20px;
+  margin-top: 50px;
 }
 
 .sign-in button {
