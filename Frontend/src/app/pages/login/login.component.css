@@ -131,4 +131,5 @@ form input {
 
 .sign-in button:hover {
   font-size: 22px;
+  border: #0000ff;
 }
