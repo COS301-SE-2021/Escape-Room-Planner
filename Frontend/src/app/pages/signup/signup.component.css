@@ -89,6 +89,7 @@
 #button button:hover {
   background-image: linear-gradient(to bottom right, #20b2aa, #20b2aa, #0000ff, #0000cd);
   font-size: 20px;
+  margin-left: 5px;
 }
 
 form {
@@ -137,4 +138,5 @@ form input:hover {
 
 .sign-in button:hover {
   font-size: 22px;
+  margin-left: 5px;
 }
