@@ -15,7 +15,7 @@ export class RoomCreatorComponent implements OnInit {
   objects: string = "";
 
   addObjects(type: string, loc: string){
-    this.objects+= "<img src='./assets/images/room1.png' style='width: 20px; height: 20px;' alt='NOT FOUND' class='img-thumbnail w-10' appDraggable>";
+    this.objects+= "<img src='./assets/images/"+loc+"' style='width: 20px; height: 20px;' alt='NOT FOUND' class='resize-drag' appDraggable>";
   }
 
 }
