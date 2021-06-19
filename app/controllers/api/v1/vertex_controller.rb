@@ -8,9 +8,20 @@ require './app/Services/room_services'
 require './app/Services/remove_vertex_request'
 require './app/Services/remove_vertex_response'
 
+
+
 module Api
   module V1
     class VertexController < ApplicationController
+
+      def cors_set_access_control_headers
+        headers['Access-Control-Allow-Origin'] = '*'
+        headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+        headers['Access-Control-Request-Method'] = '*'
+        headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+      end
+
+
       protect_from_forgery with: :null_session
       def index
         vertices = Vertex.all
