@@ -8,7 +8,7 @@
             <div class="container-fluid">
               <div class="row" style="padding-top: 20px;">
                 <div class="col">
-                  <img src="./assets/images/room1.png" alt="NOT FOUND" class="img-thumbnail" appDraggable>
+                  <img src="./assets/images/room1.png" (click)="addObjects('container', 'room1.png')" alt="NOT FOUND" class="img-thumbnail" appDraggable>
                   <p class="text-center text-black-50">Room 1</p>
                 </div>
                 <div class="col">
@@ -73,7 +73,9 @@
           <div class="col-sm-12"> Room Thing</div>
         </div>
         <div class="row vh-100">
-          <div class="d-lg-flex" style="background-color: grey"> Room Thing</div>
+          <div class="d-lg-flex" style="background-color: grey">
+            <div [innerHTML]="objects"></div>
+          </div>
         </div>
       </div>
     </div>
