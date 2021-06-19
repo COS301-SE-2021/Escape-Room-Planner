@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
 import { SignupComponent } from './pages/signup/signup.component';
+import {HttpClientModule} from "@angular/common/http";
 
 const routes: Routes = [
   { path: '', component: RoomCreatorComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
