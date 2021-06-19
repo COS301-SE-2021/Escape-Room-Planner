@@ -8,11 +8,11 @@
             <div class="container-fluid">
               <div class="row" style="padding-top: 20px;">
                 <div class="col">
-                  <img src="./assets/images/room1.png" (click)="addObjects('container', 'room1.png')" alt="NOT FOUND" class="img-thumbnail" appDraggable>
+                  <img src="./assets/images/room1.png" (click)="addObjects('container', 'room1.png', 10)" alt="NOT FOUND" class="img-thumbnail" appDraggable>
                   <p class="text-center text-black-50">Room 1</p>
                 </div>
                 <div class="col">
-                  <img src="./assets/images/con1.png" (click)="addObjects('container', 'con1.png')" alt="NOT FOUND" class="img-thumbnail">
+                  <img src="./assets/images/con1.png" (click)="addObjects('container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
                   <p class="text-center text-black-50">Container 1</p>
                 </div>
               </div>
@@ -23,11 +23,11 @@
             <div class="container-fluid">
               <div class="row" style="padding-top: 20px;">
                 <div class="col">
-                  <img src="./assets/images/puzzle1.png" (click)="addObjects('puzzle', 'puzzle1.png')" alt="NOT FOUND" class="img-thumbnail">
+                  <img src="./assets/images/puzzle1.png" (click)="addObjects('puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
                   <p class="text-center text-black-50">Puzzle 1</p>
                 </div>
                 <div class="col">
-                  <img src="./assets/images/puzzle1.png" (click)="addObjects('puzzle', 'puzzle1.png')" alt="NOT FOUND" class="img-thumbnail">
+                  <img src="./assets/images/puzzle1.png" (click)="addObjects('puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
                   <p class="text-center text-black-50">Puzzle 2</p>
                 </div>
               </div>
@@ -38,11 +38,11 @@
             <div class="container-fluid">
               <div class="row" style="padding-top: 20px;">
                 <div class="col">
-                  <img src="./assets/images/key1.png" (click)="addObjects('key', 'key1.png')" alt="NOT FOUND" class="img-thumbnail">
+                  <img src="./assets/images/key1.png" (click)="addObjects('key', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
                   <p class="text-center text-black-50">Key 1</p>
                 </div>
                 <div class="col">
-                  <img src="./assets/images/key1.png" (click)="addObjects('key', 'key1.png')" alt="NOT FOUND" class="img-thumbnail">
+                  <img src="./assets/images/key1.png" (click)="addObjects('key', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
                   <p class="text-center text-black-50">Key 2</p>
                 </div>
               </div>
@@ -53,11 +53,11 @@
             <div class="container-fluid">
               <div class="row" style="padding-top: 20px;">
                 <div class="col">
-                  <img src="./assets/images/clue1.png" (click)="addObjects('clue', 'clue1.png')" alt="NOT FOUND" class="img-thumbnail">
+                  <img src="./assets/images/clue1.png" (click)="addObjects('clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
                   <p class="text-center text-black-50">Clue 1</p>
                 </div>
                 <div class="col">
-                  <img src="./assets/images/clue1.png" (click)="addObjects('clue', 'clue1.png')" alt="NOT FOUND" class="img-thumbnail">
+                  <img src="./assets/images/clue1.png" (click)="addObjects('clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
                   <p class="text-center text-black-50">Clue 2</p>
                 </div>
               </div>
@@ -122,10 +122,7 @@
           </div>
         </div>
         <div class="row vh-100">
-          <div class="d-lg-flex escape-room" style="background-color: grey" #escapeRoomDiv>
-            <div>
-              <img src='./assets/images/room1.png' style='width: 200px; height: 200px;' alt='NOT FOUND' class='img-thumbnail'>
-            </div>
+          <div class="container-fluid escape-room" style="background-color: grey" #escapeRoomDiv>
           </div>
         </div>
       </div>

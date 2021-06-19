@@ -1,5 +1,4 @@
 import {Directive, ElementRef, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
-import "@interactjs/types"
 
 import interact from 'interactjs'
 
