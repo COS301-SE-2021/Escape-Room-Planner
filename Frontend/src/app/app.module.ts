@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
 import { SignupComponent } from './pages/signup/signup.component';
+import { DraggableDirective } from './directives/draggable.directive';
+import { DroppableDirective } from './directives/droppable.directive';
 import {HttpClientModule} from "@angular/common/http";
 
 const routes: Routes = [
@@ -21,7 +23,9 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     RoomCreatorComponent,
-    SignupComponent
+    SignupComponent,
+    DraggableDirective,
+    DroppableDirective
   ],
   imports: [
     BrowserModule,
