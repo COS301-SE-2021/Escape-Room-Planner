@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
+import {HttpClientModule} from "@angular/common/http";
 
 
 @NgModule({
   imports: [
     BrowserModule,
     appRoutingModule,
+    HttpClientModule,
   ],
   declarations: [
     AppComponent,
