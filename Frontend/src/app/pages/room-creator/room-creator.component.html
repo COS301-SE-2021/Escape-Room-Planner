@@ -69,12 +69,63 @@
 
     <div class="col-sm-10 d-lg-flex">
       <div class="container-fluid remove-padding">
-        <div class="row bg-warning">
-          <div class="col-sm-12"> Room Thing</div>
+        <div class="row">
+          <div class="col-sm-12 dropdown remove-padding">
+            <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              Select Escape Room
+            </button>
+            <ul class="dropdown-menu w-100 overflow-auto" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown">
+              <!--insert rooms here on button click-->
+              <li class="dropdown-item text-center"> + </li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+              <li><a class="dropdown-item">ROOM 1</a></li>
+              <li><a class="dropdown-item">ROOM 2</a></li>
+              <li><a class="dropdown-item">ROOM 3</a></li>
+
+            </ul>
+          </div>
         </div>
         <div class="row vh-100">
-          <div class="d-lg-flex" style="background-color: grey">
-            <div [innerHTML]="objects"></div>
+          <div class="d-lg-flex escape-room" style="background-color: grey" #escapeRoomDiv>
+            <div>
+              <img src='./assets/images/room1.png' style='width: 200px; height: 200px;' alt='NOT FOUND' class='img-thumbnail'>
+            </div>
           </div>
         </div>
       </div>
