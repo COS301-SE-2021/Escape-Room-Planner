@@ -1,10 +1,5 @@
 import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {BigInteger} from '@angular/compiler/src/i18n/big_integer';
 import {HttpClient} from '@angular/common/http';
-import {Time} from "@angular/common";
-import {TimeoutError} from "rxjs";
-import {timestamp} from "rxjs/operators";
-import {Timestamp} from "rxjs/internal-compatibility";
 
 @Component({
   selector: 'app-room-creator',
@@ -34,18 +29,8 @@ export class RoomCreatorComponent implements OnInit {
     let description : string = "Works";  //default description
     this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, 1);
 
-    // @ts-ignore
-    let newImage = this.renderer.createElement("img"); // create image
-    this.renderer.addClass(newImage, "resize-drag");
-    this.renderer.setStyle(newImage,"width", "75px");
-    this.renderer.setStyle(newImage,"height", "75px");
-    this.renderer.setStyle(newImage,"position", "absolute");
-    this.renderer.setStyle(newImage,"user-select", "none");
-    this.renderer.setStyle(newImage,"transform",'translate('+ this.lastPos +'px, 0px)');
-    this.renderer.setAttribute(newImage,"src", "./assets/images/"+loc);
-    this.renderer.setAttribute(newImage,"data-x", this.lastPos + "px");
-    this.renderer.setAttribute(newImage,"data-y", "0px");
-    this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newImage);
+    //spawns object on plane
+    this.spawnObjects(type, loc, this.lastPos, 0, 75, 75);
   }
 
   //use get to get all the rooms stored in db
@@ -115,6 +100,23 @@ export class RoomCreatorComponent implements OnInit {
     );
 
   }
+
+  //used to spawn objects onto plane
+  spawnObjects(type: string, loc: string, posx: number, posy: number, width: number, height: number): void{
+
+    let newObject = this.renderer.createElement("img"); // create image
+    this.renderer.addClass(newObject, "resize-drag");
+    this.renderer.setStyle(newObject,"width", width + "px");
+    this.renderer.setStyle(newObject,"height", height + "px");
+    this.renderer.setStyle(newObject,"position", "absolute");
+    this.renderer.setStyle(newObject,"user-select", "none");
+    this.renderer.setStyle(newObject,"transform",'translate('+ posx +'px, '+ posy +'px)');
+    this.renderer.setAttribute(newObject,"src", "./assets/images/" + loc);
+    this.renderer.setAttribute(newObject,"data-x", posx + "px");
+    this.renderer.setAttribute(newObject,"data-y", posy + "px");
+    this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
+  }
+
 
 }
 
