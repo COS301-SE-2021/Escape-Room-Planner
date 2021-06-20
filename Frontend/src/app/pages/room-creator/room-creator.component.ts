@@ -18,6 +18,7 @@ export class RoomCreatorComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEscapeRooms();
+    //DON : this.getVertexFromRoom();
   }
 
   //adds an object to drag on our 'canvas'
@@ -25,9 +26,9 @@ export class RoomCreatorComponent implements OnInit {
     this.lastPos += pos;
 
     //MAKE API CALL BASED ON TYPE
-    let name : string = "Object";       //default name
-    let description : string = "Works";  //default description
-    this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, 1);
+    //let name : string = "Object";       //default name
+    //let description : string = "Works";  //default description
+    //this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, 1);
 
     //spawns object on plane
     this.spawnObjects(type, loc, this.lastPos, 0, 75, 75);
@@ -49,6 +50,23 @@ export class RoomCreatorComponent implements OnInit {
     );
   }
 
+  //Get to get all vertex for room
+  getVertexFromRoom(): void{
+    //http request to rails api
+    this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/").subscribe(
+      response => {
+        //rendering <li> elements by using response
+        this.escapeRooms = response;
+        //render all the rooms
+        for (let er of response.data){
+          //spawn objects out;
+          //this.spawnObjects('','',0,0,25,25);
+        }
+      },
+      error => console.error('There was an error retrieving your rooms', error)
+    );
+  }
+
   // POST to create new room for a user
   createEscapeRoom(): void{
     let createRoomBody = {};
@@ -58,7 +76,7 @@ export class RoomCreatorComponent implements OnInit {
         //rendering <li> elements by using render function
         this.renderNewRoom(response.data);
       },
-      error => console.error('There was an error retrieving your rooms', error)
+      error => console.error('There was an error creating your rooms', error)
     );
   }
 
@@ -120,6 +138,15 @@ export class RoomCreatorComponent implements OnInit {
 
 }
 
+// For Vertex Response
+interface VertexArray {
+  data: Array<EscapeRoom>;
+  status: string;
+}
+
+
+
+//for Escape Room Response
 interface EscapeRoomArray {
   data: Array<EscapeRoom>;
   status: string;
