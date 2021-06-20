@@ -34,6 +34,7 @@ module Api
         end
       end
 
+      # PUT
       def put
         id=params[:id]
 
@@ -73,7 +74,7 @@ module Api
       def show
         id=params[:id]
 
-        if room == nil
+        if EscapeRoom.find_by(id: id).nil?
           render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
           return
         end
