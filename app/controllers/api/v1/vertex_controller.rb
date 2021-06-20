@@ -90,7 +90,7 @@ module Api
 
         when 'Clue'
           if clue.nil?
-            ender json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
             return
           end
 
