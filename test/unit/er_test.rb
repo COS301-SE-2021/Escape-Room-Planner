@@ -71,7 +71,7 @@ class ErTest < ActiveSupport::TestCase
     assert resp.success
   end
 
-  test "no authorisation room reset" do
+  test 'no authorisation room reset' do
     req = ResetEscapeRoomRequest.new nil, 1 # auth is trivial in here
     before_test = Vertex.find_by(escape_room_id: 1) # just to get array of objects there
     # TEST
@@ -184,4 +184,19 @@ class ErTest < ActiveSupport::TestCase
     assert_not_equal(vertex.width, -1)
     assert_equal(res.success, false)
   end
+
+  def test_update_vertex_incorrect_types
+    req = UpdateVertexRequest.new(1, '123','5', '-1', '1')
+    rs = RoomServices.new
+    res = rs.update_vertex(req)
+
+    vertex = Vertex.find_by_id(1)
+
+    assert_not_equal(vertex.posx, '123')
+    assert_not_equal(vertex.posy, '5')
+    assert_not_equal(vertex.height, '1')
+    assert_not_equal(vertex.width, '-1')
+    assert_equal(res.success, false)
+  end
+
 end
