@@ -32,10 +32,9 @@ export class RoomCreatorComponent implements OnInit {
     //MAKE API CALL BASED ON TYPE
     let name : string = "Object";       //default name
     let description : string = "Works";  //default description
-    this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, 1, 'some clue');
+    this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue');
 
     //spawns object on plane
-    this.spawnObjects(type, loc, this.lastPos, 0, 75, 75);
   }
 
   //use get to get all the rooms stored in db
@@ -78,9 +77,9 @@ export class RoomCreatorComponent implements OnInit {
       response => {
         console.log(response);
         //render all the vertices
-        for (let er of response.data){
+        for (let vertex of response.data){
           //spawn objects out;
-          this.spawnObjects('FixMe',er.graphicid,er.posx,er.posy,er.width,er.height);
+          this.spawnObjects(vertex.id,vertex.graphicid,vertex.posx,vertex.posy,vertex.width,vertex.height);
         }
       },
       error => console.error('There was an error retrieving vertices for the room', error)
@@ -145,13 +144,11 @@ export class RoomCreatorComponent implements OnInit {
       delete createVertexBody.clue;
     }
 
-    console.log(createVertexBody);
-
     //make post request for new vertex
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody).subscribe(
       response => {
         //will update vertex ID in html here
-        console.log(response);
+        this.spawnObjects(response.data.id, inGraphicID, this.lastPos, 0, 75, 75);
       },
       error => console.error('There was an error while creating a vertex', error)
     );
@@ -176,26 +173,29 @@ export class RoomCreatorComponent implements OnInit {
     this.renderer.setAttribute(newObject,"data-y", posy + "px");
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     // Event listener
-    this.renderer.listen(newObject,"onmouseup", (event) => this.updateVertex(event));
+    this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
   }
 
   updateVertex(event: any): void{
     let targetVertex = event.target;
 
+    console.log(targetVertex.getAttribute('vertex-id'));
+
     let updateVertexBody = {
-      id: targetVertex.getAttribute('vertex-id').match(/\d+/)[0],
-      posy: targetVertex.getAttribute('data-y').match(/\d+/)[0],
-      posx: targetVertex.getAttribute('data-x').match(/\d+/)[0],
-      height: targetVertex.getAttribute('height').match(/\d+/)[0],
-      width: targetVertex.getAttribute('width').match(/\d+/)[0],
+      id: targetVertex.getAttribute('vertex-id'),
+      posy: targetVertex.getAttribute('data-y'),
+      posx: targetVertex.getAttribute('data-x'),
+      height: targetVertex.style.height.match(/\d+/)[0],
+      width: targetVertex.style.width.match(/\d+/)[0]
     };
     // updates all the data of vertex
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/", updateVertexBody).subscribe(
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+targetVertex.getAttribute('vertex-id'), updateVertexBody).subscribe(
       response => {
         //will update vertex ID in html here
         console.log(response);
+        console.log('bug');
       },
-      error => console.error('There was an error while creating a vertex', error)
+      error => console.error('There was an error while updating the vertex', error)
     );
   }
 }
