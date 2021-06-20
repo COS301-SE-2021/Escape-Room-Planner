@@ -8,15 +8,15 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   test 'can create Puzzle' do
     post api_v1_vertex_index_path, params: { type: 'Puzzle',
-                                                        name: 'Puzzle1',
-                                                        posx: '2',
-                                                        posy: '3',
-                                                        width: '4',
-                                                        height: '5',
-                                                        graphicid: '123',
-                                                        estimated_time: '10:12',
-                                                        description: 'word',
-                                                        roomid: '1'
+                                             name: 'Puzzle1',
+                                             posx: '2',
+                                             posy: '3',
+                                             width: '4',
+                                             height: '5',
+                                             graphicid: '123',
+                                             estimated_time: '10:12',
+                                             description: 'word',
+                                             roomid: '1'
 
     }
 
@@ -98,7 +98,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   test 'can create Clue' do
     post api_v1_vertex_index_path, params: { type: 'Clue',
                                              name: 'Clue1',
-                                             clue: 'moveright',
+                                             clue: 'move',
                                              posx: '2',
                                              posy: '3',
                                              width: '4',
@@ -121,6 +121,16 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              roomid: '1'
 
     }
+    assert_response :bad_request
+  end
+
+  test 'can delete vertex' do
+    delete "#{api_v1_vertex_index_path}/1"
+    assert_response :ok
+  end
+
+  test 'cant delete vertex' do
+    delete "#{api_v1_vertex_index_path}/500"
     assert_response :bad_request
   end
 
