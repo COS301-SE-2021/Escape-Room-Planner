@@ -38,19 +38,21 @@ module Api
         render json: {status: 'SUCCESS', message: 'Vertices', data: vertices}, status: :ok
       end
 
+      # GET api/v1/vertex/id , get vertices attached to escape room
       def show
-        id=params[:roomid]
+        id=params[:id]
 
-        if room == nil
+        if EscapeRoom.find_by(id: id).nil?
           render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
           return
         end
 
-        vertices= Vertex.find_by(escape_room_id: id)
+        vertices= Vertex.where(escape_room_id: id) # finds every element that matches
+
         render json: {status: 'SUCCESS', message: 'Vertices', data: vertices}, status: :ok
       rescue StandardError
 
-        render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
+        render json: {status: 'FAILED', message: 'Something went wrong'}, status: :bad_request
       end
 
       def create
@@ -113,13 +115,13 @@ module Api
           res=serv.createClue(req)
 
         else
-          render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :bad_request
+          render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :bad_request
           return
         end
 
-        render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}"}, status: :ok
+        render json: { status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}" }, status: :ok
       rescue StandardError
-        render json: {status: 'FAILED', message: 'Unspecified error'}, status: :bad_request
+        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
 
       end #end create
 
