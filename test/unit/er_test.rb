@@ -127,4 +127,26 @@ class ErTest < ActiveSupport::TestCase
 
     assert_equal(res.success, true)
   end
+
+  def test_update_vertex_correct
+    vertexID = 1
+    posX = 10
+    posY = 11
+    width = 25
+    height = 26
+
+    req = UpdateVertexRequest.new(vertexID, posX, posY, width, height)
+    rs = RoomServices.new
+    res = rs.update_vertex(req)
+
+    vertex = Vertex.find_by_id(vertexID)
+
+    assert_equal(res.success, true)
+    assert_equal(vertex.posx, posX)
+    assert_equal(vertex.posy, posY)
+    assert_equal(vertex.height, height)
+    assert_equal(vertex.width, width)
+  end
+
+
 end

@@ -142,7 +142,7 @@ class RoomServices
     raise 'Request null' if request.nil?
 
     vertex = Vertex.find_by_id(request.id)
-    return UpdateVertexResponse(false, 'Vertex could not be found') if vertex.nil?
+    return UpdateVertexResponse.new(false, 'Vertex could not be found') if vertex.nil?
 
     vertex.posx = request.posx
     vertex.posy = request.posy
@@ -150,9 +150,9 @@ class RoomServices
     vertex.height = request.height
 
     @response = if vertex.save
-                  UpdateVertexResponse(true, 'Vertex Updated')
+                  UpdateVertexResponse.new(true, 'Vertex Updated')
                 else
-                  UpdateVertexResponse(false, 'Vertex Update parameters not working')
+                  UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
                 end
   end
 end
