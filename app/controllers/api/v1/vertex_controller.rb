@@ -94,7 +94,7 @@ module Api
             return
           end
 
-          req=new CreateClueRequest.new(name,posx,posy,width,height,graphicid,clue,roomid)
+          req=CreateClueRequest.new(name,posx,posy,width,height,graphicid,clue,roomid)
           res=serv.createClue(req)
 
         else
@@ -115,15 +115,18 @@ module Api
           render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
           return
         end
+
         serv = RoomServices.new
-        req=new RemoveVertexRequest(id)
+        req= RemoveVertexRequest.new(id)
         resp= serv.remove_vertex(req)
+
 
         unless resp.success
           render json: {status: 'FAILED', message: 'Unspecified error'}, status: :bad_request
           return
         end
 
+        render json: {status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}"}, status: :ok
         rescue StandardError
           render json: {status: 'FAILED', message: 'Unspecified error'}, status: :bad_request
 
