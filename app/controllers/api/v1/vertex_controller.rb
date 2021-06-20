@@ -54,7 +54,7 @@ module Api
         serv= RoomServices.new()
         resp=serv.update_vertex(req)
 
-        unless resp.success
+        if !resp.success
           render json: {status: 'FAILED', message: 'Vertex might not exist'}, status: :bad_request
           return
         end
@@ -71,7 +71,7 @@ module Api
       end
 
       def show
-        id=params[:roomid]
+        id=params[:id]
 
         if room == nil
           render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
