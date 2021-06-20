@@ -35,7 +35,7 @@ module Api
       end
 
       # PUT
-      def put
+      def update
         id=params[:id]
 
         posy = params[:posy]
@@ -79,13 +79,14 @@ module Api
           return
         end
 
-        vertices= Vertex.find_by(escape_room_id: id)
+        vertices= Vertex.where(escape_room_id: id)
         render json: {status: 'SUCCESS', message: 'Vertices', data: vertices}, status: :ok
       rescue StandardError
 
         render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
       end
 
+      # POST api/v1/vertrex
       def create
 
         type = params[:type]
@@ -150,7 +151,7 @@ module Api
           return
         end
 
-        render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}"}, status: :ok
+        render json: {status: 'SUCCESS', message: 'Vertex:', data: res}, status: :ok
       rescue StandardError
         render json: {status: 'FAILED', message: 'Unspecified error'}, status: :bad_request
 
