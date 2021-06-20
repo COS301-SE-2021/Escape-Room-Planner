@@ -153,4 +153,35 @@ class ErTest < ActiveSupport::TestCase
     exception = assert_raise(StandardError){rs.update_vertex(nil) }
     assert_equal('Request null', exception.message)
   end
+
+  def test_update_vertex_vertex_not_exist
+    req = UpdateVertexRequest.new(9, 5,5, 5, 5)
+    rs = RoomServices.new
+    res = rs.update_vertex(req)
+
+    assert_equal(res.success, false)
+    assert_equal(res.message, 'Vertex could not be found')
+  end
+
+  def test_update_vertex_height_negative
+    req = UpdateVertexRequest.new(1, 5,5, 5, -1)
+    rs = RoomServices.new
+    res = rs.update_vertex(req)
+
+    vertex = Vertex.find_by_id(1)
+
+    assert_not_equal(vertex.height, -1)
+    assert_equal(res.success, false)
+  end
+
+  def test_update_vertex_width_negative
+    req = UpdateVertexRequest.new(1, 5,5, -1, 1)
+    rs = RoomServices.new
+    res = rs.update_vertex(req)
+
+    vertex = Vertex.find_by_id(1)
+
+    assert_not_equal(vertex.width, -1)
+    assert_equal(res.success, false)
+  end
 end
