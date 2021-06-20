@@ -38,6 +38,21 @@ module Api
         render json: {status: 'SUCCESS', message: 'Vertices', data: vertices}, status: :ok
       end
 
+      def show
+        id=params[:roomid]
+
+        if room == nil
+          render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
+          return
+        end
+
+        vertices= Vertex.find_by(escape_room_id: id)
+        render json: {status: 'SUCCESS', message: 'Vertices', data: vertices}, status: :ok
+      rescue StandardError
+
+        render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
+      end
+
       def create
 
         type = params[:type]
