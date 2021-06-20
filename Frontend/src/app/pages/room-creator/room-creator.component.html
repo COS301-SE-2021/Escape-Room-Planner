@@ -76,7 +76,7 @@
             </button>
             <ul class="dropdown-menu w-100 overflow-auto" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown">
               <!--insert rooms here on button click-->
-              <li class="dropdown-item text-center"> + </li>
+              <li class="dropdown-item text-center"><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm" data-bs-whatever="@mdo">+</button> </li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item">ROOM 1</a></li>
               <li><a class="dropdown-item">ROOM 2</a></li>
@@ -125,6 +125,29 @@
           <div class="container-fluid escape-room" style="background-color: grey" #escapeRoomDiv>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal view popout here-->
+<div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Escape Room</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="recipient-name" class="col-form-label">Room Name:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Create</button>
       </div>
     </div>
   </div>
