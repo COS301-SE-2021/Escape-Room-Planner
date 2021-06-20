@@ -148,5 +148,9 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(vertex.width, width)
   end
 
-
+  def test_update_vertex_nil
+    rs = RoomServices.new
+    exception = assert_raise(StandardError){rs.update_vertex(nil) }
+    assert_equal('Request null', exception.message)
+  end
 end
