@@ -7,6 +7,8 @@ require './app/Services/create_key_response'
 require './app/Services/room_services'
 require './app/Services/remove_vertex_request'
 require './app/Services/remove_vertex_response'
+require './app/Services/update_vertex_request'
+require './app/Services/update_vertex_response'
 
 
 
@@ -32,27 +34,55 @@ module Api
         end
       end
 
+      def put
+        id=params[:id]
+
+        posy = params[:posy]
+
+        posx = params[:posx]
+
+        width = params[:width]
+
+        height = params[:height]
+
+        if id.nil? || posy.nil? || posx.nil? || width.nil? || height.nil?
+          render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+          return
+        end
+
+        req= UpdateVertexRequest.new(id,posx,posy,width,height)
+        serv= RoomServices.new()
+        resp=serv.update_vertex(req)
+
+        if !resp.success
+          render json: {status: 'FAILED', message: 'Vertex might not exist'}, status: :bad_request
+          return
+        end
+        render json: {status: 'SUCCESS', message: 'Vertices updates'}, status: :ok
+      rescue StandardError
+
+        render json: {status: 'FAILED', message: 'Vertex might not exist'}, status: :bad_request
+
+      end
 
       def index
         vertices = Vertex.all
         render json: {status: 'SUCCESS', message: 'Vertices', data: vertices}, status: :ok
       end
 
-      # GET api/v1/vertex/id , get vertices attached to escape room
       def show
-        id=params[:id]
+        id=params[:roomid]
 
-        if EscapeRoom.find_by(id: id).nil?
+        if room == nil
           render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
           return
         end
 
-        vertices= Vertex.where(escape_room_id: id) # finds every element that matches
-
+        vertices= Vertex.find_by(escape_room_id: id)
         render json: {status: 'SUCCESS', message: 'Vertices', data: vertices}, status: :ok
       rescue StandardError
 
-        render json: {status: 'FAILED', message: 'Something went wrong'}, status: :bad_request
+        render json: {status: 'FAILED', message: 'Room might not exist'}, status: :bad_request
       end
 
       def create
@@ -115,13 +145,13 @@ module Api
           res=serv.createClue(req)
 
         else
-          render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :bad_request
+          render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :bad_request
           return
         end
 
-        render json: { status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}" }, status: :ok
+        render json: {status: 'SUCCESS', message: 'Vertex:', data: "Created: #{res.success}"}, status: :ok
       rescue StandardError
-        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
+        render json: {status: 'FAILED', message: 'Unspecified error'}, status: :bad_request
 
       end #end create
 
