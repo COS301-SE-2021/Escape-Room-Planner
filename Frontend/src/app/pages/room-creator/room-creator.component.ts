@@ -48,6 +48,10 @@ export class RoomCreatorComponent implements OnInit {
       response => {
           //rendering <li> elements by using response
           this.escapeRooms = response;
+          //render all the rooms
+          for (let er of response.data){
+            this.renderNewRoom(er.id);
+          }
       },
       error => console.error('There was an error retrieving your rooms', error)
     );
@@ -59,15 +63,26 @@ export class RoomCreatorComponent implements OnInit {
     //http request to rails api
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
       response => {
-        //rendering <li> elements by using response
-        console.log(response);
-        renderNewRoom();
+        //rendering <li> elements by using render function
+        this.renderNewRoom(response.data);
       },
       error => console.error('There was an error retrieving your rooms', error)
     );
   }
 
-
+  //just renders new room text
+  renderNewRoom(id:number): void{
+    // <li><a class="dropdown-item">ROOM 1</a></li>-->
+    let newRoom = this.renderer.createElement('li');
+    let newTag = this.renderer.createElement('a');
+    // add bootstrap class to <a>
+    this.renderer.addClass(newTag,'dropdown-item');
+    this.renderer.appendChild(newTag, this.renderer.createText("Room " + id));
+    // make it <li><a>
+    this.renderer.appendChild(newRoom,newTag);
+    // append to the dropdown menu
+    this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
+  }
 }
 
 interface EscapeRoomArray {

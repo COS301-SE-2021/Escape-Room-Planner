@@ -78,48 +78,6 @@
               <!--insert rooms here on button click-->
               <li class="dropdown-item text-center"><button type="button"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">+</button> </li>
               <li><hr class="dropdown-divider"></li>
-              <li *ngFor="let er of escapeRooms.data;"><a class="dropdown-item">{{er.id}}</a></li>
-
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 1</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 2</a></li>-->
-<!--              <li><a class="dropdown-item">ROOM 3</a></li>-->
-
             </ul>
           </div>
         </div>
@@ -149,7 +107,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="createEscapeRoom()">Create</button>
+        <button type="button" class="btn btn-primary" (click)="createEscapeRoom()"  data-bs-dismiss="modal">Create</button>
       </div>
     </div>
   </div>
