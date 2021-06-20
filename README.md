@@ -21,8 +21,8 @@ Escape Room Planner intends to solve an organisational problem that user’s fac
 <br>
 Team:Five Stack <br>
 SRS Document: https://www.overleaf.com/read/scwrrchtjrdv <br>
-SRS Document D2: <place link here>
-Architectural Design Document D2: <place link here>
+SRS Document D2: <place link here> <br>
+Architectural Design Document D2: <place link here> <br>
 Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1
 
 
