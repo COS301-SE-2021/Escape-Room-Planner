@@ -2,6 +2,9 @@ import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core
 import {BigInteger} from '@angular/compiler/src/i18n/big_integer';
 import {HttpClient} from '@angular/common/http';
 import {Time} from "@angular/common";
+import {TimeoutError} from "rxjs";
+import {timestamp} from "rxjs/operators";
+import {Timestamp} from "rxjs/internal-compatibility";
 
 @Component({
   selector: 'app-room-creator',
@@ -24,10 +27,13 @@ export class RoomCreatorComponent implements OnInit {
 
   //adds an object to drag on our 'canvas'
   addObjects(type: string, loc: string, pos: number): void{
-
-  //  if()
-
     this.lastPos += pos;
+
+    //MAKE API CALL BASED ON TYPE
+    let name : string = "Object";       //default name
+    let description : string = "Works";  //default description
+    this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, 1);
+
     // @ts-ignore
     let newImage = this.renderer.createElement("img"); // create image
     this.renderer.addClass(newImage, "resize-drag");
@@ -86,10 +92,18 @@ export class RoomCreatorComponent implements OnInit {
   }
 
   //creates Vertex of type with scale at position
-  createVertex(inType: string, inName: string, inGraphicID: string, inPosy: number, inPosx: number, inWidth: number, inHeight: number, inEstimated_time: Time, inDescription: string, inRoomid: number): void{
+  createVertex(inType: string, inName: string, inGraphicID: string, inPosy: number, inPosx: number, inWidth: number, inHeight: number, inEstimated_time: Date, inDescription: string, inRoomid: number): void{
 
     //set initial json array for body
     let createVertexBody = {type: inType, name: inName, graphicid: inGraphicID, posy: inPosy, posx: inPosx, width: inWidth, height: inHeight,estimated_time: inEstimated_time, description: inDescription, roomid: inRoomid};
+
+    if(inType != "Puzzle"){
+      // @ts-ignore
+      delete  createVertexBody.description;
+      // @ts-ignore
+      delete  createVertexBody.estimated_time;
+    }
+
 
     //make post request for new vertex
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody).subscribe(
