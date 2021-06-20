@@ -13,8 +13,8 @@ export class AppComponent {
   }
 
   ngOnInit(){
-    let resp= this.http.get('http://127.0.0.1:3000/api/v1/vertex/');
-    resp.subscribe((response)=>console.log(response))
+    let resp= this.http.get('http://127.0.0.1:3000/api/v1/vertex/1');
+    // resp.subscribe((response)=>console.log(response))
   }
 
   title = 'NewEscapeRoomPlanner';

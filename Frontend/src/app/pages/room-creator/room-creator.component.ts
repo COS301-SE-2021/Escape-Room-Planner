@@ -1,5 +1,6 @@
 import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {BigInteger} from '@angular/compiler/src/i18n/big_integer';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-room-creator',
@@ -8,17 +9,20 @@ import {BigInteger} from '@angular/compiler/src/i18n/big_integer';
 })
 export class RoomCreatorComponent implements OnInit {
   public lastPos : number = 0;
+  // @ts-ignore
+  public escapeRooms: EscapeRoomArray;
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined;
+  @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined;
 
-  constructor(private el : ElementRef, private renderer: Renderer2) { }
+  constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient) { }
 
   ngOnInit(): void {
+    this.getEscapeRooms();
   }
 
-  // objects: string = "";
-
-  addObjects(type: string, loc: string, pos: number){
+  //adds an object to drag on our 'canvas'
+  addObjects(type: string, loc: string, pos: number): void{
     this.lastPos += pos;
     // @ts-ignore
     // this.escapeRoomDivRef?.nativeElement.innerHTML += "<img src='./assets/images/"+loc+"' style='width: 50px; height: 50px;' alt='NOT FOUND' appDraggable>";
@@ -37,4 +41,40 @@ export class RoomCreatorComponent implements OnInit {
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newImage);
   }
 
+  //use get to get all the rooms stored in db
+  getEscapeRooms(): void{
+    //http request to rails api
+    this.httpClient.get<EscapeRoomArray>("http://127.0.0.1:3000/api/v1/room/").subscribe(
+      response => {
+          //rendering <li> elements by using response
+          this.escapeRooms = response;
+      },
+      error => console.error('There was an error retrieving your rooms', error)
+    );
+  }
+
+  // POST to create new room for a user
+  createEscapeRoom(): void{
+    let createRoomBody = {};
+    //http request to rails api
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
+      response => {
+        //rendering <li> elements by using response
+        console.log(response);
+        renderNewRoom();
+      },
+      error => console.error('There was an error retrieving your rooms', error)
+    );
+  }
+
+
+}
+
+interface EscapeRoomArray {
+  data: Array<EscapeRoom>;
+  status: string;
+}
+
+interface EscapeRoom{
+  id: number;
 }
