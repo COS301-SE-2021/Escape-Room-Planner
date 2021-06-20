@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get "*all" => "application#cors_preflight_check", :constraints => { :method => "OPTIONS" }
+
   namespace 'api' do
     namespace 'v1' do
       resources :room
