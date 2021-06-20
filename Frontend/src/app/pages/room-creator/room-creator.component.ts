@@ -60,12 +60,9 @@ export class RoomCreatorComponent implements OnInit {
     //todo some code to check if the selected is not current
     const oldVertices = this.escapeRoomDivRef?.nativeElement.childNodes;
 
-    console.log(oldVertices);
-
-    // for (let vertex of oldVertices){
-    //   console.log(vertex);
-    //   this.renderer.removeChild(this.escapeRoomDivRef?.nativeElement, vertex);
-    // }
+    for (let vertex of oldVertices){
+      this.renderer.removeChild(this.escapeRoomDivRef?.nativeElement, vertex);
+    }
 
     this.getVertexFromRoom();
   }
