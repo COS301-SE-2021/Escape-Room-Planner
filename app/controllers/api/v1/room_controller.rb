@@ -7,13 +7,13 @@ module Api
     class RoomController < ApplicationController
       protect_from_forgery with: :null_session
 
-      #Get Rooms
+      # GET api/v1/room , shows all the rooms in db
       def index
         rooms = EscapeRoom.all
         render json: {status: 'SUCCESS', message: 'Vertices', data: rooms}, status: :ok
       end
 
-      #Get Room
+      # GET api/v1/room/id , returns a room by id
       def show
         begin
           room= EscapeRoom.find(params[:id])
@@ -23,7 +23,7 @@ module Api
         end
       end
 
-      #Create Escape Room
+      # POST api/v1/room, creates a new room
       def create
 
         req = CreateEscaperoomRequest.new

@@ -22,3 +22,14 @@ two:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+
+three:
+  id: 3
+  type: Clue
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1

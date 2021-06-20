@@ -1,9 +1,14 @@
-[![Build Status](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner.svg?branch=develop)](https://travis-ci.org/COS301-SE-2021/Escape-Room-Planner)
+[![Build Status](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner.svg?branch=master)](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=alert_status)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
+![Uptime Robot status](https://img.shields.io/uptimerobot/status/m788368677-4f8867187e66b07802dca277)
 
-#Project Name: Escape-Room-Planner <br>
+# Project Name: Escape-Room-Planner <br>
 
 Project Owner: EPI-USE Labs <br>
+
 Project Description:
+
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
 <br>
 Team:Five Stack <br>
@@ -36,7 +41,7 @@ Demo 1 Video
 <figcaption>Maseko Nqedile</figcaption>
 <img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_800_800/0/1618731388530?e=1628121600&v=beta&t=S0Om7jjeeWL5_yeW-zOlvmTSVAvZthRiUCZbsrAjuJE" alt="drawing" width="200"/>
 
-##Profiles
+## Profiles
 
 Patric Edwards [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][1].
 
@@ -53,4 +58,3 @@ Maseko Nqedile [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedi
 [3]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
 [4]: https://www.linkedin.com/in/kayla-latty-793b7320b/
 [5]: https://www.linkedin.com/in/sfiso-n-maseko-300160210/
-
