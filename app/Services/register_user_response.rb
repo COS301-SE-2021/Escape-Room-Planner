@@ -1,4 +1,4 @@
-class CreateUserResponse
+class RegisterUserResponse
 
   attr_accessor :success, :message
 
