@@ -32,7 +32,6 @@ class UserServices
   end
   
   def getUsers(request)
-    
-  end
 
+  end
 end
