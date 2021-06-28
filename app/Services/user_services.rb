@@ -20,17 +20,17 @@ class UserServices
   end
 
   def getUserDetails(request)
-
+    
   end
-
+  
   def setAdmin(request)
-
+    
   end
-
+  
   def deleteUser(request)
-
+    
   end
-
+  
   def getUsers(request)
     
   end
