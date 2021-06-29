@@ -1,4 +1,4 @@
-class SetAdminRequest
+class DeleteUserRequest
   attr_accessor :username, :email
 
   def initialize(username, email)
