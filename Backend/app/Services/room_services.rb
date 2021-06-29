@@ -1,8 +1,5 @@
-
 class RoomServices
-
   def createPuzzle(request)
-
     raise 'CreatePuzzleRequest null' if request.nil?
 
     @puzzle = Puzzle.new
@@ -24,7 +21,6 @@ class RoomServices
   end
 
   def createEscapeRoom(request)
-
     raise 'CreateEscaperoomRequest null' if request.nil?
 
     @escapeRoom = EscapeRoom.new
@@ -34,7 +30,6 @@ class RoomServices
   end
 
   def createKey(request)
-
     return CreateKeyResponse.new(-1, false) if request == nil
 
     @key = Keys.new
@@ -51,7 +46,6 @@ class RoomServices
                 else
                   CreateKeyResponse.new(-1, false)
                 end
-
   end
 
   def createContainer(request)
@@ -77,7 +71,6 @@ class RoomServices
 
   # @param [Object] request
   def remove_vertex(request)
-
     raise 'removeVertexRequest null' if request.nil?
 
     vertex = Vertex.find_by_id(request.vertexID)
@@ -107,9 +100,7 @@ class RoomServices
   end
 
   def createClue(request)
-
     return CreateClueResponse.new(-1, false) if request == nil
-
 
     @clue = Clue.new
     @clue.name = request.name
@@ -126,7 +117,6 @@ class RoomServices
                 else
                   CreateClueResponse.new(-1, false)
                 end
-
   end
 
   def reset_room(request)
@@ -143,6 +133,26 @@ class RoomServices
                   ResetEscapeRoomResponse.new(true, 'The room is already empty, but I cleaned it again <3')
                 else
                   ResetEscapeRoomResponse.new(true, 'The room has been reset to default state')
+                end
+  end
+
+  # @param [UpdateVertexRequest] request
+  # @return [UpdateVertexResponse]
+  def update_vertex(request)
+    raise 'Request null' if request.nil?
+
+    vertex = Vertex.find_by_id(request.id)
+    return UpdateVertexResponse.new(false, 'Vertex could not be found') if vertex.nil?
+
+    vertex.posx = request.posx
+    vertex.posy = request.posy
+    vertex.width = request.width
+    vertex.height = request.height
+
+    @response = if vertex.save
+                  UpdateVertexResponse.new(true, 'Vertex Updated')
+                else
+                  UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
                 end
   end
 end
