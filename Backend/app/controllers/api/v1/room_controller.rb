@@ -30,7 +30,7 @@ module Api
         serv = RoomServices.new
         resp = serv.createEscapeRoom(req)
 
-        render json: {status: 'SUCCESS', message: 'Added room id:', data: resp.id}, status: :ok
+        render json: {status: 'SUCCESS', message: 'Added room id:', data: resp }, status: :ok
       end
     end
   end
