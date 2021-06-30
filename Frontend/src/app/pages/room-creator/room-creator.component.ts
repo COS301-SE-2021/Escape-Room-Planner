@@ -1,6 +1,10 @@
 import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {tsCreateElement} from '@angular/compiler-cli/src/ngtsc/typecheck/src/ts_util';
+import {getLocaleFirstDayOfWeek} from "@angular/common";
+
+// TODO: DO CHECKS IN CASE SOMETHING FAILS TO BE STORED IN RAILS
+
 
 @Component({
   selector: 'app-room-creator',
@@ -54,16 +58,17 @@ export class RoomCreatorComponent implements OnInit {
   }
 
   changeRoom(event: any): void{
+    let clickedEscapeRoom = event.target;
+    //check if the selected room is not the one shown
+    if(clickedEscapeRoom.getAttribute("escape-room-id") === this.currentRoomId )
+      return; // do not reload the vertices again
+
     // update room id
-    this.currentRoomId = event.target.getAttribute('escape-room-id');
+    this.currentRoomId = clickedEscapeRoom.getAttribute('escape-room-id');
+
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
     //load the vertices for the newly selected room
-    //todo some code to check if the selected is not current
-    const oldVertices = this.escapeRoomDivRef?.nativeElement.childNodes;
-
-    for (let vertex of oldVertices){
-      this.renderer.removeChild(this.escapeRoomDivRef?.nativeElement, vertex);
-    }
-
     this.getVertexFromRoom();
   }
 
@@ -72,7 +77,7 @@ export class RoomCreatorComponent implements OnInit {
     //http request to rails api
     this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId).subscribe(
       response => {
-        console.log(response);
+       //console.log(response);
         //render all the vertices
         for (let vertex of response.data){
           //spawn objects out;
@@ -176,7 +181,7 @@ export class RoomCreatorComponent implements OnInit {
   updateVertex(event: any): void{
     let targetVertex = event.target;
 
-    console.log(targetVertex.getAttribute('vertex-id'));
+    // console.log(targetVertex.getAttribute('vertex-id'));
 
     let updateVertexBody = {
       id: targetVertex.getAttribute('vertex-id'),
@@ -189,8 +194,8 @@ export class RoomCreatorComponent implements OnInit {
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+targetVertex.getAttribute('vertex-id'), updateVertexBody).subscribe(
       response => {
         //will update vertex ID in html here
-        console.log(response);
-        console.log('bug');
+        // console.log(response);
+        // console.log('bug');
       },
       error => console.error('There was an error while updating the vertex', error)
     );
