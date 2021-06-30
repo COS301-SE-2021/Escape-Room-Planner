@@ -17,6 +17,7 @@ export class RoomCreatorComponent implements OnInit {
   public escapeRooms: EscapeRoomArray;
   //todo fix this to be a session?
   public currentRoomId: number = 0;
+  public newEscapeRoomName:string = "";
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined;
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined;
@@ -50,7 +51,8 @@ export class RoomCreatorComponent implements OnInit {
           this.escapeRooms = response;
           //render all the rooms
           for (let er of response.data){
-            this.renderNewRoom(er.id);
+            //todo fix this
+            this.renderNewRoom(er.id, "fake name for now");
           }
       },
       error => console.error('There was an error retrieving your rooms', error)
@@ -90,25 +92,36 @@ export class RoomCreatorComponent implements OnInit {
 
   // POST to create new room for a user
   createEscapeRoom(): void{
-    let createRoomBody = {};
+    if (this.newEscapeRoomName === "") {
+      // todo need to remove all initial spaces here
+      alert("Provide name for a room please");
+      return; // needs to have a name
+    }
+
+    // console.log('created');
+
+    let createRoomBody = {name: this.newEscapeRoomName};
     //http request to rails api
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
       response => {
         //rendering <li> elements by using render function
-        this.renderNewRoom(response.data);
+        // console.log(response.data)
+        this.renderNewRoom(response.data.id, response.data.name);
+
       },
       error => console.error('There was an error creating your rooms', error)
     );
   }
 
   //just renders new room text in the list
-  renderNewRoom(id:number): void{
+  renderNewRoom(id:number, name:string): void{
     // <li><a class="dropdown-item">ROOM 1</a></li>-->
     let newRoom = this.renderer.createElement('li');
     let newTag = this.renderer.createElement('a');
     // add bootstrap class to <a>
     this.renderer.addClass(newTag,'dropdown-item');
-    this.renderer.appendChild(newTag, this.renderer.createText("Room " + id));
+    this.renderer.addClass(newTag,'text-white');
+    this.renderer.appendChild(newTag, this.renderer.createText(name));
     this.renderer.setAttribute(newTag,'escape-room-id',id.toString());
     this.renderer.listen(newTag,'click',(event) => this.changeRoom(event))
     // make it <li><a>

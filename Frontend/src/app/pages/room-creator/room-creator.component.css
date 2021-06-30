@@ -1,3 +1,8 @@
 .remove-padding{
   padding: 0;
 }
+
+/* Escape Room selection menu colour on hover */
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+  background-color:grey;
+}
