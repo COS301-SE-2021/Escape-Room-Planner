@@ -26,7 +26,7 @@ module Api
       # POST api/v1/room, creates a new room
       def create
 
-        req = CreateEscaperoomRequest.new
+        req = CreateEscaperoomRequest.new(params[:name])
         serv = RoomServices.new
         resp = serv.createEscapeRoom(req)
 

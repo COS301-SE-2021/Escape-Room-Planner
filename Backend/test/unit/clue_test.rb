@@ -4,7 +4,7 @@ class ClueTest < ActiveSupport::TestCase
   def test_CreateClue
     num_clues_before = Clue.count
 
-    room = EscapeRoom.new
+    room = EscapeRoom.new(name:"test name")
     room.save
     room_id = room.id
     req = CreateClueRequest.new 'test', 0, 0, 0.1, 0.1,
