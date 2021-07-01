@@ -9,6 +9,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { DraggableDirective } from './directives/draggable.directive';
 import { DroppableDirective } from './directives/droppable.directive';
 import {HttpClientModule} from "@angular/common/http";
+import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
   { path: '', component: RoomCreatorComponent },
@@ -27,11 +28,12 @@ const routes: Routes = [
     DraggableDirective,
     DroppableDirective
   ],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(routes),
-    HttpClientModule,
-  ],
+    imports: [
+        BrowserModule,
+        RouterModule.forRoot(routes),
+        HttpClientModule,
+        FormsModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

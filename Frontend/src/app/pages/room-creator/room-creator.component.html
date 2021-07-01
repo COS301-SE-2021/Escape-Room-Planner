@@ -1,7 +1,12 @@
 <div class="container-fluid">
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
   <div class="row">
     <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
       <div class="overflow-auto" style="height: 94vh; width: 315px;">
+        <!-- INVENTORY STARTS HERE -->
         <ul class="nav flex-column">
           <li class="border border-dark w-100" style=" background-color: grey">Container</li>
           <li id="containerInventory" class="bg-secondary text-white" style="width: 100%;">
@@ -66,7 +71,6 @@
         </ul>
       </div>
     </div>
-
     <div class="col-sm-10 d-lg-flex">
       <div class="container-fluid remove-padding">
         <div class="row">
@@ -74,15 +78,22 @@
             <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
-            <ul class="dropdown-menu w-100 overflow-auto" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
-              <!--insert rooms here on button click-->
-              <li class="dropdown-item text-center"><button type="button"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">+</button> </li>
-              <li><hr class="dropdown-divider"></li>
+            <ul class="dropdown-menu w-100 overflow-auto remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+              <!-- INSERTS CREATED ROOMS HERE -->
+              <li class="dropdown-item text-center remove-padding">
+                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                  </svg>
+                </button>
+              </li>
+              <li><hr class="dropdown-divider text-white"></li>
             </ul>
           </div>
         </div>
         <div class="row vh-100">
           <div class="container-fluid escape-room" style="background-color: grey" #escapeRoomDiv>
+            <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
           </div>
         </div>
       </div>
@@ -102,12 +113,13 @@
         <form>
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Room Name:</label>
-            <input type="text" class="form-control" id="recipient-name">
+            <input type="text" class="form-control" id="recipient-name" required [(ngModel)]="newEscapeRoomName">
           </div>
         </form>
       </div>
+
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="createEscapeRoom()"  data-bs-dismiss="modal">Create</button>
+        <button type="submit" class="btn btn-primary" (click)="createEscapeRoom()" data-bs-dismiss="modal">Create</button>
       </div>
     </div>
   </div>

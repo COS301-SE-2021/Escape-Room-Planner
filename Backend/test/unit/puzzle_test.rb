@@ -5,7 +5,7 @@ class PuzzleTest < ActiveSupport::TestCase
   def test_createPuzzle
 
     beforetest = Puzzle.count
-    room = EscapeRoom.new
+    room = EscapeRoom.new(name:'test name')
     room.save
     room_id = room.id
     req = CreatePuzzleRequest.new 'test', 0, 0, 0.2, 0.2,

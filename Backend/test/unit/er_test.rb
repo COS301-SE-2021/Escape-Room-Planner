@@ -8,7 +8,7 @@ class ErTest < ActiveSupport::TestCase
   def test_createEscapeRoom
 
     beforetest = EscapeRoom.count
-    req = CreateEscaperoomRequest.new
+    req = CreateEscaperoomRequest.new("testName")
     rs = RoomServices.new
     rs.createEscapeRoom(req)
 
@@ -16,7 +16,7 @@ class ErTest < ActiveSupport::TestCase
   end
 
   def test_checkCreateEscapeRoomSaved
-    req = CreateEscaperoomRequest.new
+    req = CreateEscaperoomRequest.new("testName")
     rs = RoomServices.new
     resp = rs.createEscapeRoom(req)
 

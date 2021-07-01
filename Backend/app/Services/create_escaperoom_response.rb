@@ -1,11 +1,8 @@
 class CreateEscaperoomResponse
+  attr_accessor :name, :id
 
-  def initialize(id)
+  def initialize(id, name)
     @id = id
+    @name = name
   end
-
-  def id
-    @id
-  end
-
 end

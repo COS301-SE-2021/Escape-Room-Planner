@@ -7,7 +7,7 @@ class CreateKeyTest < ActiveSupport::TestCase
 
     num_keys_before = Keys.count
 
-    escape_room = EscapeRoom.new
+    escape_room = EscapeRoom.new(name:'test name')
     escape_room.save
     er_id = escape_room.id
 
