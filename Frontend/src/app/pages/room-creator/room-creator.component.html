@@ -107,16 +107,20 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <!-- warning for empty form input, hidden by default -->
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <form name="NewEscapeRoomForm" #NewScapeRoomForm = "ngForm" (ngSubmit)="createEscapeRoom(NewScapeRoomForm)">
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Room Name:</label>
             <input type="text" class="form-control" id="recipient-name" required [(ngModel)]="newEscapeRoomName">
           </div>
         </form>
       </div>
-
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" (click)="createEscapeRoom()" data-bs-dismiss="modal">Create</button>
+        <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Create</button>
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {tsCreateElement} from '@angular/compiler-cli/src/ngtsc/typecheck/src/ts_util';
 import {getLocaleFirstDayOfWeek} from "@angular/common";
@@ -11,16 +11,16 @@ import {getLocaleFirstDayOfWeek} from "@angular/common";
   templateUrl: './room-creator.component.html',
   styleUrls: ['./room-creator.component.css']
 })
-export class RoomCreatorComponent implements OnInit {
-  public lastPos : number = 0;
+export class RoomCreatorComponent implements OnInit, AfterViewInit {
+  public lastPos : number = 0; // used to populate new objects in line
   // @ts-ignore
-  public escapeRooms: EscapeRoomArray;
+  public escapeRooms: EscapeRoomArray; // array of escape rooms used to populate drop down
   //todo fix this to be a session?
-  public currentRoomId: number = 0;
-  public newEscapeRoomName:string = "";
+  public currentRoomId: number = 0; // used to check currently selected room
+  public newEscapeRoomName:string = ""; // used when submitting a new room creation
 
-  @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined;
-  @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined;
+  @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
+  @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient) { }
@@ -30,6 +30,10 @@ export class RoomCreatorComponent implements OnInit {
     this.currentRoomId = 3;
     this.getEscapeRooms();
     this.getVertexFromRoom();
+  }
+
+  ngAfterViewInit(){
+    this.renderAlertError("TEST");
   }
 
   //adds an object to drag on our 'canvas'
@@ -92,26 +96,32 @@ export class RoomCreatorComponent implements OnInit {
   }
 
   // POST to create new room for a user
-  createEscapeRoom(): void{
+  createEscapeRoom(NewEscapeRoomForm:any): void{
+    console.log(NewEscapeRoomForm.value);
+    this.renderAlertError("TEST");
+
     if (this.newEscapeRoomName === "") {
       // todo need to remove all initial spaces here
+      // regex:   ([\w\d!@#$%^&\*\(\)_\+\-=;'"?>/\\|<,\[\].:{}`~]+( )?)+
       alert("Provide name for a room please");
       return; // needs to have a name
     }
+
+
 
     // console.log('created');
 
     let createRoomBody = {name: this.newEscapeRoomName};
     //http request to rails api
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
-      response => {
-        //rendering <li> elements by using render function
-        // console.log(response.data)
-        this.renderNewRoom(response.data.id, response.data.name);
-
-      },
-      error => console.error('There was an error creating your rooms', error)
-    );
+    // this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
+    //   response => {
+    //     //rendering <li> elements by using render function
+    //     // console.log(response.data)
+    //     this.renderNewRoom(response.data.id, response.data.name);
+    //
+    //   },
+    //   error => console.error('There was an error creating your rooms', error)
+    // );
   }
 
   //just renders new room text in the list
@@ -215,7 +225,6 @@ export class RoomCreatorComponent implements OnInit {
     );
   }
 
-
   renderAlertError(message: string):void{
     //create element for alert
     let newDiv = this.renderer.createElement('div');
@@ -223,7 +232,11 @@ export class RoomCreatorComponent implements OnInit {
     let newButton = this.renderer.createElement('button');
 
     // add bootstrap to <div>
-    this.renderer.addClass(newDiv,'alert alert-warning alert-dismissible fade show');
+    this.renderer.addClass(newDiv,'alert');
+    this.renderer.addClass(newDiv,'alert-warning');
+    this.renderer.addClass(newDiv,'alert-dismissible');
+    this.renderer.addClass(newDiv,'fade');
+    this.renderer.addClass(newDiv,'show');
     this.renderer.setAttribute(newDiv, 'role', 'alert');
     //add text to <strong>
     this.renderer.appendChild(newStrong, this.renderer.createText(message));
@@ -234,7 +247,7 @@ export class RoomCreatorComponent implements OnInit {
     this.renderer.setAttribute(newButton, 'aria-label', 'Close');
 
     // make it <div><strong><button>
-    this.renderer.appendChild(newDiv,newStrong);
+    this.renderer.appendChild(newDiv,newButton);
     this.renderer.appendChild(newDiv, newStrong);
     // append to div alertElementError
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
