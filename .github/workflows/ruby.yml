@@ -20,16 +20,33 @@ jobs:
     strategy:
       matrix:
         ruby-version: ['2.6', '2.7', '3.0']
+    
+    services:
+      postgresql:
+        image: postgres:13
+        env:
+          POSTGRE_USER: root
+          POSTGRE_PASS: root
+        ports: ['5432:5432']
+        options:
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up ROR
+    - name: Set up Ruby
     # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
     # change this to (see https://github.com/ruby/setup-ruby#versioning):
     # uses: ruby/setup-ruby@v1
-      uses: ruby/setup-ruby@473e4d8fe5dd94ee328fdfca9f8c9c7afc9dae5e
+      uses: ruby/setup-ruby@v1
       with:
-        ruby-version: ${{ matrix.ruby-version }}
+        ruby-version: 2.7.3
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-    - name: Run ROR tests
-      run: bundle exec rake
+    - name: Build and Test
+      run: |
+        bundle exec rake db:create RAILS_ENV=test
+        bundle exec rake db:migrate RAILS_ENV=test
+        yarn
+        bundle exec rake test
