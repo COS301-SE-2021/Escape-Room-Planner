@@ -107,20 +107,26 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <!-- warning for empty form input, hidden by default -->
-        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <!-- warning for empty form input -->
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="!newEscapeRoomNameValid">
           <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-        <form name="NewEscapeRoomForm" #NewScapeRoomForm = "ngForm" (ngSubmit)="createEscapeRoom(NewScapeRoomForm)">
-          <div class="mb-3">
+        <form name="NewEscapeRoomForm" #NewEscapeRoomForm = "ngForm">
+          <div class="mb-3 form-group">
             <label for="recipient-name" class="col-form-label">Room Name:</label>
-            <input type="text" class="form-control" id="recipient-name" required [(ngModel)]="newEscapeRoomName">
+            <input type="text"
+                   name="EscapeRoomName"
+                   class="form-control"
+                   id="recipient-name"
+                   placeholder="Some quirky name"
+                   required
+                   [(ngModel)]="newEscapeRoomName"
+                   (input)="isNewEscapeRoomNameValid()">
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button class="btn btn-primary btn-block" data-bs-dismiss="modal">Create</button>
+      <div class="modal-footer form-group">
+        <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom(NewEscapeRoomForm)" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>

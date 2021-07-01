@@ -18,6 +18,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   //todo fix this to be a session?
   public currentRoomId: number = 0; // used to check currently selected room
   public newEscapeRoomName:string = ""; // used when submitting a new room creation
+  public newEscapeRoomNameValid:boolean = false; // flag using regex
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
@@ -33,7 +34,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    this.renderAlertError("TEST");
+    // this.renderAlertError("TEST");
   }
 
   //adds an object to drag on our 'canvas'
@@ -99,31 +100,35 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // POST to create new room for a user
   createEscapeRoom(NewEscapeRoomForm:any): void{
-    console.log(NewEscapeRoomForm.value);
-    this.renderAlertError("TEST");
+    // regex to extract valid strings, removes all the spaces and allows any character
+    let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
+    let regexResult = patternRegEx.exec(this.newEscapeRoomName);
 
-    if (this.newEscapeRoomName === "") {
-      // todo need to remove all initial spaces here
-      // regex:   ([\w\d!@#$%^&\*\(\)_\+\-=;'"?>/\\|<,\[\].:{}`~]+( )?)+
-      alert("Provide name for a room please");
-      return; // needs to have a name
+    if (regexResult === null) {
+      alert("cant send empty string");
+      // needs to have a name
+    }else {
+      let createRoomBody = {name: regexResult[0]};
+      //http request to rails api
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
+        response => {
+          //rendering <li> elements by using render function
+          // console.log(response.data)
+          this.renderNewRoom(response.data.id, response.data.name);
+        },
+        error => console.error('There was an error creating your rooms', error)
+      );
     }
 
+    this.newEscapeRoomNameValid = false;
+    this.newEscapeRoomName = ""; // resets the input box text
+  }
 
+  isNewEscapeRoomNameValid():void{
+    let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
+    let regexResult = patternRegEx.exec(this.newEscapeRoomName);
 
-    // console.log('created');
-
-    let createRoomBody = {name: this.newEscapeRoomName};
-    //http request to rails api
-    // this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
-    //   response => {
-    //     //rendering <li> elements by using render function
-    //     // console.log(response.data)
-    //     this.renderNewRoom(response.data.id, response.data.name);
-    //
-    //   },
-    //   error => console.error('There was an error creating your rooms', error)
-    // );
+    this.newEscapeRoomNameValid = regexResult !== null;
   }
 
   //just renders new room text in the list
@@ -223,7 +228,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         // console.log(response);
         // console.log('bug');
       },
-      error => this.renderAlertError("There was an Error Updating Vertex Position")
+      error => this.renderAlertError("There was an Error Updating Vertex Position") // todo also try to reset the old position
       //console.error('There was an error while updating the vertex', error)
     );
   }
