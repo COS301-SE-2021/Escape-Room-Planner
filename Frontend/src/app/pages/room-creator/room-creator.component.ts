@@ -21,6 +21,7 @@ export class RoomCreatorComponent implements OnInit {
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined;
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined;
+  @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient) { }
 
@@ -212,6 +213,31 @@ export class RoomCreatorComponent implements OnInit {
       },
       error => console.error('There was an error while updating the vertex', error)
     );
+  }
+
+
+  renderAlertError(message: string):void{
+    //create element for alert
+    let newDiv = this.renderer.createElement('div');
+    let newStrong = this.renderer.createElement('strong');
+    let newButton = this.renderer.createElement('button');
+
+    // add bootstrap to <div>
+    this.renderer.addClass(newDiv,'alert alert-warning alert-dismissible fade show');
+    this.renderer.setAttribute(newDiv, 'role', 'alert');
+    //add text to <strong>
+    this.renderer.appendChild(newStrong, this.renderer.createText(message));
+    //add bootstrap to <button>
+    this.renderer.addClass(newButton, 'btn-close');
+    this.renderer.setAttribute(newButton, 'type', 'button');
+    this.renderer.setAttribute(newButton, 'data-bs-dismiss', 'alert');
+    this.renderer.setAttribute(newButton, 'aria-label', 'Close');
+
+    // make it <div><strong><button>
+    this.renderer.appendChild(newDiv,newStrong);
+    this.renderer.appendChild(newDiv, newStrong);
+    // append to div alertElementError
+    this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
   }
 }
 
