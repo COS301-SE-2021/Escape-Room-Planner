@@ -56,7 +56,7 @@ export class RoomCreatorComponent implements OnInit {
             this.renderNewRoom(er.id, "fake name for now");
           }
       },
-      error => console.error('There was an error retrieving your rooms', error)
+        error => this.renderAlertError('There was an error retrieving your rooms')
     );
   }
 
