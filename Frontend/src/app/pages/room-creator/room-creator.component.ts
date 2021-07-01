@@ -60,6 +60,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             this.renderNewRoom(er.id, "fake name for now");
           }
       },
+        //Render error if bad request
         error => this.renderAlertError('There was an error retrieving your rooms')
     );
   }
@@ -91,7 +92,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.spawnObjects(vertex.id,vertex.graphicid,vertex.posx,vertex.posy,vertex.width,vertex.height);
         }
       },
-      error => console.error('There was an error retrieving vertices for the room', error)
+      //Error retrieving vertices message
+      error => this.renderAlertError("There was an error retrieving vertices for the room")
     );
   }
 
@@ -221,10 +223,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         // console.log(response);
         // console.log('bug');
       },
-      error => console.error('There was an error while updating the vertex', error)
+      error => this.renderAlertError("There was an Error Updating Vertex Position")
+      //console.error('There was an error while updating the vertex', error)
     );
   }
 
+  //Spawn Alert Error with Message
   renderAlertError(message: string):void{
     //create element for alert
     let newDiv = this.renderer.createElement('div');
