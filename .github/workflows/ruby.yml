@@ -21,7 +21,7 @@ jobs:
         ruby-version: ['2.6', '2.7', '3.0']
     
     services:
-      db:
+      postgres:
         image: postgres:13
         ports: ['5432:5432']
         options: >-
@@ -43,15 +43,19 @@ jobs:
     - uses: borales/actions-yarn@v2.0.0
       with:
         cmd: install
+    - name: Install dependencies
+      run: |
+        gem install bundler
+        bundle config vendor/bundle
+        bundle install --jobs 4 --retry 3
+        yarn install
+        
     - name: Build and Test
       env:
         DATABASE_URL: postgres://postgres:@localhost:5432/test
         RAILS_ENV: test
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-        
       run: |
         sudo apt-get -yqq install libpq-dev
-        gem install bundler
-        buundle install --jobs 4 --retry 3
         bundle exec rails db:prepare
         bundle exec rails test
