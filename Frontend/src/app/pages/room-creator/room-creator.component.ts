@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from
 import {HttpClient} from '@angular/common/http';
 import {tsCreateElement} from '@angular/compiler-cli/src/ngtsc/typecheck/src/ts_util';
 import {getLocaleFirstDayOfWeek} from "@angular/common";
+import {VertexService} from "../../services/vertex.service";
 
 // TODO: DO CHECKS IN CASE SOMETHING FAILS TO BE STORED IN RAILS
 
@@ -24,7 +25,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
 
-  constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient) { }
+  constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
+              private vertexService: VertexService) { }
 
   ngOnInit(): void {
     //set the currentRoomId to 1 by default, later to actual first room id?
