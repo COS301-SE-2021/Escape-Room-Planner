@@ -25,8 +25,8 @@ jobs:
       postgresql:
         image: postgres:13
         env:
-          POSTGRE_USER: root
-          POSTGRE_PASS: root
+          POSTGRE_USER: postgres
+          POSTGRE_PASS: postgres
         ports: ['5432:5432']
 
     steps:
