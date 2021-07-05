@@ -49,6 +49,5 @@ jobs:
         RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
       run: |
         sudo apt-get -yqq install libpq-dev
-        cat /var/lib/pgsql/13/data/pg_hba.conf
         bundle exec rails db:prepare
         bundle exec rails test
