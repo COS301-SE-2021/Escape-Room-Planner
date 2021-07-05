@@ -150,23 +150,24 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
 
-  //creates Vertex of type with scale at position
-  createVertex(inType: string, inName: string, inGraphicID: string, inPosy: number, inPosx: number, inWidth: number, inHeight: number, inEstimated_time: Date, inDescription: string, inRoomid: number, inClue: string): void{
-
-    //set initial json array for body
+  //creates Vertex of type with scale at position x,y
+  createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
+               inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: Date,
+               inDescription: string, inRoom_id: number, inClue: string): void
+  {
     let createVertexBody = {type: inType,
-                            name: inName,
-                            graphicid: inGraphicID,
-                            posy: inPosy,
-                            posx: inPosx,
-                            width: inWidth,
-                            height: inHeight,
-                            estimated_time: inEstimated_time,
-                            description: inDescription,
-                            roomid: inRoomid,
-                            clue: inClue
+      name: inName,
+      graphicid: inGraphicID,
+      posy: inPos_y,
+      posx: inPos_x,
+      width: inWidth,
+      height: inHeight,
+      estimated_time: inEstimated_time,
+      description: inDescription,
+      roomid: inRoom_id,
+      clue: inClue
     };
-    // removes params for puzzle
+
     if(inType != "Puzzle"){
       // @ts-ignore
       delete  createVertexBody.description;
@@ -182,17 +183,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //make post request for new vertex
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody).subscribe(
       response => {
-        //will update vertex ID in html here
-        this.spawnObjects(response.data.id, inGraphicID, this.lastPos, 0, 75, 75);
+        let local_id = this.vertexService.addVertex(response.data.id,
+          inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
+          inEstimated_time, inDescription, inRoom_id, inClue
+        );
+        this.spawnObjects(response.data.id, inGraphicID, inPos_y, inPos_x, inWidth, inHeight);
       },
-      error => console.error('There was an error while creating a vertex', error)
+      error => {
+        console.error('There was an error while creating a vertex', error);
+        this.renderAlertError("Couldn't create a vertex");
+      }
     );
-
   }
 
   //used to spawn objects onto plane
   spawnObjects(id: number, loc: string, posx: number, posy: number, width: number, height: number): void{
-
     let newObject = this.renderer.createElement("img"); // create image
     this.renderer.addClass(newObject, "resize-drag");
     // All the styles
