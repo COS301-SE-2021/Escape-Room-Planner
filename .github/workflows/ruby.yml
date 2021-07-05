@@ -33,7 +33,7 @@ jobs:
     # uses: ruby/setup-ruby@v1
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7.x
+        ruby-version: 2.7.3
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - uses: borales/actions-yarn@v2.0.0
       with:
