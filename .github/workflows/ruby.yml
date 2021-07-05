@@ -24,12 +24,7 @@ jobs:
       postgres:
         image: postgres:13
         ports: ['5432:5432']
-        options: >-
-          --health-cmd pg_isready
-          --heallth-interval 10s
-          --heallth-timeout 5s
-          --healt-retries 5
-
+        
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
