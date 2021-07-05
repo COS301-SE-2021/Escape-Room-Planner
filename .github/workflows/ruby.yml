@@ -33,28 +33,22 @@ jobs:
         
     steps:
     - uses: actions/checkout@v2
+    
+    - name: Install pg client
+      run: |
+        sudo apt-get -yqq install libpq-dev
+    
     - name: Set up Ruby
-    # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
-    # change this to (see https://github.com/ruby/setup-ruby#versioning):
-    # uses: ruby/setup-ruby@v1
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.3
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    
     - name: Install dependencies
       run: |
-        gem install bundler
-        bundle config vendor/bundle
-        bundle install --jobs 4 --retry 3
         yarn install
         
     - name: Build and Test
-      env:
-        # use postgres for the host here because we have specified a container for the job.
-        # If we were running the job on the VM this would be localhost
-        POSTGRES_HOST: postgres
-        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
       run: |
-        sudo apt-get -yqq install libpq-dev
-        bundle exec rails db:prepare
-        bundle exec rails test
+        bundle exec rake db:migrate
+        bundle exec rake test
