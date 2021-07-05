@@ -15,7 +15,6 @@ on:
 
 jobs:
   test:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,6 +27,11 @@ jobs:
           POSTGRE_USER: postgres
           POSTGRE_PASS: postgres
         ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready
+          --heallth-interval 10s
+          --heallth-timeout 5s
+          --healt-retries 5
 
     steps:
     - uses: actions/checkout@v2
@@ -37,11 +41,20 @@ jobs:
     # uses: ruby/setup-ruby@v1
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 2.7.3
+        ruby-version: 2.7.x
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    - uses: borales/actions-yarn@v2.0.0
+      with:
+        cmd: install
     - name: Build and Test
+      env:
+        DATABASE_URL: postgres://postgres:@localhost:5432/test
+        RAILS_ENV: test
+        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        
       run: |
-        bundle exec rake db:create RAILS_ENV=test
-        bundle exec rake db:migrate RAILS_ENV=test
-        yarn
-        bundle exec rake test
+        sudo apt-get -yqq install libpq-dev
+        gem install bundler
+        buundle install --jobs 4 --retry 3
+        bundle exec rails db:prepare
+        bundle exec rails test
