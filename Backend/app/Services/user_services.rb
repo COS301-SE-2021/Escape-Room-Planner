@@ -23,21 +23,21 @@ class UserServices
     raise 'LoginRequest null' if request.nil?
 
     #find user in database and retrieve it if it exists
-    @cur_user = User.find_by(username: request.username)
+    @user = User.find_by(username: request.username)
 
-    raise 'Username does not exist' if @cur_user.nil?
+    raise 'Username does not exist' if @user.nil?
 
     #check password is correct
-    raise 'Incorrect Password' unless request.password.equal?(@cur_user.password)
+    raise 'Incorrect Password' unless request.password.equal?(@user.password)
 
     #generate JWT token and attach to user
 
-    @token = Authenticate.encode(@cur_user.id)
+    @token = Authenticate.encode(@user.id)
 
     # store jwt token discuss with team
     # @cur_user.token = @token
 
-    @response = if @cur_user.save
+    @response = if @user.save
                   LoginResponse.new(true, 'Login Successful')
                 else
                   LoginResponse.new(false, 'Login Failed')
@@ -51,10 +51,10 @@ class UserServices
   def resetPassword(request)
     raise 'ResetPasswordRequest null' if request.nil?
 
-    @user = User.new
-    @user.username = request.username
-    @user.password = request.password
-    @user.newPassword = request.newPassword
+    @user = User.find_by_username(request.username)
+    raise 'Username does not exist' if @user.nil?
+
+    @user.password = request.newPassword
 
     @response = if @user.save
                   ResetPasswordResponse.new(true, 'Password reset Successfully')
@@ -77,7 +77,7 @@ class UserServices
                   GetUserDetailsResponse.new(false, 'Failed')
                 end
   end
-  
+
   def setAdmin(request)
     raise 'SetAdminRequest null' if request.nil?
 
@@ -94,11 +94,11 @@ class UserServices
                   SetAdminResponse.new(false, 'Failed')
                 end
   end
-  
+
   def deleteUser(request)
-    
+
   end
-  
+
   def getUsers(request)
 
   end
