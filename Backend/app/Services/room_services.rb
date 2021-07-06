@@ -75,11 +75,12 @@ class RoomServices
     @response
   end
 
-  # @param [Object] request
+  # @param [RemoveVertexRequest] request
+  # @return [RemoveVertexResponse]
   def remove_vertex(request)
     raise 'removeVertexRequest null' if request.nil?
 
-    vertex = Vertex.find_by_id(request.vertexID)
+    vertex = Vertex.find_by_id(request.vertex_id)
 
     @response = if vertex.nil?
                   RemoveVertexResponse.new(false, 'Vertex could not be found')
