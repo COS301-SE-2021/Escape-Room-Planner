@@ -48,6 +48,8 @@ jobs:
     - name: Build and Test
       env:
         RAILS_ENV: test
+        PG_USER: postgres
+        PG_PASSWORD: postgres
       run: |
         bundle exec rake db:create
         bundle exec rake db:migrate
