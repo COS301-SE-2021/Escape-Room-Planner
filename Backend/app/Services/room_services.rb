@@ -33,26 +33,27 @@ class RoomServices
                 end
   end
 
-  def createKey(request)
-    return CreateKeyResponse.new(-1, false) if request.nil?
+  def create_key(request)
+    return CreateKeyResponse.new(nil, false) if request.nil?
 
     @key = Keys.new
     @key.name = request.name
-    @key.posx = request.posx
-    @key.posy = request.posy
+    @key.posx = request.pos_x
+    @key.posy = request.pos_y
     @key.width = request.width
     @key.height = request.height
-    @key.graphicid = request.graphicid
-    @key.escape_room_id = request.roomID
+    @key.graphicid = request.graphic_id
+    @key.escape_room_id = request.room_id
 
     @response = if @key.save
                   CreateKeyResponse.new(@key.id, true)
                 else
-                  CreateKeyResponse.new(-1, false)
+                  CreateKeyResponse.new(nil, false)
                 end
   end
 
   # @param [CreateContainerRequest] request
+  # @return [CreateContainerResponse]
   def create_container(request)
     raise 'CreateContainerRequest null' if request.nil?
 
