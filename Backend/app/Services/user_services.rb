@@ -1,6 +1,18 @@
 class UserServices
   def registerUser(request)
+    raise 'RegisterUserRequest null' if request.nil?
+    @user = User.new
+    @user.username = request.username
+    @user.password = request.password
+    @user.email = request.email
+    @user.name = request.name
+    @user.isAdmin = request.isAdmin
 
+    @response = if @user.save
+                  RegisterUserResponse.new(true, "User Creatwd Successfully")
+                else
+                  RegisterUserResponse.new(false, "User Not Created")
+                end
   end
 
   def verifyAccount(request)
