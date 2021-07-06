@@ -31,9 +31,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Install pg client
+    - name: Prepare for Backend Tests
       run: |
         sudo apt-get -yqq install libpq-dev
+        cd Backend
     
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
