@@ -5,8 +5,8 @@ require './app/Services/room_services'
 require './app/Services/create_escapeRoom_request'
 require './app/Services/create_escapeRoom_response'
 
+# rubocop:disable Metrics/ClassLength
 class ErTest < ActiveSupport::TestCase
-
   # test if escape room can be made (good case)
   test 'test create escape room' do
     before_test = EscapeRoom.count
@@ -138,7 +138,7 @@ class ErTest < ActiveSupport::TestCase
     height = 26
 
     req = UpdateVertexRequest.new(vertex_id, pos_x, pos_y, width, height)
-    rs = RoomServices.new  # creates a room service object to test it's functionality
+    rs = RoomServices.new # creates a room service object to test it's functionality
     res = rs.update_vertex(req)
 
     vertex = Vertex.find_by_id(vertex_id)
@@ -150,14 +150,16 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(vertex.width, width)
   end
 
-  def test_update_vertex_nil
+  # test if update service works when vertex is nil (bad case)
+  test 'can handle nil vertex in update vertex' do
     rs = RoomServices.new
-    exception = assert_raise(StandardError){rs.update_vertex(nil) }
+    exception = assert_raise(StandardError) { rs.update_vertex(nil) }
     assert_equal('Request null', exception.message)
   end
 
-  def test_update_vertex_vertex_not_exist
-    req = UpdateVertexRequest.new(9, 5,5, 5, 5)
+  # test if update service doesn't update when vertex doesn't exist
+  test 'can handle non-existent vertex when updating a vertex' do
+    req = UpdateVertexRequest.new(9, 5, 5, 5, 5)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -165,8 +167,9 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.message, 'Vertex could not be found')
   end
 
-  def test_update_vertex_height_negative
-    req = UpdateVertexRequest.new(1, 5,5, 5, -1)
+  # test if vertex is not update when negative height is given (bad case)
+  test 'cannot update vertex when negative height is used' do
+    req = UpdateVertexRequest.new(1, 5, 5, 5, -1)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -176,8 +179,9 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.success, false)
   end
 
-  def test_update_vertex_width_negative
-    req = UpdateVertexRequest.new(1, 5,5, -1, 1)
+  # test if vertex is not update when negative width is given (bad case)
+  test 'cannot update vertex when negative width is used' do
+    req = UpdateVertexRequest.new(1, 5, 5, -1, 1)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -187,8 +191,9 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.success, false)
   end
 
-  def test_update_vertex_incorrect_types
-    req = UpdateVertexRequest.new(1, '123','5', '-1', '1')
+  # test if vertex is not update when incorrect type is given (bad case)
+  test 'cannot update vertex when incorrect type is used' do
+    req = UpdateVertexRequest.new(1, '123', '5', '-1', '1')
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -201,4 +206,7 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.success, false)
   end
 
+  # test if vertex is not update when negative x coordinate is given (bad case)
+  # test if vertex is not update when negative y coordinate is given (bad case)
 end
+# rubocop:enable Metrics/ClassLength
