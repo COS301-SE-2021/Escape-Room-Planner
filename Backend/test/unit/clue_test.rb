@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class ClueTest < ActiveSupport::TestCase
-  def test_create_clue
+  test 'can create a valid clue' do
     num_clues_before = Clue.count
     room_id = 1
     req = CreateClueRequest.new 'test', 0, 0, 0.1, 0.1,
@@ -14,7 +14,7 @@ class ClueTest < ActiveSupport::TestCase
     assert_not_equal(Clue.count, num_clues_before)
   end
 
-  def test_null_clue
+  test 'can handle null clue request' do
     req = nil
     rs = RoomServices.new
     response = rs.create_clue(req)
