@@ -1,7 +1,8 @@
-import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {tsCreateElement} from '@angular/compiler-cli/src/ngtsc/typecheck/src/ts_util';
 import {getLocaleFirstDayOfWeek} from "@angular/common";
+import {VertexService} from "../../services/vertex.service";
 
 // TODO: DO CHECKS IN CASE SOMETHING FAILS TO BE STORED IN RAILS
 
@@ -11,24 +12,31 @@ import {getLocaleFirstDayOfWeek} from "@angular/common";
   templateUrl: './room-creator.component.html',
   styleUrls: ['./room-creator.component.css']
 })
-export class RoomCreatorComponent implements OnInit {
-  public lastPos : number = 0;
+export class RoomCreatorComponent implements OnInit, AfterViewInit {
+  public lastPos : number = 0; // used to populate new objects in line
   // @ts-ignore
-  public escapeRooms: EscapeRoomArray;
+  public escapeRooms: EscapeRoomArray; // array of escape rooms used to populate drop down
   //todo fix this to be a session?
-  public currentRoomId: number = 0;
-  public newEscapeRoomName:string = "";
+  public currentRoomId: number = 0; // used to check currently selected room
+  public newEscapeRoomName:string = ""; // used when submitting a new room creation
+  public newEscapeRoomNameValid:boolean = false; // flag using regex
 
-  @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined;
-  @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined;
+  @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
+  @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
+  @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
 
-  constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient) { }
+  constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
+              private vertexService: VertexService) { }
 
   ngOnInit(): void {
     //set the currentRoomId to 1 by default, later to actual first room id?
     this.currentRoomId = 3;
     this.getEscapeRooms();
     this.getVertexFromRoom();
+  }
+
+  ngAfterViewInit(){
+    // this.renderAlertError("TEST");
   }
 
   //adds an object to drag on our 'canvas'
@@ -55,7 +63,8 @@ export class RoomCreatorComponent implements OnInit {
             this.renderNewRoom(er.id, "fake name for now");
           }
       },
-      error => console.error('There was an error retrieving your rooms', error)
+        //Render error if bad request
+        error => this.renderAlertError('There was an error retrieving your rooms')
     );
   }
 
@@ -86,31 +95,42 @@ export class RoomCreatorComponent implements OnInit {
           this.spawnObjects(vertex.id,vertex.graphicid,vertex.posx,vertex.posy,vertex.width,vertex.height);
         }
       },
-      error => console.error('There was an error retrieving vertices for the room', error)
+      //Error retrieving vertices message
+      error => this.renderAlertError("There was an error retrieving vertices for the room")
     );
   }
 
   // POST to create new room for a user
-  createEscapeRoom(): void{
-    if (this.newEscapeRoomName === "") {
-      // todo need to remove all initial spaces here
-      alert("Provide name for a room please");
-      return; // needs to have a name
+  createEscapeRoom(NewEscapeRoomForm:any): void{
+    // regex to extract valid strings, removes all the spaces and allows any character
+    let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
+    let regexResult = patternRegEx.exec(this.newEscapeRoomName);
+
+    if (regexResult === null) {
+      alert("cant send empty string");
+      // needs to have a name
+    }else {
+      let createRoomBody = {name: regexResult[0]};
+      //http request to rails api
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
+        response => {
+          //rendering <li> elements by using render function
+          // console.log(response.data)
+          this.renderNewRoom(response.data.id, response.data.name);
+        },
+        error => console.error('There was an error creating your rooms', error)
+      );
     }
 
-    // console.log('created');
+    this.newEscapeRoomNameValid = false;
+    this.newEscapeRoomName = ""; // resets the input box text
+  }
 
-    let createRoomBody = {name: this.newEscapeRoomName};
-    //http request to rails api
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
-      response => {
-        //rendering <li> elements by using render function
-        // console.log(response.data)
-        this.renderNewRoom(response.data.id, response.data.name);
+  isNewEscapeRoomNameValid():void{
+    let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
+    let regexResult = patternRegEx.exec(this.newEscapeRoomName);
 
-      },
-      error => console.error('There was an error creating your rooms', error)
-    );
+    this.newEscapeRoomNameValid = regexResult !== null;
   }
 
   //just renders new room text in the list
@@ -130,23 +150,24 @@ export class RoomCreatorComponent implements OnInit {
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
 
-  //creates Vertex of type with scale at position
-  createVertex(inType: string, inName: string, inGraphicID: string, inPosy: number, inPosx: number, inWidth: number, inHeight: number, inEstimated_time: Date, inDescription: string, inRoomid: number, inClue: string): void{
-
-    //set initial json array for body
+  //creates Vertex of type with scale at position x,y
+  createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
+               inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: Date,
+               inDescription: string, inRoom_id: number, inClue: string): void
+  {
     let createVertexBody = {type: inType,
-                            name: inName,
-                            graphicid: inGraphicID,
-                            posy: inPosy,
-                            posx: inPosx,
-                            width: inWidth,
-                            height: inHeight,
-                            estimated_time: inEstimated_time,
-                            description: inDescription,
-                            roomid: inRoomid,
-                            clue: inClue
+      name: inName,
+      graphicid: inGraphicID,
+      posy: inPos_y,
+      posx: inPos_x,
+      width: inWidth,
+      height: inHeight,
+      estimated_time: inEstimated_time,
+      description: inDescription,
+      roomid: inRoom_id,
+      clue: inClue
     };
-    // removes params for puzzle
+
     if(inType != "Puzzle"){
       // @ts-ignore
       delete  createVertexBody.description;
@@ -162,17 +183,21 @@ export class RoomCreatorComponent implements OnInit {
     //make post request for new vertex
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody).subscribe(
       response => {
-        //will update vertex ID in html here
-        this.spawnObjects(response.data.id, inGraphicID, this.lastPos, 0, 75, 75);
+        let local_id = this.vertexService.addVertex(response.data.id,
+          inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
+          inEstimated_time, inDescription, inRoom_id, inClue
+        );
+        this.spawnObjects(response.data.id, inGraphicID, inPos_y, inPos_x, inWidth, inHeight);
       },
-      error => console.error('There was an error while creating a vertex', error)
+      error => {
+        console.error('There was an error while creating a vertex', error);
+        this.renderAlertError("Couldn't create a vertex");
+      }
     );
-
   }
 
   //used to spawn objects onto plane
   spawnObjects(id: number, loc: string, posx: number, posy: number, width: number, height: number): void{
-
     let newObject = this.renderer.createElement("img"); // create image
     this.renderer.addClass(newObject, "resize-drag");
     // All the styles
@@ -210,8 +235,38 @@ export class RoomCreatorComponent implements OnInit {
         // console.log(response);
         // console.log('bug');
       },
-      error => console.error('There was an error while updating the vertex', error)
+      error => this.renderAlertError("There was an Error Updating Vertex Position") // todo also try to reset the old position
+      //console.error('There was an error while updating the vertex', error)
     );
+  }
+
+  //Spawn Alert Error with Message
+  renderAlertError(message: string):void{
+    //create element for alert
+    let newDiv = this.renderer.createElement('div');
+    let newStrong = this.renderer.createElement('strong');
+    let newButton = this.renderer.createElement('button');
+
+    // add bootstrap to <div>
+    this.renderer.addClass(newDiv,'alert');
+    this.renderer.addClass(newDiv,'alert-warning');
+    this.renderer.addClass(newDiv,'alert-dismissible');
+    this.renderer.addClass(newDiv,'fade');
+    this.renderer.addClass(newDiv,'show');
+    this.renderer.setAttribute(newDiv, 'role', 'alert');
+    //add text to <strong>
+    this.renderer.appendChild(newStrong, this.renderer.createText(message));
+    //add bootstrap to <button>
+    this.renderer.addClass(newButton, 'btn-close');
+    this.renderer.setAttribute(newButton, 'type', 'button');
+    this.renderer.setAttribute(newButton, 'data-bs-dismiss', 'alert');
+    this.renderer.setAttribute(newButton, 'aria-label', 'Close');
+
+    // make it <div><strong><button>
+    this.renderer.appendChild(newDiv,newButton);
+    this.renderer.appendChild(newDiv, newStrong);
+    // append to div alertElementError
+    this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
   }
 }
 

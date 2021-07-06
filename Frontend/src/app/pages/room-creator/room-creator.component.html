@@ -1,8 +1,5 @@
 <div class="container-fluid">
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
+  <div class="container-fluid" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row">
     <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
       <div class="overflow-auto" style="height: 94vh; width: 315px;">
@@ -110,16 +107,26 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
-          <div class="mb-3">
+        <!-- warning for empty form input -->
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="!newEscapeRoomNameValid">
+          <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters
+        </div>
+        <form name="NewEscapeRoomForm" #NewEscapeRoomForm = "ngForm">
+          <div class="mb-3 form-group">
             <label for="recipient-name" class="col-form-label">Room Name:</label>
-            <input type="text" class="form-control" id="recipient-name" required [(ngModel)]="newEscapeRoomName">
+            <input type="text"
+                   name="EscapeRoomName"
+                   class="form-control"
+                   id="recipient-name"
+                   placeholder="Some quirky name"
+                   required
+                   [(ngModel)]="newEscapeRoomName"
+                   (input)="isNewEscapeRoomNameValid()">
           </div>
         </form>
       </div>
-
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" (click)="createEscapeRoom()" data-bs-dismiss="modal">Create</button>
+      <div class="modal-footer form-group">
+        <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom(NewEscapeRoomForm)" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>
