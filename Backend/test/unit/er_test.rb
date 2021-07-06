@@ -1,37 +1,29 @@
 require 'test_helper'
 require './app/Services/room_services'
-require './app/Services/create_escaperoom_request'
-require './app/Services/create_escaperoom_response'
+require './app/Services/create_escapeRoom_request'
+require './app/Services/create_escapeRoom_response'
 
 class ErTest < ActiveSupport::TestCase
 
-  def test_createEscapeRoom
-
-    beforetest = EscapeRoom.count
-    req = CreateEscaperoomRequest.new("testName")
+  # test if escape room can be made
+  test 'test create escape room' do
+    before_test = EscapeRoom.count
+    req = CreateEscapeRoomRequest.new("test name")
     rs = RoomServices.new
-    rs.createEscapeRoom(req)
+    rs.create_escape_room(req)
 
-    assert_not_equal(EscapeRoom.count, beforetest)
+    assert_not_equal(EscapeRoom.count, before_test)
   end
 
-  def test_checkCreateEscapeRoomSaved
-    req = CreateEscaperoomRequest.new("testName")
-    rs = RoomServices.new
-    resp = rs.createEscapeRoom(req)
-
-    assert_not_equal(resp.id, 0)
-  end
-
-  def test_checkCreateEscapeRoomNullRequest
+  # test if service returns an exception
+  test 'test create escape room with null request' do
     req = nil
     rs = RoomServices.new
-    exception = assert_raise(StandardError){ rs.createEscapeRoom(req) }
-    assert_equal('CreateEscaperoomRequest null', exception.message)
+    exception = assert_raise(StandardError){ rs.create_escape_room(req) }
+    assert_equal('CreateEscapeRoomRequest null', exception.message)
   end
 
   def test_remove_vertex
-
     before_test = Vertex.count
     req = RemoveVertexRequest.new(1)
     rs = RoomServices.new

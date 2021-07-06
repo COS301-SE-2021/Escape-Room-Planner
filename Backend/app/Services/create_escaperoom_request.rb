@@ -1,4 +1,4 @@
-class CreateEscaperoomRequest
+class CreateEscapeRoomRequest
   attr_accessor :name
 
   # later will need a user id to create

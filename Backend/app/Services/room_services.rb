@@ -20,12 +20,12 @@ class RoomServices
                 end
   end
 
-  def createEscapeRoom(request)
-    raise 'CreateEscaperoomRequest null' if request.nil?
+  def create_escape_room(request)
+    raise 'CreateEscapeRoomRequest null' if request.nil?
 
-    @escapeRoom = EscapeRoom.new(name: request.name)
-    @escapeRoom.save
-    @response = CreateEscaperoomResponse.new(@escapeRoom.id, @escapeRoom.name)
+    @escape_room = EscapeRoom.new(name: request.name)
+    @escape_room.save
+    @response = CreateEscapeRoomResponse.new(@escape_room.id, @escape_room.name)
     @response
   end
 
