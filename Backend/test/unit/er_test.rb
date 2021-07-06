@@ -72,7 +72,8 @@ class ErTest < ActiveSupport::TestCase
     # TEST
     RoomServices.new.reset_room(req) # don't need a response to check
     # ASSERT that a room wasn't deleted
-    assert_not_nil Vertex.find_by(escape_room_id: 1) # works because there is only one vertex attached to the room id of 1
+    # works because there is only one vertex attached to the room id of 1
+    assert_not_nil Vertex.find_by(escape_room_id: 1)
   end
 
   # test if a response is received without giving it a request object (bad case)
@@ -97,12 +98,12 @@ class ErTest < ActiveSupport::TestCase
   # test if a correct response is sent when nil request object is passed (bad case)
   test 'can handle nil request object on disconnect vertex case' do
     rs = RoomServices.new
-    exception = assert_raise(StandardError){ rs.disconnect_vertices(nil) }
+    exception = assert_raise(StandardError) { rs.disconnect_vertices(nil) }
     assert_equal('disconnect_vertices_request null', exception.message)
   end
 
-
-  def test_disconnect_vertices_from_vertex_not_exist
+  # test if the service can't remove a connection when from vertex doesn't exist (bad case)
+  test 'does\'t remove a vertex connection when vertex does not exist' do
     req = DisconnectVerticesRequest.new(100, 1)
     rs = RoomServices.new
     res = rs.disconnect_vertices(req)
@@ -110,8 +111,8 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.message, 'From vertex could not be found')
   end
 
-  def test_disconnect_vertices_no_link
-
+  # test if no connections are removed when no connection exists (bad case)
+  test 'does not disconnect connection when it does not exist' do
     req = DisconnectVerticesRequest.new(3, 1)
     rs = RoomServices.new
     res = rs.disconnect_vertices(req)
@@ -119,7 +120,8 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.message, 'There is no link between vertices')
   end
 
-  def test_disconnect_vertices_correct_response
+  # test if service returns a correct response when correct vertices are disconnected (good case)
+  test 'can disconnect vertices' do
     req = DisconnectVerticesRequest.new(1, 2)
     rs = RoomServices.new
     res = rs.disconnect_vertices(req)
@@ -127,22 +129,23 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.success, true)
   end
 
-  def test_update_vertex_correct
-    vertexID = 1
-    posX = 10
-    posY = 11
+  # test if a vertex is update correctly when a service is used (good case)
+  test 'can update vertex position' do
+    vertex_id = 1
+    pos_x = 10
+    pos_y = 11
     width = 25
     height = 26
 
-    req = UpdateVertexRequest.new(vertexID, posX, posY, width, height)
-    rs = RoomServices.new
+    req = UpdateVertexRequest.new(vertex_id, pos_x, pos_y, width, height)
+    rs = RoomServices.new  # creates a room service object to test it's functionality
     res = rs.update_vertex(req)
 
-    vertex = Vertex.find_by_id(vertexID)
+    vertex = Vertex.find_by_id(vertex_id)
 
     assert_equal(res.success, true)
-    assert_equal(vertex.posx, posX)
-    assert_equal(vertex.posy, posY)
+    assert_equal(vertex.posx, pos_x)
+    assert_equal(vertex.posy, pos_y)
     assert_equal(vertex.height, height)
     assert_equal(vertex.width, width)
   end
