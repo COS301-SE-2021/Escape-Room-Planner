@@ -20,7 +20,16 @@ class UserServices
   end
 
   def login(request)
+    raise 'LoginRequest null' if request.nil?
+    @user = User.new
+    @user.username = request.username
+    @user.password = request.password
 
+    @response = if @user.save
+                  LoginResponse.new(true, "User Creatwd Successfully")
+                else
+                  LoginResponse.new(false, "User Not Created")
+                end
   end
 
   def updateAccount(request)
