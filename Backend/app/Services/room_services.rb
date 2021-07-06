@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RoomServices
   # @param [CreatePuzzleRequest] request
   # @return [CreatePuzzleResponse]
@@ -151,8 +153,8 @@ class RoomServices
     vertex = Vertex.find_by_id(request.id)
     return UpdateVertexResponse.new(false, 'Vertex could not be found') if vertex.nil?
 
-    vertex.posx = request.posx
-    vertex.posy = request.posy
+    vertex.posx = request.pos_x
+    vertex.posy = request.pos_y
     vertex.width = request.width
     vertex.height = request.height
 
