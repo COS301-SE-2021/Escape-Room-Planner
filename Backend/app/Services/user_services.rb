@@ -27,9 +27,10 @@ class UserServices
 
     raise 'Username does not exist' if @cur_user.nil?
 
+    #check password is correct
     raise 'Incorrect Password' unless request.password.equal?(@cur_user.password)
 
-    #generate JWT token
+    #generate JWT token and attach to user
 
     @token = Authenticate.encode(@cur_user.id)
 
