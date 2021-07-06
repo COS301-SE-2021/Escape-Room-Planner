@@ -86,7 +86,7 @@ class UserServices
     raise 'User does not exist' if @user.nil?
 
     @user.isAdmin = true
-    
+
     @response = if @user.save
                   SetAdminResponse.new(true, 'Successful')
                 else
@@ -95,6 +95,27 @@ class UserServices
   end
 
   def deleteUser(request)
+    raise 'SetAdminRequest null' if request.nil?
+
+    @user = User.find_by_username(request.username)
+
+    raise 'User does not exist' if @user.nil?
+
+    # A non-admin user cannpt delete another user
+    raise 'Current user is not an admin' unless @user.isAdmin
+
+    @user_to_be_deleted = User.find_by_username(request.user_to_be_deleted)
+
+    #check user to be deleted exists
+    raise 'User to be deleted does not exist' if @user_to_be_deleted.nil?
+
+    User.destroy(@user_to_be_deleted.id)
+
+    @response = if User.find_by_username(request.username).nil?
+                  DeleteUserResponse.new(true, 'Successfully deleted user')
+                else
+                  DeleteUserResponse.new(false , 'Failed to delete user')
+                end
 
   end
 
