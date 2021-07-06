@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require './app/Services/room_services'
 require './app/Services/create_escapeRoom_request'
@@ -61,28 +63,29 @@ class ErTest < ActiveSupport::TestCase
     # TEST
     RoomServices.new.reset_room(req)
     # ASSERT that a correct response is received
-    assert_empty Vertex.find_by(escape_room_id: 1)
+    assert_nil Vertex.find_by(escape_room_id: 1)
   end
 
-  # test if a room is not removed when no authorization is provided
+  # test if a room is not removed when no authorization is provided (bad case)
   test 'room isn\'t reset without authorization' do
     req = ResetEscapeRoomRequest.new nil, 1 # auth is trivial in here, so nil will do as well
     # TEST
     RoomServices.new.reset_room(req) # don't need a response to check
     # ASSERT that a room wasn't deleted
-    assert_not_empty Vertex.find_by(escape_room_id: 1)
+    assert_not_nil Vertex.find_by(escape_room_id: 1) # works because there is only one vertex attached to the room id of 1
   end
 
-  # test if a response
-  def test_remove_vertex_null_request
+  # test if a response is received without giving it a request object (bad case)
+  test 'can handle nil request object on remove vertex case' do
     req = nil
     rs = RoomServices.new
-    exception = assert_raise(StandardError){ rs.remove_vertex(req) }
+    exception = assert_raise(StandardError) { rs.remove_vertex(req) }
 
     assert_equal('removeVertexRequest null', exception.message)
   end
 
-  def test_disconnect_vertices
+  # test if we can remove the vertex connections from a join table (good case)
+  test 'can disconnect vertices' do
     from_vertex = Vertex.find_by_id(1)
     req = DisconnectVerticesRequest.new(1, 2)
     rs = RoomServices.new
@@ -91,11 +94,13 @@ class ErTest < ActiveSupport::TestCase
     assert_nil(from_vertex.vertices.find_by_id(2))
   end
 
-  def test_disconnect_vertices_null_request
+  # test if a correct response is sent when nil request object is passed (bad case)
+  test 'can handle nil request object on disconnect vertex case' do
     rs = RoomServices.new
     exception = assert_raise(StandardError){ rs.disconnect_vertices(nil) }
     assert_equal('disconnect_vertices_request null', exception.message)
   end
+
 
   def test_disconnect_vertices_from_vertex_not_exist
     req = DisconnectVerticesRequest.new(100, 1)
