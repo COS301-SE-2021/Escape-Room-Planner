@@ -207,6 +207,27 @@ class ErTest < ActiveSupport::TestCase
   end
 
   # test if vertex is not update when negative x coordinate is given (bad case)
+  test 'cannot update vertex when negative x coordinate is used' do
+    req = UpdateVertexRequest.new(1, -5, 5, 1, 1)
+    rs = RoomServices.new
+    res = rs.update_vertex(req)
+
+    vertex = Vertex.find_by_id(1)
+
+    assert_not_equal(vertex.width, -1)
+    assert_equal(res.success, false)
+  end
+
   # test if vertex is not update when negative y coordinate is given (bad case)
+  test 'cannot update vertex when negative y coordinate is used' do
+    req = UpdateVertexRequest.new(1, 5, -5, 1, 1)
+    rs = RoomServices.new
+    res = rs.update_vertex(req)
+
+    vertex = Vertex.find_by_id(1)
+
+    assert_not_equal(vertex.width, -1)
+    assert_equal(res.success, false)
+  end
 end
 # rubocop:enable Metrics/ClassLength
