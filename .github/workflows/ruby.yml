@@ -14,8 +14,13 @@ on:
     branches: [ master, develop ]
 
 jobs:
-  test:
+  ruby-test:
+    name: Ruby Test
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: Backend
     
     services:
       postgres:
@@ -41,11 +46,11 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.3
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     
     - name: Install dependencies
       run: |
-        ls
+        gem install bundler
+        bundler install
         yarn install
         
     - name: Build and Test
