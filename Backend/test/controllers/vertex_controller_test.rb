@@ -131,7 +131,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   test 'cant delete vertex' do
     delete "#{api_v1_vertex_index_path}/500"
-    assert_response :bad_request
+    assert_response :ok
   end
 
 end
