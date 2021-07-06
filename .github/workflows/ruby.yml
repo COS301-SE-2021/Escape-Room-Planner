@@ -39,8 +39,6 @@ jobs:
     - name: Prepare for Backend Tests
       run: |
         sudo apt-get -yqq install libpq-dev
-        cd Backend
-        ls
     
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
@@ -59,7 +57,6 @@ jobs:
         PG_USER: postgres
         PG_PASSWORD: postgres
       run: |
-        ls
         bundle exec rake db:create
         bundle exec rake db:migrate
         bundle exec rake test
