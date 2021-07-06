@@ -44,13 +44,11 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.3
-        bundler-cahce: true
+        bundler-cache: true
         working-directory: Backend
     
     - name: Install dependencies
       run: |
-        gem install bundler
-        bundler install
         yarn install
         
     - name: Build and Test
