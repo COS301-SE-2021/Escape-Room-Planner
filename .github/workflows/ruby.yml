@@ -50,6 +50,6 @@ jobs:
         
     - name: Build and Test
       run: |
-        bundlle exec rake db:create
+        bundle exec rake db:create
         bundle exec rake db:migrate
         bundle exec rake test
