@@ -1,22 +1,24 @@
 class RoomServices
-  def createPuzzle(request)
+  # @param [CreatePuzzleRequest] request
+  # @return [CreatePuzzleResponse]
+  def create_puzzle(request)
     raise 'CreatePuzzleRequest null' if request.nil?
 
     @puzzle = Puzzle.new
     @puzzle.name = request.name
-    @puzzle.posx = request.posx
-    @puzzle.posy = request.posy
+    @puzzle.posx = request.pos_x
+    @puzzle.posy = request.pos_y
     @puzzle.width = request.width
     @puzzle.height = request.height
-    @puzzle.graphicid = request.graphicid
-    @puzzle.estimatedTime = request.estimatedTime
+    @puzzle.graphicid = request.graphic_id
+    @puzzle.estimatedTime = request.estimated_time
     @puzzle.description = request.description
-    @puzzle.escape_room_id = request.roomID
+    @puzzle.escape_room_id = request.room_id
 
     @response = if @puzzle.save
                   CreatePuzzleResponse.new(@puzzle.id, true)
                 else
-                  CreatePuzzleResponse.new(-1, false)
+                  CreatePuzzleResponse.new(nil, false)
                 end
   end
 
@@ -24,9 +26,11 @@ class RoomServices
     raise 'CreateEscapeRoomRequest null' if request.nil?
 
     @escape_room = EscapeRoom.new(name: request.name)
-    @escape_room.save
-    @response = CreateEscapeRoomResponse.new(@escape_room.id, @escape_room.name)
-    @response
+    @response = if @escape_room.save
+                  CreateEscapeRoomResponse.new(@escape_room.id, @escape_room.name)
+                else
+                  CreateEscapeRoomResponse.new(nil, nil)
+                end
   end
 
   def createKey(request)
