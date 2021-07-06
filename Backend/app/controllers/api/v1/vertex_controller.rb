@@ -56,10 +56,10 @@ module Api
         resp=serv.update_vertex(req)
 
         if !resp.success
-          render json: {status: 'FAILED', message: 'Vertex might not exist'}, status: :bad_request
+          render json: {status: 'FAILED', message: 'Vertex might not exist',data: resp},status: :ok
           return
         end
-        render json: {status: 'SUCCESS', message: 'Vertices updates'}, status: :ok
+        render json: {status: 'SUCCESS', message: 'Vertices updates', data: resp}, status: :ok
       rescue StandardError
 
         render json: {status: 'FAILED', message: 'Vertex might not exist'}, status: :bad_request
@@ -147,7 +147,7 @@ module Api
           res=serv.createClue(req)
 
         else
-          render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :bad_request
+          render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :ok
           return
         end
 
@@ -171,7 +171,7 @@ module Api
 
 
         unless resp.success
-          render json: {status: 'FAILED', message: 'Unspecified error'}, status: :bad_request
+          render json: {status: 'FAILED', message: 'Unspecified error', data: resp}, status: :ok
           return
         end
 
