@@ -30,7 +30,7 @@ class RoomServices
   end
 
   def createKey(request)
-    return CreateKeyResponse.new(-1, false) if request == nil
+    return CreateKeyResponse.new(-1, false) if request.nil?
 
     @key = Keys.new
     @key.name = request.name
@@ -99,18 +99,19 @@ class RoomServices
                 end
   end
 
-  def createClue(request)
-    return CreateClueResponse.new(-1, false) if request == nil
+  def create_clue(request)
+
+    return CreateClueResponse.new(-1, false) if request.nil?
 
     @clue = Clue.new
     @clue.name = request.name
-    @clue.posx = request.posx
-    @clue.posy = request.posy
+    @clue.posx = request.pos_x
+    @clue.posy = request.pos_y
     @clue.width = request.width
     @clue.height = request.height
-    @clue.graphicid = request.graphicid
+    @clue.graphicid = request.graphic_id
     @clue.clue = request.clue
-    @clue.escape_room_id = request.roomID
+    @clue.escape_room_id = request.room_id
 
     @response = if @clue.save
                   CreateClueResponse.new(@clue.id, true)
@@ -124,7 +125,6 @@ class RoomServices
 
     # from request we will be able to authorize the user
     # from request we get the room id which to reset
-
     # do authentication here later
 
     @response = if request.auth.nil?
