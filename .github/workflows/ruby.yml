@@ -16,9 +16,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby-version: ['2.6', '2.7', '3.0']
     
     services:
       postgres:
@@ -49,6 +46,8 @@ jobs:
         yarn install
         
     - name: Build and Test
+      env:
+        RAILS_ENV: test
       run: |
         bundle exec rake db:create
         bundle exec rake db:migrate
