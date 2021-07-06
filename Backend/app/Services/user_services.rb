@@ -9,7 +9,7 @@ class UserServices
     @user.isAdmin = request.isAdmin
 
     @response = if @user.save
-                  RegisterUserResponse.new(true, "User Creatwd Successfully")
+                  RegisterUserResponse.new(true, "User Created Successfully")
                 else
                   RegisterUserResponse.new(false, "User Not Created")
                 end
@@ -26,9 +26,9 @@ class UserServices
     @user.password = request.password
 
     @response = if @user.save
-                  LoginResponse.new(true, "User Creatwd Successfully")
+                  LoginResponse.new(true, "Login Successfully")
                 else
-                  LoginResponse.new(false, "User Not Created")
+                  LoginResponse.new(false, "Login Failed")
                 end
   end
 
@@ -37,7 +37,17 @@ class UserServices
   end
 
   def resetPassword(request)
+    raise 'ResetPasswordRequest null' if request.nil?
+    @user = User.new
+    @user.username = request.username
+    @user.password = request.password
+    @user.newPassword = request.newPassword
 
+    @response = if @user.save
+                  ResetPasswordResponse.new(true, "Password reset Successfully")
+                else
+                  ResetPasswordResponse.new(false, "Password Not Reset")
+                end
   end
 
   def getUserDetails(request)
