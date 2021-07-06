@@ -51,7 +51,17 @@ class UserServices
   end
 
   def getUserDetails(request)
-    
+    raise 'GetUserDetailsRequest null' if request.nil?
+    @user = User.new
+    @user.username = request.username
+    @user.password = request.password
+    @user.email = request.email
+
+    @response = if @user.save
+                  GetUserDetailsResponse.new(true, "Successful")
+                else
+                  GetUserDetailsResponse.new(false, "Failed")
+                end
   end
   
   def setAdmin(request)
