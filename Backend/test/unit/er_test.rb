@@ -5,25 +5,26 @@ require './app/Services/create_escapeRoom_response'
 
 class ErTest < ActiveSupport::TestCase
 
-  # test if escape room can be made
+  # test if escape room can be made (good case)
   test 'test create escape room' do
     before_test = EscapeRoom.count
-    req = CreateEscapeRoomRequest.new("test name")
+    req = CreateEscapeRoomRequest.new('test name')
     rs = RoomServices.new
     rs.create_escape_room(req)
 
     assert_not_equal(EscapeRoom.count, before_test)
   end
 
-  # test if service returns an exception
+  # test if service returns an exception (bad case)
   test 'test create escape room with null request' do
     req = nil
     rs = RoomServices.new
-    exception = assert_raise(StandardError){ rs.create_escape_room(req) }
+    exception = assert_raise(StandardError) { rs.create_escape_room(req) }
     assert_equal('CreateEscapeRoomRequest null', exception.message)
   end
 
-  def test_remove_vertex
+  # test if the service returns correct response on success (good case)
+  test 'can remove a vertex' do
     before_test = Vertex.count
     req = RemoveVertexRequest.new(1)
     rs = RoomServices.new
@@ -33,17 +34,17 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(res.success, true)
   end
 
-  def test_remove_vertex_response_failed
-
-    req = RemoveVertexRequest.new(6)
+  # test if the service return a correct response on failure (bad case)
+  test 'does\'t remove non-existent vertex' do
+    req = RemoveVertexRequest.new(6) # send vertex id that doesn't exist
     rs = RoomServices.new
     res = rs.remove_vertex(req)
 
     assert_equal(res.success, false)
   end
 
-  def test_remove_vertex_vertices_removed
-
+  # test if the service can remove deleted vertex's connection (good case)
+  test 'can remove vertices\' connection on delete' do
     vertex = Vertex.find(1)
     before_test = vertex.vertices.count
     req = RemoveVertexRequest.new(1)
@@ -54,24 +55,25 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(vertex.vertices.count, 0)
   end
 
+  # test if a room can be reset (all vertices deleted) (good case)
   test 'room does reset' do
-    req = ResetEscapeRoomRequest.new 1234, 1 # auth is trivial in here
-    before_test = Vertex.find_by(escape_room_id: 1) # just to get array of objects there
+    req = ResetEscapeRoomRequest.new 1234, 1 # auth is trivial until it is implemented
     # TEST
-    resp = RoomServices.new.reset_room(req)
-    # ASSERT that acorrect response is received
-    assert resp.success
+    RoomServices.new.reset_room(req)
+    # ASSERT that a correct response is received
+    assert_empty Vertex.find_by(escape_room_id: 1)
   end
 
-  test 'no authorisation room reset' do
-    req = ResetEscapeRoomRequest.new nil, 1 # auth is trivial in here
-    before_test = Vertex.find_by(escape_room_id: 1) # just to get array of objects there
+  # test if a room is not removed when no authorization is provided
+  test 'room isn\'t reset without authorization' do
+    req = ResetEscapeRoomRequest.new nil, 1 # auth is trivial in here, so nil will do as well
     # TEST
-    resp = RoomServices.new.reset_room(req)
-    # ASSERT that acorrect response is received
-    assert_not resp.success
+    RoomServices.new.reset_room(req) # don't need a response to check
+    # ASSERT that a room wasn't deleted
+    assert_not_empty Vertex.find_by(escape_room_id: 1)
   end
 
+  # test if a response
   def test_remove_vertex_null_request
     req = nil
     rs = RoomServices.new
