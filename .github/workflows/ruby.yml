@@ -47,9 +47,10 @@ jobs:
         bundler-cache: true
         working-directory: Backend
     
-    - name: Install dependencies
-      run: |
-        yarn install
+    - name: Yarn with caching
+      uses: bahmutov/npm-install@HEAD
+      with:
+        working-directory: Backend
         
     - name: Build and Test
       env:
