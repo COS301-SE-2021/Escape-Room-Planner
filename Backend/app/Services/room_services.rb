@@ -48,22 +48,23 @@ class RoomServices
                 end
   end
 
-  def createContainer(request)
+  # @param [CreateContainerRequest] request
+  def create_container(request)
     raise 'CreateContainerRequest null' if request.nil?
 
     @container = Container.new
-    @container.posx = request.posx
-    @container.posy = request.posy
+    @container.posx = request.pos_x
+    @container.posy = request.pos_y
     @container.width = request.width
     @container.height = request.height
     @container.name = request.name
-    @container.graphicid = request.graphicid
-    @container.escape_room_id = request.roomID
+    @container.graphicid = request.graphic_id
+    @container.escape_room_id = request.room_id
 
     @response = if @container.save
                   CreateContainerResponse.new(@container.id, true)
                 else
-                  CreateContainerResponse.new(-1, false)
+                  CreateContainerResponse.new(nil, false)
                 end
     # Return the response
     @response
