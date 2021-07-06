@@ -81,13 +81,12 @@ class UserServices
   def setAdmin(request)
     raise 'SetAdminRequest null' if request.nil?
 
-    @user = User.new
-    @user.username = request.username
-    @user.password = request.password
-    @user.email = request.email
-    @user.name = request.name
-    @user.isAdmin = request.isAdmin
+    @user = User.find_by_username(request.username)
 
+    raise 'User does not exist' if @user.nil?
+
+    @user.isAdmin = true
+    
     @response = if @user.save
                   SetAdminResponse.new(true, 'Successful')
                 else

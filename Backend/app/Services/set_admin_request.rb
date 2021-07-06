@@ -1,11 +1,8 @@
 class SetAdminRequest
-  attr_accessor :username, :password, :email, :isAdmin
+  attr_accessor :username
 
-  def initialize(username, password, email, isAdmin)
+  def initialize(username)
     @username = username
-    @password = password
-    @email = email
-    @isAdmin = isAdmin
   end
 end
 
