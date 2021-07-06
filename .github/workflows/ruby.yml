@@ -1,0 +1,56 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will download a prebuilt Ruby version, install dependencies and run tests with Rake
+# For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
+
+name: Ruby on Rails CI
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        env:
+          POSTGRES_DB: postgres        
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+        image: postgres:13
+        ports:
+        - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Install pg client
+      run: |
+        sudo apt-get -yqq install libpq-dev
+    
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7.3
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+    
+    - name: Install dependencies
+      run: |
+        yarn install
+        
+    - name: Build and Test
+      env:
+        RAILS_ENV: test
+        PG_USER: postgres
+        PG_PASSWORD: postgres
+      run: |
+        bundle exec rake db:create
+        bundle exec rake db:migrate
+        bundle exec rake test
