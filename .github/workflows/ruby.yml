@@ -53,3 +53,11 @@ jobs:
         bundle exec rake db:create
         bundle exec rake db:migrate
         bundle exec rake test
+        
+        
+  if: contasins(github.ref, "master")
+    steps:
+      - name: Deploy to heroku
+        run: |
+          echo "I ran because we on main"
+        
