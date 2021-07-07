@@ -1,4 +1,5 @@
 class Vertex < ApplicationRecord
+  belongs_to :field, polymorphic: true
   belongs_to :escape_room
 
   has_and_belongs_to_many :vertices, join_table: 'vertex_edges', foreign_key: 'from_vertex_id',
