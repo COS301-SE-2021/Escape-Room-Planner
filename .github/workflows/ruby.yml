@@ -54,10 +54,7 @@ jobs:
         bundle exec rake db:migrate
         bundle exec rake test
         
-        
-  if: contasins(github.ref, "master")
-    steps:
-      - name: Deploy to heroku
-        run: |
-          echo "I ran because we on main"
-        
+    - name: Deploy to heroku
+      run: |
+            echo "I ran because we on main"
+      if: contasins(github.ref, "master") && github.event_name == "push"
