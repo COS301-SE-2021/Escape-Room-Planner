@@ -54,6 +54,7 @@ jobs:
         bundle exec rake db:create
         bundle exec rake db:migrate
         bundle exec rake test
+        echo "web bin/rails server -p 80 -e $RAILS_ENV" > Procfile
         
     - name: Deploy to heroku
       uses: akhileshns/heroku-deploy@v3.12.12
