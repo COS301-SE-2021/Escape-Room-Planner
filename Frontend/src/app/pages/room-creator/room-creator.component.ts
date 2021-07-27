@@ -92,8 +92,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         //render all the vertices
         for (let vertex of response.data){
           //spawn objects out;
+          this.vertexService.addVertex(vertex.id, "vertex", vertex.name, vertex.graphicid,
+                                       vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
+                                       vertex.description, vertex.clue);
           this.spawnObjects(vertex.id,vertex.graphicid,vertex.posx,vertex.posy,vertex.width,vertex.height);
         }
+
+        console.log(this.vertexService.vertices);
       },
       //Error retrieving vertices message
       error => this.renderAlertError("There was an error retrieving vertices for the room")
@@ -185,9 +190,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
         let local_id = this.vertexService.addVertex(response.data.id,
           inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
-          inEstimated_time, inDescription, inRoom_id, inClue
+          inEstimated_time, inDescription, inClue
         );
-        this.spawnObjects(response.data.id, inGraphicID, inPos_y, inPos_x, inWidth, inHeight);
+        this.spawnObjects(response.data.id, inGraphicID, inPos_x, inPos_y, inWidth, inHeight);
       },
       error => {
         console.error('There was an error while creating a vertex', error);
@@ -283,11 +288,15 @@ interface VertexArray {
 
 interface Vertex{
   id: number;
+  name: string;
   graphicid: string;
   height: number;
   width: number;
   posx: number;
   posy: number;
+  clue: string;
+  description: string;
+  estimatedTime: Date;
 }
 
 //for Escape Room Response

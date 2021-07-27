@@ -8,8 +8,7 @@ export class Key extends Vertex{
               pos_y: number,
               width: number,
               height: number,
-              graphic_id: string,
-              room_id: number) {
-    super(local_id, id, name, 'Key', pos_x, pos_y, width, height, graphic_id, room_id);
+              graphic_id: string) {
+    super(local_id, id, name, 'Key', pos_x, pos_y, width, height, graphic_id);
   }
 }
