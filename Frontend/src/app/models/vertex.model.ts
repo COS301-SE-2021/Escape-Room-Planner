@@ -12,6 +12,7 @@ export class Vertex {
   private _height: number;
   private _graphic_id: string;
   private _room_id: number;
+  private _deleted: boolean; // a flag to see if the vertex was deleted in the current session
 
   constructor(local_id: number,
               id: number,
@@ -33,6 +34,7 @@ export class Vertex {
       this._height = height;
       this._graphic_id = graphic_id;
       this._room_id = room_id;
+      this._deleted = false; // default is false since user would need to create the vertex or it comes from db
   }
 
 
@@ -114,5 +116,19 @@ export class Vertex {
 
   set room_id(value: number) {
     this._room_id = value;
+  }
+
+  /*
+    returns true is deleted flag is not set
+  */
+  public exists(){
+    return !this._deleted;
+  }
+
+  /*
+    toggles the deleted flag
+  */
+  public toggle_delete(){
+    this._deleted = !this._deleted;
   }
 }
