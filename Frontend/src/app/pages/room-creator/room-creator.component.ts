@@ -223,10 +223,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
     // RIGHT CLICK EVENT FOR OBJECTS
-    // this.renderer.listen(newObject,"contextmenu", (event) => {
-    //   alert("right click");
-    //   return false;
-    // });
+    this.renderer.listen(newObject,"contextmenu", (event) => {
+        this.removeVertex(event.target.getAttribute('vertex-id'));
+      //   alert("right click");
+       return false;
+    });
   }
 
   updateVertex(event: any): void{
@@ -250,6 +251,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         //todo: update the local array here as well
       },
       error => this.renderAlertError("There was an Error Updating Vertex Position") // todo also try to reset the old position
+      //console.error('There was an error while updating the vertex', error)
+    );
+  }
+
+  removeVertex(id: number): void{
+    let real_target_id = this.vertexService.vertices[id].id;
+    console.log(real_target_id);
+    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id).subscribe(
+      response => {
+        //will update vertex ID in html here
+        //console.log(response);
+        //console.log('bug');
+        //todo: update the local array here as well
+      },
+      error => this.renderAlertError("Unable to remove vertex") // todo also try to reset the old position
       //console.error('There was an error while updating the vertex', error)
     );
   }
