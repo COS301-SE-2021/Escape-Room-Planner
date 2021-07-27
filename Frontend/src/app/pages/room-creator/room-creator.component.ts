@@ -5,7 +5,8 @@ import {getLocaleFirstDayOfWeek} from "@angular/common";
 import {VertexService} from "../../services/vertex.service";
 
 // TODO: DO CHECKS IN CASE SOMETHING FAILS TO BE STORED IN RAILS
-
+// todo: use local vertex_id when rendering
+// todo: when using anything with vertex, use local id through vertexService
 
 @Component({
   selector: 'app-room-creator',
@@ -92,10 +93,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         //render all the vertices
         for (let vertex of response.data){
           //spawn objects out;
-          this.vertexService.addVertex(vertex.id, "vertex", vertex.name, vertex.graphicid,
+          let current_id = this.vertexService.addVertex(vertex.id, "vertex", vertex.name, vertex.graphicid,
                                        vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
                                        vertex.description, vertex.clue);
-          this.spawnObjects(vertex.id,vertex.graphicid,vertex.posx,vertex.posy,vertex.width,vertex.height);
+          this.spawnObjects(current_id);
         }
 
         console.log(this.vertexService.vertices);
@@ -188,11 +189,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //make post request for new vertex
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody).subscribe(
       response => {
-        let local_id = this.vertexService.addVertex(response.data.id,
+        //get the latest local id for a vertex
+        let current_id = this.vertexService.addVertex(response.data.id,
           inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
           inEstimated_time, inDescription, inClue
         );
-        this.spawnObjects(response.data.id, inGraphicID, inPos_x, inPos_y, inWidth, inHeight);
+        this.spawnObjects(current_id);
       },
       error => {
         console.error('There was an error while creating a vertex', error);
@@ -202,20 +204,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   //used to spawn objects onto plane
-  spawnObjects(id: number, loc: string, posx: number, posy: number, width: number, height: number): void{
+  spawnObjects(local_id: number): void{
     let newObject = this.renderer.createElement("img"); // create image
     this.renderer.addClass(newObject, "resize-drag");
     // All the styles
-    this.renderer.setStyle(newObject,"width", width + "px");
-    this.renderer.setStyle(newObject,"height", height + "px");
+    let vertex = this.vertexService.vertices[local_id];
+    this.renderer.setStyle(newObject,"width", vertex.width + "px");
+    this.renderer.setStyle(newObject,"height", vertex.height + "px");
     this.renderer.setStyle(newObject,"position", "absolute");
     this.renderer.setStyle(newObject,"user-select", "none");
-    this.renderer.setStyle(newObject,"transform",'translate('+ posx +'px, '+ posy +'px)');
+    this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x +'px, '+ vertex.pos_y +'px)');
     // Setting all needed attributes
-    this.renderer.setAttribute(newObject,'vertex-id', id.toString());
-    this.renderer.setAttribute(newObject,"src", "./assets/images/" + loc);
-    this.renderer.setAttribute(newObject,"data-x", posx + "px");
-    this.renderer.setAttribute(newObject,"data-y", posy + "px");
+    this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
+    this.renderer.setAttribute(newObject,"src", "./assets/images/" + vertex.graphic_id);
+    this.renderer.setAttribute(newObject,"data-x", vertex.pos_x + "px");
+    this.renderer.setAttribute(newObject,"data-y", vertex.pos_y + "px");
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
