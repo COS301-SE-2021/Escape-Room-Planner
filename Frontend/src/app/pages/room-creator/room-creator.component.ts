@@ -214,6 +214,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
+    // RIGHT CLICK EVENT FOR OBJECTS
+    // this.renderer.listen(newObject,"contextmenu", (event) => {
+    //   alert("right click");
+    //   return false;
+    // });
   }
 
   updateVertex(event: any): void{
