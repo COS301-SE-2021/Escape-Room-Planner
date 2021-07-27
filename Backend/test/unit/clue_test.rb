@@ -8,9 +8,8 @@ class ClueTest < ActiveSupport::TestCase
     room_id = 1
     req = CreateClueRequest.new 'test', 0, 0, 0.1, 0.1,
                                 'graphic', 'clue', room_id
-    rs = RoomServices.new
     rs.create_clue(req)
-
+    puts rs.
     assert_not_equal(Clue.count, num_clues_before)
   end
 
