@@ -218,6 +218,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setAttribute(newObject,"src", "./assets/images/" + vertex.graphic_id);
     this.renderer.setAttribute(newObject,"data-x", vertex.pos_x + "px");
     this.renderer.setAttribute(newObject,"data-y", vertex.pos_y + "px");
+    // for bootstrap pop-over
+    // this.renderer.setAttribute(newObject, "data-bs-toggle", "popover");
+    // this.renderer.setAttribute(newObject, "data-bs-trigger", "focus");
+    // this.renderer.setAttribute(newObject, "title", "Dismissible popover");
+    // this.renderer.setAttribute(newObject, "data-bs-content", "And here's some amazing content. It's very engaging. Right?");
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
