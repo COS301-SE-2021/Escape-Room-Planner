@@ -1,32 +1,49 @@
-<header>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
-  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-</header>
-<div class="screen">
-  <div class="container">
-    <div class="left-container">
-      <div class="title">
-        <h1>Sign Up</h1>
-      </div>
-      <div class="details">
-        <form action="">
-          <input type="text" placeholder="Email" name="email" id="email" required>
-          <input type="password" placeholder="Password" name="email" id="pass" required>
-          <input type="password" placeholder="Confirm Password" name="email" id="confirm" required>
-        </form>
-        <div class="sign-in">
-          <button>SIGN UP</button>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Bootstrap 4 Layout</title>
+</head>
+
+<div class="col-md-12" style="height: 87vh">
+  <div class="row d-flex justify-content-center" style="height: 100%">
+    <div class="col-md-12" id="login-container">
+      <div class="card" id="login-card"  style="overflow: hidden;">
+        <div class="card-body p-0">
+          <div class="row" style="height: 100%">
+            <div class="col-12 col-md-7 px-4 py-3">
+              <form id="login-form">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input style="background: #E5E4E2" type="name" class="form-control" id="username" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input style="background: #E5E4E2" type="email" class="form-control" id="email" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="password" required>
+                </div>
+                <div class="form-group">
+                  <label for="confirm">Cornfirm Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" required>
+                </div>
+                <button class="btn btn-primary btn-block">Sign Up</button>
+                <a href=""><p id="sign-up"><span style="color: black">Already Have An Account? </span>Login</p></a>
+              </form>
+            </div>
+            <div class="col-12 col-md-5 text-center text-white" style="background: #00fa9a; border-radius: 15px 0px 0px 15px">
+              <h1 id="welcome">Welcome</h1>
+              <p>This is Escape Rooom Planner blah blah, maybe some more information just to kinda make it more professional or something</p>
+              <button class="btn btn-primary btn-block px-20" style="margin-top: 30px; margin-right: 5px; color: blue; border: 1px solid blue; background: mediumspringgreen">Sign In</button>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="right-container">
-      <div id="info">
-        <h1>Welcome</h1>
-        <p>This is Escape Rooom Planner blah blah, maybe some more information just to kinda make it more professional or something</p>
-      </div>
-      <div id="button">
-        <button routerLink="/">SIGN IN</button>
       </div>
     </div>
   </div>
 </div>
+
