@@ -231,22 +231,23 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   updateVertex(event: any): void{
     let targetVertex = event.target;
-
+    let real_target_id = this.vertexService.vertices[targetVertex.getAttribute('vertex-id')].id;
     // console.log(targetVertex.getAttribute('vertex-id'));
 
     let updateVertexBody = {
-      id: targetVertex.getAttribute('vertex-id'),
+      id: real_target_id, //convert local to real id
       posy: targetVertex.getAttribute('data-y'),
       posx: targetVertex.getAttribute('data-x'),
       height: targetVertex.style.height.match(/\d+/)[0],
       width: targetVertex.style.width.match(/\d+/)[0]
     };
     // updates all the data of vertex
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+targetVertex.getAttribute('vertex-id'), updateVertexBody).subscribe(
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody).subscribe(
       response => {
         //will update vertex ID in html here
         // console.log(response);
         // console.log('bug');
+        //todo: update the local array here as well
       },
       error => this.renderAlertError("There was an Error Updating Vertex Position") // todo also try to reset the old position
       //console.error('There was an error while updating the vertex', error)
