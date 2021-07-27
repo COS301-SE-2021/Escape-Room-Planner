@@ -86,6 +86,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   //Get to get all vertex for room
   getVertexFromRoom(): void{
+    this.vertexService.reset_array();
     //http request to rails api
     this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId).subscribe(
       response => {
@@ -98,8 +99,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
                                        vertex.description, vertex.clue);
           this.spawnObjects(current_id);
         }
-
-        console.log(this.vertexService.vertices);
       },
       //Error retrieving vertices message
       error => this.renderAlertError("There was an error retrieving vertices for the room")
@@ -232,23 +231,29 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   updateVertex(event: any): void{
     let targetVertex = event.target;
-    let real_target_id = this.vertexService.vertices[targetVertex.getAttribute('vertex-id')].id;
+    let local_target_id = targetVertex.getAttribute('vertex-id');
+    let real_target_id = this.vertexService.vertices[local_target_id].id;
     // console.log(targetVertex.getAttribute('vertex-id'));
+    let new_y_pos = targetVertex.getAttribute('data-y');
+    let new_x_pos = targetVertex.getAttribute('data-x');
+    let new_height = targetVertex.style.height.match(/\d+/)[0];
+    let new_width = targetVertex.style.width.match(/\d+/)[0];
 
     let updateVertexBody = {
       id: real_target_id, //convert local to real id
-      posy: targetVertex.getAttribute('data-y'),
-      posx: targetVertex.getAttribute('data-x'),
-      height: targetVertex.style.height.match(/\d+/)[0],
-      width: targetVertex.style.width.match(/\d+/)[0]
+      posy: new_y_pos,
+      posx: new_x_pos,
+      height: new_height,
+      width: new_width
     };
     // updates all the data of vertex
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody).subscribe(
       response => {
-        //will update vertex ID in html here
-        // console.log(response);
-        // console.log('bug');
-        //todo: update the local array here as well
+        // updates the local array here only after storing on db
+        this.vertexService.vertices[local_target_id].pos_x = new_x_pos;
+        this.vertexService.vertices[local_target_id].pos_y = new_y_pos;
+        this.vertexService.vertices[local_target_id].width = new_width;
+        this.vertexService.vertices[local_target_id].height = new_height;
       },
       error => this.renderAlertError("There was an Error Updating Vertex Position") // todo also try to reset the old position
       //console.error('There was an error while updating the vertex', error)

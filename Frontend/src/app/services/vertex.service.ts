@@ -31,4 +31,9 @@ export class VertexService {
   get vertices(): Vertex[] {
     return this._vertices;
   }
+
+  public reset_array(){
+    this._vertices = [];
+    this._local_id_count = 0;
+  }
 }
