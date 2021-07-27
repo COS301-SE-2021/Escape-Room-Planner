@@ -265,10 +265,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let targetVertex = event.target;
     let local_target_id = targetVertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
-    console.log(real_target_id);
+    //call to backend to delete vertex by id
     this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id).subscribe(
       response => {
         //remove vertex from screen here
+        this.vertexService.vertices[local_target_id].toggle_delete();
         targetVertex.remove();
       },
       error => this.renderAlertError("Unable to remove vertex")
