@@ -19,19 +19,28 @@ input:focus {
   box-shadow: none !important;
 }
 
-.btn {
+#signin-bt {
   background: none;
   border-radius: 10px;
   border: 2px solid #00fa9a;
   color: #00fa9a;
 }
 
-.btn:hover {
+#signin-bt:hover {
   background: none;
   border-radius: 10px;
   border: 2px solid #00fa9a;
   color: #00fa9a;
 
+}
+
+#signup-bt {
+  border-radius: 10px;
+  border: 1px solid blue;
+  background: mediumspringgreen;
+  color: mediumblue;
+  text-align: center;
+  width: 95%;
 }
 
 * {
@@ -56,5 +65,5 @@ a:hover {
 
 #welcome {
   padding-top: 10px;
-  font-family: Abel;
+  font-family: "Adobe Caslon Pro Bold";
 }
