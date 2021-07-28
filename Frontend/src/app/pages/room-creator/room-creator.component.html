@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" (click)="hideContextMenu($event)">
   <div class="container-fluid" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row">
     <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
@@ -91,7 +91,24 @@
         <div class="row vh-100">
           <div class="container-fluid escape-room" style="background-color: grey" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
+
+
           </div>
+
+          <div class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 12vw;position: absolute;" [hidden]="true" #contextMenu>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="col" id="delete_button">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="removeVertex()">
+                  Delete
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>

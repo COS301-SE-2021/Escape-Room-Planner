@@ -22,9 +22,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public newEscapeRoomName:string = ""; // used when submitting a new room creation
   public newEscapeRoomNameValid:boolean = false; // flag using regex
 
+  private _target_vertex: any;
+
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
+  @ViewChild("contextMenu") contextMenuRef : ElementRef | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService) { }
@@ -228,12 +231,30 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
     // RIGHT CLICK EVENT FOR OBJECTS
     this.renderer.listen(newObject,"contextmenu", (event) => {
-        this.removeVertex(event);
-      //   alert("right click");
-       return false;
+      // this.removeVertex(event);
+      this.showContextMenu(event);
+      return false;
     });
   }
 
+  // shows a context menu when right button clicked over the vertex
+  showContextMenu(event: any): void{
+    //todo: change the position
+    this._target_vertex = event.target;
+    // @ts-ignore
+    this.contextMenuRef?.nativeElement.hidden = false;
+  }
+
+  // hides the context menu
+  hideContextMenu(event:any): void{
+    // todo: need to check if button is not delete and child of element too
+    if (event.target !== this.contextMenuRef?.nativeElement){
+      // @ts-ignore
+      this.contextMenuRef?.nativeElement.hidden = true;
+    }
+  }
+
+  // updates the position on db from user moving it
   updateVertex(event: any): void{
     let targetVertex = event.target;
     let local_target_id = targetVertex.getAttribute('vertex-id');
@@ -266,16 +287,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   //DELETES VERTEX FROM BACKEND AND REMOVES ON SCREEN
-  removeVertex(event: any): void{
-    let targetVertex = event.target;
-    let local_target_id = targetVertex.getAttribute('vertex-id');
+  removeVertex(): void{
+    let local_target_id = this._target_vertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
     //call to backend to delete vertex by id
     this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id).subscribe(
       response => {
         //remove vertex from screen here
         this.vertexService.vertices[local_target_id].toggle_delete();
-        targetVertex.remove();
+        this._target_vertex.remove();
       },
       error => this.renderAlertError("Unable to remove vertex")
       //console.error('There was an error while updating the vertex', error)
