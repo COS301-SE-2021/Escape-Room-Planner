@@ -219,8 +219,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", "./assets/images/" + vertex.graphic_id);
-    this.renderer.setAttribute(newObject,"data-x", vertex.pos_x + "px");
-    this.renderer.setAttribute(newObject,"data-y", vertex.pos_y + "px");
+    this.renderer.setAttribute(newObject,"data-x", vertex.pos_x.toString());
+    this.renderer.setAttribute(newObject,"data-y", vertex.pos_y.toString());
     // for bootstrap pop-over
     // this.renderer.setAttribute(newObject, "data-bs-toggle", "popover");
     // this.renderer.setAttribute(newObject, "data-bs-trigger", "focus");
@@ -241,6 +241,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   showContextMenu(event: any): void{
     //todo: change the position
     this._target_vertex = event.target;
+    console.log(this.contextMenuRef);
+
+    let x_pos = this._target_vertex.width + Number(this._target_vertex.getAttribute("data-x"));
+    let y_pos = this._target_vertex.getAttribute("data-y");
+
+    // console.log(x_pos);
+
+    // moves the context menu where needed based on the vertex
+    this.contextMenuRef?.nativeElement.style.setProperty("transform",'translate('+ x_pos +'px, '+ y_pos +'px)');
     // @ts-ignore
     this.contextMenuRef?.nativeElement.hidden = false;
   }
