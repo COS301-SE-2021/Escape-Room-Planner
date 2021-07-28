@@ -194,11 +194,11 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when incorrect type is given (bad case)
   test 'cannot update vertex when incorrect type is used' do
-    req = UpdateVertexRequest.new(1, '123', '5', '-1', '1')
+    req = UpdateVertexRequest.new(1, 123, 5, -1, 1)
     rs = RoomServices.new
     res = rs.update_vertex(req)
-
     vertex = Vertex.find_by_id(1)
+
 
     assert_not_equal(vertex.posx, '123')
     assert_not_equal(vertex.posy, '5')

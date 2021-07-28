@@ -159,9 +159,13 @@ class RoomServices
     vertex.width = request.width
     vertex.height = request.height
 
-    if request.pos_x < 0 or request.pos_y < 0
+    if request.pos_x < 0
       return UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
     end
+    if request.pos_y < 0
+         return UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
+    end
+
 
     @response = if vertex.save
                   UpdateVertexResponse.new(true, 'Vertex Updated')
