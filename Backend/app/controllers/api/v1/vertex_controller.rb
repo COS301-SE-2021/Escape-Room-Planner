@@ -127,15 +127,15 @@ module Api
           end
 
           req = CreatePuzzleRequest.new(name,posx,posy,width,height,graphicid,estimated_time,description,roomid)
-          res = serv.createPuzzle(req)
+          res = serv.create_puzzle(req)
 
         when 'Key'
           req = CreateKeyRequest.new(name,posx,posy,width,height,graphicid,roomid)
-          res = serv.createKey(req)
+          res = serv.create_key(req)
 
         when 'Container'
           req = CreateContainerRequest.new(posx,posy,width,height,graphicid,roomid,name)
-          res = serv.createContainer(req)
+          res = serv.create_container(req)
 
         when 'Clue'
           if clue.nil?
@@ -144,7 +144,7 @@ module Api
           end
 
           req=CreateClueRequest.new(name,posx,posy,width,height,graphicid,clue,roomid)
-          res=serv.createClue(req)
+          res=serv.create_clue(req)
 
         else
           render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :ok
