@@ -141,6 +141,7 @@ class ErTest < ActiveSupport::TestCase
     rs = RoomServices.new # creates a room service object to test it's functionality
     res = rs.update_vertex(req)
 
+
     vertex = Vertex.find_by_id(vertex_id)
 
     assert_equal(res.success, true)

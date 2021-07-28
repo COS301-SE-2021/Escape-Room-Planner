@@ -153,12 +153,13 @@ class RoomServices
     vertex = Vertex.find_by_id(request.id)
     return UpdateVertexResponse.new(false, 'Vertex could not be found') if vertex.nil?
 
+
     vertex.posx = request.pos_x
     vertex.posy = request.pos_y
     vertex.width = request.width
     vertex.height = request.height
 
-    if request.pos_x > -1 or request.pos_y>-1
+    if request.pos_x < 0 or request.pos_y < 0
       return UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
     end
 
