@@ -1,5 +1,6 @@
 require './app/Services/login_request'
 require './app/Services/register_user_request'
+require './app/Services/register_user_request'
 
 module Api
   module V1
