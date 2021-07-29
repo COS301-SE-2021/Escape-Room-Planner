@@ -36,4 +36,19 @@ export class VertexService {
     this._vertices = [];
     this._local_id_count = 0;
   }
+
+  //adds connection to from vertex
+  public addVertexConnection(from_vertex_id: number, to_vertex_id: number){
+    this._vertices[from_vertex_id].addConnection(to_vertex_id);
+  }
+
+  //adds connected line to from vertex
+  public addVertexConnectedLine(vertex_id:number, line_index: number){
+    this._vertices[vertex_id].addConnectedLine(line_index);
+  }
+
+  //adds connected line to to vertex
+  public addVertexResponsibleLine(vertex_id: number, line_index: number){
+    this._vertices[vertex_id].addResponsibleLine(line_index);
+  }
 }

@@ -12,6 +12,11 @@ export class Vertex {
   private _height: number;
   private _graphic_id: string;
   private _deleted: boolean; // a flag to see if the vertex was deleted in the current session
+  private _connections: any[] = [];
+  private _connected_lines: any[] = [];
+  private _responsible_lines: any[] = [];
+
+
 
   constructor(local_id: number,
               id: number,
@@ -119,5 +124,35 @@ export class Vertex {
   */
   public toggle_delete(){
     this._deleted = !this._deleted;
+  }
+
+  //add connections to vertex
+  public addConnection(to_vertex: number){
+    this._connections.push(to_vertex);
+  }
+
+  //add connected lines from this vertex
+  public addConnectedLine(line_index: number){
+    this._connected_lines.push(line_index);
+  }
+
+  //add connected lines from another vertex to this vertex
+  public addResponsibleLine(line_index: number){
+    this._connected_lines.push(line_index);
+  }
+
+  //gets all connections from this vertex
+  public getConnections(){
+    return this._connections;
+  }
+
+  //gets all line indices from this vertex
+  public getConnectedLines(){
+    return this._connected_lines;
+  }
+
+  //gets all line indices to this vertex
+  public getResponsibleLines(){
+    return this._responsible_lines;
   }
 }
