@@ -24,7 +24,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public newEscapeRoomNameValid:boolean = false; // flag using regex
 
   private _target_vertex: any;
-  private line: any;
+  private isConnection = false;
+  private lines:any = []; // to store lines for update and deletion
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
@@ -43,19 +44,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
     // this.renderAlertError("TEST");
-    let startElement = document.querySelector("#start-line");
-    let endElement = document.querySelector("#end-line");
-
-    this.line= new LeaderLine(startElement, endElement, {dash: {animation: true}});
-    this.line.color = "rgba(0,0,0,1.0)";
+    // let startElement = document.querySelector("#start-line");
+    // let endElement = document.querySelector("#end-line");
+    //
+    // this.line= new LeaderLine(startElement, endElement, {dash: {animation: true}});
+    // this.line.color = "rgba(0,0,0,1.0)";
   }
 
-  private flag = false;
+  // updates the line based on position oof start and the end
+  updateLine(index:number):void{
+    if(this.lines[index] !== null) this.lines[index].position();
+  }
 
-  resetLine():void{
-    this.line.position();
-    // while (this.flag) this.line.position();
-
+  // used to connect two vertices
+  connectVertex(): void{
+    this.isConnection = true;
   }
 
   //adds an object to drag on our 'canvas'
@@ -236,20 +239,34 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setAttribute(newObject,"src", "./assets/images/" + vertex.graphic_id);
     this.renderer.setAttribute(newObject,"data-x", vertex.pos_x.toString());
     this.renderer.setAttribute(newObject,"data-y", vertex.pos_y.toString());
-    // for bootstrap pop-over
-    // this.renderer.setAttribute(newObject, "data-bs-toggle", "popover");
-    // this.renderer.setAttribute(newObject, "data-bs-trigger", "focus");
-    // this.renderer.setAttribute(newObject, "title", "Dismissible popover");
-    // this.renderer.setAttribute(newObject, "data-bs-content", "And here's some amazing content. It's very engaging. Right?");
+
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
+    this.renderer.listen(newObject,"click", (event) => this.makeConnection(event));
     // RIGHT CLICK EVENT FOR OBJECTS
     this.renderer.listen(newObject,"contextmenu", (event) => {
       // this.removeVertex(event);
       this.showContextMenu(event);
       return false;
     });
+  }
+
+  makeConnection(event: any): void{
+    if (this.isConnection){
+      let to_vertex = event.target;
+      this.isConnection = false;
+
+      this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
+
+      console.log(to_vertex);
+      console.log(this.lines.length);
+
+      //add event to listen to mouse event of only connected vertices
+      to_vertex.addEventListener("mousemove", () => this.updateLine(this.lines.length-1));
+      this._target_vertex.addEventListener("mousemove", () => this.updateLine(this.lines.length-1));
+      // store on array
+    }
   }
 
   // shows a context menu when right button clicked over the vertex
