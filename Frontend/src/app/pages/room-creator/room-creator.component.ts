@@ -52,8 +52,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   // updates the line based on position oof start and the end
-  updateLine(index:number):void{
-    if(this.lines[index] !== null) this.lines[index].position();
+  updateLine(vertex_index: number):void{
+    //if(this.lines[index] !== null) this.lines[index].position();
+    let update_lines = this.vertexService.getLineIndex(vertex_index);
+    for (let i = 0; i < update_lines.length; i++){
+      if(this.lines[update_lines[i]] !== null) this.lines[update_lines[i]].position();
+    }
   }
 
   // used to connect two vertices
@@ -268,8 +272,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       //add event to listen to mouse event of only connected vertices
       to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
       this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
-      console.log(this.vertexService.getLineIndex(from_vertex_id));
-      console.log(this.vertexService.getVertexConnections(from_vertex_id));
       // store on array
     }
   }
