@@ -51,9 +51,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // this.line.color = "rgba(0,0,0,1.0)";
   }
 
-  // updates the line based on position oof start and the end
+  //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
-    //if(this.lines[index] !== null) this.lines[index].position();
     let update_lines = this.vertexService.getLineIndex(vertex_index);
     for (let i = 0; i < update_lines.length; i++){
       if(this.lines[update_lines[i]] !== null) this.lines[update_lines[i]].position();
@@ -280,7 +279,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   showContextMenu(event: any): void{
     //todo: change the position
     this._target_vertex = event.target;
-    console.log(this.contextMenuRef);
 
     let x_pos = this._target_vertex.width + Number(this._target_vertex.getAttribute("data-x"));
     let y_pos = this._target_vertex.getAttribute("data-y");
@@ -343,11 +341,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
         //remove vertex from screen here
         this.vertexService.vertices[local_target_id].toggle_delete();
+        this.removeLines(local_target_id);
         this._target_vertex.remove();
       },
       error => this.renderAlertError("Unable to remove vertex")
       //console.error('There was an error while updating the vertex', error)
     );
+  }
+
+  removeLines(vertex_id: number): void{
+    let vertex_connections = this.vertexService.getVertexConnections(vertex_id);
+    this.lines[this.vertexService.getLineIndex(vertex_id)[0]].remove();
+    this.lines[this.vertexService.getLineIndex(vertex_id)[0]] = null;
   }
 
   //Spawn Alert Error with Message
