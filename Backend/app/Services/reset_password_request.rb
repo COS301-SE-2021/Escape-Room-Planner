@@ -1,9 +1,8 @@
 class ResetPasswordRequest
-  attr_accessor :username, :password, :newPassword
+  attr_accessor :username, :newPassword
 
-  def initialize(username, password, newPassword)
+  def initialize(username, newPassword)
     @username = username
-    @password = password
     @newPassword = newPassword
   end
 end
