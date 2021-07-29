@@ -25,17 +25,17 @@ class UserServices
     #find user in database and retrieve it if it exists
     @user = User.find_by(username: request.username)
 
-    raise 'Username does not exist' if @user.nil?
+    raise 'User does not exist' if @user.nil?
 
     #check password is correct
-    raise 'Incorrect Password' unless request.password.equal?(@user.password)
+    raise 'Incorrect Password' unless @user.authenticate(@user.password) request.password.equal?(@user.password)
 
     #generate JWT token and attach to user
 
     @token = Authenticate.encode(@user.id)
 
     # store jwt token discuss with team
-    # @cur_user.token = @token
+    @user.token = @token
 
     @response = if @user.save
                   LoginResponse.new(true, 'Login Successful')
@@ -45,6 +45,7 @@ class UserServices
   end
 
   def updateAccount(request)
+
 
   end
 
