@@ -51,4 +51,14 @@ export class VertexService {
   public addVertexResponsibleLine(vertex_id: number, line_index: number){
     this._vertices[vertex_id].addResponsibleLine(line_index);
   }
+
+  //returns what lines need to be updated in an array
+  public getLineIndex(vertex_id: number){
+    return this._vertices[vertex_id].getConnectedLines().concat(this._vertices[vertex_id].getResponsibleLines());
+  }
+
+  //returns what connections a vertex has in an array
+  public getVertexConnections(vertex_id: number){
+   return this._vertices[vertex_id].getConnections();
+  }
 }

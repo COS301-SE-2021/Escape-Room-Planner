@@ -259,12 +259,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
       this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
 
-      console.log(to_vertex);
-      console.log(this.lines.length);
+      let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
+      let to_vertex_id = to_vertex.getAttribute('vertex-id');
 
+      this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+      this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length-1);
+      this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length-1);
       //add event to listen to mouse event of only connected vertices
-      to_vertex.addEventListener("mousemove", () => this.updateLine(this.lines.length-1));
-      this._target_vertex.addEventListener("mousemove", () => this.updateLine(this.lines.length-1));
+      to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
+      this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+      console.log(this.vertexService.getLineIndex(from_vertex_id));
+      console.log(this.vertexService.getVertexConnections(from_vertex_id));
       // store on array
     }
   }
