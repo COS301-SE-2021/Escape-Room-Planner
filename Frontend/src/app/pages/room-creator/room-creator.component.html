@@ -92,6 +92,9 @@
           <div class="container-fluid escape-room" style="background-color: grey" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
 
+            <img (mousemove)="resetLine()" id="start-line" class="resize-drag" vertex-id="0" src="./assets/images/room1.png" data-x="108" data-y="16" style="width: 183px; height: 157px; position: absolute; user-select: none; transform: translate(108px, 16px);">
+            <img (mousemove)="resetLine()" id="end-line" class="resize-drag" vertex-id="1" src="./assets/images/room1.png" data-x="108" data-y="16" style="width: 183px; height: 157px; position: absolute; user-select: none; transform: translate(1000px, 500px);">
+
 
           </div>
 

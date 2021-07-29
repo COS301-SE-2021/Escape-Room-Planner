@@ -11,7 +11,7 @@
 <body>
   <app-root></app-root>
   <!--bootstrap JS library-->
-  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js" integrity="sha384-LqpTUp2dBNxqY7IYl4r0m6IegZjlkQgpMo6VAoHYgLTewlETlLaHd3DfywaLNy9J" crossorigin="anonymous"></script>
 
   <script>
     interact('.resize-drag')
@@ -75,7 +75,7 @@
       // translate the element
       target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
 
-      // update the posiion attributes
+      // update the position attributes
       target.setAttribute('data-x', x)
       target.setAttribute('data-y', y)
     }
