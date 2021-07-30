@@ -52,6 +52,20 @@ export class VertexService {
     this._vertices[vertex_id].addResponsibleLine(line_index);
   }
 
+  //removes connection in vertex connections array
+  public removeVertexConnection(from_vertex_id: number, index: number){
+    this._vertices[from_vertex_id].removeConnection(index);
+  }
+
+  //removes connected line index in vertex connected line array
+  public removeVertexConnectedLine(vertex_id:number, index: number){
+    this._vertices[vertex_id].removeConnectedLine(index);
+  }
+
+  //removes responsible line index in vertex responsible line array
+  public removeVertexResponsibleLine(vertex_id: number, index: number){
+    this._vertices[vertex_id].removeResponsibleLine(index);
+  }
   //returns what lines need to be updated in an array
   public getLineIndex(vertex_id: number){
     return this._vertices[vertex_id].getConnectedLines().concat(this._vertices[vertex_id].getResponsibleLines());
