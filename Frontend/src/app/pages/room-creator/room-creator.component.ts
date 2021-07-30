@@ -400,7 +400,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   removeLines(vertex_id: number): void{
-    let vertex_connections = this.vertexService.getVertexConnections(vertex_id);
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
     let incoming_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
 
@@ -422,8 +421,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.vertexService.removeVertexConnection(start_id, vertex_id);
         this.vertexService.removeVertexConnectedLine(start_id, line_index);
       }else{
-        // is outgoing so just need the end, but can capture that from a connections array ez
-        // change the end's responsible
+        // capture end vertex local id
+        let end_id = this.lines[line_index].end.getAttribute("vertex-id");
+        // change the responsible array of end vertex
+        this.vertexService.removeVertexResponsibleLine(end_id, line_index);
+        // don't need to remove the connection or connection of current, for ease in ctrl-z
       }
 
       //line has a start and end
