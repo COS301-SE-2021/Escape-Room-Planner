@@ -284,16 +284,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
     this.is_disconnect = false;
     let line_index = this.vertexService.removeVertexConnection(from_vertex_id, to_vertex_id);
-    //checks if there is a connection to remove
+    //checks if there is a connection to remove from from_vertex to to_vertex
     if(line_index !== -1) {
-      //removes from vertex connected line in array
-      this.vertexService.removeVertexConnectedLine(from_vertex_id, line_index);
-      //removes to vertex responsible line in array
-      this.vertexService.removeVertexResponsibleLine(to_vertex_id, line_index);
-      //removes visual line on html in array
-      this.lines[line_index].remove();
-      this.lines[line_index] = null;
+      this.disconnectLines(line_index, from_vertex_id, to_vertex_id);
+    }else{
+      //checks if its being called the other way around
+      let line_index = this.vertexService.removeVertexConnection(to_vertex_id, from_vertex_id);
+      //checks if there is a connection to remove from to_vertex to from_vertex
+      if(line_index !== -1) this.disconnectLines(line_index, to_vertex_id, from_vertex_id);
     }
+  }
+
+  disconnectLines(line_index: number, from_vertex_id: number, to_vertex_id: number): void{
+    //removes from vertex connected line in array
+    this.vertexService.removeVertexConnectedLine(from_vertex_id, line_index);
+    //removes to vertex responsible line in array
+    this.vertexService.removeVertexResponsibleLine(to_vertex_id, line_index);
+    //removes visual line on html in array
+    this.lines[line_index].remove();
+    this.lines[line_index] = null;
   }
 
   //makes a connection between two vertices
