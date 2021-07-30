@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {VertexService} from "../../services/vertex.service";
 // Leader Line JS library imports
 import 'leader-line';
+import {writeErrorToLogFile} from "@angular/cli/utilities/log-file";
 declare let LeaderLine: any;
 
 // TODO: DO CHECKS IN CASE SOMETHING FAILS TO BE STORED IN RAILS
@@ -351,11 +352,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   removeLines(vertex_id: number): void{
+    let vertex_connections = this.vertexService.getVertexConnections(vertex_id);
+    let all_the_lines = this.vertexService.getLineIndex(vertex_id);
+    let outgoing_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
+
+    console.log(all_the_lines);
+    console.log(outgoing_lines);
+
+
     // only do this if there are some connections
     for( let line_index of this.vertexService.getLineIndex(vertex_id)){
+      console.log(this.lines[line_index]);
+      //todo: change vertex array values too
+
+      //line has a start and end
+      // for lines inside responsible: change the end vertex's connected
+      // for lines inside connected: change the start vertex's responsible and the connection
+
       this.lines[line_index].remove();
       this.lines[line_index] = null;
-      //todo: change vertex array values too
     }
   }
 

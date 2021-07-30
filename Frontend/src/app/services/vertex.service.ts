@@ -61,7 +61,7 @@ export class VertexService {
   //removes connected line index in vertex connected line array
   public removeVertexConnectedLine(vertex_id:number, value_to_delete: number){
     let index_to_delete = this._vertices[vertex_id].getConnectedLines().indexOf(value_to_delete);
-    this._vertices[vertex_id].removeConnectedLine(index_to_delete);
+    if (index_to_delete !== -1) this._vertices[vertex_id].removeConnectedLine(index_to_delete);
   }
 
   //removes responsible line index in vertex responsible line array
