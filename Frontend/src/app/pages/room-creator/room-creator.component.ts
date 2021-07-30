@@ -403,14 +403,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
     let incoming_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
 
-    console.log(all_the_lines);
-    console.log(incoming_lines);
-
-
     // only do this if there are some connections
     for( let line_index of all_the_lines){
       // remove the line
-      console.log(this.lines[line_index]);
       //todo: change vertex array values too
 
       if (incoming_lines.indexOf(line_index) !== -1){
