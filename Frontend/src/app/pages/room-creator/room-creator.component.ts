@@ -26,6 +26,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   private _target_vertex: any;
   private isConnection = false;
+  private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
@@ -60,9 +61,22 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
+  //all flags set to false
+  resetFlag(): void{
+    this.isConnection = false;
+    this.is_disconnect = false;
+  }
+
   // used to connect two vertices
   connectVertex(): void{
+    this.resetFlag();
     this.isConnection = true;
+  }
+
+  // used to state in disconnect state
+  disconnectVertex(): void{
+    this.resetFlag();
+    this.is_disconnect = true;
   }
 
   //adds an object to drag on our 'canvas'
@@ -247,7 +261,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
-    this.renderer.listen(newObject,"click", (event) => this.makeConnection(event));
+    this.renderer.listen(newObject,"click", (event) => this.vertexOperation(event));
     // RIGHT CLICK EVENT FOR OBJECTS
     this.renderer.listen(newObject,"contextmenu", (event) => {
       // this.removeVertex(event);
@@ -256,25 +270,50 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     });
   }
 
-  makeConnection(event: any): void{
-    if (this.isConnection){
-      let to_vertex = event.target;
-      this.isConnection = false;
+  //checks if in a operation for a vertex
+  vertexOperation(event: any): void{
+    if (this.isConnection)
+      this.makeConnection(event);
+    if(this.is_disconnect)
+      this.disconnectConnection(event);
+  }
 
-      this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
-      this.lines[this.lines.length-1].color = 'rgba(0,0,0,1.0)';
-
-      let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
-      let to_vertex_id = to_vertex.getAttribute('vertex-id');
-
-      this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
-      this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length-1);
-      this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length-1);
-      //add event to listen to mouse event of only connected vertices
-      to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-      this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
-      // store on array
+  //disconnects two vertex logically and visually
+  disconnectConnection(event: any):void {
+    let to_vertex_id = event.target.getAttribute('vertex-id');
+    let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
+    this.is_disconnect = false;
+    let line_index = this.vertexService.removeVertexConnection(from_vertex_id, to_vertex_id);
+    //checks if there is a connection to remove
+    if(line_index !== -1) {
+      //removes from vertex connected line in array
+      this.vertexService.removeVertexConnectedLine(from_vertex_id, line_index);
+      //removes to vertex responsible line in array
+      this.vertexService.removeVertexResponsibleLine(to_vertex_id, line_index);
+      //removes visual line on html in array
+      this.lines[line_index].remove();
+      this.lines[line_index] = null;
     }
+  }
+
+  //makes a connection between two vertices
+  makeConnection(event: any): void{
+    let to_vertex = event.target;
+    this.isConnection = false;
+
+    this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
+    this.lines[this.lines.length-1].color = 'rgba(0,0,0,1.0)';
+
+    let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
+    let to_vertex_id = to_vertex.getAttribute('vertex-id');
+
+    this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+    this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length-1);
+    this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length-1);
+    //add event to listen to mouse event of only connected vertices
+    to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
+    this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+    // store on array
   }
 
   // shows a context menu when right button clicked over the vertex
@@ -373,6 +412,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.lines[line_index] = null;
     }
   }
+
+
 
   //Spawn Alert Error with Message
   renderAlertError(message: string):void{

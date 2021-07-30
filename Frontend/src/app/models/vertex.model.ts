@@ -138,7 +138,7 @@ export class Vertex {
 
   //add connected lines from another vertex to this vertex
   public addResponsibleLine(line_index: number){
-    this._connected_lines.push(line_index);
+    this._responsible_lines.push(line_index);
   }
 
   //gets all connections from this vertex
