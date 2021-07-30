@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require './app/Services/room_services'
-require './app/Services/create_escapeRoom_request'
-require './app/Services/create_escapeRoom_response'
 
 # rubocop:disable Metrics/ClassLength
 class ErTest < ActiveSupport::TestCase
