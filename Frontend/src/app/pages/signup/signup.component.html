@@ -1,11 +1,49 @@
-<div class="jumbotron">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-8 offset-sm-2">
-        <p>
-          signup works!
-        </p>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Bootstrap 4 Layout</title>
+</head>
+
+<div class="col-md-12" style="height: 87vh">
+  <div class="row d-flex justify-content-center" style="height: 100%">
+    <div class="col-md-12" id="login-container">
+      <div class="card" id="login-card"  style="overflow: hidden;">
+        <div class="card-body p-0">
+          <div class="row" style="height: 100%">
+            <div class="col-12 col-md-7 px-4 py-3">
+              <form id="login-form">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input style="background: #E5E4E2" type="name" class="form-control" id="username" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input style="background: #E5E4E2" type="email" class="form-control" id="email" required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="password" required>
+                </div>
+                <div class="form-group">
+                  <label for="confirm">Cornfirm Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" required>
+                </div>
+                <button id="signin-bt" class="btn btn-primary btn-block">Sign Up</button>
+                <a href=""><p id="sign-up"><span style="color: black">Already Have An Account? </span>Login</p></a>
+              </form>
+            </div>
+            <div class="col-12 col-md-5 text-center text-white" style="background-image: linear-gradient(#00fa9a, #00fa9a, #00cc99); border-radius: 15px 0px 0px 15px">
+              <h1 id="welcome">Welcome</h1>
+              <p>This is Escape Rooom Planner blah blah, maybe some more information just to kinda make it more professional or something</p>
+              <button id="signup-bt" class="btn btn-primary">Sign In</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+

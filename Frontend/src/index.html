@@ -4,86 +4,11 @@
   <meta charset="utf-8">
   <title>Frontend</title>
   <base href="/">
+
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
   <app-root></app-root>
-  <!--bootstrap JS library-->
-  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-
-  <script>
-    interact('.resize-drag')
-      .resizable({
-        // resize from all edges and corners
-        edges: { left: true, right: true, bottom: true, top: true },
-
-        listeners: {
-          move (event) {
-            var target = event.target
-            var x = (parseFloat(target.getAttribute('data-x')) || 0)
-            var y = (parseFloat(target.getAttribute('data-y')) || 0)
-
-            // update the element's style
-            target.style.width = event.rect.width + 'px'
-            target.style.height = event.rect.height + 'px'
-
-            // translate when resizing from top or left edges
-            x += event.deltaRect.left
-            y += event.deltaRect.top
-
-            target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
-
-            target.setAttribute('data-x', x)
-            target.setAttribute('data-y', y)
-            target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height)
-          }
-        },
-        modifiers: [
-          // keep the edges inside the parent
-          interact.modifiers.restrictEdges({
-            outer: 'parent'
-          }),
-
-          // minimum size
-          interact.modifiers.restrictSize({
-            min: { width: 50, height: 50 }
-          })
-        ],
-        inertia: true
-      })
-      .draggable({
-        listeners: { move: window.dragMoveListener },
-        inertia: true,
-        modifiers: [
-          interact.modifiers.restrictRect({
-            restriction: 'parent',
-            endOnly: true
-          })
-        ]
-      })
-
-    // target elements with the "draggable" class
-
-    function dragMoveListener (event) {
-      var target = event.target
-      // keep the dragged position in the data-x/data-y attributes
-      var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-      var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-
-      // translate the element
-      target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-
-      // update the posiion attributes
-      target.setAttribute('data-x', x)
-      target.setAttribute('data-y', y)
-    }
-
-    // this function is used later in the resizing and gesture demos
-    window.dragMoveListener = dragMoveListener
-
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 </body>
 </html>

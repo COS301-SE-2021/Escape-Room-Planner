@@ -1,0 +1,69 @@
+#login-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+#login-card {
+  width: 100%;
+  border-radius: 10px;
+  /*height: 300px;*/
+  box-shadow: 5px 5px 5px gray;
+}
+.form-control {
+  /* border-color: #00fa9a !important; */
+}
+input:focus {
+  border-color: #00fa9a !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#signin-bt {
+  background: none;
+  border-radius: 10px;
+  border: 2px solid #00fa9a;
+  color: #00fa9a;
+}
+
+#signin-bt:hover {
+  background: none;
+  border-radius: 10px;
+  border: 2px solid #00fa9a;
+  color: #00fa9a;
+
+}
+
+#signup-bt {
+  border-radius: 10px;
+  border: 1px solid blue;
+  background: mediumspringgreen;
+  color: mediumblue;
+  text-align: center;
+  width: 95%;
+}
+
+* {
+  text-decoration: none;
+  list-style: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+#sign-up {
+  padding-top: 10px;
+  text-align: center;
+  color: mediumblue;
+}
+
+#forgot-pass {
+  text-align: center;
+  color: mediumblue;
+}
+
+#welcome {
+  padding-top: 10px;
+  font-family: "Adobe Caslon Pro Bold";
+}
