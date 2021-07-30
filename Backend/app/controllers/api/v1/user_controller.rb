@@ -15,12 +15,12 @@ module Api
         type = params[:type]
         email = params[:name]
         name = params[:name]
-        isAdmin = params[:isAdmin]
+        is_admin = params[:is_admin]
         username = params[:username]
         password = params[:password]
         newPassword = params[:newPassword]
 
-        if name.nil? || password.nil? || isAdmin.nil? || email.nil? || username.nil?
+        if name.nil? || password.nil? || is_admin.nil? || email.nil? || username.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
           return
         end
@@ -29,12 +29,12 @@ module Api
 
         case type
         when 'Register'
-          if email.nil? || isAdmin.nil? || name.nil? || username.nil?|| email.nil? || password.nil?
+          if email.nil? || is_admin.nil? || name.nil? || username.nil?|| email.nil? || password.nil?
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
             return
           end
 
-          req = RegisterUserRequest.new(username, password, email, name, isAdmin)
+          req = RegisterUserRequest.new(username, password, email, name, is_admin)
           res = serv.registerUser(req)
 
         # when 'Verify'
@@ -69,12 +69,12 @@ module Api
           res = serv.getUserDetails(req)
 
         when 'SetAdmin'
-          if username.nil? || password.nil? || email.nil? || name.nil? || isAdmin.nil?
+          if username.nil? || password.nil? || email.nil? || name.nil? || is_admin.nil?
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
             return
           end
 
-          req = SetAdminRequest.new(username, password, email, name, isAdmin)
+          req = SetAdminRequest.new(username, password, email, name, is_admin)
           res = serv.setAdmin(req)
 
         # when 'DeleteUser'

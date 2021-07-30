@@ -5,7 +5,7 @@ class UserServices
     @user = User.new
     @user.username = request.username
     @user.email = request.email
-    # @user.isAdmin = request.isAdmin
+    # @user.is_admin = request.is_admin
 
     #hash password and store it
 
@@ -90,7 +90,7 @@ class UserServices
 
     raise 'User does not exist' if @user.nil?
 
-    @user.isAdmin = true
+    @user.is_admin = true
 
     @response = if @user.save
                   SetAdminResponse.new(true, 'Successful')
@@ -107,7 +107,7 @@ class UserServices
     raise 'User does not exist' if @user.nil?
 
     # A non-admin user cannpt delete another user
-    raise 'Current user is not an admin' unless @user.isAdmin
+    raise 'Current user is not an admin' unless @user.is_admin
 
     @user_to_be_deleted = User.find_by_username(request.user_to_be_deleted)
 

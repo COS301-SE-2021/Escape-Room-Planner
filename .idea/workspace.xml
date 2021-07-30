@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="3e39f6e2-a62b-4832-b914-65f6f05d2e79" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/Escape-Room-Planner.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Escape-Room-Planner.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app/Services/register_user_request.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/Services/register_user_request.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app/Services/user_services.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/Services/user_services.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app/controllers/api/v1/user_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/controllers/api/v1/user_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/config/database.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/config/database.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db/migrate/20210706132139_create_users.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db/migrate/20210706132139_create_users.rb" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1w2U5httmGIFjcH6TaYDp2jSLO0" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="nodejs_package_manager_path" value="yarn" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpringUtil" SPRING_PRE_LOADER_OPTION="true" RAKE_SPRING_PRE_LOADER_OPTION="true" RAILS_SPRING_PRE_LOADER_OPTION="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3e39f6e2-a62b-4832-b914-65f6f05d2e79" name="Default Changelist" comment="" />
+      <created>1627655995963</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1627655995963</updated>
+      <workItem from="1627655997783" duration="2496000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>

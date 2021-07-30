@@ -1,11 +1,11 @@
 class RegisterUserRequest
-  attr_accessor :username, :password, :email, :isAdmin
+  attr_accessor :username, :password, :email, :is_admin
 
-  def initialize(username, password, email, isAdmin)
+  def initialize(username, password, email, is_admin)
     @username = username
     @password = password
     @email = email
-    @isAdmin = isAdmin
+    @is_admin = is_admin
   end
 end
 
