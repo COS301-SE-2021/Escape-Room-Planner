@@ -341,7 +341,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id).subscribe(
       response => {
         //remove vertex from screen here
-        this.vertexService.vertices[local_target_id].toggle_delete();
+        this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
         this.removeLines(local_target_id);
         this._target_vertex.remove();
       },
@@ -351,9 +351,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   removeLines(vertex_id: number): void{
-    let vertex_connections = this.vertexService.getVertexConnections(vertex_id);
-    this.lines[this.vertexService.getLineIndex(vertex_id)[0]].remove();
-    this.lines[this.vertexService.getLineIndex(vertex_id)[0]] = null;
+    // only do this if there are some connections
+    for( let line_index of this.vertexService.getLineIndex(vertex_id)){
+      this.lines[line_index].remove();
+      this.lines[line_index] = null;
+      //todo: change vertex array values too
+    }
   }
 
   //Spawn Alert Error with Message
