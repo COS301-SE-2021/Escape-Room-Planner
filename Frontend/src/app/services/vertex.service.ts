@@ -59,14 +59,15 @@ export class VertexService {
   }
 
   //removes connected line index in vertex connected line array
-  public removeVertexConnectedLine(vertex_id:number, index: number){
-    this._vertices[vertex_id].removeConnectedLine(index);
+  public removeVertexConnectedLine(vertex_id:number, value_to_delete: number){
+    let index_to_delete = this._vertices[vertex_id].getConnectedLines().indexOf(value_to_delete);
+    this._vertices[vertex_id].removeConnectedLine(index_to_delete);
   }
 
   //removes responsible line index in vertex responsible line array
   public removeVertexResponsibleLine(vertex_id: number, line_index: number){
-    let index = this._vertices[vertex_id].getConnections().indexOf(line_index);
-    if (index !== -1) this._vertices[vertex_id].removeConnection(index);
+    let index = this._vertices[vertex_id].getResponsibleLines().indexOf(line_index);
+    if (index !== -1) this._vertices[vertex_id].removeResponsibleLine(index);
   }
   //returns what lines need to be updated in an array
   public getLineIndex(vertex_id: number){
