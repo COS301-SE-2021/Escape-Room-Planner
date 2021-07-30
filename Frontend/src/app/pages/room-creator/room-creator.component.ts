@@ -261,6 +261,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.isConnection = false;
 
       this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
+      this.lines[this.lines.length-1].color = 'rgba(0,0,0,1.0)';
 
       let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
       let to_vertex_id = to_vertex.getAttribute('vertex-id');

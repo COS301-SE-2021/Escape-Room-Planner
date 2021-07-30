@@ -155,4 +155,19 @@ export class Vertex {
   public getResponsibleLines(){
     return this._responsible_lines;
   }
+
+  //removes a connection from this vertex to next
+  public removeConnection(index: number){
+    if(this._connections.length > index)  this._connections.splice(index, 1);
+  }
+
+  //removes connected lines from this vertex to next
+  public removeConnectedLine(index: number){
+    if(this._connected_lines.length > index)  this._connected_lines.splice(index, 1);
+  }
+
+  //removes responsible line entry
+  public removeResponsibleLine(index: number){
+    if(this._responsible_lines.length > index) this._responsible_lines.splice(index, 1);
+  }
 }
