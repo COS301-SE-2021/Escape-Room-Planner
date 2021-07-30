@@ -405,9 +405,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     // only do this if there are some connections
     for( let line_index of all_the_lines){
-      // remove the line
-      //todo: change vertex array values too
-
       if (incoming_lines.indexOf(line_index) !== -1){
         // means that this is an incoming line
         // so capture start and get the id from its attribute
@@ -423,10 +420,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         // don't need to remove the connection or connection of current, for ease in ctrl-z
       }
 
-      //line has a start and end
-      // for lines inside responsible: change the end vertex's connected
-      // for lines inside connected: change the start vertex's responsible and the connection
-
+      // remove the line
       this.lines[line_index].remove();
       this.lines[line_index] = null;
     }
