@@ -3,14 +3,18 @@ class UserServices
     raise 'RegisterUserRequest null' if request.nil?
 
     @user = User.new
+    @user.id = 8
+    @user.user_id = 48
     @user.username = request.username
     @user.email = request.email
-    # @user.isAdmin = request.isAdmin
+    @user.password_digest = request.password_digest
+    @user.isAdmin = request.isAdmin
+    @user.jwt_token = "dsfseeaaaaaea"
+    @user.type = "Register"
 
     #hash password and store it
 
-    @user.password = request.password
-
+    # @user.password_digest = request.password_digest
 
     @response = if @user.save
                   RegisterUserResponse.new(true, 'User Created Successfully')

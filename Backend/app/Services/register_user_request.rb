@@ -1,9 +1,9 @@
 class RegisterUserRequest
-  attr_accessor :username, :password, :email, :isAdmin
+  attr_accessor :username, :password_digest, :email, :isAdmin
 
-  def initialize(username, password, email, isAdmin)
+  def initialize(username, password_digest, email, isAdmin)
     @username = username
-    @password = password
+    @password_digest = password_digest
     @email = email
     @isAdmin = isAdmin
   end

@@ -14,24 +14,24 @@
         <div class="card-body p-0">
           <div class="row" style="height: 100%">
             <div class="col-12 col-md-7 px-4 py-3">
-              <form id="login-form">
+              <form id="login-form" method="post" action="http://127.0.0.1:3035/api/v1/user">
                 <div class="form-group">
                   <label for="username">Username</label>
-                  <input style="background: #E5E4E2" type="name" class="form-control" id="username" required>
+                  <input style="background: #E5E4E2" type="name" class="form-control" id="username" name="username" required>
                 </div>
                 <div class="form-group">
                   <label for="email">Email</label>
-                  <input style="background: #E5E4E2" type="email" class="form-control" id="email" required>
+                  <input style="background: #E5E4E2" type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                  <label for="password">Password</label>
-                  <input style="background: #E5E4E2" type="password" class="form-control" id="password" required>
+                  <label for="password_digest">Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="password_digest" name="password_digest" required>
                 </div>
                 <div class="form-group">
-                  <label for="confirm">Cornfirm Password</label>
-                  <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" required>
+                  <label for="confirm">Confirm Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" name="confirm" required>
                 </div>
-                <button id="signin-bt" class="btn btn-primary btn-block">Sign Up</button>
+                <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign Up</button>
                 <a href=""><p id="sign-up"><span style="color: black">Already Have An Account? </span>Login</p></a>
               </form>
             </div>
