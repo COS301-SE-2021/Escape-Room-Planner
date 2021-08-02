@@ -53,12 +53,12 @@ export class VertexService {
   }
 
   //removes connection in vertex connections array and returns line_index
-  public removeVertexConnection(from_vertex_id: number, to_vertex_id: number): number{
-    let index = this._vertices[from_vertex_id].getConnections().indexOf(to_vertex_id);
+  public removeVertexConnection(from_vertex: number, to_vertex: number): number{
+    let index = this._vertices[from_vertex].getConnections().indexOf(to_vertex);
     //checks if exists and if not will return -1
     if (index !== -1) {
-      this._vertices[from_vertex_id].removeConnection(index);
-      return this._vertices[from_vertex_id].getConnectedLines()[index];
+      this._vertices[from_vertex].removeConnection(index);
+      return this._vertices[from_vertex].getConnectedLines()[index];
     }
     return -1;
   }
