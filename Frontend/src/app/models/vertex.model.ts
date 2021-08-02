@@ -11,7 +11,10 @@ export class Vertex {
   private _width: number;
   private _height: number;
   private _graphic_id: string;
-  private _room_id: number;
+  private _deleted: boolean; // a flag to see if the vertex was deleted in the current session
+  private _connections: any[] = [];
+  private _connected_lines: any[] = [];
+  private _responsible_lines: any[] = [];
 
   constructor(local_id: number,
               id: number,
@@ -21,8 +24,7 @@ export class Vertex {
               pos_y: number,
               width: number,
               height: number,
-              graphic_id: string,
-              room_id: number) {
+              graphic_id: string) {
       this._local_id = local_id;
       this._id = id;
       this._name = name;
@@ -32,7 +34,7 @@ export class Vertex {
       this._width = width;
       this._height = height;
       this._graphic_id = graphic_id;
-      this._room_id = room_id;
+      this._deleted = false; // default is false since user would need to create the vertex or it comes from db
   }
 
 
@@ -108,11 +110,62 @@ export class Vertex {
     this._graphic_id = value;
   }
 
-  get room_id(): number {
-    return this._room_id;
+  /*
+    returns true is deleted flag is not set
+  */
+  public exists(){
+    return !this._deleted;
   }
 
-  set room_id(value: number) {
-    this._room_id = value;
+  /*
+    toggles the deleted flag
+  */
+  public toggle_delete(){
+    this._deleted = !this._deleted;
+  }
+
+  //add connections to vertex
+  public addConnection(to_vertex: number){
+    this._connections.push(to_vertex);
+  }
+
+  //add connected lines from this vertex
+  public addConnectedLine(line_index: number){
+    this._connected_lines.push(line_index);
+  }
+
+  //add connected lines from another vertex to this vertex
+  public addResponsibleLine(line_index: number){
+    this._responsible_lines.push(line_index);
+  }
+
+  //gets all connections from this vertex
+  public getConnections(){
+    return this._connections;
+  }
+
+  //gets all line indices from this vertex
+  public getConnectedLines(){
+    return this._connected_lines;
+  }
+
+  //gets all line indices to this vertex
+  public getResponsibleLines(){
+    return this._responsible_lines;
+  }
+
+  //removes a connection from this vertex to next
+  public removeConnection(index: number){
+    if(this._connections.length > index)  this._connections.splice(index, 1);
+  }
+
+  //removes connected lines from this vertex to next
+  public removeConnectedLine(index: number){
+    if(this._connected_lines.length > index)  this._connected_lines.splice(index, 1);
+  }
+
+  //removes responsible line entry
+  public removeResponsibleLine(index: number){
+    if(this._responsible_lines.length > index) this._responsible_lines.splice(index, 1);
   }
 }

@@ -55,7 +55,7 @@
       })
       .draggable({
         listeners: { move: window.dragMoveListener },
-        inertia: true,
+        inertia: false,
         modifiers: [
           interact.modifiers.restrictRect({
             restriction: 'parent',
@@ -75,7 +75,7 @@
       // translate the element
       target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
 
-      // update the posiion attributes
+      // update the position attributes
       target.setAttribute('data-x', x)
       target.setAttribute('data-y', y)
     }
