@@ -11,4 +11,20 @@ class UserTest < ActiveSupport::TestCase
     assert_not_equal(User.count, before_test)
   end
 
+  def test_UserSave
+    req = RegisterUserRequest.new('TestUser', '1234Pass', 'test@gmail.com', false)
+    us = UserServices.new
+    resp = us.registerUser(req)
+
+    assert(resp.success)
+  end
+
+  def test_registerUserNullRequest
+    req = nil
+    us = UserServices.new
+    resp = us.registerUser(req)
+
+    assert_equal(false, resp.success)
+  end
+
 end

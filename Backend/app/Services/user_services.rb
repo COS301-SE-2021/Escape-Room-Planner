@@ -1,6 +1,6 @@
 class UserServices
   def registerUser(request)
-    raise 'RegisterUserRequest null' if request.nil?
+    return RegisterUserResponse.new(false, 'Null request') if request.nil?
 
     @user = User.new
     @user.username = request.username
