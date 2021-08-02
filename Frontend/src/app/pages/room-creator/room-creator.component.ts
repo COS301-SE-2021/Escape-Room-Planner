@@ -348,9 +348,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let new_width = targetVertex.style.width.match(/\d+/)[0];
 
     let updateVertexBody = {
+      operation: 'transformation',
       id: real_target_id, //convert local to real id
-      posy: new_y_pos,
-      posx: new_x_pos,
+      pos_y: new_y_pos,
+      pos_x: new_x_pos,
       height: new_height,
       width: new_width
     };
