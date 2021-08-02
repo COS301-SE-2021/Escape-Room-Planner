@@ -1,6 +1,6 @@
 require 'jwt'
 
-class Authenticate
+class JsonWebToken
 
   # Encode a token given a certain payload ID password etc.
   # The token will expire after 24 hours

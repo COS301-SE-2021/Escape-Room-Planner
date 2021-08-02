@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3e39f6e2-a62b-4832-b914-65f6f05d2e79" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Escape-Room-Planner.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Escape-Room-Planner.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/app/Services/register_user_request.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/Services/register_user_request.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app/Services/login_response.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/Services/login_response.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/app/Services/user_services.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/Services/user_services.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Backend/app/controllers/api/v1/user_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/controllers/api/v1/user_controller.rb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/config/database.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/config/database.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/db/migrate/20210706132139_create_users.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db/migrate/20210706132139_create_users.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/lib/authenticate.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/lib/authenticate.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +37,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1627655995963</updated>
-      <workItem from="1627655997783" duration="2496000" />
+      <workItem from="1627655997783" duration="3237000" />
+      <workItem from="1627888612667" duration="6870000" />
     </task>
     <servers />
   </component>
@@ -57,5 +55,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

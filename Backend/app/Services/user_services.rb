@@ -5,9 +5,9 @@ class UserServices
     @user = User.new
     @user.username = request.username
     @user.email = request.email
-    # @user.is_admin = request.is_admin
+    @user.is_admin = request.is_admin
 
-    #hash password and store it
+    #salt and hash password and store it
 
     @user.password = request.password
 
@@ -29,22 +29,22 @@ class UserServices
     #find user in database and retrieve it if it exists
     @user = User.find_by(username: request.username)
 
-    raise 'User does not exist' if @user.nil?
+    raise 'Username does not exist' if @user.nil?
 
     #check password is correct
     raise 'Incorrect Password' unless @user.authenticate(@user.password)
 
-    #generate JWT token and attach to user
+    #generate JWT token
 
-    @token = Authenticate.encode(@user.id)
+    @token = JsonWebToken.encode(@user.id)
 
     # store jwt token discuss with team
     @user.jwt_token = @token
 
     @response = if @user.save
-                  LoginResponse.new(true, 'Login Successful')
+                  LoginResponse.new(true, 'Login Successful', @token)
                 else
-                  LoginResponse.new(false, 'Login Failed')
+                  LoginResponse.new(false, 'Login Failed', nil)
                 end
   end
 
@@ -126,5 +126,36 @@ class UserServices
 
   def getUsers(request)
 
+  end
+
+  def authenticateUser(encoded_token, user_id)
+    #compare the jwt token
+    # note: can also accept a header just need to determine if the auth_token will be appended
+
+    @decoded_token = JsonWebToken.decode(encoded_token)
+
+    @response = if User.find_by(jwt_token: @decoded_token)
+                  true
+                else
+                  false
+                end
+
+    #if recieving the header use the following
+    # if headers['Authorization'].present?
+    #   #get token from header
+    #   @encoded_token = headers['Authorization'].split('').last
+    #
+    #   # decode token
+    #   @decoded_token = JsonWebToken.decode(encoded_token)
+    #
+    #   #check token exists
+    #   @response = if User.find_by(jwt_token: @decoded_token)
+    #                 true
+    #               else
+    #                 false
+    #               end
+    # else
+    #   raise 'Missing Token'
+    # end
   end
 end

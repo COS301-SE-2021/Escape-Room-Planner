@@ -41,6 +41,7 @@ module Api
 
         when 'Login'
           if username.nil? || password.nil?
+            #return token
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
             return
           end
