@@ -205,4 +205,16 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
     assert_equal 'Ensure correct parameters are given', response['message']
   end
+
+  test 'can handle connection on wrong vertex ids' do
+    put "#{api_v1_vertex_index_path}/1", params: {
+      operation: 'connection',
+      from_vertex_id: 5,
+      to_vertex_id: 10
+    }, as: :as_json
+
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Could not connect vertex', response['message']
+  end
 end

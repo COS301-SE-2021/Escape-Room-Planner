@@ -58,7 +58,7 @@ module Api
           render json: { status: 'FAILED', message: 'Vertex might not exist', data: resp }, status: :ok
           return
         end
-        render json: { status: 'SUCCESS', message: 'Vertices updates', data: resp }, status: :ok
+        render json: { status: 'SUCCESS', message: 'Vertex updates', data: resp }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Vertex might not exist' }, status: :bad_request
       end
