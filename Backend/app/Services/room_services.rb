@@ -156,7 +156,7 @@ class RoomServices
     to_vertex = Vertex.find_by_id(request.to_vertex_id)
     return ConnectVerticesResponse.new(false, 'To vertex could not be found') if to_vertex.nil?
 
-    @response = if from_vertex.vertices.add(request.to_vertex_id).nil?
+    @response = if from_vertex.vertices.append(to_vertex).nil?
                   ConnectVerticesResponse.new(false, 'Link could not be established')
                 else
                   ConnectVerticesResponse.new(true, 'Link has been established')

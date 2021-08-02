@@ -232,5 +232,14 @@ class ErTest < ActiveSupport::TestCase
     assert_not_equal(vertex.width, -1)
     assert_equal(res.success, false)
   end
+
+  test 'connect two vertices' do
+    from_vertex = Vertex.find_by_id(3)
+    req = ConnectVerticesRequest.new(3, 1)
+    rs = RoomServices.new
+    res = rs.connect_vertex(req)
+
+    assert_not_nil(from_vertex.vertices.find_by_id(1))
+  end
 end
 # rubocop:enable Metrics/ClassLength
