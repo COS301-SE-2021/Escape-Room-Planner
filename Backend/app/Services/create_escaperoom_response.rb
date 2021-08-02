@@ -1,4 +1,4 @@
-class CreateEscaperoomResponse
+class CreateEscapeRoomResponse
   attr_accessor :name, :id
 
   def initialize(id, name)

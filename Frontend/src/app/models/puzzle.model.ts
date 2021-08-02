@@ -12,10 +12,9 @@ export class Puzzle extends  Vertex{
               width: number,
               height: number,
               graphic_id: string,
-              room_id: number,
               description: string,
               estimated_time: Date) {
-    super(local_id, id, name, 'Puzzle', pos_x, pos_y, width, height, graphic_id, room_id);
+    super(local_id, id, name, 'Puzzle', pos_x, pos_y, width, height, graphic_id);
     this._description = description;
     this._estimated_time = estimated_time;
   }

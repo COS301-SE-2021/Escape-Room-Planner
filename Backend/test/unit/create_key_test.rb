@@ -1,30 +1,21 @@
 require 'test_helper'
 
-
 class CreateKeyTest < ActiveSupport::TestCase
-
-  def test_CreateKey
-
+  test 'test create key' do
     num_keys_before = Keys.count
-
-    escape_room = EscapeRoom.new(name:'test name')
-    escape_room.save
-    er_id = escape_room.id
-
+    er_id = 1
     req = CreateKeyRequest.new 'test', 0, 0, 0.1, 0.1, 'graphic', er_id
-
     rs = RoomServices.new
-    rs.createKey(req)
+    rs.create_key(req)
 
     assert_not_equal(Keys.count, num_keys_before)
-
   end
 
-  def test_NullKey
+  test 'test null request' do
     req = nil
     rs = RoomServices.new
-    response = rs.createKey(req)
-    assert_equal(false, response.success)
+    response = rs.create_key(req)
 
+    assert_equal(false, response.success)
   end
 end

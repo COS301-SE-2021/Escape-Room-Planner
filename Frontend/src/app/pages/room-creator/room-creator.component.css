@@ -6,3 +6,8 @@
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
   background-color:grey;
 }
+
+#delete_button > button:hover {
+  background-color: #a31818;
+  color: black;
+}
