@@ -16,8 +16,6 @@ export class Vertex {
   private _connected_lines: any[] = [];
   private _responsible_lines: any[] = [];
 
-
-
   constructor(local_id: number,
               id: number,
               name: string,

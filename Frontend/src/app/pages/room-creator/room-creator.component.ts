@@ -23,7 +23,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public currentRoomId: number = 0; // used to check currently selected room
   public newEscapeRoomName:string = ""; // used when submitting a new room creation
   public newEscapeRoomNameValid:boolean = false; // flag using regex
-
+  
   private _target_vertex: any;
   private isConnection = false;
   private is_disconnect = false;
@@ -425,8 +425,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.lines[line_index] = null;
     }
   }
-
-
 
   //Spawn Alert Error with Message
   renderAlertError(message: string):void{
