@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+# Services for all operations on escape rooms and the vertices
 class RoomServices
+
   # @param [CreatePuzzleRequest] request
   # @return [CreatePuzzleResponse]
   def create_puzzle(request)
@@ -74,7 +76,6 @@ class RoomServices
                   CreateContainerResponse.new(nil, false)
                 end
     # Return the response
-    @response
   end
 
   # @param [RemoveVertexRequest] request
@@ -109,7 +110,6 @@ class RoomServices
   end
 
   def create_clue(request)
-
     return CreateClueResponse.new(-1, false) if request.nil?
 
     @clue = Clue.new
@@ -145,6 +145,24 @@ class RoomServices
                 end
   end
 
+  # @param [ConnectVerticesRequest] request
+  # @return [ConnectVerticesResponse]
+  def connect_vertex(request)
+    raise 'Request null' if request.nil?
+
+    from_vertex = Vertex.find_by_id(request.from_vertex_id)
+    return ConnectVerticesResponse.new(false, 'From vertex could not be found') if from_vertex.nil?
+
+    to_vertex = Vertex.find_by_id(request.to_vertex_id)
+    return ConnectVerticesResponse.new(false, 'To vertex could not be found') if to_vertex.nil?
+
+    @response = if from_vertex.vertices.add(request.to_vertex_id).nil?
+                  ConnectVerticesResponse.new(false, 'Link could not be established')
+                else
+                  ConnectVerticesResponse.new(true, 'Link has been established')
+                end
+  end
+
   # @param [UpdateVertexRequest] request
   # @return [UpdateVertexResponse]
   def update_vertex(request)
@@ -153,12 +171,10 @@ class RoomServices
     vertex = Vertex.find_by_id(request.id)
     return UpdateVertexResponse.new(false, 'Vertex could not be found') if vertex.nil?
 
-
     vertex.posx = request.pos_x
     vertex.posy = request.pos_y
     vertex.width = request.width
     vertex.height = request.height
-
 
     @response = if vertex.save
                   UpdateVertexResponse.new(true, 'Vertex Updated')
