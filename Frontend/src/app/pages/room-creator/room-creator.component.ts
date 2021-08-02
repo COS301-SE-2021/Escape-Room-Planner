@@ -3,12 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {VertexService} from "../../services/vertex.service";
 // Leader Line JS library imports
 import 'leader-line';
-import {writeErrorToLogFile} from "@angular/cli/utilities/log-file";
 declare let LeaderLine: any;
-
-// TODO: DO CHECKS IN CASE SOMETHING FAILS TO BE STORED IN RAILS
-// todo: use local vertex_id when rendering
-// todo: when using anything with vertex, use local id through vertexService
 
 @Component({
   selector: 'app-room-creator',
@@ -45,19 +40,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    // this.renderAlertError("TEST");
-    // let startElement = document.querySelector("#start-line");
-    // let endElement = document.querySelector("#end-line");
-    //
-    // this.line= new LeaderLine(startElement, endElement, {dash: {animation: true}});
-    // this.line.color = "rgba(0,0,0,1.0)";
+    //use for testing new functionality
   }
 
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
     let update_lines = this.vertexService.getLineIndex(vertex_index);
-    for (let i = 0; i < update_lines.length; i++){
-      if(this.lines[update_lines[i]] !== null) this.lines[update_lines[i]].position();
+
+    for (let line_index of update_lines){
+      if(this.lines[line_index] !== null) this.lines[line_index].position();
     }
   }
 
@@ -99,7 +90,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.escapeRooms = response;
           //render all the rooms
           for (let er of response.data){
-            //todo fix this
+            //todo fix this to use real name if we will still use those
             this.renderNewRoom(er.id, "fake name for now");
           }
       },
