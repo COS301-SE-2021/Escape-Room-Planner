@@ -18,7 +18,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public currentRoomId: number = 0; // used to check currently selected room
   public newEscapeRoomName:string = ""; // used when submitting a new room creation
   public newEscapeRoomNameValid:boolean = false; // flag using regex
-  
+
   private _target_vertex: any;
   private isConnection = false;
   private is_disconnect = false;
@@ -255,7 +255,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.listen(newObject,"click", (event) => this.vertexOperation(event));
     // RIGHT CLICK EVENT FOR OBJECTS
     this.renderer.listen(newObject,"contextmenu", (event) => {
-      // this.removeVertex(event);
       this.showContextMenu(event);
       return false;
     });
@@ -280,17 +279,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.disconnectLines(line_index, from_vertex_id, to_vertex_id);
     }else{
       //checks if its being called the other way around
-      let line_index = this.vertexService.removeVertexConnection(to_vertex_id, from_vertex_id);
+      line_index = this.vertexService.removeVertexConnection(to_vertex_id, from_vertex_id);
       //checks if there is a connection to remove from to_vertex to from_vertex
       if(line_index !== -1) this.disconnectLines(line_index, to_vertex_id, from_vertex_id);
     }
   }
 
-  disconnectLines(line_index: number, from_vertex_id: number, to_vertex_id: number): void{
+  disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
     //removes from vertex connected line in array
-    this.vertexService.removeVertexConnectedLine(from_vertex_id, line_index);
+    this.vertexService.removeVertexConnectedLine(from_vertex, line_index);
     //removes to vertex responsible line in array
-    this.vertexService.removeVertexResponsibleLine(to_vertex_id, line_index);
+    this.vertexService.removeVertexResponsibleLine(to_vertex, line_index);
     //removes visual line on html in array
     this.lines[line_index].remove();
     this.lines[line_index] = null;
@@ -318,13 +317,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // shows a context menu when right button clicked over the vertex
   showContextMenu(event: any): void{
-    //todo: change the position
     this._target_vertex = event.target;
 
     let x_pos = this._target_vertex.width + Number(this._target_vertex.getAttribute("data-x"));
     let y_pos = this._target_vertex.getAttribute("data-y");
-
-    // console.log(x_pos);
 
     // moves the context menu where needed based on the vertex
     this.contextMenuRef?.nativeElement.style.setProperty("transform",'translate('+ x_pos +'px, '+ y_pos +'px)');
@@ -334,7 +330,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // hides the context menu
   hideContextMenu(event:any): void{
-    // todo: need to check if button is not delete and child of element too
     if (event.target !== this.contextMenuRef?.nativeElement){
       // @ts-ignore
       this.contextMenuRef?.nativeElement.hidden = true;
