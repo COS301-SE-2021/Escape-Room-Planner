@@ -64,6 +64,8 @@ module Api
       end
 
       # calls service to connect two vertices
+      # @param [ActionController::Parameters] from_vertex_id
+      # @param [ActionController::Parameters] to_vertex_id
       def update_connection(from_vertex_id, to_vertex_id)
         # use both ids and hope for the best it woks out on .save
         if from_vertex_id.nil? || to_vertex_id.nil?
