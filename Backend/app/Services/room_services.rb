@@ -163,7 +163,7 @@ class RoomServices
       return UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
     end
     if request.pos_y < 0
-         return UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
+      return UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
     end
 
 
