@@ -12,11 +12,11 @@ require './app/Services/remove_vertex_response'
 require './app/Services/update_vertex_request'
 require './app/Services/update_vertex_response'
 
-
 # rubocop:disable Metrics/ClassLength
 module Api
   # v1 model definition for api calls
   module V1
+    # Controller that maps http requests to functions to execute
     class VertexController < ApplicationController
       protect_from_forgery with: :null_session
 
@@ -50,7 +50,7 @@ module Api
           return
         end
 
-        req = UpdateVertexRequest.new(id, posx, posy, width, height)
+        req = UpdateVertexRequest.new(id, pos_x, pos_y, width, height)
         serv = RoomServices.new
         resp = serv.update_vertex(req)
 
@@ -64,6 +64,8 @@ module Api
       end
 
       # calls service to connect two vertices
+      # @param [ActionController::Parameters] from_vertex_id
+      # @param [ActionController::Parameters] to_vertex_id
       def update_connection(from_vertex_id, to_vertex_id)
         # use both ids and hope for the best it woks out on .save
         if from_vertex_id.nil? || to_vertex_id.nil?
@@ -104,7 +106,7 @@ module Api
         render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
 
-      # POST api/v1/vertrex
+      # POST api/v1/vertex
       def create
         type = params[:type]
 
@@ -198,3 +200,4 @@ module Api
     end
   end
 end
+# rubocop:enable Metrics/ClassLength

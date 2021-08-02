@@ -2,7 +2,6 @@
 
 # Services for all operations on escape rooms and the vertices
 class RoomServices
-
   # @param [CreatePuzzleRequest] request
   # @return [CreatePuzzleResponse]
   def create_puzzle(request)
@@ -156,7 +155,8 @@ class RoomServices
     to_vertex = Vertex.find_by_id(request.to_vertex_id)
     return ConnectVerticesResponse.new(false, 'To vertex could not be found') if to_vertex.nil?
 
-    @response = if from_vertex.vertices.append(to_vertex).nil?
+    num_vertices = from_vertex.vertices.count
+    @response = if from_vertex.vertices.append(to_vertex).count < num_vertices
                   ConnectVerticesResponse.new(false, 'Link could not be established')
                 else
                   ConnectVerticesResponse.new(true, 'Link has been established')

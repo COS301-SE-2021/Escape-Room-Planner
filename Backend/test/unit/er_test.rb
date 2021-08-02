@@ -143,7 +143,6 @@ class ErTest < ActiveSupport::TestCase
     rs = RoomServices.new # creates a room service object to test it's functionality
     res = rs.update_vertex(req)
 
-
     vertex = Vertex.find_by_id(vertex_id)
 
     assert_equal(res.success, true)
@@ -201,7 +200,6 @@ class ErTest < ActiveSupport::TestCase
     res = rs.update_vertex(req)
     vertex = Vertex.find_by_id(1)
 
-
     assert_not_equal(vertex.posx, '123')
     assert_not_equal(vertex.posy, '5')
     assert_not_equal(vertex.height, '1')
@@ -241,5 +239,27 @@ class ErTest < ActiveSupport::TestCase
 
     assert_not_nil(from_vertex.vertices.find_by_id(1))
   end
+
+  # check that returns correct response when from vertex not exist when connecting two vertices
+  test 'from vertex not exist when connect vertex' do
+    req = ConnectVerticesRequest.new(5, 1)
+    rs = RoomServices.new
+    resp = rs.connect_vertex(req)
+
+    assert_not(resp.success)
+    assert_equal(resp.message, 'From vertex could not be found')
+  end
+
+  # check that returns correct response when to vertex not exist when connecting two vertices
+  test 'to vertex not exist when connect vertex' do
+    req = ConnectVerticesRequest.new(1, 5)
+    rs = RoomServices.new
+    resp = rs.connect_vertex(req)
+
+    assert_not(resp.success)
+    assert_equal(resp.message, 'To vertex could not be found')
+  end
+
+
 end
 # rubocop:enable Metrics/ClassLength
