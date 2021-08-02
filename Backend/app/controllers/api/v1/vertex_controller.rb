@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './app/Services/create_puzzle_request'
 require './app/Services/create_puzzle_response'
 require './app/Services/create_container_response'
@@ -11,42 +13,39 @@ require './app/Services/update_vertex_request'
 require './app/Services/update_vertex_response'
 
 
-
+# rubocop:disable Metrics/ClassLength
 module Api
+  # v1 model definition for api calls
   module V1
     class VertexController < ApplicationController
       protect_from_forgery with: :null_session
 
-      def cors_set_access_control_headers
-        headers['Access-Control-Allow-Origin'] = '*'
-        headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-        headers['Access-Control-Request-Method'] = '*'
-        headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-      end
+      # PUT request http://host:port/api/v1/vertex/vertex_id, json
+      # @return [JSON object with a status code or error message]
+      def update
+        # operation parameter tells what put operation should be done on vertex
+        operation = params[:operation]
 
-      def cors_preflight_check
-        if request.method == :options
-          headers['Access-Control-Allow-Origin'] = '*'
-          headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
-          headers['Access-Control-Allow-Headers'] = '*'
-          headers['Access-Control-Max-Age'] = '1728000'
-          render text: '', content_type: 'text/plain'
+        case operation
+        when 'connection'
+          update_connection(params[:from_vertex_id], params[:to_vertex_id])
+        when 'transformation'
+          update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height])
+        else
+          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
         end
       end
 
-      # PUT
-      def update
-        id = params[:id]
-
-        posy = params[:posy]
-
-        posx = params[:posx]
-
-        width = params[:width]
-
-        height = params[:height]
-
-        if id.nil? || posy.nil? || posx.nil? || width.nil? || height.nil?
+      # @param [ActionController::Parameters] id
+      # @param [ActionController::Parameters] pos_x
+      # @param [ActionController::Parameters] pos_y
+      # @param [ActionController::Parameters] width
+      # @param [ActionController::Parameters] height
+      # @return JSON
+      def update_transformation(id, pos_x, pos_y, width, height)
+        # used as update method that does transformation updates
+        # todo remake the tests, and add extra ones
+        if id.nil? || pos_y.nil? || pos_x.nil? || width.nil? || height.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
         end
@@ -61,9 +60,29 @@ module Api
         end
         render json: { status: 'SUCCESS', message: 'Vertices updates', data: resp }, status: :ok
       rescue StandardError
-
         render json: { status: 'FAILED', message: 'Vertex might not exist' }, status: :bad_request
+      end
 
+      # calls service to connect two vertices
+      def update_connection(from_vertex_id, to_vertex_id)
+        # use both ids and hope for the best it woks out on .save
+        if from_vertex_id.nil? || to_vertex_id.nil?
+          render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+        else
+          req = ConnectVerticesRequest.new(from_vertex_id, to_vertex_id)
+          serv = RoomServices.new
+          resp = serv.connect_vertex(req)
+
+          unless resp.success
+            render json: { status: 'FAILED', message: 'Could not connect vertex', data: resp }, status: :ok
+            return
+          end
+
+          render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
+        end
+
+      rescue StandardError
+        render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
 
       def index
@@ -82,13 +101,11 @@ module Api
         vertices = Vertex.where(escape_room_id: id)
         render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
       rescue StandardError
-
         render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
 
       # POST api/v1/vertrex
       def create
-
         type = params[:type]
 
         name = params[:name]
@@ -169,7 +186,6 @@ module Api
         req = RemoveVertexRequest.new(id)
         resp = serv.remove_vertex(req)
 
-
         unless resp.success
           render json: { status: 'FAILED', message: 'Unspecified error', data: resp }, status: :ok
           return
@@ -178,9 +194,7 @@ module Api
         render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
-
       end
-
     end
   end
 end

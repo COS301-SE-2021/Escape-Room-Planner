@@ -237,7 +237,7 @@ class ErTest < ActiveSupport::TestCase
     from_vertex = Vertex.find_by_id(3)
     req = ConnectVerticesRequest.new(3, 1)
     rs = RoomServices.new
-    res = rs.connect_vertex(req)
+    rs.connect_vertex(req)
 
     assert_not_nil(from_vertex.vertices.find_by_id(1))
   end
