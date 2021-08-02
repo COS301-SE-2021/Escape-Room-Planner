@@ -19,10 +19,6 @@ class UserServices
                 end
   end
 
-  def verifyAccount(request)
-
-  end
-
   def login(request)
     raise 'LoginRequest null' if request.nil?
 
@@ -46,11 +42,6 @@ class UserServices
                 else
                   LoginResponse.new(false, 'Login Failed', nil)
                 end
-  end
-
-  def updateAccount(request)
-
-
   end
 
   def resetPassword(request)
@@ -83,22 +74,6 @@ class UserServices
                 end
   end
 
-  def setAdmin(request)
-    raise 'SetAdminRequest null' if request.nil?
-
-    @user = User.find_by_username(request.username)
-
-    raise 'User does not exist' if @user.nil?
-
-    @user.is_admin = true
-
-    @response = if @user.save
-                  SetAdminResponse.new(true, 'Successful')
-                else
-                  SetAdminResponse.new(false, 'Failed')
-                end
-  end
-
   def deleteUser(request)
     raise 'SetAdminRequest null' if request.nil?
 
@@ -124,38 +99,52 @@ class UserServices
 
   end
 
+  def setAdmin(request)
+    raise 'SetAdminRequest null' if request.nil?
+
+    @user = User.find_by_username(request.username)
+
+    raise 'User does not exist' if @user.nil?
+
+    @user.is_admin = true
+
+    @response = if @user.save
+                  SetAdminResponse.new(true, 'Successful')
+                else
+                  SetAdminResponse.new(false, 'Failed')
+                end
+  end
+
   def getUsers(request)
 
   end
 
-  def authenticateUser(encoded_token, user_id)
-    #compare the jwt token
-    # note: can also accept a header just need to determine if the auth_token will be appended
+  def updateAccount(request)
 
-    @decoded_token = JsonWebToken.decode(encoded_token)
 
-    @response = if User.find_by(jwt_token: @decoded_token)
-                  true
-                else
-                  false
-                end
+  end
 
-    #if recieving the header use the following
-    # if headers['Authorization'].present?
-    #   #get token from header
-    #   @encoded_token = headers['Authorization'].split('').last
-    #
-    #   # decode token
-    #   @decoded_token = JsonWebToken.decode(encoded_token)
-    #
-    #   #check token exists
-    #   @response = if User.find_by(jwt_token: @decoded_token)
-    #                 true
-    #               else
-    #                 false
-    #               end
-    # else
-    #   raise 'Missing Token'
-    # end
+  def verifyAccount(request)
+
+  end
+
+  def authenticateUser(headers)
+
+    if headers['Authorization'].present?
+      #get token from header
+      @encoded_token = headers['Authorization'].split('').last
+
+      # decode token
+      @decoded_token = JsonWebToken.decode(@encoded_token)
+
+      #check token exists
+      @response = if User.find_by(jwt_token: @decoded_token)
+                    true
+                  else
+                    false
+                  end
+    else
+      raise 'Missing Token'
+    end
   end
 end
