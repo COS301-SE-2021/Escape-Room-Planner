@@ -20,15 +20,20 @@ class UserServices
   end
 
   def login(request)
-    raise 'LoginRequest null' if request.nil?
+
+    return LoginResponse.new(false, "Null request", nil) if request.nil?
+    # raise 'LoginRequest null' if request.nil?
 
     #find user in database and retrieve it if it exists
     @user = User.find_by(username: request.username)
 
-    raise 'Username does not exist' if @user.nil?
+    #check username exists
+    return LoginResponse.new(false, "Username does not exist", nil) if @user.nil?
+    # raise 'Username does not exist' if @user.nil?
 
     #check password is correct
-    raise 'Incorrect Password' unless @user.authenticate(request.password)
+    return LoginResponse.new(false, "Password is incorrect", nil) unless @user.autheticate(request)
+    # raise 'Incorrect Password' unless @user.authenticate(request.password)
 
     #generate JWT token
 
