@@ -120,7 +120,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     req_L = LoginRequest.new('testUser', 'testPass')
     res_L = us.login(req_L)
     put "#{api_v1_vertex_index_path}/1",
-        headers: { "Authorization": '"Bearer '+res_L.token+'"' }, params: {
+        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
           operation: 'transformation',
           id: 1, # id of one of the fixture vertices
           pos_x: 100, # new pos_x and pos_y
@@ -136,14 +136,18 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   # tests if vertex gets updated and correct response is received (good case)
   test 'can handle update on vertex id tha doesn\'t exist' do
-    put "#{api_v1_vertex_index_path}/1", params: {
-      operation: 'transformation',
-      id: 5, # id of one of the fixture vertices
-      pos_x: 100, # new pos_x and pos_y
-      pos_y: 100,
-      width: 15, # new width and height
-      height: 10
-    }, as: :as_json
+    us = UserServices.new
+    req_L = LoginRequest.new('testUser', 'testPass')
+    res_L = us.login(req_L)
+    put "#{api_v1_vertex_index_path}/1",
+        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+          operation: 'transformation',
+          id: 5, # id of one of the fixture vertices
+          pos_x: 100, # new pos_x and pos_y
+          pos_y: 100,
+          width: 15, # new width and height
+          height: 10
+        }, as: :as_json
 
     response = JSON.parse(@response.body)
     assert_response :ok
@@ -151,14 +155,18 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can handle update on vertex height that is negative' do
-    put "#{api_v1_vertex_index_path}/1", params: {
-      operation: 'transformation',
-      id: 5, # id of one of the fixture vertices
-      pos_x: 100, # new pos_x and pos_y
-      pos_y: 100,
-      width: 15, # new width and height
-      height: -10
-    }, as: :as_json
+    us = UserServices.new
+    req_L = LoginRequest.new('testUser', 'testPass')
+    res_L = us.login(req_L)
+    put "#{api_v1_vertex_index_path}/1",
+        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+          operation: 'transformation',
+          id: 5, # id of one of the fixture vertices
+          pos_x: 100, # new pos_x and pos_y
+          pos_y: 100,
+          width: 15, # new width and height
+          height: -10
+        }, as: :as_json
 
     response = JSON.parse(@response.body)
     assert_response :ok
@@ -166,11 +174,15 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can update vertex connections' do
-    put "#{api_v1_vertex_index_path}/1", params: {
-      operation: 'connection',
-      from_vertex_id: 1,
-      to_vertex_id: 2
-    }, as: :as_json
+    us = UserServices.new
+    req_L = LoginRequest.new('testUser', 'testPass')
+    res_L = us.login(req_L)
+    put "#{api_v1_vertex_index_path}/1",
+        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+          operation: 'connection',
+          from_vertex_id: 1,
+          to_vertex_id: 2
+        }, as: :as_json
 
     response = JSON.parse(@response.body)
     assert_response :ok
@@ -178,11 +190,15 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can handle null id for vertex when updating connection' do
-    put "#{api_v1_vertex_index_path}/1", params: {
-      operation: 'connection',
-      from_vertex_id: nil,
-      to_vertex_id: 2
-    }, as: :as_json
+    us = UserServices.new
+    req_L = LoginRequest.new('testUser', 'testPass')
+    res_L = us.login(req_L)
+    put "#{api_v1_vertex_index_path}/1",
+        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+          operation: 'connection',
+          from_vertex_id: nil,
+          to_vertex_id: 2
+        }, as: :as_json
 
     response = JSON.parse(@response.body)
     assert_response :bad_request
@@ -190,11 +206,15 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can handle connection on wrong vertex ids' do
-    put "#{api_v1_vertex_index_path}/1", params: {
-      operation: 'connection',
-      from_vertex_id: 5,
-      to_vertex_id: 10
-    }, as: :as_json
+    us = UserServices.new
+    req_L = LoginRequest.new('testUser', 'testPass')
+    res_L = us.login(req_L)
+    put "#{api_v1_vertex_index_path}/1",
+        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+          operation: 'connection',
+          from_vertex_id: 5,
+          to_vertex_id: 10
+        }, as: :as_json
 
     response = JSON.parse(@response.body)
     assert_response :ok
