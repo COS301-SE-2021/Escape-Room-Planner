@@ -1,6 +1,5 @@
 require 'test_helper'
 class VertexControllerTest < ActionDispatch::IntegrationTest
-
   test 'can get index' do
     get api_v1_vertex_index_path
     assert_response :success
@@ -16,9 +15,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              graphicid: '123',
                                              estimated_time: '10:12',
                                              description: 'word',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
 
     assert_response :success
   end
@@ -32,11 +29,8 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              graphicid: '123',
                                              estimated_time: '10:12',
                                              description: 'word',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
     assert_response :bad_request
-
   end
 
   test 'can create correct key' do
@@ -47,11 +41,8 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              width: '4',
                                              height: '5',
                                              graphicid: '123',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
     assert_response :success
-
   end
 
   test 'cant create correct key' do
@@ -61,11 +52,8 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              width: '4',
                                              height: '5',
                                              graphicid: '123',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
     assert_response :bad_request
-
   end
 
   test 'can create Container' do
@@ -76,9 +64,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              width: '4',
                                              height: '5',
                                              graphicid: '123',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
     assert_response :success
   end
 
@@ -89,9 +75,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              width: '4',
                                              height: '5',
                                              graphicid: '123',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
     assert_response :bad_request
   end
 
@@ -104,9 +88,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              width: '4',
                                              height: '5',
                                              graphicid: '123',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
     assert_response :success
   end
 
@@ -118,9 +100,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
                                              width: '4',
                                              height: '5',
                                              graphicid: '123',
-                                             roomid: '1'
-
-    }
+                                             roomid: '1' }
     assert_response :bad_request
   end
 
@@ -134,17 +114,20 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
-
   # tests if vertex gets updated and correct response is received (good case)
   test 'can update vertex transformation' do
-    put "#{api_v1_vertex_index_path}/1", params: {
-      operation: 'transformation',
-      id: 1, # id of one of the fixture vertices
-      pos_x: 100, # new pos_x and pos_y
-      pos_y: 100,
-      width: 15, # new width and height
-      height: 10
-    }, as: :as_json
+    us = UserServices.new
+    req_L = LoginRequest.new('testUser', 'testPass')
+    res_L = us.login(req_L)
+    put "#{api_v1_vertex_index_path}/1",
+        headers: { "Authorization": '"Bearer '+res_L.token+'"' }, params: {
+          operation: 'transformation',
+          id: 1, # id of one of the fixture vertices
+          pos_x: 100, # new pos_x and pos_y
+          pos_y: 100,
+          width: 15, # new width and height
+          height: 10
+        }, as: :as_json
 
     response = JSON.parse(@response.body)
     assert_response :ok

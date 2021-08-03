@@ -12,7 +12,7 @@ one:
   password_digest: <%= BCrypt::Password.create('testPass') %>
   email: 'test@gmail.com'
   jwt_token: '123'
-  is_admin: false
+  is_admin: true
 # column: value
 #
 

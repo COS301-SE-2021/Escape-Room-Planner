@@ -19,5 +19,6 @@ class UserControllerTest < ActionDispatch::IntegrationTest
     response = JSON.parse(@response.body)
     assert_response :ok
     assert_equal 'Login Successful', response['message']
+    puts response['auth_token']
   end
 end
