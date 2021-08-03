@@ -4,10 +4,12 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
+<% require 'bcrypt' %>
+
 one:
   id: 1
   username: 'testUser'
-  password_digest: '$2a$04$aIrVKxjf8vVPGKaSno6ZqesUeqRthmf98JixnRxhSKY1g6YO608E6'
+  password_digest: <%= BCrypt::Password.create('testPass') %>
   email: 'test@gmail.com'
   jwt_token: '123'
   is_admin: false
