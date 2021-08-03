@@ -3,7 +3,7 @@ class UserServices
     raise 'RegisterUserRequest null' if request.nil?
 
     @user = User.new
-    @user.id = 8
+    # @user.id = 9
     @user.user_id = 48
     @user.username = request.username
     @user.email = request.email

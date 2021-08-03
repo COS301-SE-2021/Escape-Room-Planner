@@ -1,12 +1,12 @@
 require './app/Services/login_request'
 require './app/Services/register_user_request'
 require './app/Services/register_user_request'
-require 'bcrypt'
+# require 'bcrypt'
 
 module Api
   module V1
     class UserController < ApplicationController
-      include BCrypt
+      # include BCrypt
       protect_from_forgery with: :null_session
       skip_before_action :verify_authenticity_token
 
@@ -20,7 +20,7 @@ module Api
         username = params[:username]
         password_digest = params[:password_digest]
 
-        if User.where('user = ?', username).count >= 1
+        if User.where('username = ?', username).count >= 1
           render json: {status: 'Fail', message: 'User already exists', data: "Created: false"}, status: :bad_request
           return
         end
