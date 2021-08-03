@@ -134,4 +134,87 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
   end
 
+
+  # tests if vertex gets updated and correct response is received (good case)
+  test 'can update vertex transformation' do
+    put "#{api_v1_vertex_index_path}/1", params: {
+      operation: 'transformation',
+      id: 1, # id of one of the fixture vertices
+      pos_x: 100, # new pos_x and pos_y
+      pos_y: 100,
+      width: 15, # new width and height
+      height: 10
+    }, as: :as_json
+
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Vertex updates', response['message']
+  end
+
+  # tests if vertex gets updated and correct response is received (good case)
+  test 'can handle update on vertex id tha doesn\'t exist' do
+    put "#{api_v1_vertex_index_path}/1", params: {
+      operation: 'transformation',
+      id: 5, # id of one of the fixture vertices
+      pos_x: 100, # new pos_x and pos_y
+      pos_y: 100,
+      width: 15, # new width and height
+      height: 10
+    }, as: :as_json
+
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Vertex updates', response['message']
+  end
+
+  test 'can handle update on vertex height that is negative' do
+    put "#{api_v1_vertex_index_path}/1", params: {
+      operation: 'transformation',
+      id: 5, # id of one of the fixture vertices
+      pos_x: 100, # new pos_x and pos_y
+      pos_y: 100,
+      width: 15, # new width and height
+      height: -10
+    }, as: :as_json
+
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Vertex might not exist', response['message']
+  end
+
+  test 'can update vertex connections' do
+    put "#{api_v1_vertex_index_path}/1", params: {
+      operation: 'connection',
+      from_vertex_id: 1,
+      to_vertex_id: 2
+    }, as: :as_json
+
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Vertex connection updates', response['message']
+  end
+
+  test 'can handle null id for vertex when updating connection' do
+    put "#{api_v1_vertex_index_path}/1", params: {
+      operation: 'connection',
+      from_vertex_id: nil,
+      to_vertex_id: 2
+    }, as: :as_json
+
+    response = JSON.parse(@response.body)
+    assert_response :bad_request
+    assert_equal 'Ensure correct parameters are given', response['message']
+  end
+
+  test 'can handle connection on wrong vertex ids' do
+    put "#{api_v1_vertex_index_path}/1", params: {
+      operation: 'connection',
+      from_vertex_id: 5,
+      to_vertex_id: 10
+    }, as: :as_json
+
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Could not connect vertex', response['message']
+  end
 end
