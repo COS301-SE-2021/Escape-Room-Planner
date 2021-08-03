@@ -32,7 +32,7 @@ class UserServices
 
     #generate JWT token
 
-    @token = JsonWebToken.encode(@user.id)
+    @token = JsonWebToken.encode(user_id: @user.id)
 
     # store jwt token discuss with team
     @user.jwt_token = @token

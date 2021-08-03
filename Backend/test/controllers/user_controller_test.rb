@@ -18,6 +18,6 @@ class UserControllerTest < ActionDispatch::IntegrationTest
 
     response = JSON.parse(@response.body)
     assert_response :ok
-    assert_equal 'Ensure correct parameters are given', response['message']
+    assert_equal 'Login Successful', response['message']
   end
 end
