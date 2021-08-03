@@ -4,6 +4,7 @@ class UserTest < ActiveSupport::TestCase
 
   def test_registerUser
     before_test = User.count
+    # req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
     req = RegisterUserRequest.new('TestUser', '1234Pass', 'test@gmail.com', false)
     us = UserServices.new
     us.registerUser(req)
@@ -25,6 +26,16 @@ class UserTest < ActiveSupport::TestCase
     resp = us.registerUser(req)
 
     assert_equal(false, resp.success)
+  end
+
+  def test_LoginWithCorrectCredentials
+    req = LoginRequest.new('testUser', 'testPass')
+    us = UserServices.new
+    resp = us.login(req)
+
+    puts resp.message
+
+    assert(resp.success)
   end
 
 end
