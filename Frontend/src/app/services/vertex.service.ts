@@ -83,7 +83,6 @@ export class VertexService {
   }
 
   //returns what connections a vertex has in an array
-  // todo test
   public getVertexConnections(vertex_id: number){
    return this._vertices[vertex_id].getConnections();
   }
