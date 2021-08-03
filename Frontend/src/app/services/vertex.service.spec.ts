@@ -49,6 +49,30 @@ describe('VertexService', () => {
     expect(service.vertices[0].getConnections().length).toBe(1, 'didn\'t add the  connection')
   });
 
+  it('#addVertexConnectedLines should create the connection', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.addVertexConnectedLine(0,1);
+
+    expect(service.vertices[0].getConnectedLines().length).toBe(1, 'didn\'t add the  connection')
+  });
+
+  it('#addVertexResponsibleLines should create the connection', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.addVertexResponsibleLine(0,1);
+
+    expect(service.vertices[0].getResponsibleLines().length).toBe(1, 'didn\'t add the  connection')
+  });
+
+  it('#getVertexConnections should create the connection', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.vertices[0].addConnection(1);
+
+    expect(service.getVertexConnections(0).length).toBe(1, 'didn\'t add the  connection')
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

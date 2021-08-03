@@ -51,6 +51,7 @@ export class VertexService {
   }
 
   //removes connection in vertex connections array and returns line_index
+  // todo test
   public removeVertexConnection(from_vertex: number, to_vertex: number): number{
     let index = this._vertices[from_vertex].getConnections().indexOf(to_vertex);
     //checks if exists and if not will return -1
@@ -62,23 +63,27 @@ export class VertexService {
   }
 
   //removes connected line index in vertex connected line array
+  // todo test
   public removeVertexConnectedLine(vertex_id:number, value_to_delete: number){
     let index_to_delete = this._vertices[vertex_id].getConnectedLines().indexOf(value_to_delete);
     if (index_to_delete !== -1) this._vertices[vertex_id].removeConnectedLine(index_to_delete);
   }
 
   //removes responsible line index in vertex responsible line array
+  // todo test
   public removeVertexResponsibleLine(vertex_id: number, line_index: number){
     let index = this._vertices[vertex_id].getResponsibleLines().indexOf(line_index);
     if (index !== -1) this._vertices[vertex_id].removeResponsibleLine(index);
   }
 
   //returns what lines need to be updated in an array
+  // todo test
   public getLineIndex(vertex_id: number){
     return this._vertices[vertex_id].getConnectedLines().concat(this._vertices[vertex_id].getResponsibleLines());
   }
 
   //returns what connections a vertex has in an array
+  // todo test
   public getVertexConnections(vertex_id: number){
    return this._vertices[vertex_id].getConnections();
   }
