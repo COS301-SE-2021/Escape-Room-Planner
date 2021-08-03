@@ -32,7 +32,7 @@ class UserServices
     # raise 'Username does not exist' if @user.nil?
 
     #check password is correct
-    return LoginResponse.new(false, "Password is incorrect", nil) unless @user.autheticate(request)
+    return LoginResponse.new(false, "Password is incorrect", nil) unless @user.authenticate(request.password)
     # raise 'Incorrect Password' unless @user.authenticate(request.password)
 
     #generate JWT token
