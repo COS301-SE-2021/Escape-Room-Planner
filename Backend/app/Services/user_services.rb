@@ -6,11 +6,10 @@ class UserServices
     @user.username = request.username
     @user.email = request.email
     @user.is_admin = true
-
     #salt and hash password and store it
-
     @user.password = request.password
 
+    puts "Whats the issue"
 
     @response = if @user.save!
                   RegisterUserResponse.new(true, 'User Created Successfully')
