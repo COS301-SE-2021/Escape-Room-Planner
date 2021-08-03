@@ -1,12 +1,10 @@
 require './app/Services/login_request'
 require './app/Services/register_user_request'
 require './app/Services/register_user_request'
-# require 'bcrypt'
 
 module Api
   module V1
     class UserController < ApplicationController
-      # include BCrypt
       protect_from_forgery with: :null_session
       skip_before_action :verify_authenticity_token
 
@@ -16,9 +14,13 @@ module Api
       end
 
       def create
-        email = params[:email]
+        type = params[:type]
+        email = params[:name]
+        name = params[:name]
+        is_admin = params[:is_admin]
         username = params[:username]
-        password_digest = params[:password_digest]
+        password = params[:password]
+        newPassword = params[:newPassword]
 
         if User.where('username = ?', username).count >= 1
           render json: {status: 'Fail', message: 'User already exists', data: "Created: false"}, status: :bad_request
@@ -31,11 +33,36 @@ module Api
         end
 
         serv = UserServices.new
-        req = RegisterUserRequest.new(username, password_digest, email, true )
-        res = serv.registerUser(req)
+
+        case type
+        when 'Register'
+          if email.nil? || is_admin.nil? || name.nil? || username.nil?|| email.nil? || password.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
+            return
+          end
+
+          req = RegisterUserRequest.new(username, password, email, is_admin)
+          res = serv.registerUser(req)
+        # req = RegisterUserRequest.new(username, password_digest, email, true )
+        # res = serv.registerUser(req)
 
         # when 'Verify'
 
+        when 'login'
+          if username.nil? || password.nil?
+            #return token
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given for login' }, status: :not_found
+            return
+          end
+
+          req = LoginRequest.new(username, password)
+          res = serv.login(req)
+
+          if res.success
+            render json: { status: 'SUCCESS', message: res.message, auth_token: res.token}, status: :ok
+          else
+            render json: { status: 'FAILED', message: res.message}, status: 401
+          end
         # when 'Login'
         #   if username.nil? || password.nil?
         #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found

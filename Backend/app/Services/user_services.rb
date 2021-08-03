@@ -1,30 +1,22 @@
 class UserServices
   def registerUser(request)
-    raise 'RegisterUserRequest null' if request.nil?
+    return RegisterUserResponse.new(false, 'Null request') if request.nil?
 
     @user = User.new
-    # @user.id = 9
-    @user.user_id = 48
     @user.username = request.username
     @user.email = request.email
-    @user.password_digest = request.password_digest
-    @user.isAdmin = request.isAdmin
-    @user.jwt_token = "dsfseeaaaaaea"
-    @user.type = "Register"
+    @user.is_admin = true
 
-    #hash password and store it
+    #salt and hash password and store it
 
-    # @user.password_digest = request.password_digest
+    @user.password = request.password
 
-    @response = if @user.save
+
+    @response = if @user.save!
                   RegisterUserResponse.new(true, 'User Created Successfully')
                 else
                   RegisterUserResponse.new(false, 'User Not Created')
                 end
-  end
-
-  def verifyAccount(request)
-
   end
 
   def login(request)
@@ -33,28 +25,23 @@ class UserServices
     #find user in database and retrieve it if it exists
     @user = User.find_by(username: request.username)
 
-    raise 'User does not exist' if @user.nil?
+    raise 'Username does not exist' if @user.nil?
 
     #check password is correct
-    raise 'Incorrect Password' unless @user.authenticate(@user.password)
+    raise 'Incorrect Password' unless @user.authenticate(request.password)
 
-    #generate JWT token and attach to user
+    #generate JWT token
 
-    @token = Authenticate.encode(@user.id)
+    @token = JsonWebToken.encode(user_id: @user.id)
 
     # store jwt token discuss with team
     @user.jwt_token = @token
 
     @response = if @user.save
-                  LoginResponse.new(true, 'Login Successful')
+                  LoginResponse.new(true, 'Login Successful', @token)
                 else
-                  LoginResponse.new(false, 'Login Failed')
+                  LoginResponse.new(false, 'Login Failed', nil)
                 end
-  end
-
-  def updateAccount(request)
-
-
   end
 
   def resetPassword(request)
@@ -87,22 +74,6 @@ class UserServices
                 end
   end
 
-  def setAdmin(request)
-    raise 'SetAdminRequest null' if request.nil?
-
-    @user = User.find_by_username(request.username)
-
-    raise 'User does not exist' if @user.nil?
-
-    @user.isAdmin = true
-
-    @response = if @user.save
-                  SetAdminResponse.new(true, 'Successful')
-                else
-                  SetAdminResponse.new(false, 'Failed')
-                end
-  end
-
   def deleteUser(request)
     raise 'SetAdminRequest null' if request.nil?
 
@@ -111,7 +82,7 @@ class UserServices
     raise 'User does not exist' if @user.nil?
 
     # A non-admin user cannpt delete another user
-    raise 'Current user is not an admin' unless @user.isAdmin
+    raise 'Current user is not an admin' unless @user.is_admin
 
     @user_to_be_deleted = User.find_by_username(request.user_to_be_deleted)
 
@@ -128,7 +99,52 @@ class UserServices
 
   end
 
+  def setAdmin(request)
+    raise 'SetAdminRequest null' if request.nil?
+
+    @user = User.find_by_username(request.username)
+
+    raise 'User does not exist' if @user.nil?
+
+    @user.is_admin = true
+
+    @response = if @user.save
+                  SetAdminResponse.new(true, 'Successful')
+                else
+                  SetAdminResponse.new(false, 'Failed')
+                end
+  end
+
   def getUsers(request)
 
+  end
+
+  def updateAccount(request)
+
+
+  end
+
+  def verifyAccount(request)
+
+  end
+
+  def authenticateUser(headers)
+
+    if headers['Authorization'].present?
+      #get token from header
+      encoded_token = headers['Authorization'].split('').last
+
+      # decode token
+      decoded_token = JsonWebToken.decode(encoded_token)
+
+      #check token exists
+      @response = if User.find_by(jwt_token: decoded_token)
+                    true
+                  else
+                    false
+                  end
+    else
+      raise 'Missing Token'
+    end
   end
 end
