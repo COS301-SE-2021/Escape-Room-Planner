@@ -49,6 +49,12 @@ module Api
           req = LoginRequest.new(username, password)
           res = serv.login(req)
 
+          if res.success
+            render json: { status: 'SUCCESS', message: res.message, auth_token: res.token}
+          else
+            render json: {status: 'FAILED', message: res.message}
+          end
+
         when 'UpdateAccount'
 
         when 'resetPassword'

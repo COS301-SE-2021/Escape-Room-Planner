@@ -1,5 +1,5 @@
 require 'test_helper'
-require '../../app/Services/user_services'
+require './app/Services/user_services'
 class UserTest < ActiveSupport::TestCase
 
   def test_registerUser

@@ -24,7 +24,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_132139) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer "user_id", null: false
     t.string "username", null: false
     t.string "email"
     t.string "password_digest", null: false

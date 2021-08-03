@@ -132,13 +132,13 @@ class UserServices
 
     if headers['Authorization'].present?
       #get token from header
-      @encoded_token = headers['Authorization'].split('').last
+      encoded_token = headers['Authorization'].split('').last
 
       # decode token
-      @decoded_token = JsonWebToken.decode(@encoded_token)
+      decoded_token = JsonWebToken.decode(encoded_token)
 
       #check token exists
-      @response = if User.find_by(jwt_token: @decoded_token)
+      @response = if User.find_by(jwt_token: decoded_token)
                     true
                   else
                     false

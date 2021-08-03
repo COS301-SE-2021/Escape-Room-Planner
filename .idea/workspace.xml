@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3e39f6e2-a62b-4832-b914-65f6f05d2e79" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Backend/test/unit/user_test.rb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/test/controllers/user_controller_test.rb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app/Services/user_services.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/Services/user_services.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/app/controllers/api/v1/user_controller.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/app/controllers/api/v1/user_controller.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/config/database.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/config/database.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db/migrate/20210706132139_create_users.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db/migrate/20210706132139_create_users.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/db/schema.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/db/schema.rb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/test/fixtures/users.yml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/test/fixtures/users.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/test/unit/user_test.rb" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/test/unit/user_test.rb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +37,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Backend" />
     <property name="nodejs_package_manager_path" value="yarn" />
   </component>
   <component name="RunManager" selected="Test::Unit/Shoulda/Minitest.test_createEscapeRoom">
@@ -107,7 +115,7 @@
       <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_SCRIPTS_PATHS" VALUE="$MODULE_DIR$/Backend/test/unit/user_test.rb" />
       <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_FILE_MASK" VALUE="" />
       <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_METHOD_NAME" VALUE="" />
-      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="TEST_SCRIPT" />
+      <RTEST_RUN_CONFIG_SETTINGS_ID NAME="TEST_TEST_TYPE" VALUE="CUSTOM_SET_OF_FILES" />
       <RTEST_RUN_CONFIG_SETTINGS_ID NAME="DRB" VALUE="false" />
       <RTEST_RUN_CONFIG_SETTINGS_ID NAME="ZEUS" VALUE="false" />
       <RTEST_RUN_CONFIG_SETTINGS_ID NAME="SPRING" VALUE="false" />
@@ -132,7 +140,8 @@
       <option name="presentableId" value="Default" />
       <updated>1627655995963</updated>
       <workItem from="1627655997783" duration="3237000" />
-      <workItem from="1627888612667" duration="12267000" />
+      <workItem from="1627888612667" duration="14208000" />
+      <workItem from="1627977722997" duration="2834000" />
     </task>
     <servers />
   </component>
