@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-signup',
@@ -7,9 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignupComponent implements OnInit {
 
-  constructor() { }
+  constructor() { http:HttpClientModule}
 
-  ngOnInit() {
+  ngOnInit(): void {
+
   }
 
+  onSubmit(data) {
+    console.warn(data)
+  }
 }
+
