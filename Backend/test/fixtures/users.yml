@@ -7,7 +7,7 @@
 one:
   id: 1
   username: 'testUser'
-  password_digest: '1234pass'
+  password_digest: '$2a$04$aIrVKxjf8vVPGKaSno6ZqesUeqRthmf98JixnRxhSKY1g6YO608E6'
   email: 'test@gmail.com'
   jwt_token: '123'
   is_admin: false

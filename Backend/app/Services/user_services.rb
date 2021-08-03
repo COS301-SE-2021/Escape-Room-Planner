@@ -5,14 +5,14 @@ class UserServices
     @user = User.new
     @user.username = request.username
     @user.email = request.email
-    @user.is_admin = request.is_admin
+    @user.is_admin = true
 
     #salt and hash password and store it
 
     @user.password = request.password
 
 
-    @response = if @user.save
+    @response = if @user.save!
                   RegisterUserResponse.new(true, 'User Created Successfully')
                 else
                   RegisterUserResponse.new(false, 'User Not Created')
@@ -28,7 +28,7 @@ class UserServices
     raise 'Username does not exist' if @user.nil?
 
     #check password is correct
-    raise 'Incorrect Password' unless @user.authenticate(@user.password)
+    raise 'Incorrect Password' unless @user.authenticate(request.password)
 
     #generate JWT token
 
