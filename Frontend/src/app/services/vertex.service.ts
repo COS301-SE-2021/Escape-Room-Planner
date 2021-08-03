@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import {Vertex} from "../models/vertex.model";
-import {HttpClient} from "@angular/common/http";
-import {Clue} from "../models/clue.model";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +8,7 @@ export class VertexService {
   private _local_id_count: number;
   private _vertices : Vertex[];
 
-  constructor(private httpClient: HttpClient) {
+  constructor() {
     this._vertices = [];
     this._local_id_count = 0;
   }
