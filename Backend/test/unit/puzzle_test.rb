@@ -1,27 +1,22 @@
 require 'test_helper'
 
 class PuzzleTest < ActiveSupport::TestCase
-
-  def test_createPuzzle
-
-    beforetest = Puzzle.count
-    room = EscapeRoom.new
-    room.save
-    room_id = room.id
+  test 'test create puzzle' do
+    before_test = Puzzle.count
+    room_id = 1
     req = CreatePuzzleRequest.new 'test', 0, 0, 0.2, 0.2,
                                   'graphic', Time.now, 'test description', room_id
     rs = RoomServices.new
-    rs.createPuzzle(req)
+    rs.create_puzzle(req)
 
     # assertion
-    assert_not_equal(Puzzle.count, beforetest)
+    assert_not_equal(Puzzle.count, before_test)
   end
 
-  def test_checkCreatePuzzleNullRequest
+  test 'test check create puzzle null request' do
     req = nil
     rs = RoomServices.new
-    exception = assert_raise(StandardError){rs.createPuzzle(req)}
-    assert_equal("CreatePuzzleRequest null", exception.message)
+    exception = assert_raise(StandardError) { rs.create_puzzle(req) }
+    assert_equal('CreatePuzzleRequest null', exception.message)
   end
-
 end

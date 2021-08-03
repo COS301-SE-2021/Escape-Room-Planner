@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 2021_07_06_132139) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "startVertex"
     t.bigint "endVertex"
+    t.string "name"
   end
 
   create_table "users", force: :cascade do |t|

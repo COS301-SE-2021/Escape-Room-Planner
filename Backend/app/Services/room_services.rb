@@ -1,79 +1,88 @@
+# frozen_string_literal: true
+
 class RoomServices
-  def createPuzzle(request)
+  # @param [CreatePuzzleRequest] request
+  # @return [CreatePuzzleResponse]
+  def create_puzzle(request)
     raise 'CreatePuzzleRequest null' if request.nil?
 
     @puzzle = Puzzle.new
     @puzzle.name = request.name
-    @puzzle.posx = request.posx
-    @puzzle.posy = request.posy
+    @puzzle.posx = request.pos_x
+    @puzzle.posy = request.pos_y
     @puzzle.width = request.width
     @puzzle.height = request.height
-    @puzzle.graphicid = request.graphicid
-    @puzzle.estimatedTime = request.estimatedTime
+    @puzzle.graphicid = request.graphic_id
+    @puzzle.estimatedTime = request.estimated_time
     @puzzle.description = request.description
-    @puzzle.escape_room_id = request.roomID
+    @puzzle.escape_room_id = request.room_id
 
     @response = if @puzzle.save
                   CreatePuzzleResponse.new(@puzzle.id, true)
                 else
-                  CreatePuzzleResponse.new(-1, false)
+                  CreatePuzzleResponse.new(nil, false)
                 end
   end
 
-  def createEscapeRoom(request)
-    raise 'CreateEscaperoomRequest null' if request.nil?
+  def create_escape_room(request)
+    raise 'CreateEscapeRoomRequest null' if request.nil?
 
-    @escapeRoom = EscapeRoom.new
-    @escapeRoom.save
-    @response = CreateEscaperoomResponse.new(@escapeRoom.id)
-    @response
+    @escape_room = EscapeRoom.new(name: request.name)
+    @response = if @escape_room.save
+                  CreateEscapeRoomResponse.new(@escape_room.id, @escape_room.name)
+                else
+                  CreateEscapeRoomResponse.new(nil, nil)
+                end
   end
 
-  def createKey(request)
-    return CreateKeyResponse.new(-1, false) if request == nil
+  def create_key(request)
+    return CreateKeyResponse.new(nil, false) if request.nil?
 
     @key = Keys.new
     @key.name = request.name
-    @key.posx = request.posx
-    @key.posy = request.posy
+    @key.posx = request.pos_x
+    @key.posy = request.pos_y
     @key.width = request.width
     @key.height = request.height
-    @key.graphicid = request.graphicid
-    @key.escape_room_id = request.roomID
+    @key.graphicid = request.graphic_id
+    @key.escape_room_id = request.room_id
 
     @response = if @key.save
                   CreateKeyResponse.new(@key.id, true)
                 else
-                  CreateKeyResponse.new(-1, false)
+                  CreateKeyResponse.new(nil, false)
                 end
   end
 
-  def createContainer(request)
+  # @param [CreateContainerRequest] request
+  # @return [CreateContainerResponse]
+  def create_container(request)
     raise 'CreateContainerRequest null' if request.nil?
 
     @container = Container.new
-    @container.posx = request.posx
-    @container.posy = request.posy
+    @container.posx = request.pos_x
+    @container.posy = request.pos_y
     @container.width = request.width
     @container.height = request.height
     @container.name = request.name
-    @container.graphicid = request.graphicid
-    @container.escape_room_id = request.roomID
+    @container.graphicid = request.graphic_id
+    @container.escape_room_id = request.room_id
 
     @response = if @container.save
                   CreateContainerResponse.new(@container.id, true)
                 else
-                  CreateContainerResponse.new(-1, false)
+                  CreateContainerResponse.new(nil, false)
                 end
     # Return the response
     @response
   end
 
-  # @param [Object] request
+  # @param [RemoveVertexRequest] request
+  # @return [RemoveVertexResponse]
   def remove_vertex(request)
     raise 'removeVertexRequest null' if request.nil?
 
-    vertex = Vertex.find_by_id(request.vertexID)
+    vertex = Vertex.find_by_id(request.vertex_id)
 
     @response = if vertex.nil?
                   RemoveVertexResponse.new(false, 'Vertex could not be found')
@@ -99,18 +108,19 @@ class RoomServices
                 end
   end
 
-  def createClue(request)
-    return CreateClueResponse.new(-1, false) if request == nil
+  def create_clue(request)
+
+    return CreateClueResponse.new(-1, false) if request.nil?
 
     @clue = Clue.new
     @clue.name = request.name
-    @clue.posx = request.posx
-    @clue.posy = request.posy
+    @clue.posx = request.pos_x
+    @clue.posy = request.pos_y
     @clue.width = request.width
     @clue.height = request.height
-    @clue.graphicid = request.graphicid
+    @clue.graphicid = request.graphic_id
     @clue.clue = request.clue
-    @clue.escape_room_id = request.roomID
+    @clue.escape_room_id = request.room_id
 
     @response = if @clue.save
                   CreateClueResponse.new(@clue.id, true)
@@ -124,7 +134,6 @@ class RoomServices
 
     # from request we will be able to authorize the user
     # from request we get the room id which to reset
-
     # do authentication here later
 
     @response = if request.auth.nil?
@@ -144,10 +153,12 @@ class RoomServices
     vertex = Vertex.find_by_id(request.id)
     return UpdateVertexResponse.new(false, 'Vertex could not be found') if vertex.nil?
 
-    vertex.posx = request.posx
-    vertex.posy = request.posy
+
+    vertex.posx = request.pos_x
+    vertex.posy = request.pos_y
     vertex.width = request.width
     vertex.height = request.height
+
 
     @response = if vertex.save
                   UpdateVertexResponse.new(true, 'Vertex Updated')
