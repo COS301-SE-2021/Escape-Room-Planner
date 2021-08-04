@@ -313,20 +313,36 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   makeConnection(event: any): void{
     let to_vertex = event.target;
     this.isConnection = false;
-
-    this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
-    this.lines[this.lines.length-1].color = 'rgba(0,0,0,1.0)';
-
     let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
     let to_vertex_id = to_vertex.getAttribute('vertex-id');
 
-    this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
-    this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length-1);
-    this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length-1);
-    //add event to listen to mouse event of only connected vertices
-    to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-    this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
-    // store on array
+    let connection = {
+      operation: 'connection',
+      from_vertex_id: this.vertexService.vertices[from_vertex_id].id, //convert local to real id
+      to_vertex_id: this.vertexService.vertices[to_vertex_id].id
+    };
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+this.vertexService.vertices[from_vertex_id].id, connection, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        if(response.status == "FAILED"){
+          this.renderAlertError(response.message);
+        }else {
+          this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
+          this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
+
+          this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+          this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
+          this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
+          //add event to listen to mouse event of only connected vertices
+          to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
+          this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+          // store on array
+        }
+      },
+      error => this.renderAlertError("There was an Error Updating Vertex Position")
+      //console.error('There was an error while updating the vertex', error)
+    );
+
   }
 
   // shows a context menu when right button clicked over the vertex
