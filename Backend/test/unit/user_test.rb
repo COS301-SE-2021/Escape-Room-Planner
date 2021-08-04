@@ -45,12 +45,19 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'test login with an invalid password' do
-    req = LoginRequest.new('test', 'rando')
+    req = LoginRequest.new('testUser', 'rando')
     us = UserServices.new
     resp = us.login(req)
 
     assert_equal(false, resp.success)
+  end
 
+  test 'test password reset' do
+    req = ResetPasswordRequest.new('testUser', '12345')
+    us = UserServices.new
+    resp = us.resetPassword(req)
+
+    assert(resp.success)
   end
 
 end
