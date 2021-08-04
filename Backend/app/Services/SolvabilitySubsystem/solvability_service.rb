@@ -26,5 +26,9 @@ class SolvabilityService
   def solvabilityHelper(startVert,endVert,vertices)
     @response = false
   end
+
+  def detectCycle()
+
+  end
   
 end
