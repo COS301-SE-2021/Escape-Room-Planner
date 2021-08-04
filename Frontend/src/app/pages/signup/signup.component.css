@@ -5,8 +5,12 @@
 
 }
 
+small {
+  color: red;
+}
+
 label {
-  font-style: initial;
+  font-weight: bold;
 }
 
 #login-card {

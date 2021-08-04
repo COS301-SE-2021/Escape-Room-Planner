@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -10,16 +10,14 @@ export class SignupComponent implements OnInit {
 
   constructor(private http:HttpClient) { }
 
-  ngOnInit(): void {
-    console.warn("Wassup Bitches");
-  }
+  ngOnInit(): void {}
 
   onSubmit(data) {
     this.http.post(' http://127.0.0.1:3035/api/v1/user', data)
-      .subscribe((result)=> {
-        console.warn("Results: ", result);
+      .subscribe((response)=> {
+        // response.token
+        alert('Success');
       })
-    console.warn(data);
   }
 }
 

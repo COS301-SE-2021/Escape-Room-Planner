@@ -14,25 +14,36 @@
         <div class="card-body p-0">
           <div class="row" style="height: 100%">
             <div class="col-12 col-md-7 px-4 py-3">
+              <h2>Sign Up</h2>
+              <hr class="mt-2 mb-3"/>
               <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm.value)">
                 <div class="form-group">
                   <label for="username">Username</label>
-                  <input style="background: #E5E4E2" type="text" class="form-control" id="username" name="username" ngModel required>
+                  <input style="background: #E5E4E2;" type="text" class="form-control" id="username" name="username" #username="ngModel"
+                         ngModel [class.is-invalid]="username.invalid && username.touched" required>
+                  <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
+                  <small id="user"></small>
                 </div>
                 <div class="form-group">
                   <label for="email">Email</label>
-                  <input style="background: #E5E4E2" type="email" class="form-control" id="email" name="email" ngModel required>
+                  <input style="background: #E5E4E2" type="email" email class="form-control" id="email" name="email" #email="ngModel"
+                         ngModel [class.is-invalid]="email.invalid && email.touched" required>
+                  <small [class.d-none]="email.valid || email.untouched">Email is required.</small>
                 </div>
                 <div class="form-group">
                   <label for="password_digest">Password</label>
-                  <input style="background: #E5E4E2" type="password" class="form-control" id="password_digest" name="password_digest" ngModel required>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="password_digest" name="password_digest"
+                         ngModel #password="ngModel" [class.is-invalid]="email.invalid && email.touched" required>
+                  <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
                 </div>
                 <div class="form-group">
                   <label for="confirm">Confirm Password</label>
-                  <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" name="confirm" ngModel required>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" name="confirm"
+                         ngModel #confirmPassword="ngModel" required>
+                  <small [class.d-none]="confirmPassword.valid || confirmPassword.untouched">Confirm password is required.</small>
                 </div>
                 <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign Up</button>
-                <a href=""><p id="sign-up"><span style="color: black">Already Have An Account? </span>Login</p></a>
+                <a href="login"><p id="sign-up"><span style="color: black">Already Have An Account? </span>Login</p></a>
               </form>
             </div>
             <div class="col-12 col-md-5 text-center text-white" style="background-image: linear-gradient(#00fa9a, #00fa9a, #00cc99); border-radius: 15px 0px 0px 15px">
