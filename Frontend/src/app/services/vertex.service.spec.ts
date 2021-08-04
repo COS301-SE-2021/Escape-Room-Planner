@@ -113,6 +113,14 @@ describe('VertexService', () => {
     expect(service.vertices[0].getResponsibleLines().length).toBeGreaterThan(0, 'remove responsible lines')
   });
 
+  it('#getVertexConnections should return correct number of connections', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.vertices[0].addConnection(1);
+    // it checks
+    expect(service.getVertexConnections(0).length).toBeGreaterThan(0, 'does not return correct connections');
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });

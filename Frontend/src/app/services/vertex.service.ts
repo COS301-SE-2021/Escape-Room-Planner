@@ -75,7 +75,6 @@ export class VertexService {
   }
 
   //returns what lines need to be updated in an array
-  // todo test
   public getLineIndex(vertex_id: number){
     return this._vertices[vertex_id].getConnectedLines().concat(this._vertices[vertex_id].getResponsibleLines());
   }
