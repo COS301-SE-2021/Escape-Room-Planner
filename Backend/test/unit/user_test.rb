@@ -33,9 +33,15 @@ class UserTest < ActiveSupport::TestCase
     us = UserServices.new
     resp = us.login(req)
 
-    puts resp.message
-
     assert(resp.success)
+  end
+
+  def test_LoginWithIncorrectUsername
+    req = LoginRequest.new('test', 'testPass')
+    us = UserServices.new
+    resp = us.login(req)
+
+    assert_equal(false, resp.success)
   end
 
 end
