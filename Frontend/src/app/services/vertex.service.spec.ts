@@ -73,6 +73,26 @@ describe('VertexService', () => {
     expect(service.getVertexConnections(0).length).toBe(1, 'didn\'t add the  connection')
   });
 
+  it('#removeVertexConnectedLines should delete the connected line when it exists', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.vertices[0].addConnectedLine(1);
+    // it does
+    service.removeVertexConnectedLine(0,1);
+    // it checks
+    expect(service.vertices[0].getConnectedLines().length).toBe(0, 'didn\'t remove connected lines')
+  });
+
+  it('#removeVertexConnectedLines should delete the connected line when it does not exists', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.vertices[0].addConnectedLine(1);
+    // it does
+    service.removeVertexConnectedLine(0,2);
+    // it checks
+    expect(service.vertices[0].getConnectedLines().length).toBeGreaterThan(0, 'didn\'t remove connected lines')
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
