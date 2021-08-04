@@ -90,7 +90,27 @@ describe('VertexService', () => {
     // it does
     service.removeVertexConnectedLine(0,2);
     // it checks
-    expect(service.vertices[0].getConnectedLines().length).toBeGreaterThan(0, 'didn\'t remove connected lines')
+    expect(service.vertices[0].getConnectedLines().length).toBeGreaterThan(0, 'remove connected lines')
+  });
+
+  it('#removeVertexResponsibleLine should delete the connected line when it exists', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.vertices[0].addResponsibleLine(1);
+    // it does
+    service.removeVertexResponsibleLine(0,1);
+    // it checks
+    expect(service.vertices[0].getResponsibleLines().length).toBe(0, 'didn\'t remove responsible lines')
+  });
+
+  it('#removeVertexResponsibleLine should delete the connected line when it does not exists', () => {
+    service.vertices.push(new Vertex(0, 0, "name",
+      'inType', 0, 0, 0, 0, "inGraphicID"));
+    service.vertices[0].addResponsibleLine(1);
+    // it does
+    service.removeVertexResponsibleLine(0,2);
+    // it checks
+    expect(service.vertices[0].getResponsibleLines().length).toBeGreaterThan(0, 'remove responsible lines')
   });
 
   it('should be created', () => {

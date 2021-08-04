@@ -69,7 +69,6 @@ export class VertexService {
   }
 
   //removes responsible line index in vertex responsible line array
-  // todo test
   public removeVertexResponsibleLine(vertex_id: number, line_index: number){
     let index = this._vertices[vertex_id].getResponsibleLines().indexOf(line_index);
     if (index !== -1) this._vertices[vertex_id].removeResponsibleLine(index);
