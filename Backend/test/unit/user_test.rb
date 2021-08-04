@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'test a user saves' do
-    req = RegisterUserRequest.new('TestUser', '1234Pass', 'test@gmail.com', false)
+    req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
     us = UserServices.new
     resp = us.registerUser(req)
 
