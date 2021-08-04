@@ -1,4 +1,4 @@
-require './app/Services/room_services'
+require './app/Services/RoomSubsystem/room_services'
 
 
 module Api

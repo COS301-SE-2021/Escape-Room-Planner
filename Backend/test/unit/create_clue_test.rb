@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require './app/Services/RoomSubsytem/room_services'
 
 class CreateClueTest < Minitest::Unit::TestCase
   def setup
