@@ -1,8 +1,20 @@
 class SolvabilityService
 
-  def calculateSolvability; end
+  def calculateSolvability(request)
 
-  def calculateSetUpOrder; end
+    raise 'Solvability Request cant be null' if request.nil?
 
-  def calculateEstimatedTime; end
+  end
+
+  def calculateSetUpOrder(request)
+
+    raise 'Solvability Request cant be null' if request.nil?
+
+  end
+
+  def calculateEstimatedTime(request)
+
+    raise 'Solvability Request cant be null' if request.nil?
+
+  end
 end
