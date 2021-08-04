@@ -1,1 +1,3 @@
+class CalculateSolvableRequest
 
+end

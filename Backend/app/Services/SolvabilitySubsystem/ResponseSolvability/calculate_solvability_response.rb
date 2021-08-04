@@ -1,1 +1,3 @@
+class CalculateSolvableResponse
 
+end
