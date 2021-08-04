@@ -49,12 +49,12 @@ class UserServices
   end
 
   def resetPassword(request)
-    raise 'ResetPasswordRequest null' if request.nil?
+    return ResetPasswordResponse.new(false, "Reset Password request null") if request.nil?
 
     @user = User.find_by_username(request.username)
-    raise 'Username does not exist' if @user.nil?
+    return ResetPasswordResponse.new(false,"Username does not exist") if @user.nil?
 
-    @user.password = request.newPassword
+    @user.update(password: request.newPassword)
 
     @response = if @user.save
                   ResetPasswordResponse.new(true, 'Password reset Successfully')
