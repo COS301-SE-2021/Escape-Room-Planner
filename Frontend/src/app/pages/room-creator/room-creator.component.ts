@@ -1,6 +1,8 @@
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
+import {Router} from "@angular/router";
 // Leader Line JS library imports
 import 'leader-line';
 declare let LeaderLine: any;
@@ -23,6 +25,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   private isConnection = false;
   private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
+  private headers: HttpHeaders = new HttpHeaders();
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
@@ -30,7 +33,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("contextMenu") contextMenuRef : ElementRef | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
-              private vertexService: VertexService) { }
+              private vertexService: VertexService, private router:Router)
+  {
+    // todo change to work with login token and not test token
+
+    localStorage.setItem('token', "test");
+    //localStorage.clear();
+    if(localStorage.getItem('token') ==  null) {
+      this.router.navigate(['login']).then(r => alert("login test"));
+    }
+      this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+  }
+
 
   ngOnInit(): void {
     //set the currentRoomId to 1 by default, later to actual first room id?
@@ -84,7 +98,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   //use get to get all the rooms stored in db
   getEscapeRooms(): void{
     //http request to rails api
-    this.httpClient.get<EscapeRoomArray>("http://127.0.0.1:3000/api/v1/room/").subscribe(
+    this.httpClient.get<EscapeRoomArray>("http://127.0.0.1:3000/api/v1/room/", {"headers": this.headers}).subscribe(
       response => {
           //rendering <li> elements by using response
           this.escapeRooms = response;
@@ -118,7 +132,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   getVertexFromRoom(): void{
     this.vertexService.reset_array();
     //http request to rails api
-    this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId).subscribe(
+    this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
        //console.log(response);
         //render all the vertices
@@ -147,7 +161,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }else {
       let createRoomBody = {name: regexResult[0]};
       //http request to rails api
-      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody, {"headers": this.headers}).subscribe(
         response => {
           //rendering <li> elements by using render function
           // console.log(response.data)
@@ -216,7 +230,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
 
     //make post request for new vertex
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody).subscribe(
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody, {"headers": this.headers}).subscribe(
       response => {
         //get the latest local id for a vertex
         let current_id = this.vertexService.addVertex(response.data.id,
@@ -356,7 +370,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       width: new_width
     };
     // updates all the data of vertex
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody).subscribe(
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody, {"headers": this.headers}).subscribe(
       response => {
         // updates the local array here only after storing on db
         this.vertexService.vertices[local_target_id].pos_x = new_x_pos;
@@ -374,7 +388,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let local_target_id = this._target_vertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
     //call to backend to delete vertex by id
-    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id).subscribe(
+    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, {"headers": this.headers}).subscribe(
       response => {
         //remove vertex from screen here
         this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
