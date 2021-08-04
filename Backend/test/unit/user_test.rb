@@ -44,4 +44,13 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(false, resp.success)
   end
 
+  def test_LoginWithIncorrectPassword
+    req = LoginRequest.new('test', 'rando')
+    us = UserServices.new
+    resp = us.login(req)
+
+    assert_equal(false, resp.success)
+
+  end
+
 end
