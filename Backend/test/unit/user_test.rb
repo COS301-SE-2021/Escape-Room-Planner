@@ -4,8 +4,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'test register user' do
     before_test = User.count
-    # req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
-    req = RegisterUserRequest.new('TestUser', '1234Pass', 'test@gmail.com', false)
+    req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
     us = UserServices.new
     us.registerUser(req)
 
