@@ -2,20 +2,24 @@ class UserServices
   def registerUser(request)
     return RegisterUserResponse.new(false, 'Null request') if request.nil?
 
-    @user = User.new
-    @user.username = request.username
-    @user.email = request.email
-    @user.is_admin = true
+    begin
+      @user = User.new
+      @user.username = request.username
+      @user.email = request.email
+      @user.is_admin = true
 
-    # salt and hash password and store it
+      # salt and hash password and store it
 
-    @user.password = request.password
+      @user.password = request.password
 
-    @response = if @user.save!
-                  RegisterUserResponse.new(true, 'User Created Successfully')
-                else
-                  RegisterUserResponse.new(false, 'User Not Created')
-                end
+      @response = if @user.save!
+                    RegisterUserResponse.new(true, 'User Created Successfully')
+                  else
+                    RegisterUserResponse.new(false, 'User Not Created')
+                  end
+    rescue StandardError => e
+      RegisterUserResponse.new(false, e)
+    end
   end
 
   def login(request)
@@ -136,7 +140,7 @@ class UserServices
                   else
                     false
                   end
-    rescue Exception
+    rescue StandardError => e
       false
     end
   end
