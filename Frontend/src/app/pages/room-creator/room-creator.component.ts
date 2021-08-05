@@ -403,7 +403,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let local_target_id = this._target_vertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
     //call to backend to delete vertex by id
-    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, {"headers": this.headers}).subscribe(
+
+    let remove_vertex = {
+      operation: "remove_vertex",
+      id: real_target_id
+    };
+
+    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, {"headers": this.headers, "params": remove_vertex}).subscribe(
       response => {
         //remove vertex from screen here
         this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
