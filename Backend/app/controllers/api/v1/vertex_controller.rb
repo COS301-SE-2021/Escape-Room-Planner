@@ -181,7 +181,7 @@ module Api
         when 'remove_vertex'
           delete_vertex(params[:id])
         when 'disconnect_vertex'
-          update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height])
+          delete_connection(params[:from_vertex_id], params[:to_vertex_id])
         else
           render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
         end
