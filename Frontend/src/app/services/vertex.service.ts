@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Vertex} from "../models/vertex.model";
+import {Clue} from "../models/clue.model";
+import {Container} from "../models/container.model";
+import {Key} from "../models/key.model";
+import {Puzzle} from "../models/puzzle.model";
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +19,36 @@ export class VertexService {
 
   addVertex(inId:number, inType: string, inName: string, inGraphicID: string,
             inPos_y: number, inPos_x: number, inWidth: number,
-            inHeight: number, inEstimated_time: Date, inDescription: string, inClue: string): number
-  {
+            inHeight: number, inEstimated_time: Date, inDescription: string, inClue: string): number {
     // todo Fix this to instantiate proper class
-    let new_vertex = new Vertex(this._local_id_count++, inId, inName,
-      inType, inPos_x, inPos_y, inWidth, inHeight, inGraphicID);
+    let new_vertex = null;
+    if (inType === "Clue") {
+      new_vertex = new Clue(this._local_id_count++, inId, inName,
+                            inPos_x, inPos_y, inWidth, inHeight,
+                            inGraphicID, inClue);
+      console.log("Cl");
+    } else if (inType === "Container") {
+      new_vertex = new Container(this._local_id_count++, inId, inName,
+                                 inPos_x, inPos_y, inWidth, inHeight,
+                                  inGraphicID);
+      console.log("Co");
+    }  else if (inType === "Key") {
+      new_vertex = new Key(this._local_id_count++, inId, inName,
+                           inPos_x, inPos_y, inWidth, inHeight,
+                           inGraphicID);
+      console.log("Ke");
+    } else if(inType === "Puzzle"){
+      new_vertex = new Puzzle(this._local_id_count++, inId, inName,
+                              inPos_x, inPos_y, inWidth, inHeight,
+                              inGraphicID, inDescription, inEstimated_time);
+      console.log("Pu");
+    }
 
-    this._vertices.push(new_vertex);
-
-    return new_vertex.local_id;
+    if (new_vertex != null) {
+      this._vertices.push(new_vertex);
+      return new_vertex.local_id;
+    }
+    return -1;
   }
 
   get vertices(): Vertex[] {
