@@ -4,8 +4,11 @@ require 'concurrent'
 class RoomControllerTest < ActionDispatch::IntegrationTest
 
     #Get Rooms
-  test 'can get index' do
+  test 'can get all rooms' do
     get api_v1_room_index_path
+
+    puts @response.body
+
     assert_response :success
   end
 
