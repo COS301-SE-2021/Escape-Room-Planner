@@ -111,6 +111,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+
+
+
   changeRoom(event: any): void{
     let clickedEscapeRoom = event.target;
     //check if the selected room is not the one shown
@@ -186,17 +189,43 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   //just renders new room text in the list
   renderNewRoom(id:number, name:string): void{
-    // <li><a class="dropdown-item">ROOM 1</a></li>-->
+    // <li><div><div> class="dropdown-item">ROOM 1</div><div><button></button><img></div></div></li>-->
     let newRoom = this.renderer.createElement('li');
-    let newTag = this.renderer.createElement('a');
-    // add bootstrap class to <a>
-    this.renderer.addClass(newTag,'dropdown-item');
-    this.renderer.addClass(newTag,'text-white');
-    this.renderer.appendChild(newTag, this.renderer.createText(name));
-    this.renderer.setAttribute(newTag,'escape-room-id',id.toString());
-    this.renderer.listen(newTag,'click',(event) => this.changeRoom(event))
+    let newDivRow = this.renderer.createElement('div');
+    let newDivCol1 = this.renderer.createElement('div');
+    let newDivCol2 = this.renderer.createElement('div');
+    let newButton = this.renderer.createElement('button');
+    let newImage = this.renderer.createElement('img');
+
+    //add src to <img>
+    this.renderer.setAttribute(newImage, 'src', './assets/svg/trash-fill.svg');
+
+    //add boostrap class to <button>
+    this.renderer.addClass(newButton, 'btn');
+    this.renderer.addClass(newButton, 'btn-dark');
+    this.renderer.appendChild(newButton, newImage);
+
+    //add bootstrap class to <div col2>
+    this.renderer.addClass(newDivCol2, 'col-1');
+    this.renderer.addClass(newDivCol2, 'text-end');
+    this.renderer.appendChild(newDivCol2, newButton);
+
+    //add bootstrap class to <div col1>
+    this.renderer.addClass(newDivCol1, 'col-11');
+    this.renderer.addClass(newDivCol1, 'text-white');
+    this.renderer.appendChild(newDivCol1, this.renderer.createText(name));
+    this.renderer.setAttribute(newDivCol1,'escape-room-id',id.toString());
+    this.renderer.listen(newDivCol1,'click',(event) => this.changeRoom(event))
+
+    // add bootstrap class to <div row>
+    this.renderer.addClass(newDivRow, 'row');
+    this.renderer.addClass(newDivRow,'dropdown-item');
+    this.renderer.addClass(newDivRow, 'd-flex');
+    this.renderer.appendChild(newDivRow, newDivCol1);
+    this.renderer.appendChild(newDivRow, newDivCol2);
+
     // make it <li><a>
-    this.renderer.appendChild(newRoom,newTag);
+    this.renderer.appendChild(newRoom,newDivRow);
     // append to the dropdown menu
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
