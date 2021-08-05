@@ -104,8 +104,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.escapeRooms = response;
           //render all the rooms
           for (let er of response.data){
-            //todo fix this to use real name if we will still use those
-            this.renderNewRoom(er.id, "fake name for now");
+            this.renderNewRoom(er.id, er.name);
           }
       },
         //Render error if bad request
@@ -500,4 +499,5 @@ interface EscapeRoomArray {
 
 interface EscapeRoom{
   id: number;
+  name: string;
 }
