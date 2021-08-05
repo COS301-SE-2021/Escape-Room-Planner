@@ -131,7 +131,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'Link has been removed', response['message']
   end
 
-  # test if vertex has no connection and tries to remove and correct response is received (good case)
+  # test if vertex has no connection and tries to remove with correct response received (bad case)
   test 'can handle vertex with no connections' do
     delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
                                                       from_vertex_id: '1',
@@ -140,6 +140,17 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     response = JSON.parse(@response.body)
     assert_response :ok
     assert_equal 'There is no link between vertices', response['message']
+  end
+
+  # test if vertex does not exist when removing connection with correct response received (bad case)
+  test 'can handle doesnt exist' do
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
+                                                      from_vertex_id: '100',
+                                                      to_vertex_id: '5'
+    }
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'From vertex could not be found', response['message']
   end
 
   # tests if vertex gets updated and correct response is received (good case)
