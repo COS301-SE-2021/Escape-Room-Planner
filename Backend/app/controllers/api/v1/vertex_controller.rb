@@ -81,7 +81,6 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
-
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
@@ -175,26 +174,40 @@ module Api
       end
       # end create
 
+      # delete api call http://host/api/v1/vertex/"+real_target_id
       def destroy
-        id = params[:id]
+        operation = params[:operation]
+        case operation
+        when 'remove_vertex'
+          remove_vertex(params[:id])
+        when 'disconnect_vertex'
+          update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height])
+        else
+          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+        end
+      end
 
+      # @param [ActionController::Parameters] id
+      # @return JSON
+      def delete_vertex(id)
         if id.nil?
           render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
           return
         end
-
         serv = RoomServices.new
         req = RemoveVertexRequest.new(id)
         resp = serv.remove_vertex(req)
-
         unless resp.success
           render json: { status: 'FAILED', message: 'Unspecified error', data: resp }, status: :ok
           return
         end
-
         render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
+      end
+
+      def delete_connection(from_vertex_id, to_vertex_id)
+
       end
     end
   end
