@@ -285,27 +285,47 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   disconnectConnection(event: any):void {
     let to_vertex_id = event.target.getAttribute('vertex-id');
     let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
-    this.is_disconnect = false;
+
+    //disconnect vertex from screen here
     let line_index = this.vertexService.removeVertexConnection(from_vertex_id, to_vertex_id);
     //checks if there is a connection to remove from from_vertex to to_vertex
-    if(line_index !== -1) {
+    if (line_index !== -1) {
       this.disconnectLines(line_index, from_vertex_id, to_vertex_id);
-    }else{
+    } else {
       //checks if its being called the other way around
       line_index = this.vertexService.removeVertexConnection(to_vertex_id, from_vertex_id);
       //checks if there is a connection to remove from to_vertex to from_vertex
-      if(line_index !== -1) this.disconnectLines(line_index, to_vertex_id, from_vertex_id);
+      if (line_index !== -1) this.disconnectLines(line_index, to_vertex_id, from_vertex_id);
     }
+    this.is_disconnect = false;
   }
 
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
-    //removes from vertex connected line in array
-    this.vertexService.removeVertexConnectedLine(from_vertex, line_index);
-    //removes to vertex responsible line in array
-    this.vertexService.removeVertexResponsibleLine(to_vertex, line_index);
-    //removes visual line on html in array
-    this.lines[line_index].remove();
-    this.lines[line_index] = null;
+    let real_from_id = this.vertexService.vertices[from_vertex].id;
+    let remove_connection = {
+      operation: "disconnect_vertex",
+      from_vertex_id: real_from_id,
+      to_vertex_id: this.vertexService.vertices[to_vertex].id
+    };
+
+    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_from_id,
+      {"headers": this.headers, "params": remove_connection}).subscribe(
+      response => {
+        if (response.status == "SUCCESS") {
+          //removes from vertex connected line in array
+          this.vertexService.removeVertexConnectedLine(from_vertex, line_index);
+          //removes to vertex responsible line in array
+          this.vertexService.removeVertexResponsibleLine(to_vertex, line_index);
+          //removes visual line on html in array
+          this.lines[line_index].remove();
+          this.lines[line_index] = null;
+        }else{
+          this.renderAlertError("Unable to remove vertex")
+        }
+      },
+      error => this.renderAlertError("Unable to remove vertex")
+      //console.error('There was an error while updating the vertex', error)
+    );
   }
 
   //makes a connection between two vertices
