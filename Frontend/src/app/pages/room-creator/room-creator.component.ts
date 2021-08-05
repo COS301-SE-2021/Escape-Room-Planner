@@ -133,18 +133,51 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //http request to rails api
     this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
-       //console.log(response);
         //render all the vertices
-        // console.log(response.data[0]);
 
         for (let vertex_t of response.data){
           //spawn objects out;
           let vertex = vertex_t.vertex
+          let vertex_type = vertex_t.type;
+          let vertex_connections = vertex_t.connections;
 
-          let current_id = this.vertexService.addVertex(vertex.id, "vertex", vertex.name, vertex.graphicid,
+          let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
                                        vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
                                        vertex.description, vertex.clue);
+
+          // @ts-ignore
+          for (let vertex_connection of vertex_connections)
+            this.vertexService.addVertexConnection(current_id, vertex_connection);
+
           this.spawnObjects(current_id);
+        }
+
+        // TODO consider using some other method to locate these, cause triple for loop is not pog
+        // converts real connection to local connection
+        for (let vertex of this.vertexService.vertices){
+          let vertex_connections = vertex.getConnections();
+
+          for (let vertex_connection of vertex_connections){
+            // go through all the connections
+            // for each location locate the vertex with that real id and use its local id in place of real one
+            console.log(vertex_connection);
+
+            for (let vertex_to of this.vertexService.vertices){
+
+              if (vertex_to.id === vertex_connection){
+                this.vertexService.removeVertexConnection(vertex.local_id ,vertex_connection);
+                vertex.addConnection(vertex_to.local_id); // appends to the end of the list
+
+                let from_vertex = document.querySelectorAll('[vertex-id="'+vertex.local_id+'"]')[0];
+                let to_vertex = document.querySelectorAll('[vertex-id="'+vertex_to.local_id+'"]')[0];
+
+                this.renderLines(vertex.local_id, from_vertex, vertex_to.local_id, to_vertex);
+                break; // so that not the whole array is traversed
+              }
+            }
+          }
+
+          console.log(vertex.getConnections());
         }
       },
       //Error retrieving vertices message
@@ -350,16 +383,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         if(response.status == "FAILED"){
           this.renderAlertError(response.message);
         }else {
-          this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
-          this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
-
-          this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
-          this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
-          this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
-          //add event to listen to mouse event of only connected vertices
-          to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-          this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
-          // store on array
+          // this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
+          // this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
+          //
+          // this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+          // this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
+          // this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
+          // //add event to listen to mouse event of only connected vertices
+          // to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
+          // this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+          // // store on array
+          this.renderLines(from_vertex_id, this._target_vertex, to_vertex_id, to_vertex);
         }
       },
       error => this.renderAlertError("There was an Error Updating Vertex Position")
@@ -368,6 +402,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   }
 
+  private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
+    this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
+    this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
+
+    this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+    this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
+    this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
+    //add event to listen to mouse event of only connected vertices
+    to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
+    from_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+    // store on array
+  }
   // shows a context menu when right button clicked over the vertex
   showContextMenu(event: any): void{
     this._target_vertex = event.target;
@@ -511,6 +557,7 @@ interface VertexArray {
 interface VertexArrayData{
   vertex: Vertex;
   connections: number;
+  type: string;
 }
 
 interface Vertex{
