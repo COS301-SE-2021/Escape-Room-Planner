@@ -4,8 +4,10 @@ one:
   id: 1
   startVertex: MyStringStart
   endVertex: MyStringEnd
+  name: one
 
 two:
   id: 2
   startVertex: MyStringStart
   endVertex: MyStringEnd
+  name: two

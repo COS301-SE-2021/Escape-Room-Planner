@@ -8,17 +8,18 @@ module Api
 
       # GET api/v1/room , shows all the rooms in db
       def index
-        rooms = EscapeRoom.all
-        render json: { status: 'SUCCESS', message: 'Vertices', data: rooms }, status: :ok
+        rooms = EscapeRoom.select(:id, :name)
+        render json: { status: 'SUCCESS', message: 'Escape Rooms', data: rooms }, status: :ok
       end
 
       # GET api/v1/room/id , returns a room by id
       def show
         begin
-          room= EscapeRoom.find(params[:id])
-          render json: { status: 'SUCCESS', message: 'Vertex:', data: room }, status: :ok
+          # TODO: this should be a user_id or jwt token that will be decoded
+          room = EscapeRoom.select(:id, :name).find(params[:id])
+          render json: { status: 'SUCCESS', message: 'Escape Rooms', data: room }, status: :ok
         rescue StandardError
-          render json: { status: 'Fail', message: 'Id might not exist' }, status: :not_found
+          render json: { status: 'Fail', message: 'Escape Room might not exist' }, status: :not_found
         end
       end
 
