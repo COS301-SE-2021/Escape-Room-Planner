@@ -1,8 +1,23 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 class VertexControllerTest < ActionDispatch::IntegrationTest
   test 'can get index' do
     get api_v1_vertex_index_path
     assert_response :success
+  end
+
+  test 'can get vertices based on escape room id' do
+    get "#{api_v1_vertex_index_path}/1"
+
+    puts @response.body
+
+    assert_response :ok
+  end
+
+  test 'can handle a show when incorrect escape room id is provided' do
+    get "#{api_v1_vertex_index_path}/-1"
+    assert_response :bad_request
   end
 
   test 'can create Puzzle' do

@@ -135,8 +135,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
        //console.log(response);
         //render all the vertices
-        for (let vertex of response.data){
+        // console.log(response.data[0]);
+
+        for (let vertex_t of response.data){
           //spawn objects out;
+          let vertex = vertex_t.vertex
+
           let current_id = this.vertexService.addVertex(vertex.id, "vertex", vertex.name, vertex.graphicid,
                                        vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
                                        vertex.description, vertex.clue);
@@ -480,8 +484,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
 // For Vertex Response
 interface VertexArray {
-  data: Array<Vertex>;
+  data: Array<VertexArrayData>;
   status: string;
+}
+
+interface VertexArrayData{
+  vertex: Vertex;
+  connections: number;
 }
 
 interface Vertex{

@@ -90,7 +90,9 @@ module Api
         render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
       end
 
+      # returns all the vertices for a specific room id
       def show
+        # this is an escape room id
         id = params[:id]
 
         if EscapeRoom.find_by(id: id).nil?
@@ -98,8 +100,29 @@ module Api
           return
         end
 
-        vertices = Vertex.where(escape_room_id: id)
-        render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
+        response = Vertex.select(
+          :id,
+          :type,
+          :name,
+          :posx,
+          :posy,
+          :width,
+          :height,
+          :graphicid
+        ).where(escape_room_id: id)
+
+        # puts()
+
+        # puts 'cock'
+
+        # TODO: need to return only useful fields and a :type somehow
+        #
+        # TODO: also need ot send connections
+        render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
+                                                                       { vertex: k,
+                                                                         connections: k.vertices.ids,
+                                                                         type: k.type }
+                                                                     end }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
@@ -194,13 +217,16 @@ module Api
           render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
           return
         end
+
         serv = RoomServices.new
         req = RemoveVertexRequest.new(id)
         resp = serv.remove_vertex(req)
+
         unless resp.success
           render json: { status: 'FAILED', message: 'Unable to remove vertex', data: resp }, status: :ok
           return
         end
+
         render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
