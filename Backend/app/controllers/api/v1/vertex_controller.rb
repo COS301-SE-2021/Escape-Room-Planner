@@ -81,7 +81,6 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
-
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
@@ -175,24 +174,54 @@ module Api
       end
       # end create
 
+      # delete api call http://host/api/v1/vertex/"+real_target_id
       def destroy
-        id = params[:id]
+        operation = params[:operation]
+        case operation
+        when 'remove_vertex'
+          delete_vertex(params[:id])
+        when 'disconnect_vertex'
+          delete_connection(params[:from_vertex_id], params[:to_vertex_id])
+        else
+          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+        end
+      end
 
+      # @param [ActionController::Parameters] id
+      # @return JSON
+      def delete_vertex(id)
         if id.nil?
           render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
           return
         end
-
         serv = RoomServices.new
         req = RemoveVertexRequest.new(id)
         resp = serv.remove_vertex(req)
-
         unless resp.success
-          render json: { status: 'FAILED', message: 'Unspecified error', data: resp }, status: :ok
+          render json: { status: 'FAILED', message: 'Unable to remove vertex', data: resp }, status: :ok
           return
         end
-
         render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
+      rescue StandardError
+        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
+      end
+
+      # @param [ActionController::Parameters] from_vertex_id
+      # @param [ActionController::Parameters] to_vertex_id
+      # @return JSON
+      def delete_connection(from_vertex_id, to_vertex_id)
+        if from_vertex_id.nil? || to_vertex_id.nil?
+          render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
+          return
+        end
+        serv = RoomServices.new
+        req = DisconnectVerticesRequest.new(from_vertex_id, to_vertex_id)
+        resp = serv.disconnect_vertices(req)
+        unless resp.success
+          render json: { status: 'FAILED', message: resp.message }, status: :ok
+          return
+        end
+        render json: { status: 'SUCCESS', message: resp.message }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
