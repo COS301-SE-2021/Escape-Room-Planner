@@ -111,6 +111,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  deleteRoom(event: any): void{
+    console.log(event.target);
+    let confirmation = confirm("Are you sure you want to delete this room?");
+    console.log(confirmation);
+  }
+
   changeRoom(event: any): void{
     let clickedEscapeRoom = event.target;
     //check if the selected room is not the one shown
@@ -231,11 +237,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     //add src to <img>
     this.renderer.setAttribute(newImage, 'src', './assets/svg/trash-fill.svg');
+    this.renderer.setAttribute(newImage,'escape-room-id',id.toString());
 
     //add boostrap class to <button>
     this.renderer.addClass(newButton, 'btn');
     this.renderer.addClass(newButton, 'btn-dark');
     this.renderer.appendChild(newButton, newImage);
+    this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event))
 
     //add bootstrap class to <div col2>
     this.renderer.addClass(newDivCol2, 'col-1');
