@@ -169,7 +169,7 @@ module Api
           req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
           res = serv.create_puzzle(req)
 
-        when 'Key'
+        when 'Keys'
           req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid)
           res = serv.create_key(req)
 
