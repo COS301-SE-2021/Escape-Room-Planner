@@ -102,21 +102,21 @@ class UserServices
                 end
   end
 
-  def setAdmin(request)
-    raise 'SetAdminRequest null' if request.nil?
-
-    @user = User.find_by_username(request.username)
-
-    raise 'User does not exist' if @user.nil?
-
-    @user.is_admin = true
-
-    @response = if @user.save
-                  SetAdminResponse.new(true, 'Successful')
-                else
-                  SetAdminResponse.new(false, 'Failed')
-                end
-  end
+  # def setAdmin(request)
+  #   raise 'SetAdminRequest null' if request.nil?
+  #
+  #   @user = User.find_by_username(request.username)
+  #
+  #   raise 'User does not exist' if @user.nil?
+  #
+  #   @user.is_admin = true
+  #
+  #   @response = if @user.save
+  #                 SetAdminResponse.new(true, 'Successful')
+  #               else
+  #                 SetAdminResponse.new(false, 'Failed')
+  #               end
+  # end
 
   def getUsers(request)
   end
@@ -128,14 +128,16 @@ class UserServices
   end
 
   def authenticateUser(encoded_token)
-    # decode token
-    # todo check if jwt token being passed
-    decoded_token = JsonWebToken.decode(encoded_token)
-    # check token exists
-    @response = if User.find_by_id(decoded_token['id'])
-                  true
-                else
-                  false
-                end
+    begin
+      decoded_token = JsonWebToken.decode(encoded_token)
+      # check token exists
+      @response = if User.find_by_id(decoded_token['id'])
+                    true
+                  else
+                    false
+                  end
+    rescue Exception
+      false
+    end
   end
 end
