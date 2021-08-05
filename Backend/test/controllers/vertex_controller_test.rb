@@ -125,13 +125,21 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can delete vertex' do
-    delete "#{api_v1_vertex_index_path}/1"
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'remove_vertex',
+                                                      id: '1'
+    }
+    response = JSON.parse(@response.body)
     assert_response :ok
+    assert_equal 'Vertex:', response['message']
   end
 
   test 'cant delete vertex' do
-    delete "#{api_v1_vertex_index_path}/500"
+    delete "#{api_v1_vertex_index_path}/500", params: { operation: 'remove_vertex',
+                                                        id: '500'
+    }
+    response = JSON.parse(@response.body)
     assert_response :ok
+    assert_equal 'Unable to remove vertex', response['message']
   end
 
 

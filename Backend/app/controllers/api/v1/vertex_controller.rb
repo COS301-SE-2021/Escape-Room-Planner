@@ -179,7 +179,7 @@ module Api
         operation = params[:operation]
         case operation
         when 'remove_vertex'
-          remove_vertex(params[:id])
+          delete_vertex(params[:id])
         when 'disconnect_vertex'
           update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height])
         else
@@ -198,7 +198,7 @@ module Api
         req = RemoveVertexRequest.new(id)
         resp = serv.remove_vertex(req)
         unless resp.success
-          render json: { status: 'FAILED', message: 'Unspecified error', data: resp }, status: :ok
+          render json: { status: 'FAILED', message: 'Unable to remove vertex', data: resp }, status: :ok
           return
         end
         render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
