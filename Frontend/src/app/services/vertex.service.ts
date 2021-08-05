@@ -26,22 +26,19 @@ export class VertexService {
       new_vertex = new Clue(this._local_id_count++, inId, inName,
                             inPos_x, inPos_y, inWidth, inHeight,
                             inGraphicID, inClue);
-      console.log("Cl");
     } else if (inType === "Container") {
       new_vertex = new Container(this._local_id_count++, inId, inName,
                                  inPos_x, inPos_y, inWidth, inHeight,
                                   inGraphicID);
-      console.log("Co");
-    }  else if (inType === "Key") {
+    }  else if (inType === "Keys")  {
       new_vertex = new Key(this._local_id_count++, inId, inName,
                            inPos_x, inPos_y, inWidth, inHeight,
                            inGraphicID);
-      console.log("Ke");
+
     } else if(inType === "Puzzle"){
       new_vertex = new Puzzle(this._local_id_count++, inId, inName,
                               inPos_x, inPos_y, inWidth, inHeight,
                               inGraphicID, inDescription, inEstimated_time);
-      console.log("Pu");
     }
 
     if (new_vertex != null) {

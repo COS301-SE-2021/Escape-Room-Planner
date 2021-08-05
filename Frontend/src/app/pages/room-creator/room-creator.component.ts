@@ -91,7 +91,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let name : string = "Object";       //default name
     let description : string = "Works";  //default description
     this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue');
-
     //spawns object on plane
   }
 
@@ -141,7 +140,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           //spawn objects out;
           let vertex = vertex_t.vertex
 
-          let current_id = this.vertexService.addVertex(vertex.id, "vertex", vertex.name, vertex.graphicid,
+          let current_id = this.vertexService.addVertex(vertex.id, "Keys", vertex.name, vertex.graphicid,
                                        vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
                                        vertex.description, vertex.clue);
           this.spawnObjects(current_id);
@@ -240,6 +239,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
           inEstimated_time, inDescription, inClue
         );
+
         this.spawnObjects(current_id);
       },
       error => {
