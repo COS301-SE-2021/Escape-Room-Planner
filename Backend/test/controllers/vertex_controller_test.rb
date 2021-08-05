@@ -143,7 +143,7 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   # test if vertex does not exist when removing connection with correct response received (bad case)
-  test 'can handle doesnt exist' do
+  test 'can handle vertex that doesnt exist' do
     delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
                                                       from_vertex_id: '100',
                                                       to_vertex_id: '5'
@@ -151,6 +151,16 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     response = JSON.parse(@response.body)
     assert_response :ok
     assert_equal 'From vertex could not be found', response['message']
+  end
+
+  # test if nil passed for vertex while removing connection with correct response received (bad case)
+  test 'can handle nil vertex passed disconnect vertex' do
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
+                                                      to_vertex_id: '5'
+    }
+    response = JSON.parse(@response.body)
+    assert_response :bad_request
+    assert_equal 'Pass in correct parameters', response['message']
   end
 
   # tests if vertex gets updated and correct response is received (good case)

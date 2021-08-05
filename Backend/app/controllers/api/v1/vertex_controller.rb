@@ -211,7 +211,7 @@ module Api
       # @return JSON
       def delete_connection(from_vertex_id, to_vertex_id)
         if from_vertex_id.nil? || to_vertex_id.nil?
-          render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
+          render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
           return
         end
         serv = RoomServices.new
