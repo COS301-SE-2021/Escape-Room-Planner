@@ -21,7 +21,8 @@ gem 'jbuilder', '~> 2.7'
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password (Ensures that passwords are correctly encrypted)
  gem 'bcrypt', '~> 3.1.7'
-
+#Email validatior
+gem 'email_validator'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 #

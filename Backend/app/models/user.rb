@@ -7,4 +7,6 @@ class User < ApplicationRecord
   validates :id, :username, :email, uniqueness: true
   validates :is_admin, inclusion: { in: [true, false] }
   validates :password_digest, presence: true
+  #Validates an email check https://github.com/K-and-R/email_validator for documentation
+  validates :email, email: true
 end
