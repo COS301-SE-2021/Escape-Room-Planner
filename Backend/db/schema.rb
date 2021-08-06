@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_132139) do
     t.string "password_digest", null: false
     t.boolean "is_admin"
     t.string "jwt_token"
-    t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

@@ -14,10 +14,17 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(data) {
-    this.http.post(' http://127.0.0.1:3000/api/v1/login', data)
+    let extra_data = {
+      username: data["username"],
+      password_digest: data["password_digest"],
+      operation: 'Login'
+    };
+
+    this.http.post(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe(
         res => {
             localStorage.setItem('token: ', res["auth_token"]);
+            alert("Success");
         })
   }
 

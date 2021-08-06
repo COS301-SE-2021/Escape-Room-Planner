@@ -14,29 +14,50 @@ module Api
       end
 
       def create
-        type = params[:type]
+        operation = params[:operation]
         email = params[:email]
-        name = params[:name]
-        is_admin = params[:is_admin]
+        # is_admin = params[:is_admin]
         username = params[:username]
         password = params[:password_digest]
-        newPassword = params[:newPassword]
 
-        if User.where('username = ?', username).count >= 1
-          render json: {status: 'Fail', message: 'User already exists', data: "Created: false"}, status: :bad_request
-          return
-        end
-
-        if email.nil? || username.nil?
+        if password.nil? || username.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
           return
         end
 
         serv = UserServices.new
-        # case type
-        # when 'Register'
-        req = RegisterUserRequest.new(username, password, email, is_admin)
-        res = serv.registerUser(req)
+
+        case operation
+        when 'Register'
+          if User.where('username = ?', username).count >= 1
+            render json: {status: 'Fail', message: 'User already exists', data: "Created: false"}, status: :bad_request
+            return
+          end
+
+          req = RegisterUserRequest.new(username, password, email, true)
+          res = serv.registerUser(req)
+
+        when 'Login'
+          puts "Does it at least come here"
+          if username.nil? || password.nil?
+            #return token
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given for login' }, status: :not_found
+            return
+          end
+
+          req = LoginRequest.new(username, password)
+          res = serv.login(req)
+
+          if res.success
+            render json: { status: 'SUCCESS', message: res.message, auth_token: res.token}, status: :ok
+            return
+          else
+            render json: { status: 'FAILED', message: res.message}, status: 401
+            return
+          end
+        end
+
+
 
 
         # when 'Verify'

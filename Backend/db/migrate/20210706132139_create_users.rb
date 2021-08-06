@@ -6,7 +6,6 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :password_digest, null: false
       t.boolean :is_admin
       t.string :jwt_token
-      t.string :type
       t.timestamps
     end
   end
