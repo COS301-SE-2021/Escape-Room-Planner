@@ -18,7 +18,7 @@
               <hr class="mt-2 mb-3"/>
               <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">
                 <div class="form-group">
-                  <label for="username">Email</label>
+                  <label for="username">Username</label>
                   <input style="background: #E5E4E2" type="text" class="form-control" id="username" name="username" #username="ngModel"
                          ngModel [class.is-invalid]="username.invalid && username.touched">
                   <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
@@ -27,7 +27,7 @@
                   <label for="password">Password</label>
                   <input style="background: #E5E4E2" type="password" class="form-control" id="password" name="password_digest"
                          ngModel #password="ngModel" [class.is-invalid]="username.invalid && username.touched" required>
-                  <small [class.d-none]="password.valid || password.untouched">Password is required.</small>>
+                  <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
                 </div>
                 <a href=""><p id="forgot-pass">Forgot Your Password?</p></a>
                 <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign in</button>

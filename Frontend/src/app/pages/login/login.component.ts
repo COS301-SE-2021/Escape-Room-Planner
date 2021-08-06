@@ -14,11 +14,10 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(data) {
-    this.http.post(' http://127.0.0.1:3035/api/v1/login', data)
+    this.http.post(' http://127.0.0.1:3000/api/v1/login', data)
       .subscribe(
         res => {
-            console.log(res)
-            // localStorage.setItem('token',);
+            localStorage.setItem('token: ', res["auth_token"]);
         })
   }
 

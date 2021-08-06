@@ -4,7 +4,7 @@ import {RouterModule, Routes} from "@angular/router";
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
-// import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
+import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
 import { SignupComponent } from './pages/signup/signup.component';
 // import { DraggableDirective } from './directives/draggable.directive';
 // import { DroppableDirective } from './directives/droppable.directive';
@@ -12,7 +12,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
-  // { path: '', component: RoomCreatorComponent },
+  { path: '', component: RoomCreatorComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   // otherwise redirect to login
@@ -23,7 +23,7 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     LoginComponent,
-    // RoomCreatorComponent,
+    RoomCreatorComponent,
     SignupComponent
     // DraggableDirective,
     // DroppableDirective
