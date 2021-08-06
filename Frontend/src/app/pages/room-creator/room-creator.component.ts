@@ -48,7 +48,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     //set the currentRoomId to 1 by default, later to actual first room id?
-    this.currentRoomId = 3;
+    this.currentRoomId = 13;
     this.getEscapeRooms();
     this.getVertexFromRoom();
   }
@@ -109,6 +109,26 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         //Render error if bad request
         error => this.renderAlertError('There was an error retrieving your rooms')
     );
+  }
+
+  deleteRoom(event: any): void{
+    //confirmation box on deleting room
+    let confirmation = confirm("Are you sure you want to delete this room?");
+    let room_id = event.target.getAttribute("escape-room-id");
+    if(confirmation === true){
+      this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/room/"+room_id,
+        {"headers": this.headers}).subscribe(
+        response => {
+          //remove Room From screen here
+          if(response.status == "SUCCESS"){
+            document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
+          }else
+            this.renderAlertError("Unable To Delete Room");
+        },
+        error => this.renderAlertError("Unable To Delete Room")
+        //console.error('There was an error while updating the vertex', error)
+      );
+    }
   }
 
   changeRoom(event: any): void{
@@ -232,11 +252,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     //add src to <img>
     this.renderer.setAttribute(newImage, 'src', './assets/svg/trash-fill.svg');
+    this.renderer.setAttribute(newImage,'escape-room-id',id.toString());
 
     //add boostrap class to <button>
     this.renderer.addClass(newButton, 'btn');
     this.renderer.addClass(newButton, 'btn-dark');
     this.renderer.appendChild(newButton, newImage);
+    this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event))
 
     //add bootstrap class to <div col2>
     this.renderer.addClass(newDivCol2, 'col-1');
@@ -259,6 +281,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     // make it <li><a>
     this.renderer.appendChild(newRoom,newDivRow);
+    this.renderer.setAttribute(newRoom,'room-id',id.toString());
     // append to the dropdown menu
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
