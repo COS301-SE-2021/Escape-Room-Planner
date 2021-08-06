@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LoginRequest
   attr_accessor :username, :password
 

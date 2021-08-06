@@ -1,5 +1,6 @@
-class LoginResponse
+# frozen_string_literal: true
 
+class LoginResponse
   attr_accessor :success, :message, :token
 
   def initialize(success, message, token)
