@@ -61,7 +61,7 @@ class UserServices
     @user = User.find_by_username(request.username)
     return ResetPasswordResponse.new(false, 'Username does not exist') if @user.nil?
 
-    @user.update(password: request.newPassword)
+    @user.update(password: request.new_password)
 
     @response = if @user.save
                   ResetPasswordResponse.new(true, 'Password reset Successfully')
@@ -132,7 +132,7 @@ class UserServices
   def verify_account(request); end
 
   def authenticate_user(encoded_token)
-    decoded_token = JsonWebToken.decode(encoded_token),{verify_expiration: true}
+    decoded_token = JsonWebToken.decode(encoded_token), { verify_expiration: true }
     # check token exists
     @response = if User.find_by_id(decoded_token['id'])
                   true
@@ -141,7 +141,7 @@ class UserServices
                 end
   rescue JWT::ExpiredSignature
     false
-  rescue Exception
+  rescue StandardError
     false
   end
 end
