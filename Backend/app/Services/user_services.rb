@@ -1,5 +1,6 @@
+# frozen_string_literal: true
 class UserServices
-  def registerUser(request)
+  def register_user(request)
     return RegisterUserResponse.new(false, 'Null request') if request.nil?
 
     begin
