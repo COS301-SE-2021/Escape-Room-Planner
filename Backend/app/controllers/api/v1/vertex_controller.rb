@@ -111,13 +111,6 @@ module Api
           :graphicid
         ).where(escape_room_id: id)
 
-        # puts()
-
-        # puts 'cock'
-
-        # TODO: need to return only useful fields and a :type somehow
-        #
-        # TODO: also need ot send connections
         render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
                                                                        { vertex: k,
                                                                          connections: k.vertices.ids,

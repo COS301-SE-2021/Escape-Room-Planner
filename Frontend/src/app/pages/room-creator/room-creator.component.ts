@@ -128,14 +128,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   //Get to get all vertex for room
   getVertexFromRoom(): void{
+    // resets the vertices on room switch
     this.vertexService.reset_array();
+    // resets the lines array
+    for (let line of this.lines){
+      if(line !== null)
+        line.remove();
+    }
+    this.lines = [];
+
     //http request to rails api
     this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
-       //console.log(response);
         //render all the vertices
-        // console.log(response.data[0]);
-
         for (let vertex_t of response.data){
           //spawn objects out;
           let vertex = vertex_t.vertex
@@ -161,13 +166,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           for (let vertex_connection of vertex_connections){
             // go through all the connections
             // for each location locate the vertex with that real id and use its local id in place of real one
-            console.log(vertex_connection);
 
             for (let vertex_to of this.vertexService.vertices){
 
               if (vertex_to.id === vertex_connection){
                 this.vertexService.removeVertexConnection(vertex.local_id ,vertex_connection);
-                vertex.addConnection(vertex_to.local_id); // appends to the end of the list
 
                 let from_vertex = document.querySelectorAll('[vertex-id="'+vertex.local_id+'"]')[0];
                 let to_vertex = document.querySelectorAll('[vertex-id="'+vertex_to.local_id+'"]')[0];
@@ -177,9 +180,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
               }
             }
           }
-
-          console.log(vertex.getConnections());
         }
+        console.log(this.vertexService.getVertexConnections(1));
       },
       //Error retrieving vertices message
       error => this.renderAlertError("There was an error retrieving vertices for the room")
@@ -201,7 +203,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody, {"headers": this.headers}).subscribe(
         response => {
           //rendering <li> elements by using render function
-          // console.log(response.data)
           this.renderNewRoom(response.data.id, response.data.name);
         },
         error => console.error('There was an error creating your rooms', error)
@@ -352,13 +353,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
 
     //disconnect vertex from screen here
-    let line_index = this.vertexService.removeVertexConnection(from_vertex_id, to_vertex_id);
+    let line_index = this.vertexService.removeVertexConnection(from_vertex_id, +to_vertex_id);
     //checks if there is a connection to remove from from_vertex to to_vertex
     if (line_index !== -1) {
+      console.log(" from to");
+      console.log(this.vertexService.getVertexConnections(from_vertex_id));
       this.disconnectLines(line_index, from_vertex_id, to_vertex_id);
     } else {
+      console.log(" to from");
+      console.log(this.vertexService.getVertexConnections(to_vertex_id));
       //checks if its being called the other way around
-      line_index = this.vertexService.removeVertexConnection(to_vertex_id, from_vertex_id);
+      line_index = this.vertexService.removeVertexConnection(to_vertex_id, +from_vertex_id);
       //checks if there is a connection to remove from to_vertex to from_vertex
       if (line_index !== -1) this.disconnectLines(line_index, to_vertex_id, from_vertex_id);
     }
@@ -400,33 +405,36 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
     let to_vertex_id = to_vertex.getAttribute('vertex-id');
 
-    let connection = {
-      operation: 'connection',
-      from_vertex_id: this.vertexService.vertices[from_vertex_id].id, //convert local to real id
-      to_vertex_id: this.vertexService.vertices[to_vertex_id].id
-    };
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+this.vertexService.vertices[from_vertex_id].id, connection, {"headers": this.headers}).subscribe(
-      response => {
-        // updates the local array here only after storing on db
-        if(response.status == "FAILED"){
-          this.renderAlertError(response.message);
-        }else {
-          // this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
-          // this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
-          //
-          // this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
-          // this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
-          // this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
-          // //add event to listen to mouse event of only connected vertices
-          // to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-          // this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
-          // // store on array
-          this.renderLines(from_vertex_id, this._target_vertex, to_vertex_id, to_vertex);
-        }
-      },
-      error => this.renderAlertError("There was an Error Updating Vertex Position")
-      //console.error('There was an error while updating the vertex', error)
-    );
+    if(!this.vertexService.getVertexConnections(from_vertex_id).includes(+to_vertex_id)){
+      console.log("added a connection");
+      let connection = {
+        operation: 'connection',
+        from_vertex_id: this.vertexService.vertices[from_vertex_id].id, //convert local to real id
+        to_vertex_id: this.vertexService.vertices[to_vertex_id].id
+      };
+      this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+this.vertexService.vertices[from_vertex_id].id, connection, {"headers": this.headers}).subscribe(
+        response => {
+          // updates the local array here only after storing on db
+          if(response.status == "FAILED"){
+            this.renderAlertError(response.message);
+          }else {
+            // this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
+            // this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
+            //
+            // this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+            // this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
+            // this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
+            // //add event to listen to mouse event of only connected vertices
+            // to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
+            // this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+            // // store on array
+            this.renderLines(from_vertex_id, this._target_vertex, +to_vertex_id, to_vertex);
+          }
+        },
+        error => this.renderAlertError("There was an Error Updating Vertex Position")
+        //console.error('There was an error while updating the vertex', error)
+      );
+    }
 
   }
 
@@ -469,7 +477,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let targetVertex = event.target;
     let local_target_id = targetVertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
-    // console.log(targetVertex.getAttribute('vertex-id'));
     let new_y_pos = targetVertex.getAttribute('data-y');
     let new_x_pos = targetVertex.getAttribute('data-x');
     let new_height = targetVertex.style.height.match(/\d+/)[0];

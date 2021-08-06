@@ -131,7 +131,7 @@ export class Vertex {
 
   //add connected lines from this vertex
   public addConnectedLine(line_index: number){
-    this._connected_lines.push(line_index);
+    this._connected_lines.unshift(line_index);
   }
 
   //add connected lines from another vertex to this vertex
