@@ -64,4 +64,18 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(false, us.authenticate_user(nil))
   end
 
+  # test 'test sending null token to authenticate user' do
+  #   #please note the exp in json_web_token must be changed to do the test 30 seconds
+  #   req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
+  #   us = UserServices.new
+  #   us.register_user(req)
+  #   req2 = LoginRequest.new('rTest', 'rTest')
+  #   resp = us.login(req2)
+  #   u = User.find_by_username('rTest')
+  #   token = u.jwt_token
+  #
+  #   sleep(40.seconds)
+  #   assert_equal(false, us.authenticate_user(token))
+  # end
+
 end
