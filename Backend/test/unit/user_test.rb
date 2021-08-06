@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require './app/Services/user_services'
 class UserTest < ActiveSupport::TestCase
-
   test 'test register user' do
     before_test = User.count
     req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
@@ -77,5 +78,4 @@ class UserTest < ActiveSupport::TestCase
   #   sleep(40.seconds)
   #   assert_equal(false, us.authenticate_user(token))
   # end
-
 end
