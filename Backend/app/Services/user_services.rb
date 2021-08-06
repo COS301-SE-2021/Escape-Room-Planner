@@ -53,7 +53,7 @@ class UserServices
                 end
   end
 
-  def resetPassword(request)
+  def reset_password(request)
     return ResetPasswordResponse.new(false, "Reset Password request null") if request.nil?
 
     @user = User.find_by_username(request.username)
