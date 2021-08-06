@@ -126,12 +126,12 @@ export class Vertex {
 
   //add connections to vertex
   public addConnection(to_vertex: number){
-    this._connections.push(to_vertex);
+    this._connections.unshift(to_vertex);
   }
 
   //add connected lines from this vertex
   public addConnectedLine(line_index: number){
-    this._connected_lines.push(line_index);
+    this._connected_lines.unshift(line_index);
   }
 
   //add connected lines from another vertex to this vertex
