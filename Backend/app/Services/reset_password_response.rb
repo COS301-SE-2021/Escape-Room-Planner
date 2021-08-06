@@ -1,5 +1,6 @@
-class ResetPasswordResponse
+# frozen_string_literal: true
 
+class ResetPasswordResponse
   attr_accessor :success, :message
 
   def initialize(success, message)
