@@ -201,7 +201,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             }
           }
         }
-        console.log(this.vertexService.getVertexConnections(1));
       },
       //Error retrieving vertices message
       error => this.renderAlertError("There was an error retrieving vertices for the room")
@@ -379,12 +378,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let line_index = this.vertexService.removeVertexConnection(from_vertex_id, +to_vertex_id);
     //checks if there is a connection to remove from from_vertex to to_vertex
     if (line_index !== -1) {
-      console.log(" from to");
-      console.log(this.vertexService.getVertexConnections(from_vertex_id));
       this.disconnectLines(line_index, from_vertex_id, to_vertex_id);
     } else {
-      console.log(" to from");
-      console.log(this.vertexService.getVertexConnections(to_vertex_id));
       //checks if its being called the other way around
       line_index = this.vertexService.removeVertexConnection(to_vertex_id, +from_vertex_id);
       //checks if there is a connection to remove from to_vertex to from_vertex
