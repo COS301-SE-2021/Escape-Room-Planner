@@ -6,7 +6,7 @@ class UserTest < ActiveSupport::TestCase
     before_test = User.count
     req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
     us = UserServices.new
-    us.registerUser(req)
+    us.register_user(req)
 
     assert_not_equal(User.count, before_test)
   end
@@ -14,7 +14,7 @@ class UserTest < ActiveSupport::TestCase
   test 'test a user saves' do
     req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
     us = UserServices.new
-    resp = us.registerUser(req)
+    resp = us.register_user(req)
 
     assert(resp.success)
   end
@@ -22,7 +22,7 @@ class UserTest < ActiveSupport::TestCase
   test 'test register user with a null request' do
     req = nil
     us = UserServices.new
-    resp = us.registerUser(req)
+    resp = us.register_user(req)
 
     assert_equal(false, resp.success)
   end
