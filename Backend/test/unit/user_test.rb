@@ -54,7 +54,7 @@ class UserTest < ActiveSupport::TestCase
   test 'test password reset' do
     req = ResetPasswordRequest.new('testUser', '12345')
     us = UserServices.new
-    resp = us.resetPassword(req)
+    resp = us.reset_password(req)
 
     assert(resp.success)
   end
