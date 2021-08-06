@@ -18,7 +18,7 @@ module Api
         is_admin = params[:is_admin]
         username = params[:username]
         password = params[:password]
-        newPassword = params[:newPassword]
+        newPassword = params[:new_password]
 
         serv = UserServices.new
 

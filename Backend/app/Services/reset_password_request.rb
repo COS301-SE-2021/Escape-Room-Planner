@@ -1,8 +1,10 @@
-class ResetPasswordRequest
-  attr_accessor :username, :newPassword
+# frozen_string_literal: true
 
-  def initialize(username, newPassword)
+class ResetPasswordRequest
+  attr_accessor :username, :new_password
+
+  def initialize(username, new_password)
     @username = username
-    @newPassword = newPassword
+    @new_password = new_password
   end
 end
