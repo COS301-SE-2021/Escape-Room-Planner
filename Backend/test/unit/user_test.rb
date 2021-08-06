@@ -61,7 +61,7 @@ class UserTest < ActiveSupport::TestCase
 
   test 'test sending null token to authenticate user' do
     us = UserServices.new
-    assert_equal(false, us.authenticateUser(nil))
+    assert_equal(false, us.authenticate_user(nil))
   end
 
 end
