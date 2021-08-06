@@ -132,7 +132,7 @@ class UserServices
   def verify_account(request)
   end
 
-  def authenticateUser(encoded_token)
+  def authenticate_user(encoded_token)
     begin
       decoded_token = JsonWebToken.decode(encoded_token)
       # check token exists
