@@ -30,7 +30,7 @@ module Api
           end
 
           req = RegisterUserRequest.new(username, password, email, is_admin)
-          res = serv.registerUser(req)
+          res = serv.register_user(req)
 
         # when 'Verify'
 
