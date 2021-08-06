@@ -1,5 +1,6 @@
-class GetUserDetailsResponse
+# frozen_string_literal: true
 
+class GetUserDetailsResponse
   attr_accessor :success, :message
 
   def initialize(success, message)

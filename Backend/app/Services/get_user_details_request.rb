@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GetUserDetailsRequest
   attr_accessor :username, :password, :email
 
@@ -7,4 +9,3 @@ class GetUserDetailsRequest
     @email = email
   end
 end
-
