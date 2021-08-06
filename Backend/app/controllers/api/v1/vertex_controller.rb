@@ -25,6 +25,7 @@ module Api
       def update
         # operation parameter tells what put operation should be done on vertex
         operation = params[:operation]
+        
         case operation
         when 'connection'
           update_connection(params[:from_vertex_id], params[:to_vertex_id])
