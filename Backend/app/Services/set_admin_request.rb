@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetAdminRequest
   attr_accessor :username
 
@@ -5,4 +7,3 @@ class SetAdminRequest
     @username = username
   end
 end
-

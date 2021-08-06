@@ -1,5 +1,6 @@
-class SetAdminResponse
+# frozen_string_literal: true
 
+class SetAdminResponse
   attr_accessor :success, :message
 
   def initialize(success, message)
