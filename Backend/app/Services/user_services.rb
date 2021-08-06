@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 class UserServices
   def register_user(request)
     return RegisterUserResponse.new(false, 'Null request') if request.nil?
@@ -24,19 +25,20 @@ class UserServices
   end
 
   def login(request)
+    return LoginResponse.new(false, 'Null request', nil) if request.nil?
 
-    return LoginResponse.new(false, "Null request", nil) if request.nil?
     # raise 'LoginRequest null' if request.nil?
 
     # find user in database and retrieve it if it exists
     @user = User.find_by(username: request.username)
 
-    #check username exists
-    return LoginResponse.new(false, "Username does not exist", nil) if @user.nil?
+    # check username exists
+    return LoginResponse.new(false, 'Username does not exist', nil) if @user.nil?
     # raise 'Username does not exist' if @user.nil?
 
     # check password is correct
-    return LoginResponse.new(false, "Password is incorrect", nil) unless @user.authenticate(request.password)
+    return LoginResponse.new(false, 'Password is incorrect', nil) unless @user.authenticate(request.password)
+
     # raise 'Incorrect Password' unless @user.authenticate(request.password)
 
     # generate JWT token
@@ -54,10 +56,10 @@ class UserServices
   end
 
   def reset_password(request)
-    return ResetPasswordResponse.new(false, "Reset Password request null") if request.nil?
+    return ResetPasswordResponse.new(false, 'Reset Password request null') if request.nil?
 
     @user = User.find_by_username(request.username)
-    return ResetPasswordResponse.new(false,"Username does not exist") if @user.nil?
+    return ResetPasswordResponse.new(false, 'Username does not exist') if @user.nil?
 
     @user.update(password: request.newPassword)
 
@@ -90,7 +92,7 @@ class UserServices
 
     raise 'User does not exist' if @user.nil?
 
-    # A non-admin user cannpt delete another user
+    # A non-admin user cannot delete another user
     raise 'Current user is not an admin' unless @user.is_admin
 
     @user_to_be_deleted = User.find_by_username(request.user_to_be_deleted)
@@ -123,26 +125,21 @@ class UserServices
   #               end
   # end
 
-  def get_users(request)
-  end
+  def get_users(request); end
 
-  def update_account(request)
-  end
+  def update_account(request); end
 
-  def verify_account(request)
-  end
+  def verify_account(request); end
 
   def authenticate_user(encoded_token)
-    begin
-      decoded_token = JsonWebToken.decode(encoded_token)
-      # check token exists
-      @response = if User.find_by_id(decoded_token['id'])
-                    true
-                  else
-                    false
-                  end
-    rescue StandardError => e
-      false
-    end
+    decoded_token = JsonWebToken.decode(encoded_token)
+    # check token exists
+    @response = if User.find_by_id(decoded_token['id'])
+                  true
+                else
+                  false
+                end
+  rescue StandardError
+    false
   end
 end
