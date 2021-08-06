@@ -68,7 +68,7 @@ class UserServices
                 end
   end
 
-  def getUserDetails(request)
+  def get_user_details(request)
     raise 'GetUserDetailsRequest null' if request.nil?
 
     @user = User.new
@@ -83,7 +83,7 @@ class UserServices
                 end
   end
 
-  def deleteUser(request)
+  def delete_user(request)
     raise 'SetAdminRequest null' if request.nil?
 
     @user = User.find_by_username(request.username)
@@ -123,13 +123,13 @@ class UserServices
   #               end
   # end
 
-  def getUsers(request)
+  def get_users(request)
   end
 
-  def updateAccount(request)
+  def update_account(request)
   end
 
-  def verifyAccount(request)
+  def verify_account(request)
   end
 
   def authenticateUser(encoded_token)
