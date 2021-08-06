@@ -1,5 +1,6 @@
-class UpdateAccountResponse
+# frozen_string_literal: true
 
+class UpdateAccountResponse
   attr_accessor :success, :message
 
   def initialize(success, message)
