@@ -1,8 +1,24 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 class VertexControllerTest < ActionDispatch::IntegrationTest
+
   test 'can get index' do
     get api_v1_vertex_index_path
     assert_response :success
+  end
+
+  test 'can get vertices based on escape room id' do
+    get "#{api_v1_vertex_index_path}/1"
+
+    puts @response.body
+
+    assert_response :ok
+  end
+
+  test 'can handle a show when incorrect escape room id is provided' do
+    get "#{api_v1_vertex_index_path}/-1"
+    assert_response :bad_request
   end
 
   test 'can create Puzzle' do
@@ -104,14 +120,67 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
   end
 
+  # test when incorrect operation call when delete request called
+  test 'incorrect operation call on delete request' do
+    delete "#{api_v1_vertex_index_path}/1", params: { id: '1' }
+    response = JSON.parse(@response.body)
+    assert_response :bad_request
+    assert_equal 'Operation does not exist', response['message']
+  end
+
   test 'can delete vertex' do
-    delete "#{api_v1_vertex_index_path}/1"
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'remove_vertex',
+                                                      id: '1' }
+    response = JSON.parse(@response.body)
     assert_response :ok
+    assert_equal 'Vertex:', response['message']
   end
 
   test 'cant delete vertex' do
-    delete "#{api_v1_vertex_index_path}/500"
+    delete "#{api_v1_vertex_index_path}/500", params: { operation: 'remove_vertex',
+                                                        id: '500' }
+    response = JSON.parse(@response.body)
     assert_response :ok
+    assert_equal 'Unable to remove vertex', response['message']
+  end
+
+  # test if vertex removes connection and correct response is received (good case)
+  test 'can remove connection' do
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
+                                                      from_vertex_id: '1',
+                                                      to_vertex_id: '2' }
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Link has been removed', response['message']
+  end
+
+  # test if vertex has no connection and tries to remove with correct response received (bad case)
+  test 'can handle vertex with no connections' do
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
+                                                      from_vertex_id: '1',
+                                                      to_vertex_id: '5' }
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'There is no link between vertices', response['message']
+  end
+
+  # test if vertex does not exist when removing connection with correct response received (bad case)
+  test 'can handle vertex that doesnt exist' do
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
+                                                      from_vertex_id: '100',
+                                                      to_vertex_id: '5' }
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'From vertex could not be found', response['message']
+  end
+
+  # test if nil passed for vertex while removing connection with correct response received (bad case)
+  test 'can handle nil vertex passed disconnect vertex' do
+    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
+                                                      to_vertex_id: '5' }
+    response = JSON.parse(@response.body)
+    assert_response :bad_request
+    assert_equal 'Pass in correct parameters', response['message']
   end
 
   # tests if vertex gets updated and correct response is received (good case)

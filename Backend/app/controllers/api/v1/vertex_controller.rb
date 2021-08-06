@@ -26,7 +26,7 @@ module Api
       # PUT request http://host:port/api/v1/vertex/vertex_id, json
       # @return [JSON object with a status code or error message]
       def update
-        # checks if user is authorized 
+        # checks if user is authorized
         if request.headers['Authorization'].present?
           auth_token = request.headers['Authorization'].split(' ').last
           unless @@user_service.authenticate_user(auth_token)
@@ -94,6 +94,7 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
+
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
@@ -103,7 +104,9 @@ module Api
         render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
       end
 
+      # returns all the vertices for a specific room id
       def show
+        # this is an escape room id
         id = params[:id]
 
         if EscapeRoom.find_by(id: id).nil?
@@ -111,8 +114,22 @@ module Api
           return
         end
 
-        vertices = Vertex.where(escape_room_id: id)
-        render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
+        response = Vertex.select(
+          :id,
+          :type,
+          :name,
+          :posx,
+          :posy,
+          :width,
+          :height,
+          :graphicid
+        ).where(escape_room_id: id)
+
+        render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
+                                                                       { vertex: k,
+                                                                         connections: k.vertices.ids,
+                                                                         type: k.type }
+                                                                     end }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
@@ -159,7 +176,7 @@ module Api
           req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
           res = serv.create_puzzle(req)
 
-        when 'Key'
+        when 'Keys'
           req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid)
           res = serv.create_key(req)
 
@@ -187,9 +204,22 @@ module Api
       end
       # end create
 
+      # delete api call http://host/api/v1/vertex/"+real_target_id
       def destroy
-        id = params[:id]
+        operation = params[:operation]
+        case operation
+        when 'remove_vertex'
+          delete_vertex(params[:id])
+        when 'disconnect_vertex'
+          delete_connection(params[:from_vertex_id], params[:to_vertex_id])
+        else
+          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+        end
+      end
 
+      # @param [ActionController::Parameters] id
+      # @return JSON
+      def delete_vertex(id)
         if id.nil?
           render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
           return
@@ -200,11 +230,31 @@ module Api
         resp = serv.remove_vertex(req)
 
         unless resp.success
-          render json: { status: 'FAILED', message: 'Unspecified error', data: resp }, status: :ok
+          render json: { status: 'FAILED', message: 'Unable to remove vertex', data: resp }, status: :ok
           return
         end
 
         render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
+      rescue StandardError
+        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
+      end
+
+      # @param [ActionController::Parameters] from_vertex_id
+      # @param [ActionController::Parameters] to_vertex_id
+      # @return JSON
+      def delete_connection(from_vertex_id, to_vertex_id)
+        if from_vertex_id.nil? || to_vertex_id.nil?
+          render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
+          return
+        end
+        serv = RoomServices.new
+        req = DisconnectVerticesRequest.new(from_vertex_id, to_vertex_id)
+        resp = serv.disconnect_vertices(req)
+        unless resp.success
+          render json: { status: 'FAILED', message: resp.message }, status: :ok
+          return
+        end
+        render json: { status: 'SUCCESS', message: resp.message }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end

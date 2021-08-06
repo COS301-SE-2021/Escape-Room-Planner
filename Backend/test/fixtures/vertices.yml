@@ -26,7 +26,7 @@ two:
 three:
   id: 3
   type: Clue
-  name: two
+  name: three
   posx: 1
   posy: 1
   width: 1.5
