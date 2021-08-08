@@ -34,10 +34,16 @@ class SolvabilityService
 
     # Two arrays of size of num vertices set to false
     visited = Array.new(request.vertices.count)
-    i = 0
-    while i < visited.count
-      visited[i] = false
+
+    # For each vertex in the array
+    while i<request.vertices
+      i = 0
+      while i < visited.count
+        visited[i] = false
+        inc(i)
+      end
     end
+
 
 
     false
