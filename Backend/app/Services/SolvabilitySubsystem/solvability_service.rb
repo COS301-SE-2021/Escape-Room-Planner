@@ -1,6 +1,6 @@
 class SolvabilityService
 
-  def calculateSolvability(request)
+  def calculate_solvability(request)
 
     raise 'Solvability Request cant be null' if request.nil?
 
@@ -11,27 +11,47 @@ class SolvabilityService
     CalculateSolvableResponse.new(solvabilityHelper(request.startVert, request.endVert, request.vertices))
   end
 
-  def calculateSetUpOrder(request)
+  def calculate_set_up_order(request)
 
     raise 'Solvability Request cant be null' if request.nil?
 
   end
 
-  def calculateEstimatedTime(request)
+  def calculate_estimated_time(request)
 
     raise 'Solvability Request cant be null' if request.nil?
 
   end
-  
-  def solvabilityHelper(startVert,endVert,vertices)
+
+  def solvability_helper(startVert,endVert,vertices)
     @response = false
   end
 
-  def detectCycle()
+  def detect_cycle()
 
-    visited= Array.new
-    restack= Array.new
+    #Two arrays of size of num vertices set to false
+    visited = Array.new
+    restack = Array.new
+
+    i = 0
+    while i < visited.count
+
+    end
 
   end
-  
-end
+
+  def is_cyclic(i,visited,restack)
+    if restack[i]
+      return true
+    end
+
+    if visited[i]
+      return true
+    end
+
+
+
+
+  end
+
+  end
