@@ -29,6 +29,9 @@ class SolvabilityService
 
   def detectCycle()
 
+    visited= Array.new
+    restack= Array.new
+
   end
   
 end
