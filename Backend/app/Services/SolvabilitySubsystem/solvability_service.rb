@@ -38,10 +38,7 @@ class SolvabilityService
     while i < visited.count
       visited[i] = false
     end
-    
-    stack = []
 
-    i = 0
 
     false
   end
