@@ -1,13 +1,17 @@
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
+
 class SolvabilityService
   def calculate_solvability(request)
 
     raise 'Solvability Request cant be null' if request.nil?
 
-    if request.startVert.nil? || request.endVert.nil || request.vertices.nil?
+    if request.startVert.nil? || request.endVert.nil? || request.vertices.nil?
       raise 'Parameters in request object cannot be null'
     end
 
     CalculateSolvableResponse.new(detect_cycle(request))
+
   end
 
   def calculate_set_up_order(request)
@@ -63,4 +67,4 @@ class SolvabilityService
     puts vertices.find_by_id(index)
   end
 
-  end
+end
