@@ -1,11 +1,64 @@
-<div class="jumbotron">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-8 offset-sm-2">
-        <p>
-          signup works!
-        </p>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Bootstrap 4 Layout</title>
+</head>
+
+<div class="col-md-12" style="height: 87vh">
+  <div class="row d-flex justify-content-center" style="height: 100%">
+    <div class="col-md-12" id="login-container">
+      <div class="card" id="login-card"  style="overflow: hidden;">
+        <div class="card-body p-0">
+          <div class="row" style="height: 100%">
+            <div class="col-12 col-md-7 px-4 py-3">
+              <h2>Sign Up</h2>
+              <hr class="mt-2 mb-3"/>
+              <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm.value)">
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <input style="background: #E5E4E2;" type="text" class="form-control" id="username" name="username" #username="ngModel"
+                         ngModel [class.is-invalid]="username.invalid && username.touched" required>
+                  <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
+                  <small id="user"></small>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input style="background: #E5E4E2" type="email" email class="form-control" id="email" name="email" #email="ngModel"
+                         ngModel [class.is-invalid]="email.invalid && email.touched" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required>
+                  <small *ngIf="email.errors?.required && email.touched">Email is required.</small>
+                  <small *ngIf="email.errors?.pattern && email.touched">Please enter a valid email.</small>
+                </div>
+                <div class="form-group">
+                  <label for="password_digest">Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="password_digest" name="password_digest"
+                         ngModel #password="ngModel" [class.is-invalid]="email.invalid && email.touched"
+                         pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}" required>
+                  <small *ngIf="password.errors?.required && password.touched">Password is required.</small>
+                  <small *ngIf="password.errors?.pattern && password.touched">Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.</small>
+                </div>
+                <div class="form-group">
+                  <label for="confirm">Confirm Password</label>
+                  <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" name="confirm"
+                         ngModel #confirmPassword="ngModel" required>
+                  <small *ngIf="confirmPassword.errors?.required && confirmPassword.touched">Confirm password is required.</small>
+                  <small *ngIf="confirmPassword.errors?.pattern && confirmPassword.touched">Passwords don't match.</small>
+                </div>
+                <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign Up</button>
+                <a href="login"><p id="sign-up"><span style="color: black">Already Have An Account? </span>Login</p></a>
+              </form>
+            </div>
+            <div class="col-12 col-md-5 text-center text-white" style="background-image: linear-gradient(#00fa9a, #00fa9a, #00cc99); border-radius: 15px 0px 0px 15px">
+              <h1 id="welcome">Welcome</h1>
+              <p>This is Escape Rooom Planner blah blah, maybe some more information just to kinda make it more professional or something</p>
+              <button id="signup-bt" class="btn btn-primary">Sign In</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
