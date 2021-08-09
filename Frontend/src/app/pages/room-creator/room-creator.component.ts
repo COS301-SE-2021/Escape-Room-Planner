@@ -1,6 +1,8 @@
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
+import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
+import {Router} from "@angular/router";
 // Leader Line JS library imports
 import 'leader-line';
 declare let LeaderLine: any;
@@ -23,6 +25,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   private isConnection = false;
   private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
+  private headers: HttpHeaders = new HttpHeaders();
 
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
@@ -30,11 +33,22 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("contextMenu") contextMenuRef : ElementRef | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
-              private vertexService: VertexService) { }
+              private vertexService: VertexService, private router:Router)
+  {
+    // todo change to work with login token and not test token
+
+    localStorage.setItem('token', "test");
+    //localStorage.clear();
+    if(localStorage.getItem('token') ==  null) {
+      this.router.navigate(['login']).then(r => alert("login test"));
+    }
+      this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+  }
+
 
   ngOnInit(): void {
     //set the currentRoomId to 1 by default, later to actual first room id?
-    this.currentRoomId = 3;
+    this.currentRoomId = 13;
     this.getEscapeRooms();
     this.getVertexFromRoom();
   }
@@ -77,26 +91,44 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let name : string = "Object";       //default name
     let description : string = "Works";  //default description
     this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue');
-
     //spawns object on plane
   }
 
   //use get to get all the rooms stored in db
   getEscapeRooms(): void{
     //http request to rails api
-    this.httpClient.get<EscapeRoomArray>("http://127.0.0.1:3000/api/v1/room/").subscribe(
+    this.httpClient.get<EscapeRoomArray>("http://127.0.0.1:3000/api/v1/room/", {"headers": this.headers}).subscribe(
       response => {
           //rendering <li> elements by using response
           this.escapeRooms = response;
           //render all the rooms
           for (let er of response.data){
-            //todo fix this to use real name if we will still use those
-            this.renderNewRoom(er.id, "fake name for now");
+            this.renderNewRoom(er.id, er.name);
           }
       },
         //Render error if bad request
         error => this.renderAlertError('There was an error retrieving your rooms')
     );
+  }
+
+  deleteRoom(event: any): void{
+    //confirmation box on deleting room
+    let confirmation = confirm("Are you sure you want to delete this room?");
+    let room_id = event.target.getAttribute("escape-room-id");
+    if(confirmation === true){
+      this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/room/"+room_id,
+        {"headers": this.headers}).subscribe(
+        response => {
+          //remove Room From screen here
+          if(response.status == "SUCCESS"){
+            document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
+          }else
+            this.renderAlertError("Unable To Delete Room");
+        },
+        error => this.renderAlertError("Unable To Delete Room")
+        //console.error('There was an error while updating the vertex', error)
+      );
+    }
   }
 
   changeRoom(event: any): void{
@@ -116,18 +148,58 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   //Get to get all vertex for room
   getVertexFromRoom(): void{
+    // resets the vertices on room switch
     this.vertexService.reset_array();
+    // resets the lines array
+    for (let line of this.lines){
+      if(line !== null)
+        line.remove();
+    }
+    this.lines = [];
+
     //http request to rails api
-    this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId).subscribe(
+    this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
-       //console.log(response);
         //render all the vertices
-        for (let vertex of response.data){
+        for (let vertex_t of response.data){
           //spawn objects out;
-          let current_id = this.vertexService.addVertex(vertex.id, "vertex", vertex.name, vertex.graphicid,
+          let vertex = vertex_t.vertex
+          let vertex_type = vertex_t.type;
+          let vertex_connections = vertex_t.connections;
+
+          let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
                                        vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
                                        vertex.description, vertex.clue);
+
+          // @ts-ignore
+          for (let vertex_connection of vertex_connections)
+            this.vertexService.addVertexConnection(current_id, vertex_connection);
+
           this.spawnObjects(current_id);
+        }
+
+        // TODO consider using some other method to locate these, cause triple for loop is not pog
+        // converts real connection to local connection
+        for (let vertex of this.vertexService.vertices){
+          let vertex_connections = vertex.getConnections();
+
+          for (let vertex_connection of vertex_connections){
+            // go through all the connections
+            // for each location locate the vertex with that real id and use its local id in place of real one
+
+            for (let vertex_to of this.vertexService.vertices){
+
+              if (vertex_to.id === vertex_connection){
+                this.vertexService.removeVertexConnection(vertex.local_id ,vertex_connection);
+
+                let from_vertex = document.querySelectorAll('[vertex-id="'+vertex.local_id+'"]')[0];
+                let to_vertex = document.querySelectorAll('[vertex-id="'+vertex_to.local_id+'"]')[0];
+
+                this.renderLines(vertex.local_id, from_vertex, vertex_to.local_id, to_vertex);
+                break; // so that not the whole array is traversed
+              }
+            }
+          }
         }
       },
       //Error retrieving vertices message
@@ -147,10 +219,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }else {
       let createRoomBody = {name: regexResult[0]};
       //http request to rails api
-      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody).subscribe(
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody, {"headers": this.headers}).subscribe(
         response => {
           //rendering <li> elements by using render function
-          // console.log(response.data)
           this.renderNewRoom(response.data.id, response.data.name);
         },
         error => console.error('There was an error creating your rooms', error)
@@ -170,17 +241,46 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   //just renders new room text in the list
   renderNewRoom(id:number, name:string): void{
-    // <li><a class="dropdown-item">ROOM 1</a></li>-->
+    // <li><div><div> class="dropdown-item">ROOM 1</div><div><button></button><img></div></div></li>-->
     let newRoom = this.renderer.createElement('li');
-    let newTag = this.renderer.createElement('a');
-    // add bootstrap class to <a>
-    this.renderer.addClass(newTag,'dropdown-item');
-    this.renderer.addClass(newTag,'text-white');
-    this.renderer.appendChild(newTag, this.renderer.createText(name));
-    this.renderer.setAttribute(newTag,'escape-room-id',id.toString());
-    this.renderer.listen(newTag,'click',(event) => this.changeRoom(event))
+    let newDivRow = this.renderer.createElement('div');
+    let newDivCol1 = this.renderer.createElement('div');
+    let newDivCol2 = this.renderer.createElement('div');
+    let newButton = this.renderer.createElement('button');
+    let newImage = this.renderer.createElement('img');
+
+    //add src to <img>
+    this.renderer.setAttribute(newImage, 'src', './assets/svg/trash-fill.svg');
+    this.renderer.setAttribute(newImage,'escape-room-id',id.toString());
+
+    //add boostrap class to <button>
+    this.renderer.addClass(newButton, 'btn');
+    this.renderer.addClass(newButton, 'btn-dark');
+    this.renderer.appendChild(newButton, newImage);
+    this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event))
+
+    //add bootstrap class to <div col2>
+    this.renderer.addClass(newDivCol2, 'col-1');
+    this.renderer.addClass(newDivCol2, 'text-end');
+    this.renderer.appendChild(newDivCol2, newButton);
+
+    //add bootstrap class to <div col1>
+    this.renderer.addClass(newDivCol1, 'col-11');
+    this.renderer.addClass(newDivCol1, 'text-white');
+    this.renderer.appendChild(newDivCol1, this.renderer.createText(name));
+    this.renderer.setAttribute(newDivCol1,'escape-room-id',id.toString());
+    this.renderer.listen(newDivCol1,'click',(event) => this.changeRoom(event))
+
+    // add bootstrap class to <div row>
+    this.renderer.addClass(newDivRow, 'row');
+    this.renderer.addClass(newDivRow,'dropdown-item');
+    this.renderer.addClass(newDivRow, 'd-flex');
+    this.renderer.appendChild(newDivRow, newDivCol1);
+    this.renderer.appendChild(newDivRow, newDivCol2);
+
     // make it <li><a>
-    this.renderer.appendChild(newRoom,newTag);
+    this.renderer.appendChild(newRoom,newDivRow);
+    this.renderer.setAttribute(newRoom,'room-id',id.toString());
     // append to the dropdown menu
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
@@ -216,13 +316,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
 
     //make post request for new vertex
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody).subscribe(
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody, {"headers": this.headers}).subscribe(
       response => {
         //get the latest local id for a vertex
         let current_id = this.vertexService.addVertex(response.data.id,
           inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
           inEstimated_time, inDescription, inClue
         );
+
         this.spawnObjects(current_id);
       },
       error => {
@@ -272,46 +373,99 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   disconnectConnection(event: any):void {
     let to_vertex_id = event.target.getAttribute('vertex-id');
     let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
-    this.is_disconnect = false;
-    let line_index = this.vertexService.removeVertexConnection(from_vertex_id, to_vertex_id);
+
+    //disconnect vertex from screen here
+    let line_index = this.vertexService.removeVertexConnection(from_vertex_id, +to_vertex_id);
     //checks if there is a connection to remove from from_vertex to to_vertex
-    if(line_index !== -1) {
+    if (line_index !== -1) {
       this.disconnectLines(line_index, from_vertex_id, to_vertex_id);
-    }else{
+    } else {
       //checks if its being called the other way around
-      line_index = this.vertexService.removeVertexConnection(to_vertex_id, from_vertex_id);
+      line_index = this.vertexService.removeVertexConnection(to_vertex_id, +from_vertex_id);
       //checks if there is a connection to remove from to_vertex to from_vertex
-      if(line_index !== -1) this.disconnectLines(line_index, to_vertex_id, from_vertex_id);
+      if (line_index !== -1) this.disconnectLines(line_index, to_vertex_id, from_vertex_id);
     }
+    this.is_disconnect = false;
   }
 
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
-    //removes from vertex connected line in array
-    this.vertexService.removeVertexConnectedLine(from_vertex, line_index);
-    //removes to vertex responsible line in array
-    this.vertexService.removeVertexResponsibleLine(to_vertex, line_index);
-    //removes visual line on html in array
-    this.lines[line_index].remove();
-    this.lines[line_index] = null;
+    let real_from_id = this.vertexService.vertices[from_vertex].id;
+    let remove_connection = {
+      operation: "disconnect_vertex",
+      from_vertex_id: real_from_id,
+      to_vertex_id: this.vertexService.vertices[to_vertex].id
+    };
+
+    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_from_id,
+      {"headers": this.headers, "params": remove_connection}).subscribe(
+      response => {
+        if (response.status == "SUCCESS") {
+          //removes from vertex connected line in array
+          this.vertexService.removeVertexConnectedLine(from_vertex, line_index);
+          //removes to vertex responsible line in array
+          this.vertexService.removeVertexResponsibleLine(to_vertex, line_index);
+          //removes visual line on html in array
+          this.lines[line_index].remove();
+          this.lines[line_index] = null;
+        }else{
+          this.renderAlertError("Unable to remove vertex")
+        }
+      },
+      error => this.renderAlertError("Unable to remove vertex")
+      //console.error('There was an error while updating the vertex', error)
+    );
   }
 
   //makes a connection between two vertices
   makeConnection(event: any): void{
     let to_vertex = event.target;
     this.isConnection = false;
-
-    this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
-    this.lines[this.lines.length-1].color = 'rgba(0,0,0,1.0)';
-
     let from_vertex_id = this._target_vertex.getAttribute('vertex-id');
     let to_vertex_id = to_vertex.getAttribute('vertex-id');
 
+    if(!this.vertexService.getVertexConnections(from_vertex_id).includes(+to_vertex_id)){
+      console.log("added a connection");
+      let connection = {
+        operation: 'connection',
+        from_vertex_id: this.vertexService.vertices[from_vertex_id].id, //convert local to real id
+        to_vertex_id: this.vertexService.vertices[to_vertex_id].id
+      };
+      this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+this.vertexService.vertices[from_vertex_id].id, connection, {"headers": this.headers}).subscribe(
+        response => {
+          // updates the local array here only after storing on db
+          if(response.status == "FAILED"){
+            this.renderAlertError(response.message);
+          }else {
+            // this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
+            // this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
+            //
+            // this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+            // this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
+            // this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
+            // //add event to listen to mouse event of only connected vertices
+            // to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
+            // this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+            // // store on array
+            this.renderLines(from_vertex_id, this._target_vertex, +to_vertex_id, to_vertex);
+          }
+        },
+        error => this.renderAlertError("There was an Error Updating Vertex Position")
+        //console.error('There was an error while updating the vertex', error)
+      );
+    }
+
+  }
+
+  private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
+    this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
+    this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
+
     this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
-    this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length-1);
-    this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length-1);
+    this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
+    this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
     //add event to listen to mouse event of only connected vertices
     to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-    this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+    from_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
     // store on array
   }
 
@@ -341,7 +495,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let targetVertex = event.target;
     let local_target_id = targetVertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
-    // console.log(targetVertex.getAttribute('vertex-id'));
     let new_y_pos = targetVertex.getAttribute('data-y');
     let new_x_pos = targetVertex.getAttribute('data-x');
     let new_height = targetVertex.style.height.match(/\d+/)[0];
@@ -356,7 +509,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       width: new_width
     };
     // updates all the data of vertex
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody).subscribe(
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody, {"headers": this.headers}).subscribe(
       response => {
         // updates the local array here only after storing on db
         this.vertexService.vertices[local_target_id].pos_x = new_x_pos;
@@ -374,7 +527,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let local_target_id = this._target_vertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
     //call to backend to delete vertex by id
-    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id).subscribe(
+
+    let remove_vertex = {
+      operation: "remove_vertex",
+      id: real_target_id
+    };
+
+    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, {"headers": this.headers, "params": remove_vertex}).subscribe(
       response => {
         //remove vertex from screen here
         this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
@@ -445,8 +604,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
 // For Vertex Response
 interface VertexArray {
-  data: Array<Vertex>;
+  data: Array<VertexArrayData>;
   status: string;
+}
+
+interface VertexArrayData{
+  vertex: Vertex;
+  connections: number;
+  type: string;
 }
 
 interface Vertex{
@@ -470,4 +635,5 @@ interface EscapeRoomArray {
 
 interface EscapeRoom{
   id: number;
+  name: string;
 }
