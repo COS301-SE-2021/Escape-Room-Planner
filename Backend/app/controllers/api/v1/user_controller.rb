@@ -10,7 +10,7 @@ module Api
 
       def index
         users = User.all
-        render json: {status: 'SUCCESS', message: 'Users', data: users}, status: :ok
+        render json: { status: 'SUCCESS', message: 'Users', data: users }, status: :ok
       end
 
       def create
@@ -18,7 +18,7 @@ module Api
         email = params[:email]
         # is_admin = params[:is_admin]
         username = params[:username]
-        password = params[:password_digest]
+        password = params[:password]
 
         if password.nil? || username.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
@@ -30,7 +30,7 @@ module Api
         case operation
         when 'Register'
           if User.where('username = ?', username).count >= 1
-            render json: {status: 'Fail', message: 'User already exists', data: "Created: false"}, status: :bad_request
+            render json: { status: 'Fail', message: 'User already exists', data: "Created: false" }, status: :bad_request
             return
           end
 
@@ -38,23 +38,24 @@ module Api
           res = serv.registerUser(req)
 
         when 'Login'
-          puts "Does it at least come here"
           if username.nil? || password.nil?
-            #return token
+            # return token
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given for login' }, status: :not_found
             return
           end
-
           req = LoginRequest.new(username, password)
           res = serv.login(req)
 
           if res.success
-            render json: { status: 'SUCCESS', message: res.message, auth_token: res.token}, status: :ok
+            render json: { status: 'SUCCESS', message: res.message, auth_token: res.token }, status: :ok
             return
           else
-            render json: { status: 'FAILED', message: res.message}, status: 401
+            render json: { status: 'FAILED', message: res.message }, status: 401
             return
           end
+        else
+          render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
+          return
         end
 
 
@@ -124,9 +125,9 @@ module Api
         #   return
         # end
 
-        render json: {status: 'SUCCESS', message: 'User:', data: "Created: #{res.success}"}, status: :ok
+        render json: { status: 'SUCCESS', message: 'User:', data: "Created: #{res.success}" }, status: :ok
       rescue StandardError
-        render json: {status: 'FAILED', message: 'Unspecified error'}, status: :not_found
+        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :not_found
 
       end
     end

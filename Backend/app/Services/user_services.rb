@@ -2,15 +2,12 @@ class UserServices
   def registerUser(request)
     return RegisterUserResponse.new(false, 'Null request') if request.nil?
 
-    puts "Whats the issue 22"
     @user = User.new
     @user.username = request.username
     @user.email = request.email
     @user.is_admin = request.is_admin
-    #salt and hash password and store it
+    # salt and hash password and store it
     @user.password = request.password
-
-    puts "Whats the issue"
 
     @response = if @user.save!
                   RegisterUserResponse.new(true, 'User Created Successfully')
@@ -22,15 +19,15 @@ class UserServices
   def login(request)
     raise 'LoginRequest null' if request.nil?
 
-    #find user in database and retrieve it if it exists
+    # find user in database and retrieve it if it exists
     @user = User.find_by(username: request.username)
 
     raise 'Username does not exist' if @user.nil?
 
-    #check password is correct
+    # check password is correct
     raise 'Incorrect Password' unless @user.authenticate(request.password)
 
-    #generate JWT token
+    # generate JWT token
 
     @token = JsonWebToken.encode(user_id: @user.id)
 
@@ -86,7 +83,7 @@ class UserServices
 
     @user_to_be_deleted = User.find_by_username(request.user_to_be_deleted)
 
-    #check user to be deleted exists
+    # check user to be deleted exists
     raise 'User to be deleted does not exist' if @user_to_be_deleted.nil?
 
     User.destroy(@user_to_be_deleted.id)
@@ -131,13 +128,13 @@ class UserServices
   def authenticateUser(headers)
 
     if headers['Authorization'].present?
-      #get token from header
+      # get token from header
       encoded_token = headers['Authorization'].split('').last
 
       # decode token
       decoded_token = JsonWebToken.decode(encoded_token)
 
-      #check token exists
+      # check token exists
       @response = if User.find_by(jwt_token: decoded_token)
                     true
                   else
