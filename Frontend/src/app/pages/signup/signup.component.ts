@@ -1,5 +1,4 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-signup',
@@ -8,23 +7,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SignupComponent implements OnInit {
 
-  constructor(private http:HttpClient) { }
+  constructor() { }
 
-  ngOnInit(): void {}
-
-  onSubmit(data:any) {
-    let extra_data = {
-      username: data["username"],
-      email: data["email"],
-      password_digest: data["password_digest"],
-      operation: 'Register'
-    };
-
-    this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
-      .subscribe((response)=> {
-        // response.token
-        alert('Success');
-      })
+  ngOnInit(): void {
   }
-}
 
+}
