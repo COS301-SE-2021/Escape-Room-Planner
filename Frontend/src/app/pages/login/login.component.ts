@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-login',
@@ -8,24 +7,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private http:HttpClient) { }
+  constructor() { }
 
-  ngOnInit() {
-  }
-
-  onSubmit(data:any) {
-    let extra_data = {
-      username: data["username"],
-      password_digest: data["password_digest"],
-      operation: 'Login'
-    };
-
-    this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
-      .subscribe(
-        res => {
-            localStorage.setItem('token: ', res["auth_token"]);
-            alert("Success");
-        })
+  ngOnInit(): void {
   }
 
 }
