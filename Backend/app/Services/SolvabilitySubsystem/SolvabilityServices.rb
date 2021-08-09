@@ -39,10 +39,9 @@ class SolvabilityService
     visited = Array.new(request.vertices.count)
     stack = Array.new(request.vertices.count)
 
-
     # For each vertex in the array
     i = 0
-    while i < request.vertices
+    while i < request.vertices.count
 
       return true if cyclic(i, visited, stack)
 
@@ -53,6 +52,7 @@ class SolvabilityService
 
   def cyclic(index, visited, stack)
     # if node has been stack or visited return true
+
     return true if stack[index]
 
     return true if visited[index]
@@ -63,8 +63,6 @@ class SolvabilityService
     stack[index] = true
 
     # create array with adj nodes
-
-    puts vertices.find_by_id(index)
   end
 
 end
