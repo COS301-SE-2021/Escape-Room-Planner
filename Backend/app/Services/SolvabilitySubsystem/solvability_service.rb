@@ -1,5 +1,4 @@
 class SolvabilityService
-
   def calculate_solvability(request)
 
     raise 'Solvability Request cant be null' if request.nil?
@@ -61,7 +60,7 @@ class SolvabilityService
 
     # create array with adj nodes
 
-
+    puts vertices.find_by_id(index)
   end
 
   end
