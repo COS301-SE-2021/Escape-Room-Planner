@@ -34,18 +34,17 @@ class SolvabilityService
 
     # Two arrays of size of num vertices set to false
     visited = Array.new(request.vertices.count)
+    stack = Array.new(request.vertices.count)
+
 
     # For each vertex in the array
-    while i<request.vertices
-      i = 0
-      while i < visited.count
-        visited[i] = false
-        inc(i)
-      end
+    i = 0
+    while i < request.vertices
+
+      return true if cyclic(i, visited, stack)
+
+      inc(i)
     end
-
-
-
     false
   end
 
@@ -60,7 +59,7 @@ class SolvabilityService
 
     stack[index] = true
 
-    # create array with
+    # create array with adj nodes
 
 
   end
