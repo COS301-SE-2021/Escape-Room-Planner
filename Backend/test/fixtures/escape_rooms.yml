@@ -5,9 +5,11 @@ one:
   startVertex: MyStringStart
   endVertex: MyStringEnd
   name: one
+  user_id: 1
 
 two:
   id: 2
   startVertex: MyStringStart
   endVertex: MyStringEnd
   name: two
+  user_id: 1

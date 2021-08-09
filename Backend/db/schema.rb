@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_06_132139) do
+ActiveRecord::Schema.define(version: 2021_08_09_123526) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 2021_07_06_132139) do
     t.bigint "startVertex"
     t.bigint "endVertex"
     t.string "name"
+    t.bigint "user_id", default: 1, null: false
+    t.index ["user_id"], name: "index_escape_rooms_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -56,5 +58,6 @@ ActiveRecord::Schema.define(version: 2021_07_06_132139) do
     t.index ["escape_room_id"], name: "index_vertices_on_escape_room_id"
   end
 
+  add_foreign_key "escape_rooms", "users"
   add_foreign_key "vertices", "escape_rooms"
 end
