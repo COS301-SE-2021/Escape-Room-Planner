@@ -12,7 +12,7 @@ export class SignupComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit(data) {
+  onSubmit(data:any) {
     let extra_data = {
       username: data["username"],
       email: data["email"],
@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
       operation: 'Register'
     };
 
-    this.http.post(' http://127.0.0.1:3000/api/v1/user', extra_data)
+    this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe((response)=> {
         // response.token
         alert('Success');
