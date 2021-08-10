@@ -2,6 +2,8 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 
 class SolvabilityService
+
+
   def calculate_solvability(request)
 
     raise 'Solvability Request cant be null' if request.nil?
@@ -35,6 +37,11 @@ class SolvabilityService
 
   def detect_cycle(request)
 
+    clue_const = 'Clue'
+    key_const = 'Keys'
+    puzzle_const ='Puzzle'
+    container_const = 'Container'
+
     # Get all edges
     edges = []
     edge_count = 0
@@ -60,7 +67,12 @@ class SolvabilityService
     while i < edge_count
       from_vert_id = edges[i].partition(',').first
       to_vertex_id = edges[i].partition(',').last
-      puts to_vertex_id
+
+      puts Vertex.find_by(id: from_vert_id).type
+      if Vertex.find_by(id: from_vert_id).type == key_const || Vertex.find_by(id: from_vert_id).type == clue_const
+        return false if Vertex.find_by(id: to_vertex_id).type != puzzle_const
+      end
+
       i += 1
     end
 
