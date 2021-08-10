@@ -13,9 +13,8 @@ export class AppComponent {
   }
 
   ngOnInit(){
-    let resp= this.http.get('http://127.0.0.1:3000/api/v1/vertex/1');
-    // resp.subscribe((response)=>console.log(response))
+    // todo make a verification of jwt here and make redirect based on that
   }
 
-  title = 'NewEscapeRoomPlanner';
+  title = 'EscapeRoomPlanner';
 }

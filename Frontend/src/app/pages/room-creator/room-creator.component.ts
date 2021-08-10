@@ -57,6 +57,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //use for testing new functionality
   }
 
+  // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
     let update_lines = this.vertexService.getLineIndex(vertex_index);
@@ -84,6 +85,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.is_disconnect = true;
   }
 
+  // todo
   //adds an object to drag on our 'canvas'
   addObjects(type: string, loc: string, pos: number): void{
     this.lastPos += pos;
@@ -94,6 +96,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //spawns object on plane
   }
 
+  // todo
   //use get to get all the rooms stored in db
   getEscapeRooms(): void{
     //http request to rails api
@@ -111,6 +114,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // todo
   deleteRoom(event: any): void{
     //confirmation box on deleting room
     let confirmation = confirm("Are you sure you want to delete this room?");
@@ -131,6 +135,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // todo
   changeRoom(event: any): void{
     let clickedEscapeRoom = event.target;
     //check if the selected room is not the one shown
@@ -146,6 +151,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.getVertexFromRoom();
   }
 
+  // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
     // resets the vertices on room switch
@@ -207,6 +213,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // todo
   // POST to create new room for a user
   createEscapeRoom(): void{
     // regex to extract valid strings, removes all the spaces and allows any character
@@ -232,6 +239,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.newEscapeRoomName = ""; // resets the input box text
   }
 
+  // todo
   isNewEscapeRoomNameValid():void{
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -239,6 +247,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.newEscapeRoomNameValid = regexResult !== null;
   }
 
+  // todo
   //just renders new room text in the list
   renderNewRoom(id:number, name:string): void{
     // <li><div><div> class="dropdown-item">ROOM 1</div><div><button></button><img></div></div></li>-->
@@ -285,6 +294,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
 
+  // todo
   //creates Vertex of type with scale at position x,y
   createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
                inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: Date,
@@ -333,6 +343,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
     let newObject = this.renderer.createElement("img"); // create image
@@ -361,6 +372,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // todo
   //checks if in a operation for a vertex
   vertexOperation(event: any): void{
     if (this.isConnection)
@@ -369,6 +381,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.disconnectConnection(event);
   }
 
+  // todo
   //disconnects two vertex logically and visually
   disconnectConnection(event: any):void {
     let to_vertex_id = event.target.getAttribute('vertex-id');
@@ -388,6 +401,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.is_disconnect = false;
   }
 
+  // todo
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
     let real_from_id = this.vertexService.vertices[from_vertex].id;
     let remove_connection = {
@@ -416,6 +430,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // todo
   //makes a connection between two vertices
   makeConnection(event: any): void{
     let to_vertex = event.target;
@@ -450,12 +465,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           }
         },
         error => this.renderAlertError("There was an Error Updating Vertex Position")
-        //console.error('There was an error while updating the vertex', error)
       );
     }
 
   }
 
+  // todo, test by rendering a function and clicking on a make connections
   private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
     this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
@@ -469,6 +484,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // store on array
   }
 
+  // todo
   // shows a context menu when right button clicked over the vertex
   showContextMenu(event: any): void{
     this._target_vertex = event.target;
@@ -490,6 +506,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // todo
   // updates the position on db from user moving it
   updateVertex(event: any): void{
     let targetVertex = event.target;
@@ -522,6 +539,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // todo
   //DELETES VERTEX FROM BACKEND AND REMOVES ON SCREEN
   removeVertex(): void{
     let local_target_id = this._target_vertex.getAttribute('vertex-id');
@@ -545,6 +563,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  // todo
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
     let incoming_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
