@@ -46,7 +46,11 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can delete valid room' do
-    delete "#{api_v1_room_index_path}/1"
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    delete "#{api_v1_room_index_path}/1",
+           headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
 
     response = JSON.parse(@response.body)
     assert_response :ok
