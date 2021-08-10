@@ -208,7 +208,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   // POST to create new room for a user
-  createEscapeRoom(NewEscapeRoomForm:any): void{
+  createEscapeRoom(): void{
     // regex to extract valid strings, removes all the spaces and allows any character
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);

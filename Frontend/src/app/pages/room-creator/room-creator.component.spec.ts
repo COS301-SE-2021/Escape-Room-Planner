@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RoomCreatorComponent } from './room-creator.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {RouterTestingModule} from "@angular/router/testing";
+import {VertexService} from "../../services/vertex.service";
 
 describe('RoomCreatorComponent', () => {
   let component: RoomCreatorComponent;
@@ -8,7 +11,16 @@ describe('RoomCreatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RoomCreatorComponent ]
+      imports:[
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      declarations: [
+        RoomCreatorComponent
+      ],
+      providers:[
+        VertexService
+      ]
     })
     .compileComponents();
   });
