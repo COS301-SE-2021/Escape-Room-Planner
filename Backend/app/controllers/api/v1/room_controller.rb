@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require './app/Services/room_services'
+require './app/Services/services_helper'
 
 module Api
   module V1
@@ -8,8 +9,12 @@ module Api
       protect_from_forgery with: :null_session
       # GET api/v1/room , shows all the rooms in db
       def index
-        rooms = EscapeRoom.select(:id, :name)
-        render json: { status: 'SUCCESS', message: 'Escape Rooms', data: rooms }, status: :ok
+        if authorise(request)
+          rooms = EscapeRoom.select(:id, :name)
+          render json: { status: 'SUCCESS', message: 'Escape Rooms', data: rooms }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       end
 
       # GET api/v1/room/id , returns a room by id
