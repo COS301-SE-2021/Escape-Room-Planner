@@ -11,6 +11,7 @@ require './app/Services/remove_vertex_request'
 require './app/Services/remove_vertex_response'
 require './app/Services/update_vertex_request'
 require './app/Services/update_vertex_response'
+require './app/Services/services_helper'
 
 # rubocop:disable Metrics/ClassLength
 module Api
@@ -21,19 +22,12 @@ module Api
       protect_from_forgery with: :null_session
 
       # userService instance to be used for authorization
-      @@user_service = UserServices.new
 
       # PUT request http://host:port/api/v1/vertex/vertex_id, json
       # @return [JSON object with a status code or error message]
       def update
         # checks if user is authorized
-        if request.headers['Authorization'].present?
-          auth_token = request.headers['Authorization'].split(' ').last
-          unless @@user_service.authenticate_user(auth_token)
-            render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-            return
-          end
-
+        if authorise(request)
           # operation parameter tells what put operation should be done on vertex
           operation = params[:operation]
 
@@ -45,6 +39,8 @@ module Api
           else
             render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
           end
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
       end
 
