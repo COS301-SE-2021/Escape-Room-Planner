@@ -132,9 +132,7 @@ class UserServices
   def verify_account(request); end
 
   def authenticate_user(encoded_token)
-    decoded_token = JsonWebToken.decode(encoded_token) #, { verify_expiration: true }
-    # check token exists
-    # todo check if exp
+    decoded_token = JsonWebToken.decode(encoded_token)
     @response = if User.find_by_id(decoded_token['id'])
                   true
                 else
