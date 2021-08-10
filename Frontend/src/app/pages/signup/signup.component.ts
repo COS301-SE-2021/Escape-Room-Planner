@@ -16,15 +16,20 @@ export class SignupComponent implements OnInit {
     let extra_data = {
       username: data["username"],
       email: data["email"],
-      password_digest: data["password_digest"],
+      password: data["password_digest"],
       operation: 'Register'
     };
+    console.log(extra_data);
 
     this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe((response)=> {
         // response.token
         alert('Success');
-      })
+      },
+          error => {
+            console.log(error);
+        alert(error);
+        })
   }
 }
 
