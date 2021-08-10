@@ -20,8 +20,12 @@ module Api
       # GET api/v1/room/id , returns a room by id
       def show
         # TODO: this should be a user_id or jwt token that will be decoded
-        room = EscapeRoom.select(:id, :name).find(params[:id])
-        render json: { status: 'SUCCESS', message: 'Escape Rooms', data: room }, status: :ok
+        if authorise(request)
+          room = EscapeRoom.select(:id, :name).find(params[:id])
+          render json: { status: 'SUCCESS', message: 'Escape Rooms', data: room }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       rescue StandardError
         render json: { status: 'Fail', message: 'Escape Room might not exist' }, status: :not_found
       end
