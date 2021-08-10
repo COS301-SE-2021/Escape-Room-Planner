@@ -259,18 +259,22 @@ module Api
       # @param [ActionController::Parameters] to_vertex_id
       # @return JSON
       def delete_connection(from_vertex_id, to_vertex_id)
-        if from_vertex_id.nil? || to_vertex_id.nil?
-          render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
-          return
+        if authorise(request)
+          if from_vertex_id.nil? || to_vertex_id.nil?
+            render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
+            return
+          end
+          serv = RoomServices.new
+          req = DisconnectVerticesRequest.new(from_vertex_id, to_vertex_id)
+          resp = serv.disconnect_vertices(req)
+          unless resp.success
+            render json: { status: 'FAILED', message: resp.message }, status: :ok
+            return
+          end
+          render json: { status: 'SUCCESS', message: resp.message }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
-        serv = RoomServices.new
-        req = DisconnectVerticesRequest.new(from_vertex_id, to_vertex_id)
-        resp = serv.disconnect_vertices(req)
-        unless resp.success
-          render json: { status: 'FAILED', message: resp.message }, status: :ok
-          return
-        end
-        render json: { status: 'SUCCESS', message: resp.message }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
