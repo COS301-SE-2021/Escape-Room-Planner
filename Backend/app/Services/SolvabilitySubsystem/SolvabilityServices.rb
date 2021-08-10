@@ -102,10 +102,18 @@ class SolvabilityService
     i = 0
     while i < visited.count
       visited[i] = false
-
       i += 1
     end
 
+    stack = []
+
+    stack.push(request.startVertex)
+
+    until stack.empty?
+
+      next_node=stack.pop
+      
+    end
 
     true
   end
