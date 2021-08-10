@@ -9,3 +9,15 @@ two:
 three:
   from_vertex_id: 2
   to_vertex_id: 3
+
+four:
+  from_vertex_id: 3
+  to_vertex_id: 5
+
+five:
+  from_vertex_id: 5
+  to_vertex_id: 4
+
+six:
+  from_vertex_id: 4
+  to_vertex_id: 6
