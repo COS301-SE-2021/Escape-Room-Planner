@@ -275,10 +275,10 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   # tests if vertex gets updated and correct response is received (good case)
   test 'can update vertex transformation' do
     us = UserServices.new
-    req_L = LoginRequest.new('testUser', 'testPass')
-    res_L = us.login(req_L)
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
     put "#{api_v1_vertex_index_path}/1",
-        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }, params: {
           operation: 'transformation',
           id: 1, # id of one of the fixture vertices
           pos_x: 100, # new pos_x and pos_y
@@ -295,10 +295,10 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   # tests if vertex gets updated and correct response is received (good case)
   test 'can handle update on vertex id tha doesn\'t exist' do
     us = UserServices.new
-    req_L = LoginRequest.new('testUser', 'testPass')
-    res_L = us.login(req_L)
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
     put "#{api_v1_vertex_index_path}/1",
-        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }, params: {
           operation: 'transformation',
           id: 5, # id of one of the fixture vertices
           pos_x: 100, # new pos_x and pos_y
@@ -314,10 +314,10 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   test 'can handle update on vertex height that is negative' do
     us = UserServices.new
-    req_L = LoginRequest.new('testUser', 'testPass')
-    res_L = us.login(req_L)
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
     put "#{api_v1_vertex_index_path}/1",
-        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }, params: {
           operation: 'transformation',
           id: 5, # id of one of the fixture vertices
           pos_x: 100, # new pos_x and pos_y
@@ -333,10 +333,10 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   test 'can update vertex connections' do
     us = UserServices.new
-    req_L = LoginRequest.new('testUser', 'testPass')
-    res_L = us.login(req_L)
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
     put "#{api_v1_vertex_index_path}/1",
-        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }, params: {
           operation: 'connection',
           from_vertex_id: 1,
           to_vertex_id: 2
@@ -349,10 +349,10 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   test 'can handle null id for vertex when updating connection' do
     us = UserServices.new
-    req_L = LoginRequest.new('testUser', 'testPass')
-    res_L = us.login(req_L)
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
     put "#{api_v1_vertex_index_path}/1",
-        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }, params: {
           operation: 'connection',
           from_vertex_id: nil,
           to_vertex_id: 2
@@ -365,10 +365,10 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   test 'can handle connection on wrong vertex ids' do
     us = UserServices.new
-    req_L = LoginRequest.new('testUser', 'testPass')
-    res_L = us.login(req_L)
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
     put "#{api_v1_vertex_index_path}/1",
-        headers: { "Authorization": '"Bearer ' + res_L.token + '"' }, params: {
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }, params: {
           operation: 'connection',
           from_vertex_id: 5,
           to_vertex_id: 10
