@@ -68,11 +68,23 @@ class SolvabilityService
       from_vert_id = edges[i].partition(',').first
       to_vertex_id = edges[i].partition(',').last
 
-      puts Vertex.find_by(id: from_vert_id).type
+      # if key or clue(Item)
+      # can only interact with puzzle
       if Vertex.find_by(id: from_vert_id).type == key_const || Vertex.find_by(id: from_vert_id).type == clue_const
         return false if Vertex.find_by(id: to_vertex_id).type != puzzle_const
       end
 
+      # if container
+      # has to go to key or clue
+      if Vertex.find_by(id: from_vert_id).type == container_const
+        return false if Vertex.find_by(id: to_vertex_id).type == puzzle_const
+      end
+
+      # if puzzle
+      # has to go to container
+      if Vertex.find_by(id: from_vert_id).type == puzzle_const
+        return false if Vertex.find_by(id: from_vert_id).type != container_const
+      end
       i += 1
     end
 
