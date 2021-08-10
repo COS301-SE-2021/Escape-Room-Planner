@@ -13,7 +13,11 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can get vertices based on escape room id' do
-    get "#{api_v1_vertex_index_path}/1"
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    get "#{api_v1_vertex_index_path}/1",
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
 
     puts @response.body
 
