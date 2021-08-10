@@ -34,16 +34,27 @@ class SolvabilityService
   # Create a wrapper class, that calls the recursive function for all the vertices and if any function returns true return true. Else if for all vertices the function returns false return false.
 
   def detect_cycle(request)
+   
     # Get all edges
     edges = []
+    edge_count = 0
+    puts
     i = 0
-    #while i < request.vertices.count
-    vert = Vertex.find_by(id: request.vertices[0])
-    edges = vert.vertices.all
+    while i < request.vertices.count
+      vert = Vertex.find_by(id: request.vertices[i])
+      to_vertex = vert.vertices.all
 
-    puts edges[1].id
-    i += 1
-    #end
+      # for each vertex find edges
+
+      to_vertex.each do |to|
+        edges[edge_count] = "#{request.vertices[i]},#{to.id}"
+        puts 'num: ' + edge_count.to_s + ' edge: ' + edges[edge_count]
+        edge_count += 1
+      end
+
+      i += 1
+    end
+
 
 
 
