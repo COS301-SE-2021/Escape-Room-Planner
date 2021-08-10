@@ -260,8 +260,13 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   # test if nil passed for vertex while removing connection with correct response received (bad case)
   test 'can handle nil vertex passed disconnect vertex' do
-    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'disconnect_vertex',
-                                                      to_vertex_id: '5' }
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    delete "#{api_v1_vertex_index_path}/1",
+           headers: { "Authorization": '"Bearer ' + res_l.token + '"' },
+           params: { operation: 'disconnect_vertex',
+                     to_vertex_id: '5' }
     response = JSON.parse(@response.body)
     assert_response :bad_request
     assert_equal 'Pass in correct parameters', response['message']
