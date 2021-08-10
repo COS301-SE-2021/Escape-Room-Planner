@@ -112,13 +112,18 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'cant create Container' do
-    post api_v1_vertex_index_path, params: { type: 'Container',
-                                             posx: '2',
-                                             posy: '3',
-                                             width: '4',
-                                             height: '5',
-                                             graphicid: '123',
-                                             roomid: '1' }
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    post api_v1_vertex_index_path,
+         headers: { "Authorization": '"Bearer ' + res_l.token + '"' },
+         params: { type: 'Container',
+         posx: '2',
+         posy: '3',
+         width: '4',
+         height: '5',
+         graphicid: '123',
+         roomid: '1' }
     assert_response :bad_request
   end
 
