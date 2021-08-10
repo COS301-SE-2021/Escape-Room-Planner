@@ -34,6 +34,15 @@ class SolvabilityService
   # Create a wrapper class, that calls the recursive function for all the vertices and if any function returns true return true. Else if for all vertices the function returns false return false.
 
   def detect_cycle(request)
+    # Get all edges
+    edges=[]
+    i=0
+    while i < request.vertices.count
+      vert = Vertex.find_by(id:request.vertices[i])
+      inc(i)
+    end
+
+
 
     # Two arrays of size of num vertices set to false
     visited = Array.new(request.vertices.count)
