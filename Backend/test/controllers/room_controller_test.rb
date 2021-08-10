@@ -4,7 +4,11 @@ require 'concurrent'
 class RoomControllerTest < ActionDispatch::IntegrationTest
   # Get Rooms
   test 'can get all rooms' do
-    get api_v1_room_index_path
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    get api_v1_room_index_path,
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
 
     puts @response.body
 
