@@ -2,6 +2,8 @@
 
 require './app/Services/room_services'
 require './app/Services/services_helper'
+require './app/Services/create_escaperoom_request'
+require './app/Services/create_escaperoom_response'
 
 module Api
   module V1
@@ -32,14 +34,15 @@ module Api
 
       # POST api/v1/room, creates a new room
       def create
-        require './app/Services/create_escaperoom_request'
-        require './app/Services/create_escaperoom_response'
+        if authorise(request)
+          req = CreateEscapeRoomRequest.new(params[:name])
+          serv = RoomServices.new
+          resp = serv.create_escape_room(req)
 
-        req = CreateEscapeRoomRequest.new(params[:name])
-        serv = RoomServices.new
-        resp = serv.create_escape_room(req)
-
-        render json: { status: 'SUCCESS', message: 'Added room id:', data: resp }, status: :ok
+          render json: { status: 'SUCCESS', message: 'Added room id:', data: resp }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       end
 
       # delete api call http://host/api/v1/room/"+room_id
