@@ -15,7 +15,7 @@ class SolvabilityTest < ActiveSupport::TestCase
 
     resp = serv.calculate_solvability(solvabilityrq)
 
-    assert_equal(false, true)
+    assert_equal(true, resp.solvable)
   end
 
 end
