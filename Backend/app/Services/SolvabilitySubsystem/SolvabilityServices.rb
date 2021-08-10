@@ -39,7 +39,7 @@ class SolvabilityService
     i = 0
     while i < request.vertices.count
       vert = Vertex.find_by(id: request.vertices[i])
-      puts vert.vertices.all
+      puts vert.vertices.__id__
       i += 1
     end
 
