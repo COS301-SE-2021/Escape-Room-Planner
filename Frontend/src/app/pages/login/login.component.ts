@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   onSubmit(data:any) {
     let extra_data = {
       username: data["username"],
-      password_digest: data["password_digest"],
+      password: data["password_digest"],
       operation: 'Login'
     };
 
