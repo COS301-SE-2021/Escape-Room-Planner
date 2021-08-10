@@ -132,69 +132,73 @@ module Api
 
       # POST api/v1/vertex
       def create
-        type = params[:type]
+        if authorise(request)
+          type = params[:type]
 
-        name = params[:name]
+          name = params[:name]
 
-        graphicid = params[:graphicid]
+          graphicid = params[:graphicid]
 
-        posy = params[:posy]
+          posy = params[:posy]
 
-        posx = params[:posx]
+          posx = params[:posx]
 
-        width = params[:width]
+          width = params[:width]
 
-        height = params[:height]
+          height = params[:height]
 
-        estimated_time = params[:estimated_time]
+          estimated_time = params[:estimated_time]
 
-        description = params[:description]
+          description = params[:description]
 
-        clue = params[:clue]
+          clue = params[:clue]
 
-        roomid = params[:roomid]
+          roomid = params[:roomid]
 
-        if name.nil? || graphicid.nil? || posy.nil? || posx.nil? || width.nil? || height.nil? || roomid.nil?
-          render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
-          return
-        end
-
-        serv = RoomServices.new
-
-        case type
-        when 'Puzzle'
-
-          if estimated_time.nil? || description.nil?
-            render json: { status: 'FAILED', message: 'Puzzle needs name and estimated time' }, status: :bad_request
-            return
-          end
-
-          req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
-          res = serv.create_puzzle(req)
-
-        when 'Keys'
-          req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid)
-          res = serv.create_key(req)
-
-        when 'Container'
-          req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name)
-          res = serv.create_container(req)
-
-        when 'Clue'
-          if clue.nil?
+          if name.nil? || graphicid.nil? || posy.nil? || posx.nil? || width.nil? || height.nil? || roomid.nil?
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
             return
           end
 
-          req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid)
-          res = serv.create_clue(req)
+          serv = RoomServices.new
 
+          case type
+          when 'Puzzle'
+
+            if estimated_time.nil? || description.nil?
+              render json: { status: 'FAILED', message: 'Puzzle needs name and estimated time' }, status: :bad_request
+              return
+            end
+
+            req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
+            res = serv.create_puzzle(req)
+
+          when 'Keys'
+            req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid)
+            res = serv.create_key(req)
+
+          when 'Container'
+            req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name)
+            res = serv.create_container(req)
+
+          when 'Clue'
+            if clue.nil?
+              render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+              return
+            end
+
+            req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid)
+            res = serv.create_clue(req)
+
+          else
+            render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :ok
+            return
+          end
+
+          render json: { status: 'SUCCESS', message: 'Vertex:', data: res }, status: :ok
         else
-          render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :ok
-          return
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
-
-        render json: { status: 'SUCCESS', message: 'Vertex:', data: res }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
