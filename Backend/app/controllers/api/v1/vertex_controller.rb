@@ -106,30 +106,34 @@ module Api
 
       # returns all the vertices for a specific room id
       def show
-        # this is an escape room id
-        id = params[:id]
+        if authorise(request)
+          # this is an escape room id
+          id = params[:id]
 
-        if EscapeRoom.find_by(id: id).nil?
-          render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
-          return
+          if EscapeRoom.find_by(id: id).nil?
+            render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
+            return
+          end
+
+          response = Vertex.select(
+            :id,
+            :type,
+            :name,
+            :posx,
+            :posy,
+            :width,
+            :height,
+            :graphicid
+          ).where(escape_room_id: id)
+
+          render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
+            { vertex: k,
+              connections: k.vertices.ids,
+              type: k.type }
+          end }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
-
-        response = Vertex.select(
-          :id,
-          :type,
-          :name,
-          :posx,
-          :posy,
-          :width,
-          :height,
-          :graphicid
-        ).where(escape_room_id: id)
-
-        render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
-                                                                       { vertex: k,
-                                                                         connections: k.vertices.ids,
-                                                                         type: k.type }
-                                                                     end }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
