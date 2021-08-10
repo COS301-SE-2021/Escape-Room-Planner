@@ -13,7 +13,11 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
 
   # Get Room
   test 'can get certain index' do
-    get "#{api_v1_room_index_path}/1"
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    get "#{api_v1_room_index_path}/1",
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
     assert_response :success
   end
 
@@ -25,7 +29,11 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
 
   # Create Room
   test 'can create room' do
-    post api_v1_room_index_path
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    post api_v1_room_index_path,
+         headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
     assert_response :success
   end
 
