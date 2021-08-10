@@ -214,14 +214,18 @@ module Api
 
       # delete api call http://host/api/v1/vertex/"+real_target_id
       def destroy
-        operation = params[:operation]
-        case operation
-        when 'remove_vertex'
-          delete_vertex(params[:id])
-        when 'disconnect_vertex'
-          delete_connection(params[:from_vertex_id], params[:to_vertex_id])
+        if authorise(request)
+          operation = params[:operation]
+          case operation
+          when 'remove_vertex'
+            delete_vertex(params[:id])
+          when 'disconnect_vertex'
+            delete_connection(params[:from_vertex_id], params[:to_vertex_id])
+          else
+            render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+          end
         else
-          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
       end
 
