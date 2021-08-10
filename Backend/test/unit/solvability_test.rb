@@ -7,7 +7,7 @@ class SolvabilityTest < ActiveSupport::TestCase
 
   def test_solvability
 
-    vertices = [1, 3, 4, 5, 6]
+    vertices = [1, 2, 3, 4, 5, 6]
 
     solvabilityrq = CalculateSolvableRequest.new(1, 6, vertices)
 
