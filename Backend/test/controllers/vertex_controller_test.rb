@@ -188,8 +188,13 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'can delete vertex' do
-    delete "#{api_v1_vertex_index_path}/1", params: { operation: 'remove_vertex',
-                                                      id: '1' }
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    delete "#{api_v1_vertex_index_path}/1",
+           headers: { "Authorization": '"Bearer ' + res_l.token + '"' },
+           params: { operation: 'remove_vertex',
+                     id: '1' }
     response = JSON.parse(@response.body)
     assert_response :ok
     assert_equal 'Vertex:', response['message']
