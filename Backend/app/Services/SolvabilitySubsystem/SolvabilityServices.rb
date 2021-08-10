@@ -35,11 +35,12 @@ class SolvabilityService
 
   def detect_cycle(request)
     # Get all edges
-    edges=[]
-    i=0
+    edges = []
+    i = 0
     while i < request.vertices.count
-      vert = Vertex.find_by(id:request.vertices[i])
-      inc(i)
+      vert = Vertex.find_by(id: request.vertices[i])
+      puts vert.vertices.all
+      i += 1
     end
 
 
@@ -54,7 +55,7 @@ class SolvabilityService
 
       return true if cyclic(i, visited, stack)
 
-      inc(i)
+      i += 1
     end
     false
   end
