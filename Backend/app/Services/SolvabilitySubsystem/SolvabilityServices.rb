@@ -72,7 +72,7 @@ class SolvabilityService
       # can only interact with puzzle
       if Vertex.find_by(id: from_vert_id).type == key_const || Vertex.find_by(id: from_vert_id).type == clue_const
         if Vertex.find_by(id: to_vertex_id).type != puzzle_const
-          puts 'Error occured at '+from_vert_id +' '+ to_vertex_id+ ' because clue not to puzzle'
+          puts "Error occurred at #{from_vert_id} #{to_vertex_id} because clue not to puzzle"
           return false
         end
       end
@@ -81,7 +81,7 @@ class SolvabilityService
       # has to go to key or clue
       if Vertex.find_by(id: from_vert_id).type == container_const
        if Vertex.find_by(id: to_vertex_id).type == puzzle_const
-         puts 'Error occured at '+from_vert_id +' '+ to_vertex_id+' because container not to clue or key'
+         puts "Error occurred at #{from_vert_id} #{to_vertex_id} because container not to clue or key"
          return false
        end
       end
@@ -90,7 +90,7 @@ class SolvabilityService
       # has to go to container
       if Vertex.find_by(id: from_vert_id).type == puzzle_const
         if Vertex.find_by(id: to_vertex_id).type != container_const
-          puts 'Error occured at '+from_vert_id +' '+ to_vertex_id +' because puzzle not to container'
+          puts "Error occurred at #{from_vert_id} #{to_vertex_id} because puzzle not to container"
           return false
         end
       end
