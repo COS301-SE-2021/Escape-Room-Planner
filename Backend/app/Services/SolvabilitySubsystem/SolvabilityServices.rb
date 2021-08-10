@@ -37,11 +37,13 @@ class SolvabilityService
     # Get all edges
     edges = []
     i = 0
-    while i < request.vertices.count
-      vert = Vertex.find_by(id: request.vertices[i])
-      puts vert.vertices.__id__
-      i += 1
-    end
+    #while i < request.vertices.count
+    vert = Vertex.find_by(id: request.vertices[0])
+    edges = vert.vertices.all
+
+    puts edges[1].id
+    i += 1
+    #end
 
 
 

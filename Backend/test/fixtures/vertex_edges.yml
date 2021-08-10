@@ -5,3 +5,7 @@ one:
 two:
   from_vertex_id: 1
   to_vertex_id: 3
+
+three:
+  from_vertex_id: 2
+  to_vertex_id: 3
