@@ -2,7 +2,7 @@ require 'test_helper'
 require 'concurrent'
 
 class RoomControllerTest < ActionDispatch::IntegrationTest
-  # Get Rooms
+  # Show Rooms
   test 'can get all rooms' do
     us = UserServices.new
     req_l = LoginRequest.new('testUser', 'testPass')
@@ -27,7 +27,11 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
 
   # Get Room Fails
   test 'can get unmade index' do
-    get "#{api_v1_room_index_path}/100"
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    get "#{api_v1_room_index_path}/100",
+        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
     assert_response :not_found
   end
 
