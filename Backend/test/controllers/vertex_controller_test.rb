@@ -176,7 +176,12 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
 
   # test when incorrect operation call when delete request called
   test 'incorrect operation call on delete request' do
-    delete "#{api_v1_vertex_index_path}/1", params: { id: '1' }
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    delete "#{api_v1_vertex_index_path}/1",
+           headers: { "Authorization": '"Bearer ' + res_l.token + '"' },
+           params: { id: '1' }
     response = JSON.parse(@response.body)
     assert_response :bad_request
     assert_equal 'Operation does not exist', response['message']
