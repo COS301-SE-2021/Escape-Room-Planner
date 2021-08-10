@@ -96,8 +96,12 @@ module Api
       end
 
       def index
-        vertices = Vertex.all
-        render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
+        if authorise(request)
+          vertices = Vertex.all
+          render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       end
 
       # returns all the vertices for a specific room id
