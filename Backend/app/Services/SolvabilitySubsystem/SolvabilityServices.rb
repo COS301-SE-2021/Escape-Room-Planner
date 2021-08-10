@@ -107,7 +107,7 @@ class SolvabilityService
 
     stack = []
 
-    stack.push(request.startVertex)
+    stack.push(request.startVert)
 
     until stack.empty?
 
