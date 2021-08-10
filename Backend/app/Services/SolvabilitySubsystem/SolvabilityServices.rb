@@ -102,7 +102,7 @@ class SolvabilityService
     i = 0
     while i < visited.count
       visited[i] = false
-      puts visited[i]
+
       i += 1
     end
 
