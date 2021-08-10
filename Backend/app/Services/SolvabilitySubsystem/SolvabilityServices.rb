@@ -39,7 +39,7 @@ class SolvabilityService
 
     clue_const = 'Clue'
     key_const = 'Keys'
-    puzzle_const ='Puzzle'
+    puzzle_const = 'Puzzle'
     container_const = 'Container'
 
     # Get all edges
@@ -71,19 +71,28 @@ class SolvabilityService
       # if key or clue(Item)
       # can only interact with puzzle
       if Vertex.find_by(id: from_vert_id).type == key_const || Vertex.find_by(id: from_vert_id).type == clue_const
-        return false if Vertex.find_by(id: to_vertex_id).type != puzzle_const
+        if Vertex.find_by(id: to_vertex_id).type != puzzle_const
+          puts 'Error occured at '+from_vert_id +' '+ to_vertex_id+ ' because clue not to puzzle'
+          return false
+        end
       end
 
       # if container
       # has to go to key or clue
       if Vertex.find_by(id: from_vert_id).type == container_const
-        return false if Vertex.find_by(id: to_vertex_id).type == puzzle_const
+       if Vertex.find_by(id: to_vertex_id).type == puzzle_const
+         puts 'Error occured at '+from_vert_id +' '+ to_vertex_id+' because container not to clue or key'
+         return false
+       end
       end
 
       # if puzzle
       # has to go to container
       if Vertex.find_by(id: from_vert_id).type == puzzle_const
-        return false if Vertex.find_by(id: from_vert_id).type != container_const
+        if Vertex.find_by(id: to_vertex_id).type != container_const
+          puts 'Error occured at '+from_vert_id +' '+ to_vertex_id +' because puzzle not to container'
+          return false
+        end
       end
       i += 1
     end

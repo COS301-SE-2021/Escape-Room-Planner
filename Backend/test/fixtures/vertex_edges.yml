@@ -7,17 +7,13 @@ two:
   to_vertex_id: 3
 
 three:
-  from_vertex_id: 2
-  to_vertex_id: 3
-
-four:
   from_vertex_id: 3
   to_vertex_id: 5
 
-five:
+four:
   from_vertex_id: 5
   to_vertex_id: 4
 
-six:
+five:
   from_vertex_id: 4
   to_vertex_id: 6
