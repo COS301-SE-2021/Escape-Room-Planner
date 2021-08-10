@@ -97,36 +97,23 @@ class SolvabilityService
       i += 1
     end
 
-
-
-    # Two arrays of size of num vertices set to false
+    #Perform DFS on graph
     visited = Array.new(request.vertices.count)
-    stack = Array.new(request.vertices.count)
-
-    # For each vertex in the array
     i = 0
-    while i < request.vertices.count
-
-      return true if cyclic(i, visited, stack)
-
+    while i < visited.count
+      visited[i] = false
+      puts visited[i]
       i += 1
     end
-    false
+
+
+    true
   end
 
-  def cyclic(index, visited, stack)
-    # if node has been stack or visited return true
-
-    return true if stack[index]
-
-    return true if visited[index]
-
-    # set current node to visited and stack
-    visited[index] = true
-
-    stack[index] = true
-
-    # create array with adj nodes
+  def depth_first_search(v,visited)
+    visited[v] = true
+    puts v
   end
+
 
 end
