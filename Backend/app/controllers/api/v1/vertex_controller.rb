@@ -232,21 +232,25 @@ module Api
       # @param [ActionController::Parameters] id
       # @return JSON
       def delete_vertex(id)
-        if id.nil?
-          render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
-          return
+        if authorise(request)
+          if id.nil?
+            render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
+            return
+          end
+
+          serv = RoomServices.new
+          req = RemoveVertexRequest.new(id)
+          resp = serv.remove_vertex(req)
+
+          unless resp.success
+            render json: { status: 'FAILED', message: 'Unable to remove vertex', data: resp }, status: :ok
+            return
+          end
+
+          render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
-
-        serv = RoomServices.new
-        req = RemoveVertexRequest.new(id)
-        resp = serv.remove_vertex(req)
-
-        unless resp.success
-          render json: { status: 'FAILED', message: 'Unable to remove vertex', data: resp }, status: :ok
-          return
-        end
-
-        render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
