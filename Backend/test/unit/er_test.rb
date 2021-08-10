@@ -43,7 +43,7 @@ class ErTest < ActiveSupport::TestCase
 
   def test_remove_vertex_response_failed
 
-    req = RemoveVertexRequest.new(6)
+    req = RemoveVertexRequest.new(7)
     rs = RoomServices.new
     res = rs.remove_vertex(req)
 

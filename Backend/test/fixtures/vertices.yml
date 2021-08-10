@@ -33,3 +33,36 @@ three:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+
+four:
+  id: 4
+  type: Keys
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+five:
+  id: 5
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+six:
+  id: 6
+  type: Container
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
