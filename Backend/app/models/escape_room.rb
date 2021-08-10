@@ -1,4 +1,7 @@
+# frozen_string_literal: true
+
 class EscapeRoom < ApplicationRecord
-  has_many :vertices, dependent: :delete_all
+  belongs_to :user
+  has_many :vertices, dependent: :destroy
   validates :name, presence: true
 end

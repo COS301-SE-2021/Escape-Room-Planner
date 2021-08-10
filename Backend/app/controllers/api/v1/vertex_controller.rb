@@ -20,19 +20,31 @@ module Api
     class VertexController < ApplicationController
       protect_from_forgery with: :null_session
 
+      # userService instance to be used for authorization
+      @@user_service = UserServices.new
+
       # PUT request http://host:port/api/v1/vertex/vertex_id, json
       # @return [JSON object with a status code or error message]
       def update
-        # operation parameter tells what put operation should be done on vertex
-        operation = params[:operation]
-        
-        case operation
-        when 'connection'
-          update_connection(params[:from_vertex_id], params[:to_vertex_id])
-        when 'transformation'
-          update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height])
-        else
-          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+        # checks if user is authorized
+        if request.headers['Authorization'].present?
+          auth_token = request.headers['Authorization'].split(' ').last
+          unless @@user_service.authenticate_user(auth_token)
+            render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+            return
+          end
+
+          # operation parameter tells what put operation should be done on vertex
+          operation = params[:operation]
+
+          case operation
+          when 'connection'
+            update_connection(params[:from_vertex_id], params[:to_vertex_id])
+          when 'transformation'
+            update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height])
+          else
+            render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+          end
         end
       end
 
@@ -82,6 +94,7 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
+
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
