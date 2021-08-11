@@ -37,10 +37,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   {
     // todo change to work with login token and not test token
 
-    localStorage.setItem('token', "test");
-    //localStorage.clear();
     if(localStorage.getItem('token') ==  null) {
-      this.router.navigate(['login']).then(r => alert("login test"));
+      this.router.navigate(['login']).then(r => console.log('no jwt stored'));
     }
       this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
   }
@@ -110,7 +108,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           }
       },
         //Render error if bad request
-        error => this.renderAlertError('There was an error retrieving your rooms')
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else{
+            this.renderAlertError('There was an error retrieving your rooms');
+          }
+        }
     );
   }
 
@@ -119,7 +124,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //confirmation box on deleting room
     let confirmation = confirm("Are you sure you want to delete this room?");
     let room_id = event.target.getAttribute("escape-room-id");
-    if(confirmation === true){
+    if(confirmation){
       this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/room/"+room_id,
         {"headers": this.headers}).subscribe(
         response => {
@@ -129,7 +134,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           }else
             this.renderAlertError("Unable To Delete Room");
         },
-        error => this.renderAlertError("Unable To Delete Room")
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else{
+            this.renderAlertError("Unable To Delete Room");
+          }
+        }
         //console.error('There was an error while updating the vertex', error)
       );
     }
@@ -209,7 +221,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         }
       },
       //Error retrieving vertices message
-      error => this.renderAlertError("There was an error retrieving vertices for the room")
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("There was an error retrieving vertices for the room");
+        }
+      }
     );
   }
 
@@ -231,7 +250,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           //rendering <li> elements by using render function
           this.renderNewRoom(response.data.id, response.data.name);
         },
-        error => console.error('There was an error creating your rooms', error)
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else {
+            console.error('There was an error creating your rooms', error);
+          }
+        }
       );
     }
 
@@ -337,8 +363,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.spawnObjects(current_id);
       },
       error => {
-        console.error('There was an error while creating a vertex', error);
-        this.renderAlertError("Couldn't create a vertex");
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          console.error('There was an error while creating a vertex', error);
+          this.renderAlertError("Couldn't create a vertex");
+        }
       }
     );
   }
@@ -425,8 +456,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.renderAlertError("Unable to remove vertex")
         }
       },
-      error => this.renderAlertError("Unable to remove vertex")
-      //console.error('There was an error while updating the vertex', error)
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("Unable to remove vertex");
+          console.error('There was an error while updating the vertex', error);
+        }
+      }
     );
   }
 
@@ -464,7 +502,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             this.renderLines(from_vertex_id, this._target_vertex, +to_vertex_id, to_vertex);
           }
         },
-        error => this.renderAlertError("There was an Error Updating Vertex Position")
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else {
+            this.renderAlertError("There was an Error Updating Vertex Position");
+          }
+        }
       );
     }
 
@@ -534,7 +579,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.vertexService.vertices[local_target_id].width = new_width;
         this.vertexService.vertices[local_target_id].height = new_height;
       },
-      error => this.renderAlertError("There was an Error Updating Vertex Position") // todo also try to reset the old position
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("There was an Error Updating Vertex Position"); // todo also try to reset the old position
+        }
+      }
       //console.error('There was an error while updating the vertex', error)
     );
   }
@@ -558,7 +610,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.removeLines(local_target_id);
         this._target_vertex.remove();
       },
-      error => this.renderAlertError("Unable to remove vertex")
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("Unable to remove vertex");
+        }
+      }
       //console.error('There was an error while updating the vertex', error)
     );
   }
