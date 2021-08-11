@@ -35,6 +35,11 @@ eight:
   to_vertex_id: 705
 
   #container to container
-nince:
+nine:
   from_vertex_id: 706
   to_vertex_id: 707
+
+  #puzzle to not container
+ten:
+  from_vertex_id: 708
+  to_vertex_id: 709

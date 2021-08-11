@@ -155,3 +155,25 @@ fourteen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+
+fifteen:
+  id: 708
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+sixteen:
+  id: 709
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
