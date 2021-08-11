@@ -243,7 +243,7 @@ class ErTest < ActiveSupport::TestCase
 
   # check that returns correct response when from vertex not exist when connecting two vertices
   test 'from vertex not exist when connect vertex' do
-    req = ConnectVerticesRequest.new(5, 1)
+    req = ConnectVerticesRequest.new(-1, 1)
     rs = RoomServices.new
     resp = rs.connect_vertex(req)
 
@@ -253,7 +253,7 @@ class ErTest < ActiveSupport::TestCase
 
   # check that returns correct response when to vertex not exist when connecting two vertices
   test 'to vertex not exist when connect vertex' do
-    req = ConnectVerticesRequest.new(1, 5)
+    req = ConnectVerticesRequest.new(1, -1)
     rs = RoomServices.new
     resp = rs.connect_vertex(req)
 
