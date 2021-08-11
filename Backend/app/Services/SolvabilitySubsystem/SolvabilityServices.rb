@@ -124,6 +124,8 @@ class SolvabilityService
     vert=Vertex.find_by(id:startnode)
     puts "startnode is: #{vert.id.to_s}"
 
+
+
   end
 
 
