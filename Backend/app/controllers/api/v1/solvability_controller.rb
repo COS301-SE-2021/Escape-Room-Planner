@@ -11,7 +11,7 @@ module Api
     class VertexController < ApplicationController
       protect_from_forgery with: :null_session
 
-      def update
+      def create
         if authorise(request)
 
           operation = params[:operation]
