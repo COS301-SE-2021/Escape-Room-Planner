@@ -11,12 +11,12 @@ module Api
     class VertexController < ApplicationController
       protect_from_forgery with: :null_session
 
-      def show
+      def update
         if authorise(request)
 
-          type = params[:type]
+          operation = params[:operation]
 
-          if type == 'Solvable'
+          if operation == 'Solvable'
             start_vert = params[:startVertex]
 
             end_vert = params[:endVertex]
