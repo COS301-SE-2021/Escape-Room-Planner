@@ -9,14 +9,16 @@ import { HttpClient } from '@angular/common/http';
 export class SignupComponent implements OnInit {
 
   constructor(private http:HttpClient) { }
-
+  display = ' none'
   ngOnInit(): void {}
 
   onSubmit(data:any) {
+    this.display = 'none';
     let extra_data = {
       username: data["username"],
       email: data["email"],
       password: data["password_digest"],
+      new_password: data["confirm"],
       operation: 'Register'
     };
     console.log(extra_data);
@@ -27,8 +29,7 @@ export class SignupComponent implements OnInit {
         alert('Success');
       },
           error => {
-            console.log(error);
-        alert(error);
+            this.display = 'block';
         })
   }
 }
