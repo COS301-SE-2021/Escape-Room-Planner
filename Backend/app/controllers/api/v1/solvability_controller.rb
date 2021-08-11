@@ -1,6 +1,6 @@
 require './app/Services/services_helper'
 require './app/Services/SolvabilitySubsystem/SolvabilityServices'
-require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvability_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 
 # rubocop:disable Metrics/ClassLength
