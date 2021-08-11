@@ -25,7 +25,7 @@ class UserServices
   end
 
   def login(request)
-    return LoginResponse.new(false, 'Null request', nil) if request.nil?
+    return LoginResponse.new(false, 'Null request', nil, nil) if request.nil?
 
     # raise 'LoginRequest null' if request.nil?
 
@@ -33,11 +33,11 @@ class UserServices
     @user = User.find_by(username: request.username)
 
     # check username exists
-    return LoginResponse.new(false, 'Username does not exist', nil) if @user.nil?
+    return LoginResponse.new(false, 'Username does not exist', nil, nil) if @user.nil?
     # raise 'Username does not exist' if @user.nil?
 
     # check password is correct
-    return LoginResponse.new(false, 'Password is incorrect', nil) unless @user.authenticate(request.password)
+    return LoginResponse.new(false, 'Password is incorrect', nil, request.username) unless @user.authenticate(request.password)
 
     # raise 'Incorrect Password' unless @user.authenticate(request.password)
 
@@ -49,9 +49,9 @@ class UserServices
     @user.jwt_token = @token
 
     @response = if @user.save
-                  LoginResponse.new(true, 'Login Successful', @token)
+                  LoginResponse.new(true, 'Login Successful', @token, request.username)
                 else
-                  LoginResponse.new(false, 'Login Failed', nil)
+                  LoginResponse.new(false, 'Login Failed', nil, request.username)
                 end
   end
 
