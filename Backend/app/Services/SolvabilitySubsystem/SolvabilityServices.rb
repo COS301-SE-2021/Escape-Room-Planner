@@ -118,9 +118,9 @@ class SolvabilityService
 
     true
   end
-
+  @visited=[]
   def traverse(startnode)
-    visited=[]
+
     vert=Vertex.find_by(id:startnode)
     puts "startnode is: #{vert.id.to_s}"
 
