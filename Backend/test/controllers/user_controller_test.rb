@@ -7,10 +7,10 @@ class UserControllerTest < ActionDispatch::IntegrationTest
     us = UserServices.new
     us.registerUser(req)
     # BCrypt::Password.create
-    puts User.find_by_id(2)[:password_digest]
-    puts User.find_by_id(1)[:password_digest]
-    post "#{api_v1_user_index_path}", params: {
-      type: 'login',
+    # puts User.find_by_id(2)[:password_digest]
+    # puts User.find_by_id(1)[:password_digest]
+    post api_v1_user_index_path, params: {
+      operation: 'Login',
       username: 'test1',
       password: '1235'
     }, as: :as_json

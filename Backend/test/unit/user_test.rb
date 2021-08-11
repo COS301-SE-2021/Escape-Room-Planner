@@ -4,7 +4,7 @@ class UserTest < ActiveSupport::TestCase
 
   def test_registerUser
     before_test = User.count
-    req = RegisterUserRequest.new('TestUser', '1234Pass', 'test@gmail.com', false)
+    req = RegisterUserRequest.new('TestUser', '1234Pass', 'test2@gmail.com', false)
     us = UserServices.new
     us.registerUser(req)
 
@@ -12,7 +12,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   def test_UserSave
-    req = RegisterUserRequest.new('TestUser', '1234Pass', 'test@gmail.com', false)
+    req = RegisterUserRequest.new('TestUser', '1234Pass', 'test2@gmail.com', false)
     us = UserServices.new
     resp = us.registerUser(req)
 

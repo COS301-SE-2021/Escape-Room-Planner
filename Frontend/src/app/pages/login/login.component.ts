@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -15,14 +15,14 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSubmit(data) {
+  onSubmit(data:any) {
     let extra_data = {
       username: data["username"],
       password_digest: data["password_digest"],
       operation: 'Login'
     };
 
-    this.http.post(' http://127.0.0.1:3000/api/v1/user', extra_data)
+    this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe(
         res => {
             localStorage.setItem('token', res["auth_token"]);

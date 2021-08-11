@@ -74,6 +74,6 @@ a:hover {
 
 #welcome {
   padding-top: 10px;
-  font-family: "Adobe Caslon Pro Bold";
+  font-family: "Adobe Caslon Pro Bold", monospace;
   text-shadow: 2px 2px 2px black;
 }
