@@ -21,12 +21,20 @@ class SolvabilityTest < ActiveSupport::TestCase
 
     vertices = [701, 700]
 
-    solvability_req = CalculateSolvableRequest.new(1, 6, vertices)
+    solvability_req = CalculateSolvableRequest.new(701, 700, vertices)
     serv = SolvabilityService.new
     resp = serv.calculate_solvability(solvability_req)
 
     assert_equal(false, resp.solvable)
   end
 
+  def test_solvability_key_to_puzzle
+    vertices = [702, 703]
 
+    solvability_req = CalculateSolvableRequest.new(702, 703, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_solvability(solvability_req)
+
+    assert_equal(true, resp.solvable)
+  end
 end

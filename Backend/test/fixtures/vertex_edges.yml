@@ -19,7 +19,12 @@ five:
   to_vertex_id: 6
 
 #For illegal move tests
-
+  #key to key test
 six:
   from_vertex_id: 700
   to_vertex_id: 701
+
+  #key to puzzle test
+seven:
+  from_vertex_id: 702
+  to_vertex_id: 703
