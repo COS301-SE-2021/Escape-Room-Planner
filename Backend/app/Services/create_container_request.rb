@@ -1,15 +1,15 @@
+# frozen_string_literal: true
+
 class CreateContainerRequest
+  attr_accessor :name, :pos_x, :pos_y, :width, :height, :graphic_id, :room_id
 
-  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :roomID
-
-  def initialize(posx, posy, width, height, graphicid, roomID, name)
-    @posx = posx
-    @posy = posy
+  def initialize(pos_x, pos_y, width, height, graphic_id, room_id, name)
+    @pos_x = pos_x
+    @pos_y = pos_y
     @width = width
     @height = height
-    @graphicid = graphicid
-    @roomID = roomID
+    @graphic_id = graphic_id
+    @room_id = room_id
     @name = name
   end
-
 end

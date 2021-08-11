@@ -3,6 +3,11 @@
 }
 
 /* Escape Room selection menu colour on hover */
-.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+.dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {
   background-color:grey;
+}
+
+#delete_button > button:hover {
+  background-color: #a31818;
+  color: black;
 }

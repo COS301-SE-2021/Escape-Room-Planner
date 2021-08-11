@@ -1,9 +1,7 @@
 class RemoveVertexRequest
+  attr_accessor :vertex_id
 
-  attr_accessor :vertexID
-
-  def initialize(vertextID)
-    @vertexID = vertextID
+  def initialize(vertex_id)
+    @vertex_id = vertex_id
   end
-
 end
