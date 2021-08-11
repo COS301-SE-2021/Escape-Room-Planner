@@ -1,0 +1,10 @@
+one:
+  id: 1
+  key: 'nm2mbp2urgny8lfjlp3wzg1lo555'
+  filename: 'clue.png'
+  content_type: 'image/png'
+  metadata: '{"identified":true,"analyzed":true}'
+  service_name: 'local'
+  byte_size: 2586
+  checksum: 'btySxpv+mQOT8kfCrP2CuA=='
+  created_at: '2021-08-11 11:14:48.950903'

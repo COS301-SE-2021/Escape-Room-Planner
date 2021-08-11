@@ -1,0 +1,3 @@
+class ActiveStorageAttachments < ApplicationRecord
+
+end
