@@ -7,6 +7,7 @@ require 'rails/test_help'
 class ActiveSupport::TestCase
   # Run tests in parallel with specified workers
   parallelize(workers: 1, with: 1)
+  BEARER = '"Bearer'
 
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
@@ -16,7 +17,7 @@ class ActiveSupport::TestCase
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     get link,
-        headers: { "Authorization": "\"Bearer #{res_l.token}\"" }
+        headers: { "Authorization": "#{BEARER} #{res_l.token}\"" }
 
     # @response
   end
@@ -26,7 +27,7 @@ class ActiveSupport::TestCase
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     post link,
-         headers: { "Authorization": "\"Bearer #{res_l.token}\"" },
+         headers: { "Authorization": "#{BEARER} #{res_l.token}\"" },
          params: in_params
   end
 
@@ -35,7 +36,7 @@ class ActiveSupport::TestCase
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     delete link,
-           headers: { "Authorization": "\"Bearer #{res_l.token}\"" },
+           headers: { "Authorization": "#{BEARER} #{res_l.token}\"" },
            params: in_params
 
     JSON.parse(@response.body)
@@ -46,7 +47,7 @@ class ActiveSupport::TestCase
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     put link,
-        headers: { "Authorization": "\"Bearer #{res_l.token}\"" },
+        headers: { "Authorization": "#{BEARER}  #{res_l.token}\"" },
         params: in_params, as: :as_json
 
     JSON.parse(@response.body)
