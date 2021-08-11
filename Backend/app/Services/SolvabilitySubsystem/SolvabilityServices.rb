@@ -98,9 +98,9 @@ class SolvabilityService
     end
 
     @found = false
-    @endNode = request.endVert
+    @end_node = request.endVert
     @visited = []
-    traverse(request.startVert)
+    return traverse(request.startVert)
     # #Perform DFS on graph
     # visited = Array.new(request.vertices.count)
     # i = 0
@@ -122,13 +122,11 @@ class SolvabilityService
     true
   end
 
-  def traverse(startnode)
-    vert = Vertex.find_by(id:startnode)
-    puts "current node is: #{vert.id.to_s}"
+  def traverse(start_node)
+    vert = Vertex.find_by(id:start_node)
+    puts "current node is: #{vert.id}"
 
-    if vert.id == @endNode
-      @found = true
-    end
+    @found = true if vert.id == @end_node
 
     to_vertex = vert.vertices.all
     to_vertex.each do |to|
