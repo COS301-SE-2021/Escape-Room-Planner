@@ -28,3 +28,8 @@ six:
 seven:
   from_vertex_id: 702
   to_vertex_id: 703
+
+  #container to puzzle test
+eight:
+  from_vertex_id: 704
+  to_vertex_id: 705

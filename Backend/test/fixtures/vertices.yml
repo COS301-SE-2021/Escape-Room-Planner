@@ -111,3 +111,25 @@ ten:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+
+eleven:
+  id: 704
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+twelve:
+  id: 705
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
