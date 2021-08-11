@@ -78,4 +78,14 @@ class SolvabilityTest < ActiveSupport::TestCase
     assert_equal(true, resp.solvable)
   end
 
+  def test_circle_solvable
+    vertices = [801, 802, 803, 804]
+
+    solvability_req = CalculateSolvableRequest.new(801, 804, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_solvability(solvability_req)
+
+    assert_equal(true, resp.solvable)
+  end
+
 end

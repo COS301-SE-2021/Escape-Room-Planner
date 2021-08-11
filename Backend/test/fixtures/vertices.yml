@@ -199,3 +199,50 @@ eighteen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+
+#test with circle
+c1:
+  id: 801
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+c2:
+  id: 802
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+c3:
+  id: 803
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+c4:
+  id: 804
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+

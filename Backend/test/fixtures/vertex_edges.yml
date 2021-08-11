@@ -48,3 +48,20 @@ ten:
 eleven:
   from_vertex_id: 710
   to_vertex_id: 711
+
+#test with circle
+c1_to_c2:
+  from_vertex_id: 801
+  to_vertex_id: 802
+
+c2_to_c3:
+  from_vertex_id: 802
+  to_vertex_id: 803
+
+c3_to_c4:
+  from_vertex_id: 803
+  to_vertex_id: 804
+
+c4_to_c2:
+  from_vertex_id: 804
+  to_vertex_id: 802

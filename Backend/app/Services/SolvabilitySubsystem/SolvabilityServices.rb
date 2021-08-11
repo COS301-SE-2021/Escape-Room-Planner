@@ -80,10 +80,10 @@ class SolvabilityService
       # if container
       # has to go to key or clue
       if Vertex.find_by(id: from_vert_id).type == container_const
-       if Vertex.find_by(id: to_vertex_id).type == puzzle_const
-         puts "Error occurred at #{from_vert_id} #{to_vertex_id} because container not to clue or key"
-         return false
-       end
+        if Vertex.find_by(id: to_vertex_id).type == puzzle_const
+          puts "Error occurred at #{from_vert_id} #{to_vertex_id} because container not to clue or key"
+          return false
+        end
       end
 
       # if puzzle
@@ -100,6 +100,7 @@ class SolvabilityService
     @found = false
     @end_node = request.endVert
     @visited = []
+    @visited_count=0
     traverse(request.startVert)
   end
 
@@ -111,7 +112,18 @@ class SolvabilityService
 
     to_vertex = vert.vertices.all
     to_vertex.each do |to|
-      traverse(to)
+
+
+      if @visited_count==0
+        @visited[@visited_count] = to.id
+        @visited_count+=1
+        traverse(to)
+      elsif !@visited.include? to.id
+          @visited[@visited_count] = to.id
+          @visited_count+=1
+          traverse(to)
+               end
+
     end
     @found
   end
