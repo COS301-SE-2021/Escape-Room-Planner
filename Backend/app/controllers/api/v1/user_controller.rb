@@ -20,15 +20,15 @@ module Api
         username = params[:username]
         password = params[:password]
 
-        if password.nil? || username.nil?
-          render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
-          return
-        end
-
         serv = UserServices.new
 
         case operation
         when 'Register'
+          if password.nil? || username.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
+            return
+          end
+
           if User.where('username = ?', username).count >= 1
             render json: { status: 'Fail', message: 'User already exists', data: "Created: false" }, status: :bad_request
             return
@@ -56,8 +56,10 @@ module Api
         when 'Verify'
           if authorise(request)
             render json: { status: 'SUCCESS' }, status: :ok
+            return
           else
             render json: { status: 'FAILED' }, status: :unauthorized
+            return
           end
         else
           render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
