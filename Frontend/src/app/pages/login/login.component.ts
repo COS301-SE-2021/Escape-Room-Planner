@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
     this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe(
         res => {
-            localStorage.setItem('token: ', res["auth_token"]);
-            alert("Success");
+          localStorage.setItem('token', res["auth_token"]);
+          alert("Success");
         })
   }
 
