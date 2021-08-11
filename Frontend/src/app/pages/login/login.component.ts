@@ -13,7 +13,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
   }
 
+  display = 'none';
   onSubmit(data:any) {
+    this.display = 'none';
     let extra_data = {
       username: data["username"],
       password: data["password_digest"],
@@ -25,7 +27,11 @@ export class LoginComponent implements OnInit {
         res => {
             localStorage.setItem('token: ', res["auth_token"]);
             alert("Success");
-        })
+        },
+          error => {
+            this.display = 'block';
+          }
+        )
   }
 
 }
