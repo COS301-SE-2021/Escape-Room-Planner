@@ -1,6 +1,6 @@
 require './app/Services/login_request'
 require './app/Services/register_user_request'
-require './app/Services/register_user_request'
+require './app/Services/services_helper'
 
 module Api
   module V1
@@ -52,6 +52,12 @@ module Api
           else
             render json: { status: 'FAILED', message: res.message }, status: 401
             return
+          end
+        when 'Verify'
+          if authorise(request)
+            render json: { status: 'SUCCESS' }, status: :ok
+          else
+            render json: { status: 'FAILED' }, status: :unauthorized
           end
         else
           render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found

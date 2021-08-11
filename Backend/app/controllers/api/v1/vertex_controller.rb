@@ -52,7 +52,6 @@ module Api
       # @return JSON
       def update_transformation(id, pos_x, pos_y, width, height)
         # used as update method that does transformation updates
-        # todo remake the tests, and add extra ones
         if id.nil? || pos_y.nil? || pos_x.nil? || width.nil? || height.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
