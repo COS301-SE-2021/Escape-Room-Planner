@@ -97,30 +97,33 @@ class SolvabilityService
       i += 1
     end
 
-    #Perform DFS on graph
-    visited = Array.new(request.vertices.count)
-    i = 0
-    while i < visited.count
-      visited[i] = false
-      i += 1
-    end
-
-    stack = []
-
-    stack.push(request.startVert)
-
-    until stack.empty?
-
-      next_node=stack.pop
-      
-    end
+    traverse(request.startVert)
+    # #Perform DFS on graph
+    # visited = Array.new(request.vertices.count)
+    # i = 0
+    # while i < visited.count
+    #   visited[i] = false
+    #   i += 1
+    # end
+    #
+    # stack = []
+    #
+    # stack.push(request.startVert)
+    #
+    # until stack.empty?
+    #
+    #   next_node=stack.pop
+    #
+    # end
 
     true
   end
 
-  def depth_first_search(v,visited)
-    visited[v] = true
-    puts v
+  def traverse(startnode)
+    visited=[]
+    vert=Vertex.find_by(id:startnode)
+    puts "startnode is: #{vert.id.to_s}"
+
   end
 
 
