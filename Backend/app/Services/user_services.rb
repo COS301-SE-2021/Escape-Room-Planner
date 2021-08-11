@@ -131,13 +131,11 @@ class UserServices
 
   def verify_account(request); end
 
-  def authenticate_user(encoded_token)
+  def authenticate_user(encoded_token, username)
     decoded_token = JsonWebToken.decode(encoded_token)
-    @response = if User.find_by_id(decoded_token['id'])
-                  true
-                else
-                  false
-                end
+    @user = User.find_by_id(decoded_token['id'])
+    # Check that the token belongs to the current logged in user
+    @user.username.eql?(username)
   rescue JWT::ExpiredSignature
     false
   rescue StandardError
