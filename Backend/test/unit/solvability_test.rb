@@ -5,17 +5,26 @@ require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solva
 
 class SolvabilityTest < ActiveSupport::TestCase
 
-  def test_solvability
+
+  def test_solvability_legal_graph
 
     vertices = [1, 2, 3, 4, 5, 6]
 
-    solvabilityrq = CalculateSolvableRequest.new(1, 6, vertices)
-
+    solvability_req = CalculateSolvableRequest.new(1, 6, vertices)
     serv = SolvabilityService.new
-
-    resp = serv.calculate_solvability(solvabilityrq)
+    resp = serv.calculate_solvability(solvability_req)
 
     assert_equal(true, resp.solvable)
   end
 
+  def test_solvability_key_to_key
+
+    vertices = [701, 700]
+
+    solvability_req = CalculateSolvableRequest.new(1, 6, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_solvability(solvability_req)
+
+    assert_equal(false, resp.solvable)
+  end
 end

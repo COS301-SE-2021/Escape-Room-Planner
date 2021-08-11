@@ -66,3 +66,26 @@ six:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+
+#For illegal move tests
+seven:
+  id: 700
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+
+eight:
+  id: 701
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1

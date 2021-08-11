@@ -17,3 +17,9 @@ four:
 five:
   from_vertex_id: 4
   to_vertex_id: 6
+
+#For illegal move tests
+
+six:
+  from_vertex_id: 700
+  to_vertex_id: 701

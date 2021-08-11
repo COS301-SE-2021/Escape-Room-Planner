@@ -100,26 +100,7 @@ class SolvabilityService
     @found = false
     @end_node = request.endVert
     @visited = []
-    return traverse(request.startVert)
-    # #Perform DFS on graph
-    # visited = Array.new(request.vertices.count)
-    # i = 0
-    # while i < visited.count
-    #   visited[i] = false
-    #   i += 1
-    # end
-    #
-    # stack = []
-    #
-    # stack.push(request.startVert)
-    #
-    # until stack.empty?
-    #
-    #   next_node=stack.pop
-    #
-    # end
-
-    true
+    traverse(request.startVert)
   end
 
   def traverse(start_node)
