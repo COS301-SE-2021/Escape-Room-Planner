@@ -12,9 +12,9 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 
 const routes: Routes = [
-  { path: '', component: RoomCreatorComponent },
+  { path: 'room', component: RoomCreatorComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'login', component: LoginComponent },
+  { path: '/', component: LoginComponent },
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
