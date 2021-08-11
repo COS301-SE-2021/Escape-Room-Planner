@@ -27,4 +27,6 @@ class SolvabilityTest < ActiveSupport::TestCase
 
     assert_equal(false, resp.solvable)
   end
+
+
 end
