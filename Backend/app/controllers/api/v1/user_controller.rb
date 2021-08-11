@@ -19,6 +19,7 @@ module Api
         # is_admin = params[:is_admin]
         username = params[:username]
         password = params[:password_digest]
+        new_password = params[:new_password]
 
         if password.nil? || username.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
@@ -29,8 +30,15 @@ module Api
 
         case operation
         when 'Register'
+          if password != new_password
+            puts password.inspect
+            puts new_password.inspect
+            render json: { status: 'FAILED', message: "Password does not match."}, status: 401
+            return
+          end
+
           if User.where('username = ?', username).count >= 1
-            render json: {status: 'Fail', message: 'User already exists', data: "Created: false"}, status: :bad_request
+            render json: {status: 'Fail', message: 'Username already exists', data: "Created: false"}, status: :bad_request
             return
           end
 
@@ -38,7 +46,6 @@ module Api
           res = serv.registerUser(req)
 
         when 'Login'
-          puts "Does it at least come here"
           if username.nil? || password.nil?
             #return token
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given for login' }, status: :not_found
@@ -55,56 +62,28 @@ module Api
             render json: { status: 'FAILED', message: res.message}, status: 401
             return
           end
-        end
-
-
-
 
         # when 'Verify'
-
-        # when 'login'
-        #   if username.nil? || password.nil?
-        #     #return token
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given for login' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = LoginRequest.new(username, password)
-        #   res = serv.login(req)
-        #
-        #   if res.success
-        #     render json: { status: 'SUCCESS', message: res.message, auth_token: res.token}, status: :ok
-        #   else
-        #     render json: { status: 'FAILED', message: res.message}, status: 401
-        #   end
-        # when 'Login'
-        #   if username.nil? || password.nil?
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = LoginRequest.new(username, password)
-        #   res = serv.login(req)
         #
         # when 'UpdateAccount'
         #
-        # when 'resetPassword'
-        #   if username.nil? || password.nil? || newPassword.nil?
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = ResetPasswordRequest.new(username, password, newPassword)
-        #   res = serv.resetPassword(req)
-        #
-        # when 'GetUserDetails'
-        #   if username.nil? || password.nil? || email.nil?
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = GetUserDetailsRequest.new(username, password, email)
-        #   res = serv.getUserDetails(req)
+        when 'resetPassword'
+          if username.nil? || password.nil? || new_password.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
+            return
+          end
+
+          req = ResetPasswordRequest.new(username, password, new_password)
+          res = serv.resetPassword(req)
+
+        when 'GetUserDetails'
+          if username.nil? || password.nil? || email.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
+            return
+          end
+
+          req = GetUserDetailsRequest.new(username, password, email)
+          res = serv.getUserDetails(req)
         #
         # when 'SetAdmin'
         #   if username.nil? || password.nil? || email.nil? || name.nil? || isAdmin.nil?
@@ -112,7 +91,7 @@ module Api
         #     return
         #   end
         #
-        #   req = SetAdminRequest.new(username, password, email, name, isAdmin)
+        #   req = SetAdminRequest.new(username, password, email, "name", is_admin)
         #   res = serv.setAdmin(req)
 
         # when 'DeleteUser'
@@ -122,7 +101,7 @@ module Api
         # else
         #   render json: {status: 'FAILED', message: 'Ensure type is correct with correct parameters'}, status: :not_found
         #   return
-        # end
+        end
 
         render json: {status: 'SUCCESS', message: 'User:', data: "Created: #{res.success}"}, status: :ok
       rescue StandardError

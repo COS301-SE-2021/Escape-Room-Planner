@@ -28,6 +28,7 @@
                   <input style="background: #E5E4E2" type="password" class="form-control" id="password" name="password_digest"
                          ngModel #password="ngModel" [class.is-invalid]="username.invalid && username.touched" required>
                   <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
+                  <small [style.display]="display" ngModel #pass>Your password is incorrect.</small>
                 </div>
                 <a href=""><p id="forgot-pass">Forgot Your Password?</p></a>
                 <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign in</button>

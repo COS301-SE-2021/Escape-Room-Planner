@@ -44,7 +44,7 @@
                   <input style="background: #E5E4E2" type="password" class="form-control" id="confirm" name="confirm"
                          ngModel #confirmPassword="ngModel" required>
                   <small *ngIf="confirmPassword.errors?.required && confirmPassword.touched">Confirm password is required.</small>
-                  <small *ngIf="confirmPassword.errors?.pattern && confirmPassword.touched">Passwords don't match.</small>
+                  <small [style.display]="display" ngModel #pass>Your passwords do not match.</small>
                 </div>
                 <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign Up</button>
                 <a href="login"><p id="sign-up"><span style="color: black">Already Have An Account? </span>Login</p></a>

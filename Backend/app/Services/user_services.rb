@@ -2,15 +2,12 @@ class UserServices
   def registerUser(request)
     return RegisterUserResponse.new(false, 'Null request') if request.nil?
 
-    puts "Whats the issue 22"
     @user = User.new
     @user.username = request.username
     @user.email = request.email
     @user.is_admin = request.is_admin
     #salt and hash password and store it
     @user.password = request.password
-
-    puts "Whats the issue"
 
     @response = if @user.save!
                   RegisterUserResponse.new(true, 'User Created Successfully')
