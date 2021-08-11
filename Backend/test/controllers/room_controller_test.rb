@@ -2,13 +2,14 @@ require 'test_helper'
 require 'concurrent'
 
 class RoomControllerTest < ActionDispatch::IntegrationTest
+  BEARER = '"Bearer '.freeze
   # Show Rooms
   test 'can get all rooms' do
     us = UserServices.new
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     get api_v1_room_index_path,
-        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
+        headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
 
     puts @response.body
 
@@ -21,7 +22,7 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     get "#{api_v1_room_index_path}/1",
-        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
+        headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
     assert_response :success
   end
 
@@ -31,7 +32,7 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     get "#{api_v1_room_index_path}/100",
-        headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
+        headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
     assert_response :not_found
   end
 
@@ -41,7 +42,7 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     post api_v1_room_index_path,
-         headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
+         headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
     assert_response :success
   end
 
@@ -50,7 +51,7 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     delete "#{api_v1_room_index_path}/1",
-           headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
+           headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
 
     response = JSON.parse(@response.body)
     assert_response :ok
@@ -62,7 +63,7 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     req_l = LoginRequest.new('testUser', 'testPass')
     res_l = us.login(req_l)
     delete "#{api_v1_room_index_path}/-1",
-           headers: { "Authorization": '"Bearer ' + res_l.token + '"' }
+           headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
 
     response = JSON.parse(@response.body)
     assert_response :bad_request
