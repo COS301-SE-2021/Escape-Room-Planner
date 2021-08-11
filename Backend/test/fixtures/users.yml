@@ -11,7 +11,7 @@ one:
   username: 'testUser'
   password_digest: <%= BCrypt::Password.create('testPass') %>
   email: 'test@gmail.com'
-  jwt_token: '123'
+  jwt_token: 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoyMzg2MDczMjMxfQ.Zwe1E5JKM40pXWoVgUaqcVsc5mPFt7HHj2k6f3WZZr0'
   is_admin: true
 # column: value
 #
