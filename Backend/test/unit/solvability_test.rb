@@ -68,4 +68,14 @@ class SolvabilityTest < ActiveSupport::TestCase
     assert_equal(false, resp.solvable)
   end
 
+  def test_solvability_puzzle_to_container
+    vertices = [710, 711]
+
+    solvability_req = CalculateSolvableRequest.new(708, 709, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_solvability(solvability_req)
+
+    assert_equal(true, resp.solvable)
+  end
+
 end
