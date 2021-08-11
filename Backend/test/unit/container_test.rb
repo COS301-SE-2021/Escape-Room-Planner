@@ -1,23 +1,21 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class ContainerTest < ActiveSupport::TestCase
-
-  def test_createContainer
-
-    beforetest = Container.count
-    roomID = 1
-    req = CreateContainerRequest.new(0, 0, 0.1, 0.1, "test", roomID, "d")
+  test 'test create container' do
+    before_test = Container.count
+    room_id = 1
+    req = CreateContainerRequest.new(0, 0, 0.1, 0.1, 'test', room_id, 'd')
     rs = RoomServices.new
-    rs.createContainer(req)
-
-    assert_not_equal(Container.count, beforetest)
+    rs.create_container(req)
+    assert_not_equal(Container.count, before_test)
   end
 
-  def test_checkCreateContainerNullRequest
+  test 'test check create container null request' do
     req = nil
     rs = RoomServices.new
-    exception = assert_raise(StandardError){rs.createContainer(req)}
-    assert_equal("CreateContainerRequest null", exception.message)
+    exception = assert_raise(StandardError) { rs.create_container(req) }
+    assert_equal('CreateContainerRequest null', exception.message)
   end
-
 end

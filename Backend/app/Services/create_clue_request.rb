@@ -1,15 +1,16 @@
-class CreateClueRequest
-  attr_accessor :name, :posx, :posy, :width, :height, :graphicid, :clue, :roomID
+# frozen_string_literal: true
 
-  def initialize(name, posx, posy, width, height, graphicid, clue, escape_room_id)
+class CreateClueRequest
+  attr_accessor :name, :pos_x, :pos_y, :width, :height, :graphic_id, :clue, :room_id
+
+  def initialize(name, pos_x, pos_y, width, height, graphic_id, clue, room_id)
     @name = name
-    @posx = posx
-    @posy = posy
+    @pos_x = pos_x
+    @pos_y = pos_y
     @width = width
     @height = height
-    @graphicid = graphicid
+    @graphic_id = graphic_id
     @clue = clue
-    @roomID = escape_room_id
+    @room_id = room_id
   end
-
 end
