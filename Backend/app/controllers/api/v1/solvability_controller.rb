@@ -13,27 +13,27 @@ module Api
 
       def show
         if authorise(request)
-          
-          type=params[:type]
 
-          if(type=='Solvable')
+          type = params[:type]
+
+          if type == 'Solvable'
             start_vert = params[:startVertex]
 
             end_vert = params[:endVertex]
 
             vertices = params[:vertices]
 
-            Solvability(start_vert, end_vert, vertices)
+            solvability(start_vert, end_vert, vertices)
           end
 
         else
           render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
       rescue StandardError
-        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request 
+        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
     end
-      
-      def Solvability(start_vert, end_vert, vertices)
+
+      def solvability(start_vert, end_vert, vertices)
 
         if start_vert.nil? || end_vert.nil? || vertices.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
