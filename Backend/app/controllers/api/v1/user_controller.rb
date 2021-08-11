@@ -36,9 +36,6 @@ module Api
           end
 
           if new_password != password
-            puts new_password.inspect
-            puts new_password.inspect
-            puts "so it comes here"
             render json: { status: 'FAILED', message: 'Password does not match.' }, status: 401
             return
           end
