@@ -4,8 +4,11 @@
     <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
       <div class="overflow-auto" style="height: 94vh; width: 315px;">
         <!-- INVENTORY STARTS HERE -->
+
+        <button (click)="checkSolvable()">Solvable?</button>
         <ul class="nav flex-column">
           <li class="border border-dark w-100" style=" background-color: grey">Container</li>
+
           <li id="containerInventory" class="bg-secondary text-white" style="width: 100%;">
             <div class="container-fluid">
               <div class="row" style="padding-top: 20px;">
