@@ -7,12 +7,23 @@ require './app/Services/InventorySubsystem/Response/add_graphic_response'
 
 # Class that test inventory sub system
 class InventoryTest < ActiveSupport::TestCase
-  @@TOKEN = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoyMzg2MDczMjMxfQ.Zwe1E5JKM40pXWoVgUaqcVsc5mPFt7HHj2k6f3WZZr0'
+  @@token = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoyMzg2MDczMjMxfQ.Zwe1E5JKM40pXWoVgUaqcVsc5mPFt7HHj2k6f3WZZr0'
 
   test 'can add Graphic to Inventory' do
-    request = AddGraphicRequest.new(@@TOKEN, "won")
+    test_image = './storage/test/clue1.png'
+    file = Rack::Test::UploadedFile.new(test_image, 'image/png')
+    request = AddGraphicRequest.new(@@token, file)
     serv = InventoryService.new
     response = serv.add_graphic(request)
-    puts response.message
+    assert_equal(response.message, 'Graphic been added')
   end
+
+  test 'can handle incorrect image upload' do
+    request = AddGraphicRequest.new(@@token, 'incorrect type')
+    serv = InventoryService.new
+    response = serv.add_graphic(request)
+    assert_equal(response.message, 'Error has occurred')
+  end
+
+  # TODO: do test on incorrect JWT token given
 end
