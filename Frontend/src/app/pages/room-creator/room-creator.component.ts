@@ -5,6 +5,7 @@ import {VertexService} from "../../services/vertex.service";
 import {Router} from "@angular/router";
 // Leader Line JS library imports
 import 'leader-line';
+import {InventoryComponent} from "../inventory/inventory.component";
 declare let LeaderLine: any;
 
 @Component({
@@ -83,13 +84,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   // todo
-  //adds an object to drag on our 'canvas'
-  addObjects(type: string, loc: string, pos: number): void{
-    this.lastPos += pos;
+  // adds an object to drag on our 'canvas'
+  addObjects(event:any): void{
+    this.lastPos += event.pos;
     //MAKE API CALL BASED ON TYPE
     let name : string = "Object";       //default name
     let description : string = "Works";  //default description
-    this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue');
+    this.createVertex(event.type, name, event.loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue');
     //spawns object on plane
   }
 
@@ -155,7 +156,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     // update room id
     this.currentRoomId = clickedEscapeRoom.getAttribute('escape-room-id');
-
     // @ts-ignore
     this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
     //load the vertices for the newly selected room
@@ -662,6 +662,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.addClass(newDiv,'alert-dismissible');
     this.renderer.addClass(newDiv,'fade');
     this.renderer.addClass(newDiv,'show');
+    this.renderer.setStyle(newDiv, 'margin','0');
     this.renderer.setAttribute(newDiv, 'role', 'alert');
     //add text to <strong>
     this.renderer.appendChild(newStrong, this.renderer.createText(message));

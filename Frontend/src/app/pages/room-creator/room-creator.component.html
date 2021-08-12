@@ -1,73 +1,9 @@
-<div class="container-fluid" (click)="hideContextMenu($event)">
-  <div class="container-fluid" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
+<div class="container-fluid remove-padding" (click)="hideContextMenu($event)">
+  <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row">
-    <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
-      <div class="overflow-auto" style="height: 94vh; width: 315px;">
-        <!-- INVENTORY STARTS HERE -->
-        <ul class="nav flex-column">
-          <li class="border border-dark w-100" style=" background-color: grey">Container</li>
-          <li id="containerInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/room1.png" (click)="addObjects('Container', 'room1.png', 10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Room 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/con1.png" (click)="addObjects('Container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Container 1</p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="border border-dark w-100" style=" background-color: grey">Puzzle</li>
-          <li id="PuzzleInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/puzzle1.png" (click)="addObjects('Puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Puzzle 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/puzzle1.png" (click)="addObjects('Puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Puzzle 2</p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="border border-dark w-100" style=" background-color: grey">Key</li>
-          <li id="KeyInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/key1.png" (click)="addObjects('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Key 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/key1.png" (click)="addObjects('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Key 2</p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="border border-dark w-100" style=" background-color: grey">Clue</li>
-          <li id="ClueInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/clue1.png" (click)="addObjects('Clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Clue 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/clue1.png" (click)="addObjects('Clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Clue 2</p>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+
+    <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)"></app-inventory>
+
     <div class="col-sm-10 d-lg-flex remove-padding">
       <div class="container-fluid remove-padding">
         <div class="row">

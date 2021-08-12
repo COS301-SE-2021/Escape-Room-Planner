@@ -8,6 +8,7 @@ import { RoomCreatorComponent } from './pages/room-creator/room-creator.componen
 import { SignupComponent } from './pages/signup/signup.component';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import { InventoryComponent } from './pages/inventory/inventory.component';
 
 const routes: Routes = [
   // { path: '', component: AppComponent },
@@ -23,7 +24,8 @@ const routes: Routes = [
     AppComponent,
     LoginComponent,
     RoomCreatorComponent,
-    SignupComponent
+    SignupComponent,
+    InventoryComponent
   ],
     imports: [
         BrowserModule,
