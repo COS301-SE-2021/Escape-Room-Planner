@@ -10,11 +10,15 @@ import { DraggableDirective } from './directives/draggable.directive';
 import { DroppableDirective } from './directives/droppable.directive';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import { VerifyComponent } from './pages/verify/verify.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 
 const routes: Routes = [
   { path: '', component: RoomCreatorComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'verify', component: VerifyComponent },
+  { path: 'reset', component: ResetPasswordComponent },
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
@@ -26,7 +30,9 @@ const routes: Routes = [
     RoomCreatorComponent,
     SignupComponent,
     DraggableDirective,
-    DroppableDirective
+    DroppableDirective,
+    VerifyComponent,
+    ResetPasswordComponent
   ],
     imports: [
         BrowserModule,
