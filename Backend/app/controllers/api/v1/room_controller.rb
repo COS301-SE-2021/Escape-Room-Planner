@@ -26,8 +26,8 @@ module Api
           room = EscapeRoom.select(:id, :name).find(params[:id])
           render json: { status: 'SUCCESS', message: 'Escape Rooms', data: room }, status: :ok
         else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+         render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+          end
       rescue StandardError
         render json: { status: 'Fail', message: 'Escape Room might not exist' }, status: :not_found
       end
