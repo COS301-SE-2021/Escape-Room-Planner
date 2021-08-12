@@ -41,9 +41,7 @@ module Api
           return
         end
 
-        puts 'here'
         req = CalculateSolvableRequest.new(start_vert, end_vert, vertices)
-        puts 'here'
         serv = SolvabilityService.new
         resp = serv.calculate_solvability(req)
 
