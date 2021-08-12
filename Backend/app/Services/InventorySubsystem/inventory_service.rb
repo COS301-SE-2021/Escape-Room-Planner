@@ -5,7 +5,9 @@ class InventoryService
   # @param [AddGraphicRequest] request
   # @return [AddGraphicResponse]
   def add_graphic(request)
-    AddGraphicResponse.new(false, 'Please Send Image') if request.image.nil?
+    return AddGraphicResponse.new(false, 'Please Send Image') if request.image.nil?
+    return AddGraphicResponse.new(false, 'Please send Type') if request.type.nil?
+
     decoded_token = JsonWebToken.decode(request.token)
     user = User.find_by_id(decoded_token['id'])
     @response = if user.nil?
@@ -13,7 +15,10 @@ class InventoryService
                 else
                   user.graphic.attach(request.image)
                   blob = user.graphic.blobs.last
-                  puts blob.metadata['identified']
+                  blob.metadata['type'] = request.type
+                  blob.metadata
+                  blob.save!
+                  # TODO: change metadata before upload
                   AddGraphicResponse.new(true, 'Graphic been added')
                 end
   rescue StandardError
@@ -31,7 +36,7 @@ class InventoryService
                     {
                       blob_id: blob.id,
                       src: Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000'),
-                      type: blob.metadata
+                      type: blob.metadata['type']
                     }
                   end
                   GetGraphicsResponse.new(true, 'User Inventory Graphics Obtained', image)

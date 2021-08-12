@@ -31,7 +31,7 @@ module Api
         if authorise(request)
           # get auth_token to get user id
           auth_token = request.headers['Authorization'].split(' ').last
-          req = AddGraphicRequest.new(auth_token, params[:image])
+          req = AddGraphicRequest.new(auth_token, params[:image], params[:image])
           res = @@inventory_service.add_graphic(req)
           render json: { success: res.success, message: res.message }, status: :ok
         else
