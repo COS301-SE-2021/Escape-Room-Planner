@@ -2,6 +2,8 @@ require 'test_helper'
 require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
 
 class SolvabilityTest < ActiveSupport::TestCase
 
@@ -86,6 +88,45 @@ class SolvabilityTest < ActiveSupport::TestCase
     resp = serv.calculate_solvability(solvability_req)
 
     assert_equal(true, resp.solvable)
+  end
+
+  def test_set_up_legal_graph
+    vertices = [1, 2, 3, 4, 5, 6]
+
+    solvability_req = CalculateSetUpOrderRequest.new(1, 6, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_set_up_order(solvability_req)
+
+    assert_equal('Success', resp.status)
+  end
+
+  def test_set_up_nil_req
+    solvability_req = nil
+
+    serv = SolvabilityService.new
+    resp = serv.calculate_set_up_order(solvability_req)
+
+    assert_equal('Solvability Request cant be null', resp.status)
+  end
+
+  def test_set_up_nil_param
+    vertices = nil
+
+    solvability_req = CalculateSetUpOrderRequest.new(1, 6, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_set_up_order(solvability_req)
+
+    assert_equal('Parameters in request object cannot be null', resp.status)
+  end
+
+  def test_set_up_circle_graph
+    vertices = [801, 802, 803, 804]
+
+    solvability_req = CalculateSetUpOrderRequest.new(801, 804, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_set_up_order(solvability_req)
+
+    assert_equal('Success', resp.status)
   end
 
 end
