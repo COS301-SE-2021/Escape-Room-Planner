@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require 'mail'
 
-def NotificationServices
+class NotificationServices
   def send_email_notification(request)
     return SendEmailNotificationResponse(false, 'SendEmailNotificationRequest null') if request.nil?
+
     @mail = Mail.new do
       from 'alyak0803@gmail.com'
       to   'kayla.latty.kal@gmail.com'
