@@ -119,4 +119,15 @@ class SolvabilityTest < ActiveSupport::TestCase
     assert_equal('Parameters in request object cannot be null', resp.status)
   end
 
+  def test_set_up_circle_graph
+    vertices = [801, 802, 803, 804]
+
+    solvability_req = CalculateSetUpOrderRequest.new(801, 804, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_set_up_order(solvability_req)
+
+
+    assert_equal('Success', resp.status)
+  end
+
 end
