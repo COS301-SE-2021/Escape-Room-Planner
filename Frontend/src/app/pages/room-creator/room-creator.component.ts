@@ -545,6 +545,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  checkSolvable(): void{
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/").subscribe(
+      response=>{
+        console.log(response.data)
+      }
+    )
+
+    let remove_vertex = {
+      operation: "Solvable",
+
+    };
+  }
+
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
     let incoming_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
