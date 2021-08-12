@@ -75,7 +75,7 @@ class SolvabilityService
 
       to_vertex.each do |to|
         edges[edge_count] = "#{request.vertices[i]},#{to.id}"
-        # uts "num: #{edge_count} edge: #{edges[edge_count]}"
+        # puts "num: #{edge_count} edge: #{edges[edge_count]}"
         edge_count += 1
       end
 
