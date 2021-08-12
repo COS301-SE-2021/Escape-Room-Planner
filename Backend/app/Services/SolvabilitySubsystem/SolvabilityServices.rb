@@ -1,5 +1,7 @@
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvabily_request'
 
 class SolvabilityService
 
@@ -17,8 +19,17 @@ class SolvabilityService
   end
 
   def calculate_set_up_order(request)
+    return CalculateSolvableResponse.new(nil, 'Solvability Request cant be null') if request.nil?
 
-    raise 'Solvability Request cant be null' if request.nil?
+
+    if request.startVert.nil? || request.endVert.nil? || request.vertices.nil?
+      return CalculateSolvableResponse.new(nil, 'Parameters in request object cannot be null')
+    end
+
+
+    return CalculateSolvableResponse.new(nil, 'Escape room needs to be solvable first') unless calculate_solvability(request)
+
+    set_up_order_helper(request.startVert)
 
   end
 
@@ -128,5 +139,7 @@ class SolvabilityService
     @found
   end
 
+  def set_up_order_helper(start_node)
 
+  end
 end
