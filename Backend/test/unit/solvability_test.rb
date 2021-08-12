@@ -106,7 +106,17 @@ class SolvabilityTest < ActiveSupport::TestCase
     serv = SolvabilityService.new
     resp = serv.calculate_set_up_order(solvability_req)
 
-    assert_equal('Solvability Request cant be null',resp.status)
+    assert_equal('Solvability Request cant be null', resp.status)
+  end
+
+  def test_set_up_nil_param
+    vertices = nil
+
+    solvability_req = CalculateSetUpOrderRequest.new(1, 6, vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_set_up_order(solvability_req)
+
+    assert_equal('Parameters in request object cannot be null', resp.status)
   end
 
 end
