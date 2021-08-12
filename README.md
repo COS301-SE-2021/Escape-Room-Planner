@@ -1,4 +1,5 @@
-[![Build Status](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner.svg?branch=master)](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner)
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FCOS301-SE-2021%2FEscape-Room-Planner%2Fbadge%3Fref%3Dmaster&style=for-the-badge)](https://actions-badge.atrox.dev/COS301-SE-2021/Escape-Room-Planner/goto?ref=master)
+
 ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m788368677-4f8867187e66b07802dca277)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
