@@ -62,14 +62,13 @@ class UserTest < ActiveSupport::TestCase
 
   test 'test sending null token to authenticate user' do
     us = UserServices.new
-    assert_equal(false, us.authenticate_user(nil))
+    assert_equal(false, us.authenticate_user(nil, 'testUser'))
   end
 
   test 'test sending invalid token to authenticate user' do
     us = UserServices.new
-    assert_equal(false, us.authenticate_user('1234.1234.1234'))
+    assert_equal(false, us.authenticate_user('1234.1234.1234', 'testUser'))
   end
-
   # test 'test sending expired token to authenticate user' do
   #   #please note the exp in json_web_token must be changed to do the test 30 seconds
   #   req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
