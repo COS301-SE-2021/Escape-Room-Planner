@@ -1,5 +1,7 @@
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
 
 class SolvabilityService
 
@@ -17,8 +19,26 @@ class SolvabilityService
   end
 
   def calculate_set_up_order(request)
+    return SetUpOrderResponse.new(nil, 'Solvability Request cant be null') if request.nil?
 
-    raise 'Solvability Request cant be null' if request.nil?
+
+    if request.startVert.nil? || request.endVert.nil? || request.vertices.nil?
+      return SetUpOrderResponse.new(nil, 'Parameters in request object cannot be null')
+    end
+
+
+    unless calculate_solvability(request)
+      return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first')
+    end
+    @visited = []
+    @visited_count = 0
+    @order_count = 0
+    @order_array = []
+    vertices = set_up_order_helper(request.startVert)
+
+    return SetUpOrderResponse.new(nil, 'Failure') if @order_array.nil?
+
+    SetUpOrderResponse.new(@order_array, 'Success')
 
   end
 
@@ -55,7 +75,7 @@ class SolvabilityService
 
       to_vertex.each do |to|
         edges[edge_count] = "#{request.vertices[i]},#{to.id}"
-        puts "num: #{edge_count} edge: #{edges[edge_count]}"
+        # puts "num: #{edge_count} edge: #{edges[edge_count]}"
         edge_count += 1
       end
 
@@ -100,33 +120,58 @@ class SolvabilityService
     @found = false
     @end_node = request.endVert
     @visited = []
-    @visited_count=0
+    @visited_count = 0
     traverse(request.startVert)
   end
 
   def traverse(start_node)
     vert = Vertex.find_by(id:start_node)
-    puts "current node is: #{vert.id}"
+    # puts "current node is: #{vert.id}"
 
     @found = true if vert.id == @end_node
+
+    if vert.vertices.all.nil?
+      return @found
+    end
 
     to_vertex = vert.vertices.all
     to_vertex.each do |to|
 
 
-      if @visited_count==0
+      if @visited_count.zero?
         @visited[@visited_count] = to.id
-        @visited_count+=1
+        @visited_count += 1
         traverse(to)
       elsif !@visited.include? to.id
-          @visited[@visited_count] = to.id
-          @visited_count+=1
-          traverse(to)
+        @visited[@visited_count] = to.id
+        @visited_count += 1
+        traverse(to)
                end
 
     end
     @found
   end
 
+  def set_up_order_helper(start_node)
+    vert = Vertex.find_by(id:start_node)
 
+    to_vertex = vert.vertices.all
+    @order_array[@order_count] = vert.id
+
+    @order_count += 1
+
+    to_vertex.each do |to|
+
+      if @visited_count.zero?
+        @visited[@visited_count] = to.id
+        @visited_count += 1
+        set_up_order_helper(to)
+      elsif !@visited.include? to.id
+        @visited[@visited_count] = to.id
+        @visited_count += 1
+        set_up_order_helper(to)
+      end
+
+    end
+  end
 end
