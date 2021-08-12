@@ -27,7 +27,7 @@ module Api
       # @return [JSON object with a status code or error message]
       def update
         # checks if user is authorized
-        if authorise(request)
+        #if authorise(request)
           # operation parameter tells what put operation should be done on vertex
           operation = params[:operation]
 
@@ -39,9 +39,9 @@ module Api
           else
             render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
           end
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        #else
+        #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #end
       end
 
       # @param [ActionController::Parameters] id
@@ -96,17 +96,17 @@ module Api
       end
 
       def index
-        if authorise(request)
+        # if authorise(request)
           vertices = Vertex.all
           render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        # else
+        #   render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        # end
       end
 
       # returns all the vertices for a specific room id
       def show
-        if authorise(request)
+        #if authorise(request)
           # this is an escape room id
           id = params[:id]
 
@@ -131,16 +131,16 @@ module Api
               connections: k.vertices.ids,
               type: k.type }
           end }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+          #  else
+          #render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+          # end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
 
       # POST api/v1/vertex
       def create
-        if authorise(request)
+        # if authorise(request)
           type = params[:type]
 
           name = params[:name]
@@ -204,9 +204,9 @@ module Api
           end
 
           render json: { status: 'SUCCESS', message: 'Vertex:', data: res }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        # else
+        #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
@@ -214,7 +214,7 @@ module Api
 
       # delete api call http://host/api/v1/vertex/"+real_target_id
       def destroy
-        if authorise(request)
+        # if authorise(request)
           operation = params[:operation]
           case operation
           when 'remove_vertex'
@@ -224,15 +224,15 @@ module Api
           else
             render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
           end
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        #  else
+        #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #end
       end
 
       # @param [ActionController::Parameters] id
       # @return JSON
       def delete_vertex(id)
-        if authorise(request)
+        #if authorise(request)
           if id.nil?
             render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
             return
@@ -248,9 +248,9 @@ module Api
           end
 
           render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        # else
+        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
@@ -259,7 +259,7 @@ module Api
       # @param [ActionController::Parameters] to_vertex_id
       # @return JSON
       def delete_connection(from_vertex_id, to_vertex_id)
-        if authorise(request)
+        # if authorise(request)
           if from_vertex_id.nil? || to_vertex_id.nil?
             render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
             return
@@ -272,9 +272,9 @@ module Api
             return
           end
           render json: { status: 'SUCCESS', message: resp.message }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        #else
+        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
