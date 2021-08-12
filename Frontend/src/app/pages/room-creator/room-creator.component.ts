@@ -35,7 +35,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private router:Router)
   {
-    // todo change to work with login token and not test token
 
     if(localStorage.getItem('token') ==  null) {
       this.router.navigate(['login']).then(r => console.log('no jwt stored'));
