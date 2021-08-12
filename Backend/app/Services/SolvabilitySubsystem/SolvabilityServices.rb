@@ -100,7 +100,7 @@ class SolvabilityService
     @found = false
     @end_node = request.endVert
     @visited = []
-    @visited_count=0
+    @visited_count = 0
     traverse(request.startVert)
   end
 
@@ -114,14 +114,14 @@ class SolvabilityService
     to_vertex.each do |to|
 
 
-      if @visited_count==0
+      if @visited_count.zero?
         @visited[@visited_count] = to.id
-        @visited_count+=1
+        @visited_count += 1
         traverse(to)
       elsif !@visited.include? to.id
-          @visited[@visited_count] = to.id
-          @visited_count+=1
-          traverse(to)
+        @visited[@visited_count] = to.id
+        @visited_count += 1
+        traverse(to)
                end
 
     end
