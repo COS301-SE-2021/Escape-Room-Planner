@@ -62,11 +62,11 @@ module Api
 
       def update
 
-        if params[:operation] == 'setStart'
+        if(params[:operation]=='setStart')
 
         end
 
-        if params[:operation] == 'setEnd'
+        if(params[:operation]=='setEnd')
 
         end
 
