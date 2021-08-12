@@ -126,7 +126,6 @@ class SolvabilityTest < ActiveSupport::TestCase
     serv = SolvabilityService.new
     resp = serv.calculate_set_up_order(solvability_req)
 
-
     assert_equal('Success', resp.status)
   end
 
