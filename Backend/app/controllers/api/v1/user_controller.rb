@@ -21,15 +21,15 @@ module Api
         password = params[:password]
         new_password = params[:new_password]
 
-        if password.nil? || username.nil?
-          render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
-          return
-        end
-
         serv = UserServices.new
 
         case operation
         when 'Register'
+          if password.nil? || username.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
+            return
+          end
+
           if User.where('username = ?', username).count >= 1
             render json: { status: 'Fail', message: 'User already exists', data: "Created: false" }, status: :bad_request
             return
@@ -65,15 +65,9 @@ module Api
         # end
 
         when 'reset_password_notification'
-          if username.nil? || password.nil? || new_password.nil?
-            render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
-            return
-          end
-
-          req = ResetPasswordRequest.new(username, password, newPassword)
-          res = serv.resetPassword(req)
-
-
+          puts 'Did we?'
+          req = ResetPasswordNotificationRequest.new(email)
+          res = serv.reset_password_notification(req)
 
 
         # when 'Verify'
