@@ -30,7 +30,10 @@ class SolvabilityService
     unless calculate_solvability(request)
       return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first')
     end
-
+    @visited = []
+    @visited_count = 0
+    @order_count = 0
+    @order_array = []
     vertices = set_up_order_helper(request.startVert)
 
     return SetUpOrderResponse.new(nil, 'Failure') if vertices.nil?
@@ -151,8 +154,24 @@ class SolvabilityService
 
   def set_up_order_helper(start_node)
     vert = Vertex.find_by(id:start_node)
-    puts "current node is: #{vert.id}"
 
+    to_vertex = vert.vertices.all
+    @order_array[@order_count] = vert.id
+    puts @order_array[@order_count]
+    @order_count += 1
 
+    to_vertex.each do |to|
+
+      if @visited_count.zero?
+        @visited[@visited_count] = to.id
+        @visited_count += 1
+        traverse(to)
+      elsif !@visited.include? to.id
+        @visited[@visited_count] = to.id
+        @visited_count += 1
+        traverse(to)
+      end
+
+    end
   end
 end
