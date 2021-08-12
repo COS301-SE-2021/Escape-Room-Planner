@@ -53,4 +53,11 @@ class ActiveSupport::TestCase
     JSON.parse(@response.body)
   end
   # Add more helper methods to be used by all tests here...
+
+  def login_for_test
+    us = UserServices.new
+    req_l = LoginRequest.new('testUser', 'testPass')
+    res_l = us.login(req_l)
+    res_l.token
+  end
 end
