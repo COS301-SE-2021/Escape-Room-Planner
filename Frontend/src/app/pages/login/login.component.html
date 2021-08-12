@@ -7,6 +7,7 @@
   <title>Bootstrap 4 Layout</title>
 </head>
 
+<div class="container">
 <div class="col-md-12" style="height: 87vh">
   <div class="row d-flex justify-content-center" style="height: 100%">
     <div class="col-md-12" id="login-container">
@@ -28,6 +29,7 @@
                   <input style="background: #E5E4E2" type="password" class="form-control" id="password" name="password_digest"
                          ngModel #password="ngModel" [class.is-invalid]="username.invalid && username.touched" required>
                   <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
+                  <small [style.display]="display">Password is incorrect.</small>
                 </div>
                 <a href=""><p id="forgot-pass">Forgot Your Password?</p></a>
                 <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign in</button>
@@ -44,4 +46,5 @@
       </div>
     </div>
   </div>
+</div>
 </div>
