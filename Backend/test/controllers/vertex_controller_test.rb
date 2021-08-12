@@ -23,7 +23,6 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     #     headers: { "Authorization": "\"Bearer #{res_l.token}\"" }
 
     authed_get_call("#{api_v1_vertex_index_path}/1")
-    puts @response.body
 
     assert_response :ok
   end

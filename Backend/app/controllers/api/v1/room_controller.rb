@@ -48,7 +48,6 @@ module Api
       # delete api call http://host/api/v1/room/"+room_id
       def destroy
         if authorise(request)
-          puts params[:id]
           room = EscapeRoom.find_by_id(params[:id])
           if room.nil?
             render json: { status: 'SUCCESS', message: 'Room does not exist' }, status: :bad_request

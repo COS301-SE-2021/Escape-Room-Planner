@@ -11,8 +11,6 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     get api_v1_room_index_path,
         headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
 
-    puts @response.body
-
     assert_response :success
   end
 
