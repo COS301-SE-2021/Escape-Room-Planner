@@ -55,6 +55,13 @@ class UserServices
                 end
   end
 
+  def reset_password_notification(request)
+    return ResetPasswordNotificationResponse.new(false, 'Reset Password Notification request null') if request.nil?
+
+    @user = User.find_by_email(request.email)
+    return ResetPasswordNotificationResponse.new(false, 'Email does not exist') if @user.nil?
+  end
+
   def reset_password(request)
     return ResetPasswordResponse.new(false, 'Reset Password request null') if request.nil?
 
