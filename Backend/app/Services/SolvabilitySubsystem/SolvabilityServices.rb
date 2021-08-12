@@ -1,7 +1,7 @@
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
-require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_request'
-require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvabily_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
 
 class SolvabilityService
 
@@ -19,17 +19,23 @@ class SolvabilityService
   end
 
   def calculate_set_up_order(request)
-    return CalculateSolvableResponse.new(nil, 'Solvability Request cant be null') if request.nil?
+    return SetUpOrderResponse.new(nil, 'Solvability Request cant be null') if request.nil?
 
 
     if request.startVert.nil? || request.endVert.nil? || request.vertices.nil?
-      return CalculateSolvableResponse.new(nil, 'Parameters in request object cannot be null')
+      return SetUpOrderResponse.new(nil, 'Parameters in request object cannot be null')
     end
 
 
-    return CalculateSolvableResponse.new(nil, 'Escape room needs to be solvable first') unless calculate_solvability(request)
+    unless calculate_solvability(request)
+      return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first')
+    end
 
-    vertices=set_up_order_helper(request.startVert)
+    vertices = set_up_order_helper(request.startVert)
+
+    return SetUpOrderResponse.new(nil, 'Failure') if vertices.nil?
+
+    SetUpOrderResponse.new(vertices, 'Success')
 
   end
 
@@ -66,7 +72,7 @@ class SolvabilityService
 
       to_vertex.each do |to|
         edges[edge_count] = "#{request.vertices[i]},#{to.id}"
-        puts "num: #{edge_count} edge: #{edges[edge_count]}"
+        # uts "num: #{edge_count} edge: #{edges[edge_count]}"
         edge_count += 1
       end
 
@@ -117,9 +123,13 @@ class SolvabilityService
 
   def traverse(start_node)
     vert = Vertex.find_by(id:start_node)
-    puts "current node is: #{vert.id}"
+    # puts "current node is: #{vert.id}"
 
     @found = true if vert.id == @end_node
+
+    if vert.vertices.all.nil?
+      return @found
+    end
 
     to_vertex = vert.vertices.all
     to_vertex.each do |to|
@@ -140,6 +150,9 @@ class SolvabilityService
   end
 
   def set_up_order_helper(start_node)
+    vert = Vertex.find_by(id:start_node)
+    puts "current node is: #{vert.id}"
+
 
   end
 end

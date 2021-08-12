@@ -1,5 +1,5 @@
-class CalculateSolvableResponse
-  attr_accessor :order, status
+class SetUpOrderResponse
+  attr_accessor :order
 
   def initialize(order, status)
     @status = status
