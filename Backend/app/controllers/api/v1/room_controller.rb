@@ -11,7 +11,7 @@ module Api
       protect_from_forgery with: :null_session
       # GET api/v1/room , shows all the rooms in db
       def index
-        # if authorise(request)
+        #if authorise(request)
           rooms = EscapeRoom.select(:id, :name)
          render json: { status: 'SUCCESS', message: 'Escape Rooms', data: rooms }, status: :ok
           # else
@@ -48,7 +48,7 @@ module Api
       # delete api call http://host/api/v1/room/"+room_id
       def destroy
         #if authorise(request)
-          puts params[:id]
+        #puts params[:id]
           room = EscapeRoom.find_by_id(params[:id])
           if room.nil?
             render json: { status: 'SUCCESS', message: 'Room does not exist' }, status: :bad_request
@@ -58,6 +58,18 @@ module Api
         #else
         #render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         #end
+      end
+
+      def update
+
+        if params[:operation] == 'setStart'
+
+        end
+
+        if params[:operation] == 'setEnd'
+
+        end
+
       end
     end
   end
