@@ -25,10 +25,13 @@ class InventoryService
     @response = if user.nil?
                   GetGraphicsResponse.new(false, 'User can not be found', nil)
                 else
-                  image = user.graphic
-                  GetGraphicsResponse.new(true, 'User Inventory Graphics Obtained', image)
+                  image = user.graphic.blobs
+                  GetGraphicsResponse.new(true, 'User Inventory Graphics Obtained',
+                                          image.map do |blob|
+                                            Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
+                                          end)
                 end
-  rescue StandardError
-    GetGraphicsResponse.new(false, 'Error has occurred', nil)
+  rescue StandardError => error
+    GetGraphicsResponse.new(false, error, nil)
   end
 end
