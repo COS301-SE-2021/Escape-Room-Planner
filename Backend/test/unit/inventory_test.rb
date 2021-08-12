@@ -13,14 +13,14 @@ class InventoryTest < ActiveSupport::TestCase
   test 'can add Graphic to Inventory' do
     test_image = './storage/test/clue1.png'
     file = Rack::Test::UploadedFile.new(test_image, 'image/png')
-    request = AddGraphicRequest.new(login_for_test, file)
+    request = AddGraphicRequest.new(login_for_test, file, 'Clue')
     serv = InventoryService.new
     response = serv.add_graphic(request)
     assert_equal(response.message, 'Graphic been added')
   end
 
   test 'can handle incorrect image upload' do
-    request = AddGraphicRequest.new(login_for_test, 'incorrect type')
+    request = AddGraphicRequest.new(login_for_test, 'incorrect type', 'Clue')
     serv = InventoryService.new
     response = serv.add_graphic(request)
     assert_equal(response.message, 'Error has occurred')

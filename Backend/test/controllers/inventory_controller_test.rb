@@ -15,10 +15,11 @@ module Api
       end
 
       test 'correct response when no image added' do
-        authed_post_call(api_v1_inventory_index_path, { image_fake: 'test' })
+        authed_post_call(api_v1_inventory_index_path, { image_fake: 'test',
+                                                                 type: 'Clue'})
         response = JSON.parse(@response.body)
         assert_response :success
-        assert_equal 'Error has occurred', response['message']
+        assert_equal 'Please Send Image', response['message']
       end
 
       # TODO: inventory test with fake JWT
