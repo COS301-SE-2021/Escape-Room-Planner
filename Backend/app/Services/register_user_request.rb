@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 class RegisterUserRequest
-  attr_accessor :username, :password, :email, :is_admin
+  attr_accessor :username, :password, :email
 
-  def initialize(username, password, email, is_admin)
+  def initialize(username, password, email)
     @username = username
     @password = password
     @email = email
-    @is_admin = is_admin
   end
 end

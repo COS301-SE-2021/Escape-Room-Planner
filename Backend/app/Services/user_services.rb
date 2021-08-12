@@ -8,7 +8,7 @@ class UserServices
       @user = User.new
       @user.username = request.username
       @user.email = request.email
-      @user.is_admin = true
+      @user.is_admin = false
 
       # salt and hash password and store it
 
