@@ -6,16 +6,21 @@
 # For more information see: https://github.com/marketplace/actions/setup-ruby-jruby-and-truffleruby
 
 name: Ruby on Rails CI
+
 on:
-  workflow_dispatch:
   push:
     branches: [ master, develop ]
   pull_request:
     branches: [ master, develop ]
 
 jobs:
-  test:
+  ruby-test:
+    name: Ruby Test
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: Backend
     
     services:
       postgres:
@@ -31,7 +36,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Install pg client
+    - name: Prepare for Backend Tests
       run: |
         sudo apt-get -yqq install libpq-dev
     
@@ -39,11 +44,13 @@ jobs:
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: 2.7.3
-        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+        bundler-cache: true
+        working-directory: Backend
     
-    - name: Install dependencies
-      run: |
-        yarn install
+    - name: Yarn with caching
+      uses: bahmutov/npm-install@HEAD
+      with:
+        working-directory: Backend
         
     - name: Build and Test
       env:
@@ -59,6 +66,7 @@ jobs:
     - name: Deploy to heroku
       uses: akhileshns/heroku-deploy@v3.12.12
       with:
+        working-directory: Backend
         heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}

@@ -1,0 +1,170 @@
+<div class="container-fluid" (click)="hideContextMenu($event)">
+  <div class="container-fluid" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
+  <div class="row">
+    <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
+      <div class="overflow-auto" style="height: 94vh; width: 315px;">
+        <!-- INVENTORY STARTS HERE -->
+        <ul class="nav flex-column">
+          <li class="border border-dark w-100" style=" background-color: grey">Container</li>
+          <li id="containerInventory" class="bg-secondary text-white" style="width: 100%;">
+            <div class="container-fluid">
+              <div class="row" style="padding-top: 20px;">
+                <div class="col">
+                  <img src="./assets/images/room1.png" (click)="addObjects('Container', 'room1.png', 10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Room 1</p>
+                </div>
+                <div class="col">
+                  <img src="./assets/images/con1.png" (click)="addObjects('Container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Container 1</p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="border border-dark w-100" style=" background-color: grey">Puzzle</li>
+          <li id="PuzzleInventory" class="bg-secondary text-white" style="width: 100%;">
+            <div class="container-fluid">
+              <div class="row" style="padding-top: 20px;">
+                <div class="col">
+                  <img src="./assets/images/puzzle1.png" (click)="addObjects('Puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Puzzle 1</p>
+                </div>
+                <div class="col">
+                  <img src="./assets/images/puzzle1.png" (click)="addObjects('Puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Puzzle 2</p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="border border-dark w-100" style=" background-color: grey">Key</li>
+          <li id="KeyInventory" class="bg-secondary text-white" style="width: 100%;">
+            <div class="container-fluid">
+              <div class="row" style="padding-top: 20px;">
+                <div class="col">
+                  <img src="./assets/images/key1.png" (click)="addObjects('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Key 1</p>
+                </div>
+                <div class="col">
+                  <img src="./assets/images/key1.png" (click)="addObjects('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Key 2</p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="border border-dark w-100" style=" background-color: grey">Clue</li>
+          <li id="ClueInventory" class="bg-secondary text-white" style="width: 100%;">
+            <div class="container-fluid">
+              <div class="row" style="padding-top: 20px;">
+                <div class="col">
+                  <img src="./assets/images/clue1.png" (click)="addObjects('Clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Clue 1</p>
+                </div>
+                <div class="col">
+                  <img src="./assets/images/clue1.png" (click)="addObjects('Clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+                  <p class="text-center text-black-50">Clue 2</p>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-10 d-lg-flex remove-padding">
+      <div class="container-fluid remove-padding">
+        <div class="row">
+          <div class="col-sm-12 dropdown remove-padding">
+            <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              Select Escape Room
+            </button>
+            <ul class="dropdown-menu w-100 overflow-auto remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+              <!-- INSERTS CREATED ROOMS HERE -->
+              <li class="dropdown-item text-center remove-padding">
+                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+                  </svg>
+                </button>
+              </li>
+              <li><hr class="dropdown-divider text-white"></li>
+            </ul>
+          </div>
+        </div>
+        <div class="row vh-100">
+          <div class="container-fluid escape-room remove-padding" style="background-color: grey" #escapeRoomDiv>
+            <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
+          </div>
+
+          <div id="context_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute;" [hidden]="true" #contextMenu>
+            <div class="row">
+              <div class="col">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="connectVertex()">
+                  Connect
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-link-45deg" viewBox="0 0 16 16">
+                    <path d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1.002 1.002 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4.018 4.018 0 0 1-.128-1.287z"/>
+                    <path d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243L6.586 4.672z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="col">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="disconnectVertex()">
+                  Remove Connection
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eraser-fill" viewBox="0 0 16 16">
+                    <path d="M8.086 2.207a2 2 0 0 1 2.828 0l3.879 3.879a2 2 0 0 1 0 2.828l-5.5 5.5A2 2 0 0 1 7.879 15H5.12a2 2 0 0 1-1.414-.586l-2.5-2.5a2 2 0 0 1 0-2.828l6.879-6.879zm.66 11.34L3.453 8.254 1.914 9.793a1 1 0 0 0 0 1.414l2.5 2.5a1 1 0 0 0 .707.293H7.88a1 1 0 0 0 .707-.293l.16-.16z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="col" id="delete_button">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="removeVertex()">
+                  Delete
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- modal view popout here-->
+<div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Escape Room</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <!-- warning for empty form input -->
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="!newEscapeRoomNameValid">
+          <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters
+        </div>
+        <form name="NewEscapeRoomForm" #NewEscapeRoomForm = "ngForm">
+          <div class="mb-3 form-group">
+            <label for="recipient-name" class="col-form-label">Room Name:</label>
+            <input type="text"
+                   name="EscapeRoomName"
+                   class="form-control"
+                   id="recipient-name"
+                   placeholder="Some quirky name"
+                   required
+                   [(ngModel)]="newEscapeRoomName"
+                   (input)="isNewEscapeRoomNameValid()">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer form-group">
+        <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom(NewEscapeRoomForm)" [disabled]="!newEscapeRoomNameValid">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
