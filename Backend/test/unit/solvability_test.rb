@@ -100,4 +100,13 @@ class SolvabilityTest < ActiveSupport::TestCase
     assert_equal('Success', resp.status)
   end
 
+  def test_set_up_nil_req
+    solvability_req = nil
+
+    serv = SolvabilityService.new
+    resp = serv.calculate_set_up_order(solvability_req)
+
+    assert_equal('Solvability Request cant be null',resp.status)
+  end
+
 end
