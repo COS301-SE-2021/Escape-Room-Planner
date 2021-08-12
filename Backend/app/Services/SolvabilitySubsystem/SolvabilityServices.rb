@@ -29,7 +29,7 @@ class SolvabilityService
 
     return CalculateSolvableResponse.new(nil, 'Escape room needs to be solvable first') unless calculate_solvability(request)
 
-    set_up_order_helper(request.startVert)
+    vertices=set_up_order_helper(request.startVert)
 
   end
 
