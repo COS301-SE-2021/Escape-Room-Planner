@@ -62,12 +62,31 @@ module Api
 
       def update
 
-        if(params[:operation]=='setStart')
-
+        if params[:operation].nil?
+          render json: { status: 'Failed', message: 'Specify operation' }, status: :bad_request
+          return
         end
 
-        if(params[:operation]=='setEnd')
+        if params[:operation] == 'setStart'
 
+          if params[:id].nil? || params[:startVertex].nil?
+            render json: { status: 'Failed', message: 'Ensure fields are filled in' }, status: :bad_request
+            return
+          end
+
+          EscapeRoom.find_by_id(params[:id]).endVertex = params[:startVertex]
+          EscapeRoom.find_by_id(params[:id]).save
+        end
+
+        if params[:operation] == 'setEnd'
+
+          if params[:id].nil? || params[:endVertex].nil?
+            render json: { status: 'Failed', message: 'Ensure fields are filled in' }, status: :bad_request
+            return
+          end
+
+          EscapeRoom.find_by_id(params[:id]).endVertex = params[:endVertex]
+          EscapeRoom.find_by_id(params[:id]).save
         end
 
       end
