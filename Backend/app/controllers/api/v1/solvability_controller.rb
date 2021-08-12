@@ -8,7 +8,7 @@ module Api
   # v1 model definition for api calls
   module V1
     # Controller that maps http requests to functions to execute
-    class VertexController < ApplicationController
+    class SolvabilityController < ApplicationController
       protect_from_forgery with: :null_session
 
       def create
@@ -23,6 +23,7 @@ module Api
 
             vertices = params[:vertices]
 
+
             solvability(start_vert, end_vert, vertices)
           end
 
@@ -31,7 +32,7 @@ module Api
         end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
-    end
+      end
 
       def solvability(start_vert, end_vert, vertices)
 
@@ -40,15 +41,18 @@ module Api
           return
         end
 
+        puts 'here'
         req = CalculateSolvableRequest(start_vert, end_vert, vertices)
+        puts 'here'
         serv = SolvabilityService.new
         resp = serv.calculate_solvability(req)
+
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
         @vertices = vertices
       end
     end
 
-    end
   end
+end
 
