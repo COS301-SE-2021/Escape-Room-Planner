@@ -1,5 +1,5 @@
 class SetUpOrderResponse
-  attr_accessor :order
+  attr_accessor :order, :status
 
   def initialize(order, status)
     @status = status

@@ -36,9 +36,9 @@ class SolvabilityService
     @order_array = []
     vertices = set_up_order_helper(request.startVert)
 
-    return SetUpOrderResponse.new(nil, 'Failure') if vertices.nil?
+    return SetUpOrderResponse.new(nil, 'Failure') if @order_array.nil?
 
-    SetUpOrderResponse.new(vertices, 'Success')
+    SetUpOrderResponse.new(@order_array, 'Success')
 
   end
 
@@ -157,7 +157,7 @@ class SolvabilityService
 
     to_vertex = vert.vertices.all
     @order_array[@order_count] = vert.id
-    puts @order_array[@order_count]
+
     @order_count += 1
 
     to_vertex.each do |to|
@@ -165,11 +165,11 @@ class SolvabilityService
       if @visited_count.zero?
         @visited[@visited_count] = to.id
         @visited_count += 1
-        traverse(to)
+        set_up_order_helper(to)
       elsif !@visited.include? to.id
         @visited[@visited_count] = to.id
         @visited_count += 1
-        traverse(to)
+        set_up_order_helper(to)
       end
 
     end
