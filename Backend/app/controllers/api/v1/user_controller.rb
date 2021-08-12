@@ -59,10 +59,19 @@ module Api
             render json: { status: 'FAILED', message: res.message }, status: 401
             return
           end
-        else
-          render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
-          return
-        end
+        # else
+        #   render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
+        #   return
+        # end
+
+        when 'reset_password_notification'
+          if username.nil? || password.nil? || new_password.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
+            return
+          end
+
+          req = ResetPasswordRequest.new(username, password, newPassword)
+          res = serv.resetPassword(req)
 
 
 
@@ -95,15 +104,7 @@ module Api
         #
         # when 'UpdateAccount'
         #
-        # when 'resetPassword'
-        #   if username.nil? || password.nil? || newPassword.nil?
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = ResetPasswordRequest.new(username, password, newPassword)
-        #   res = serv.resetPassword(req)
-        #
+
         # when 'GetUserDetails'
         #   if username.nil? || password.nil? || email.nil?
         #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
@@ -132,9 +133,9 @@ module Api
         # end
 
         render json: { status: 'SUCCESS', message: 'User:', data: "Created: #{res.success}" }, status: :ok
-      rescue StandardError
-        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :not_found
-
+      # rescue StandardError
+      #   render json: { status: 'FAILED', message: 'Unspecified error' }, status: :not_found
+          end
       end
     end
   end

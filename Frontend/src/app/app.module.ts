@@ -12,6 +12,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { VerifyComponent } from './pages/verify/verify.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { ResetPasswordNotComponent } from './pages/reset-password-not/reset-password-not.component';
 
 const routes: Routes = [
   { path: '', component: RoomCreatorComponent },
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'verify', component: VerifyComponent },
   { path: 'reset', component: ResetPasswordComponent },
+  { path: 'reset-not', component: ResetPasswordNotComponent },
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
@@ -32,7 +34,8 @@ const routes: Routes = [
     DraggableDirective,
     DroppableDirective,
     VerifyComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    ResetPasswordNotComponent
   ],
     imports: [
         BrowserModule,
