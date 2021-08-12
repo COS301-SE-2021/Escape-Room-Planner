@@ -10,7 +10,7 @@ class InventoryTest < ActiveSupport::TestCase
   @@token = 'eyJhbGciOiJIUzI1NiJ9.eyJpZCI6MSwiZXhwIjoyMzg2MDczMjMxfQ.Zwe1E5JKM40pXWoVgUaqcVsc5mPFt7HHj2k6f3WZZr0'
 
   test 'can add Graphic to Inventory' do
-    test_image = 'C:/Users/donav/Desktop/Assignments/2021/COS301/Capstone/HTML/clue1.png'
+    test_image = './storage/test/clue1.png'
     file = Rack::Test::UploadedFile.new(test_image, 'image/png')
     request = AddGraphicRequest.new(@@token, file)
     serv = InventoryService.new
