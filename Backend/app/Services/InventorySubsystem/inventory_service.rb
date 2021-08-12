@@ -9,7 +9,6 @@ class InventoryService
 
     decoded_token = JsonWebToken.decode(request.token)
     user = User.find_by_id(decoded_token['id'])
-
     @response = if user.nil?
                   AddGraphicResponse.new(false, 'User can not be found')
                 else
