@@ -75,4 +75,14 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     assert_response :bad_request
     assert_equal 'Room does not exist', response['message']
   end
+
+  # test 'set start room' do
+  #   response = authed_put_request("#{api_v1_room_index_path}/1", {
+  #                                   operation: 'setStart',
+  #                                   id: '1',
+  #                                   startVertex: '1'
+  #                                 })
+  #
+  #   assert_response :ok
+  # end
 end

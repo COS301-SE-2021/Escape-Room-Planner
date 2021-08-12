@@ -14,7 +14,7 @@ module Api
       protect_from_forgery with: :null_session
 
       def create
-        #if authorise(request)
+        if authorise(request)
 
           operation = params[:operation]
 
@@ -39,9 +39,9 @@ module Api
             solvability(start_vert, end_vert, vertices)
           end
 
-        # else
-        #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        #end
+         else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end

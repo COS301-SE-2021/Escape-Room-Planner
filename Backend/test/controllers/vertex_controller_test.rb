@@ -546,4 +546,5 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     assert_response :ok
     assert_equal 'Could not connect vertex', response['message']
   end
+
 end
