@@ -69,6 +69,11 @@
       </div>
     </div>
   </div>
+
+
+  <input type="file" name="idk" #file [hidden]="true" (input)="yes(file)">
+  <button type="submit" (click)="file.click()"> + icon </button>
+
 </div>
 
 <!-- modal view popout here-->

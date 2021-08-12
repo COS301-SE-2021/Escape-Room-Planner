@@ -31,10 +31,9 @@ class InventoryService
                     {
                       blob_id: blob.id,
                       src: Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000'),
-                      type: 'clue'
+                      type: blob.metadata
                     }
                   end
-                  puts image
                   GetGraphicsResponse.new(true, 'User Inventory Graphics Obtained', image)
                 end
   rescue StandardError

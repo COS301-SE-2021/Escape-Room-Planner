@@ -678,6 +678,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // append to div alertElementError
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
   }
+
+  yes(input:HTMLInputElement | null):void{
+    // @ts-ignore
+    console.log(input?.files[0]);
+  }
 }
 
 // For Vertex Response
