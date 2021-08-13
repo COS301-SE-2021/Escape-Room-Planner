@@ -12,6 +12,8 @@ require './app/Services/remove_vertex_response'
 require './app/Services/update_vertex_request'
 require './app/Services/update_vertex_response'
 require './app/Services/services_helper'
+require './app/Services/RoomSubsystem/Request/get_vertices_request'
+require './app/Services/RoomSubsystem/Response/get_vertices_response'
 
 # rubocop:disable Metrics/ClassLength
 module Api
@@ -106,35 +108,13 @@ module Api
       # returns all the vertices for a specific room id
       def show
         if authorise(request)
-          # this is an escape room id
-          id = params[:id]
-
-          if EscapeRoom.find_by(id: id).nil?
-            render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
-            return
-          end
-
-          response = Vertex.select(
-            :id,
-            :type,
-            :name,
-            :posx,
-            :posy,
-            :width,
-            :height,
-            :graphicid
-          ).where(escape_room_id: id)
-
-          render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
-            { vertex: k,
-              connections: k.vertices.ids,
-              type: k.type }
-          end }, status: :ok
+          req = GetVerticesRequest.new(params[:id])
+          serv = RoomServices.new
+          res = serv.get_vertices(req)
+          render json: { success: res.success, message: res.message, data: res.data}, status: :ok
         else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+          render json: { success: 'FAILED', message: 'Unauthorized', data: nil }, status: 401
         end
-      rescue StandardError
-        render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
 
       # POST api/v1/vertex

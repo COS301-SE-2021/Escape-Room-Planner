@@ -184,7 +184,8 @@ class RoomServices
   end
 
   def get_vertices(request)
-    GetVerticesResponse.new(false, "Can't locate user", nil) if request.id.nil?
+    return GetVerticesResponse.new(false, 'Can not locate user', nil) if EscapeRoom.find_by_id(request.id).nil?
+
     vertices = Vertex.select(
       :id,
       :type,
@@ -196,17 +197,20 @@ class RoomServices
       :graphicid,
       :blob_id
     ).where(escape_room_id: request.id)
+    return GetVerticesResponse.new(true, 'Room has no vertices', nil) if vertices.nil?
+
     data = vertices.map do |k|
       if k.blob_id != 0
         blob = ActiveStorageBlobs.find_by_id(k.blob_id)
-        k.graphicid = Rails.application.routes.url_helpers.rails_blob_url(blob,  host: 'localhost:3000')
+        k.graphicid = Rails.application.routes.url_helpers.rails_blob_url(blob, host: 'localhost:3000')
       end
       { vertex: k,
         connections: k.vertices.ids,
         type: k.type }
     end
     GetVerticesResponse.new(true, 'Vertices Obtained', data)
-  rescue StandardError
+  rescue StandardError => e
+    puts e
     GetVerticesResponse.new(false, 'Error occurred while getting Vertices', nil)
   end
 end
