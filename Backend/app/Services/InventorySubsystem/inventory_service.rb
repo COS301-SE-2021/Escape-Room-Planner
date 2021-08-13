@@ -25,6 +25,8 @@ class InventoryService
     AddGraphicResponse.new(false, 'Error has occurred')
   end
 
+  # @param [GetGraphicsRequest] request
+  # @return [GetGraphicsResponse]
   def get_graphics(request)
     decoded_token = JsonWebToken.decode(request.token)
     user = User.find_by_id(decoded_token['id'])
@@ -43,5 +45,23 @@ class InventoryService
                 end
   rescue StandardError
     GetGraphicsResponse.new(false, 'Error has occurred', nil)
+  end
+
+  # @param [DeleteGraphicRequest] request
+  # @return [DeleteGraphicResponse]
+  def delete_graphic(request)
+    return DeleteGraphicResponse.new(false, 'Please Send Image') if request.blob_id < 1
+
+    decoded_token = JsonWebToken.decode(request.token)
+    user = User.find_by_id(decoded_token['id'])
+    @response = if user.nil?
+                  DeleteGraphicResponse.new(false, 'User can not be found')
+                else
+                  user.graphic.where(blob_id: request.blob_id).purge
+                  DeleteGraphicResponse.new(true, 'Graphic been deleted')
+                end
+  rescue StandardError => e
+    puts e
+    DeleteGraphicResponse.new(false, 'Error has occurred, unable to delete graphic')
   end
 end

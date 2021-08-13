@@ -6,6 +6,8 @@ require './app/Services/InventorySubsystem/Request/add_graphic_request'
 require './app/Services/InventorySubsystem/Response/add_graphic_response'
 require './app/Services/InventorySubsystem/Request/get_graphics_request'
 require './app/Services/InventorySubsystem/Response/get_graphics_response'
+require './app/Services/InventorySubsystem/Request/delete_graphic_request'
+require './app/Services/InventorySubsystem/Response/delete_graphic_response'
 
 # Class that test inventory sub system
 class InventoryTest < ActiveSupport::TestCase
@@ -41,5 +43,13 @@ class InventoryTest < ActiveSupport::TestCase
     serv = InventoryService.new
     response = serv.get_graphics(request)
     assert_equal(response.message, 'Error has occurred')
+  end
+
+  test 'can delete graphic for user' do
+    request = DeleteGraphicRequest.new(login_for_test, 1)
+    serv = InventoryService.new
+    response = serv.delete_graphic(request)
+    assert_not(ActiveStorageAttachments.where(blob_id: 1).nil?)
+    assert_equal(response.message, 'Graphic been deleted')
   end
 end
