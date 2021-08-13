@@ -2,7 +2,7 @@
   <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row">
 
-    <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)"></app-inventory>
+    <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')"></app-inventory>
 
     <div class="col-sm-10 d-lg-flex remove-padding">
       <div class="container-fluid remove-padding">
@@ -69,11 +69,6 @@
       </div>
     </div>
   </div>
-
-
-  <input type="file" name="idk" #file [hidden]="true" (input)="yes(file)">
-  <button type="submit" (click)="file.click()"> + icon </button>
-
 </div>
 
 <!-- modal view popout here-->
