@@ -121,6 +121,24 @@
             </div>
             <hr class="dropdown-divider text-white">
             <div class="row">
+              <div class="col" id="set_start">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="setStart()">
+                  Set Start
+                  <img src="/assets/svg/flag.svg">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="col" id="set_end">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="setEnd()">
+                  Set End
+                  <img src="/assets/svg/flag-fill.svg">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
               <div class="col" id="delete_button">
                 <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="removeVertex()">
                   Delete

@@ -22,6 +22,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public newEscapeRoomNameValid:boolean = false; // flag using regex
 
   private _target_vertex: any;
+  private _target_start: any;
+  private _target_end: any;
   private isConnection = false;
   private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
@@ -557,6 +559,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     };
   }
+
+  setStart() :void{
+
+  }
+
+  setEnd() :void{
+
+  }
+
 
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
