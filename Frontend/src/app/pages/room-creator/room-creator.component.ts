@@ -559,7 +559,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
         //rendering <li> elements by using render function
         console.log(response)
-        if (response.status==true){
+        if (response.data.solvable==true){
           window.alert('Solvable')
         }else {
           window.alert('not Solvable')
