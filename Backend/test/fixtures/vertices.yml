@@ -11,7 +11,7 @@ one:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
-
+  blob_id: 0
 two:
   id: 2
   type: Clue
@@ -22,7 +22,7 @@ two:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
-
+  blob_id: 1
 three:
   id: 3
   type: Clue
@@ -33,3 +33,4 @@ three:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1

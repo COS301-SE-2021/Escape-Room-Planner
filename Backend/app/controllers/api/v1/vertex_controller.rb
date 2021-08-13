@@ -12,6 +12,8 @@ require './app/Services/remove_vertex_response'
 require './app/Services/update_vertex_request'
 require './app/Services/update_vertex_response'
 require './app/Services/services_helper'
+require './app/Services/RoomSubsystem/Request/get_vertices_request'
+require './app/Services/RoomSubsystem/Response/get_vertices_response'
 
 # rubocop:disable Metrics/ClassLength
 module Api
@@ -89,7 +91,6 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
-
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
@@ -106,35 +107,13 @@ module Api
       # returns all the vertices for a specific room id
       def show
         if authorise(request)
-          # this is an escape room id
-          id = params[:id]
-
-          if EscapeRoom.find_by(id: id).nil?
-            render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
-            return
-          end
-
-          response = Vertex.select(
-            :id,
-            :type,
-            :name,
-            :posx,
-            :posy,
-            :width,
-            :height,
-            :graphicid
-          ).where(escape_room_id: id)
-
-          render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
-            { vertex: k,
-              connections: k.vertices.ids,
-              type: k.type }
-          end }, status: :ok
+          req = GetVerticesRequest.new(params[:id])
+          serv = RoomServices.new
+          res = serv.get_vertices(req)
+          render json: { success: res.success, message: res.message, data: res.data }, status: :ok
         else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+          render json: { success: 'FAILED', message: 'Unauthorized', data: nil }, status: 401
         end
-      rescue StandardError
-        render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
 
       # POST api/v1/vertex
@@ -162,6 +141,8 @@ module Api
 
           roomid = params[:roomid]
 
+          blob_id = params[:blob_id]
+
           if name.nil? || graphicid.nil? || posy.nil? || posx.nil? || width.nil? || height.nil? || roomid.nil?
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
             return
@@ -177,7 +158,8 @@ module Api
               return
             end
 
-            req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
+            req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description,
+                                          roomid)
             res = serv.create_puzzle(req)
 
           when 'Keys'
@@ -185,7 +167,7 @@ module Api
             res = serv.create_key(req)
 
           when 'Container'
-            req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name)
+            req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name, blob_id)
             res = serv.create_container(req)
 
           when 'Clue'
