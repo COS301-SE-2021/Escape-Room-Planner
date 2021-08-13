@@ -20,9 +20,6 @@ module Api
 
           if operation == 'Solvable'
 
-
-
-
             room_id = params[:roomid]
             start_vert = EscapeRoom.find_by_id(room_id).startVertex
             end_vert  = EscapeRoom.find_by_id(room_id).endVertex
@@ -58,16 +55,15 @@ module Api
       end
 
       def solvability(start_vert, end_vert, vertices)
-        puts "t1"
         if start_vert.nil? || end_vert.nil? || vertices.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
         end
-        puts "here"
+
         req = CalculateSolvableRequest.new(start_vert, end_vert, vertices)
         serv = SolvabilityService.new
         resp = serv.calculate_solvability(req)
-        puts "here"
+
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       end
