@@ -76,6 +76,8 @@ module Api
 
           EscapeRoom.find_by_id(params[:id]).endVertex = params[:startVertex]
           EscapeRoom.find_by_id(params[:id]).save
+
+          render json: { status: 'Success', message: 'Start vertex saved' }, status: :ok
         end
 
         if params[:operation] == 'setEnd'
@@ -87,8 +89,12 @@ module Api
 
           EscapeRoom.find_by_id(params[:id]).endVertex = params[:endVertex]
           EscapeRoom.find_by_id(params[:id]).save
+
+          render json: { status: 'Success', message: 'End vertex saved' }, status: :ok
         end
 
+      rescue StandardError
+        render json: { status: 'Fail', message: 'Escape Room might not exist' }, status: :not_found
       end
     end
   end
