@@ -548,17 +548,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   checkSolvable(): void{
-
-
-    let remove_vertex = {
+    let SolvableCheck = {
       operation: "Solvable",
-
+      startVertex: this._target_start,
+      endVertex: this._target_end
     };
   }
 
   setStart() :void{
     this._target_start= this._target_vertex;
     let id=this.vertexService.vertices[this._target_start.getAttribute("vertex-id")].id
+    this._target_start=id
     let connection = {
       operation: 'setStart',
       startVertex: id , //convert local to real id
@@ -577,6 +577,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   setEnd() :void{
     this._target_end= this._target_vertex;
     var id=this.vertexService.vertices[this._target_end.getAttribute("vertex-id")].id
+    this._target_end=id
     let connection = {
       operation: 'setEnd',
       endVertex: id , //convert local to real id
