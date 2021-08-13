@@ -548,11 +548,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   checkSolvable(): void{
-    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/").subscribe(
-      response=>{
-        console.log(response.data)
-      }
-    )
+
 
     let remove_vertex = {
       operation: "Solvable",
@@ -581,6 +577,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   setEnd() :void{
     this._target_end= this._target_vertex;
     var id=this.vertexService.vertices[this._target_end.getAttribute("vertex-id")].id
+    let connection = {
+      operation: 'setEnd',
+      endVertex: id , //convert local to real id
+    };
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        console.log(response);
+      },
+      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      //console.error('There was an error while updating the vertex', error)
+    );
+
   }
 
 
