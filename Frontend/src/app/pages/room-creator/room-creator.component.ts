@@ -22,6 +22,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public newEscapeRoomNameValid:boolean = false; // flag using regex
 
   private _target_vertex: any;
+  private _target_start: any;
+  private _target_end: any;
   private isConnection = false;
   private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
@@ -544,6 +546,70 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       //console.error('There was an error while updating the vertex', error)
     );
   }
+
+  checkSolvable(): void{
+    let SolvableCheck = {
+      operation: "Solvable",
+      startVertex: this._target_start,
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        console.log(response)
+        if (response.data.solvable==true){
+          window.alert('Solvable')
+        }else {
+          window.alert('not Solvable')
+        }
+
+
+      },
+      error => console.error('', error)
+    );
+  }
+
+  setStart() :void{
+    this._target_start= this._target_vertex;
+    let id=this.vertexService.vertices[this._target_start.getAttribute("vertex-id")].id
+    this._target_start=id
+    let connection = {
+      operation: 'setStart',
+      startVertex: id , //convert local to real id
+    };
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        console.log(response);
+      },
+      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      //console.error('There was an error while updating the vertex', error)
+    );
+  }
+
+  setEnd() :void{
+    this._target_end= this._target_vertex;
+    var id=this.vertexService.vertices[this._target_end.getAttribute("vertex-id")].id
+    this._target_end=id
+    let connection = {
+      operation: 'setEnd',
+      endVertex: id , //convert local to real id
+    };
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        console.log(response);
+      },
+      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      //console.error('There was an error while updating the vertex', error)
+    );
+
+  }
+
 
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);

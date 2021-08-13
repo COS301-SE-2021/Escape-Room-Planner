@@ -10,7 +10,7 @@ class SolvabilityService
 
     raise 'Solvability Request cant be null' if request.nil?
 
-    if request.startVert.nil? || request.endVert.nil? || request.vertices.nil?
+    if request.startVert.nil? || request.endVert.nil? 
       raise 'Parameters in request object cannot be null'
     end
 
