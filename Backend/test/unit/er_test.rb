@@ -6,6 +6,8 @@ require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
 require './app/models/Keys'
 require './app/models/Container'
+require './app/Services/RoomSubsystem/Request/get_vertices_request'
+require './app/Services/RoomSubsystem/Response/get_vertices_response'
 
 # rubocop:disable Metrics/ClassLength
 class ErTest < ActiveSupport::TestCase
@@ -261,5 +263,13 @@ class ErTest < ActiveSupport::TestCase
   end
 
 
+  test 'can get vertices' do
+    req = GetVerticesRequest.new(1)
+    rs = RoomServices.new
+    resp = rs.get_vertices(req)
+    assert_equal(resp.message, 'Vertices Obtained')
+    assert_not_nil(resp.data)
+  end
+  # TODO: Test get vertices fully
 end
 # rubocop:enable Metrics/ClassLength

@@ -182,4 +182,31 @@ class RoomServices
                   UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
                 end
   end
+
+  def get_vertices(request)
+    GetVerticesResponse.new(false, "Can't locate user", nil) if request.id.nil?
+    vertices = Vertex.select(
+      :id,
+      :type,
+      :name,
+      :posx,
+      :posy,
+      :width,
+      :height,
+      :graphicid,
+      :blob_id
+    ).where(escape_room_id: request.id)
+    data = vertices.map do |k|
+      if k.blob_id != 0
+        blob = ActiveStorageBlobs.find_by_id(k.blob_id)
+        k.graphicid = Rails.application.routes.url_helpers.rails_blob_url(blob,  host: 'localhost:3000')
+      end
+      { vertex: k,
+        connections: k.vertices.ids,
+        type: k.type }
+    end
+    GetVerticesResponse.new(true, 'Vertices Obtained', data)
+  rescue StandardError
+    GetVerticesResponse.new(false, 'Error occurred while getting Vertices', nil)
+  end
 end
