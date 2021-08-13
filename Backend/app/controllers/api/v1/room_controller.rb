@@ -74,7 +74,7 @@ module Api
             return
           end
 
-          EscapeRoom.find_by_id(params[:id]).endVertex = params[:startVertex]
+          EscapeRoom.find_by_id(params[:id]).startVertex = params[:startVertex]
           EscapeRoom.find_by_id(params[:id]).save
 
           render json: { status: 'Success', message: 'Start vertex saved' }, status: :ok
