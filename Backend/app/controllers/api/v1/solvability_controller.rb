@@ -18,6 +18,27 @@ module Api
 
           operation = params[:operation]
 
+          if operation == 'Solvable'
+
+
+
+
+            room_id = params[:roomid]
+            start_vert = EscapeRoom.find_by_id(room_id).startVertex
+            end_vert  = EscapeRoom.find_by_id(room_id).endVertex
+
+            all = Vertex.all.where(escape_room_id: room_id)
+            icount = 0
+            vertices = []
+            all.each do |v|
+              vertices[icount] = v.id
+              icount += 1
+            end
+
+            solvability(start_vert, end_vert, vertices)
+
+          end
+
           if operation == 'Setup'
             start_vert = params[:startVertex]
 
@@ -25,18 +46,8 @@ module Api
 
             vertices = params[:vertices]
 
+
             set_up_order(start_vert, end_vert, vertices)
-          end
-
-          if operation == 'Solvable'
-            start_vert = params[:startVertex]
-
-            end_vert = params[:endVertex]
-
-            vertices = params[:vertices]
-
-
-            solvability(start_vert, end_vert, vertices)
           end
 
         #  else
@@ -47,19 +58,18 @@ module Api
       end
 
       def solvability(start_vert, end_vert, vertices)
-
+        puts "t1"
         if start_vert.nil? || end_vert.nil? || vertices.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
         end
-
+        puts "here"
         req = CalculateSolvableRequest.new(start_vert, end_vert, vertices)
         serv = SolvabilityService.new
         resp = serv.calculate_solvability(req)
-
+        puts "here"
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
-        @vertices = vertices
       end
 
       def set_up_order(start_vert, end_vert, vertices)
