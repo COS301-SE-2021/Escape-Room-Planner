@@ -2,8 +2,8 @@
 
 one:
   id: 1
-  startVertex: MyStringStart
-  endVertex: MyStringEnd
+  startVertex: 1
+  endVertex: 6
   name: one
   user_id: 1
 
