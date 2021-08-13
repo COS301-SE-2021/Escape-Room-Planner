@@ -1,11 +1,17 @@
  <div class="overflow-auto" style="height: 94vh; width: 315px;">
     <!-- INVENTORY STARTS HERE -->
     <ul class="nav flex-column">
-      <li class="border border-dark w-100" style=" background-color: grey">Container
-        <input type="file" name="idk" #add_container [hidden]="true" (input)="addImage(add_container,'container')">
-        <button type="submit" (click)="add_container.click()" style="float: right;" class="btn btn-link remove-padding">
-          <img src="./assets/svg/plus.svg" alt="add container image"/>
-        </button>
+      <li class="border border-dark w-100" style=" background-color: grey; float: left;">Container
+
+
+        <form #form (submit)="addImage_2($event)">
+          <input type="file" accept="image/*" name="image" #add_container [hidden]="false">
+          <button type="submit" style="float: right;" class="btn btn-link remove-padding">
+            <img src="./assets/svg/plus.svg" alt="add container image"/>
+          </button>
+        </form>
+
+
       </li>
       <li id="containerInventory" class="bg-secondary text-white" style="width: 100%;">
         <div class="container-fluid">
@@ -22,7 +28,7 @@
         </div>
       </li>
       <li class="border border-dark w-100" style=" background-color: grey">Puzzle
-        <input type="file" name="idk" #add_puzzle [hidden]="true" (input)="addImage(add_puzzle,'puzzle')">
+        <input type="file" accept="image/*" name="idk" #add_puzzle [hidden]="true" (input)="addImage(add_puzzle,'puzzle')">
         <button type="submit" (click)="add_puzzle.click()" style="float: right;" class="btn btn-link remove-padding">
           <img src="./assets/svg/plus.svg" alt="add container image"/>
         </button>
@@ -38,7 +44,7 @@
         </div>
       </li>
       <li class="border border-dark w-100" style=" background-color: grey">Key
-        <input type="file" name="idk" #add_key [hidden]="true" (input)="addImage(add_key,'key')">
+        <input type="file" accept="image/*" name="idk" #add_key [hidden]="true" (input)="addImage(add_key,'key')">
         <button type="submit" (click)="add_key.click()" style="float: right;" class="btn btn-link remove-padding">
           <img src="./assets/svg/plus.svg" alt="add container image"/>
         </button>
@@ -54,7 +60,7 @@
         </div>
       </li>
       <li class="border border-dark w-100" style=" background-color: grey">Clue
-        <input type="file" name="idk" #add_clue [hidden]="true" (input)="addImage(add_clue,'clue')">
+        <input type="file" accept="image/*" name="idk" #add_clue [hidden]="true" (input)="addImage(add_clue,'clue')">
         <button type="submit" (click)="add_clue.click()" style="float: right;" class="btn btn-link remove-padding">
           <img src="./assets/svg/plus.svg" alt="add container image"/>
         </button>

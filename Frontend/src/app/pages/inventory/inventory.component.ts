@@ -1,5 +1,7 @@
 import {Component, ElementRef, EventEmitter, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {toBase64String} from "@angular/compiler/src/output/source_map";
+import {File} from "@angular/compiler-cli/src/ngtsc/file_system/testing/src/mock_file_system";
 
 @Component({
   selector: 'app-inventory',
@@ -36,14 +38,12 @@ export class InventoryComponent implements OnInit {
 
   public loadInventory(images: Array<image_object>): void{
     for (let image of images){
-      console.log(image);
       let blob_id = image.blob_id.toString();
       this.inventory[blob_id] = image.src;
       this.renderInventoryObject(blob_id, image.type);
     }
   }
 
-  // todo fix the onClick() to work as expected with escape-room-spawning
   private renderInventoryObject( blob_id: string, type:string){
     // <div class="col">
     // <img src="./assets/images/key1.png" (click)="onClick('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
@@ -81,7 +81,6 @@ export class InventoryComponent implements OnInit {
         break;
       }
       case 'clue':{
-        console.log('here');
         this.renderer.appendChild(this.clue_div?.nativeElement, new_div)
         break;
       }
@@ -98,10 +97,53 @@ export class InventoryComponent implements OnInit {
     this.afterClick.emit(data);
   }
 
-  public addImage(input:HTMLInputElement | null, type:'container'|'puzzle'|'key'|'clue'):void{
-    console.log(type);
+  public async addImage(input: HTMLInputElement | null, type: 'container' | 'puzzle' | 'key' | 'clue'): Promise<void> {
+    let file = input?.files?.item(0);
 
-    // send to backend and render the thing on front
+
+    if (file != null && file.size < 1000000 && file.type.includes('image')) {
+      // send request ot back end render piece on front
+      let image = (await this.toBase64(file) as string).replace('data:image/jpeg;base64,', '');
+
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/inventory/", {image: image, type: type}
+        , {"headers": this.headers}).subscribe(
+        response => {
+          console.log(response);
+        },
+        error => {
+          console.error(error);
+          this.error.emit();
+        }
+      );
+    } else {
+      alert('file size too large or not an image');
+    }
+  }
+
+  private toBase64(file:Blob):Promise<any>{
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  public addImage_2(event:any){
+    // let file = input?.files?.item(0);
+    let form = new FormData(event.target);
+    console.log(form);
+      // send request ot back end render piece on front
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/inventory/", form
+        ,{"headers":this.headers}).subscribe(
+        response =>{
+          console.log(response);
+        },
+        error =>{
+          console.error(error);
+          this.error.emit();
+        }
+      );
   }
 }
 
