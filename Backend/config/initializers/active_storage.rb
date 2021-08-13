@@ -1,2 +1,2 @@
 # config/initializers/active_storage.rb
-ActiveStorage::Service.url_expires_in = 99.year
+Rails.application.config.active_storage.service_urls_expire_in = 99.years
