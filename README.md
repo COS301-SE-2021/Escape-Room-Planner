@@ -1,4 +1,5 @@
 Most likely failing, because of herooku upload
+
 [![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FCOS301-SE-2021%2FEscape-Room-Planner%2Fbadge%3Fref%3Dmaster&style=for-the-badge)](https://actions-badge.atrox.dev/COS301-SE-2021/Escape-Room-Planner/goto?ref=master)
 
 [![Ruby on Rails CI](https://github.com/COS301-SE-2021/Escape-Room-Planner/actions/workflows/ruby.yml/badge.svg?branch=master)](https://github.com/COS301-SE-2021/Escape-Room-Planner/actions/workflows/ruby.yml)
