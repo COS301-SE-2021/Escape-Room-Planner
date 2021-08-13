@@ -1,22 +1,17 @@
 # frozen_string_literal: true
 
-require 'mail'
-
 class NotificationServices
   def send_email_notification(request)
-    return SendEmailNotificationResponse(false, 'SendEmailNotificationRequest null') if request.nil?
+    return SendEmailNotificationResponse.new(false, 'Request null') if request.nil?
 
-    @mail = Mail.new do
-      from 'alyak0803@gmail.com'
-      to   'kayla.latty.kal@gmail.com'
-      subject 'test email'
-      body 'Hi this is a test'
-    end
+    resp = UserNotifierMailer.send_signup_email(request.email).deliver
+    puts resp
+    SendEmailNotificationResponse.new(true, 'Email sent successfully')
 
-    @response = if @mail.deliver!
-                  SendEmailNotificationResponse(true, 'email sent succesfully')
-                else
-                  SendEmailNotificationResponse(false, 'email unsuccessful')
-                end
+    # @response = if
+    #               return SendEmailNotificationResponse.new(true, 'Email sent successfully')
+    #             else
+    #               return SendEmailNotificationResponse.new(false, 'Email failed to send')
+    #             end
   end
 end
