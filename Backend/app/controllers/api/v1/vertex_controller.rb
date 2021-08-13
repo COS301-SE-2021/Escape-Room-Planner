@@ -91,7 +91,6 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
-
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
@@ -111,7 +110,7 @@ module Api
           req = GetVerticesRequest.new(params[:id])
           serv = RoomServices.new
           res = serv.get_vertices(req)
-          render json: { success: res.success, message: res.message, data: res.data}, status: :ok
+          render json: { success: res.success, message: res.message, data: res.data }, status: :ok
         else
           render json: { success: 'FAILED', message: 'Unauthorized', data: nil }, status: 401
         end
@@ -142,6 +141,8 @@ module Api
 
           roomid = params[:roomid]
 
+          blob_id = params[:blob_id]
+
           if name.nil? || graphicid.nil? || posy.nil? || posx.nil? || width.nil? || height.nil? || roomid.nil?
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
             return
@@ -157,7 +158,8 @@ module Api
               return
             end
 
-            req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
+            req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description,
+                                          roomid)
             res = serv.create_puzzle(req)
 
           when 'Keys'
@@ -165,7 +167,7 @@ module Api
             res = serv.create_key(req)
 
           when 'Container'
-            req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name)
+            req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name, blob_id)
             res = serv.create_container(req)
 
           when 'Clue'

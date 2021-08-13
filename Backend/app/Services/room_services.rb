@@ -68,7 +68,7 @@ class RoomServices
     @container.name = request.name
     @container.graphicid = request.graphic_id
     @container.escape_room_id = request.room_id
-
+    @container.blob_id = request.blob_id unless request.blob_id.nil?
     @response = if @container.save
                   CreateContainerResponse.new(@container.id, true)
                 else
