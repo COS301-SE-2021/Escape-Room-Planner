@@ -551,8 +551,24 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let SolvableCheck = {
       operation: "Solvable",
       startVertex: this._target_start,
-      endVertex: this._target_end
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
     };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        console.log(response)
+        if (response.data.solvable==true){
+          window.alert('Solvable')
+        }else {
+          window.alert('not Solvable')
+        }
+
+
+      },
+      error => console.error('', error)
+    );
   }
 
   setStart() :void{
