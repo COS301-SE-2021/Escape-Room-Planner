@@ -6,6 +6,8 @@ require './app/Services/InventorySubsystem/Request/add_graphic_request'
 require './app/Services/InventorySubsystem/Response/add_graphic_response'
 require './app/Services/InventorySubsystem/Request/get_graphics_request'
 require './app/Services/InventorySubsystem/Response/get_graphics_response'
+require './app/Services/InventorySubsystem/Request/delete_graphic_request'
+require './app/Services/InventorySubsystem/Response/delete_graphic_response'
 
 module Api
   module V1
@@ -31,8 +33,21 @@ module Api
         if authorise(request)
           # get auth_token to get user id
           auth_token = request.headers['Authorization'].split(' ').last
-          req = AddGraphicRequest.new(auth_token, params[:image], params[:image])
+          req = AddGraphicRequest.new(auth_token, params[:image], params[:type])
           res = @@inventory_service.add_graphic(req)
+          render json: { success: res.success, message: res.message }, status: :ok
+        else
+          render json: { success: false, message: 'Unauthorized' }, status: 401
+        end
+      end
+
+      # delete api/v1/inventory/:id
+      def destroy
+        if authorise(request)
+          # get auth_token to get user id
+          auth_token = request.headers['Authorization'].split(' ').last
+          req = DeleteGraphicRequest.new(auth_token, params[:blob_id].to_i)
+          res = @@inventory_service.delete_graphic(req)
           render json: { success: res.success, message: res.message }, status: :ok
         else
           render json: { success: false, message: 'Unauthorized' }, status: 401

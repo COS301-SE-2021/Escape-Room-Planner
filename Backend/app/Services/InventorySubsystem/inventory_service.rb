@@ -50,8 +50,7 @@ class InventoryService
   # @param [DeleteGraphicRequest] request
   # @return [DeleteGraphicResponse]
   def delete_graphic(request)
-    return DeleteGraphicResponse.new(false, 'Please Send Image') if request.blob_id < 1
-
+    return DeleteGraphicResponse.new(false, 'Please send real blob id') if request.blob_id.nil?
     decoded_token = JsonWebToken.decode(request.token)
     user = User.find_by_id(decoded_token['id'])
     @response = if user.nil?

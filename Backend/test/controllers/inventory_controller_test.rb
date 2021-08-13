@@ -8,7 +8,7 @@ module Api
       test 'can add graphic to Inventory' do
         test_image = './storage/test/clue1.png'
         file = Rack::Test::UploadedFile.new(test_image, 'image/png')
-        authed_post_call(api_v1_inventory_index_path, { image: file })
+        authed_post_call(api_v1_inventory_index_path, { image: file, type: 'clue' })
         response = JSON.parse(@response.body)
         assert_response :success
         assert_equal 'Graphic been added', response['message']
@@ -32,6 +32,13 @@ module Api
       end
 
       # TODO: Assert get expected response for get graphics
+
+      test 'can delete graphic through api call' do
+        authed_delete_call("#{api_v1_inventory_index_path}/1", { blob_id: 1 })
+        response = JSON.parse(@response.body)
+        assert_response :success
+        assert_equal 'Graphic been deleted', response['message']
+      end
     end
   end
 end
