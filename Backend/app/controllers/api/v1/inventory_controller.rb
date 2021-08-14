@@ -46,7 +46,15 @@ module Api
         if authorise(request)
           # get auth_token to get user id
           auth_token = request.headers['Authorization'].split(' ').last
-          req = DeleteGraphicRequest.new(auth_token, params[:blob_id].to_i)
+
+          puts 'cocka'
+          puts 'cocka'
+          puts 'cocka'
+          puts 'cocka'
+          puts 'cocka'
+          puts params[:id]
+
+          req = DeleteGraphicRequest.new(auth_token, params[:id].to_i)
           res = @@inventory_service.delete_graphic(req)
           render json: { success: res.success, message: res.message }, status: :ok
         else
