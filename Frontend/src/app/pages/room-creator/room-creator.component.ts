@@ -548,6 +548,16 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   checkSolvable(): void{
+    if(this._target_start==null){
+      window.alert('set a start vertex first')
+      return
+    }
+
+    if(this._target_end==null){
+      window.alert('set an end vertex first')
+      return
+    }
+
     let SolvableCheck = {
       operation: "Solvable",
       startVertex: this._target_start,
@@ -569,6 +579,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       },
       error => console.error('', error)
     );
+  }
+
+  checkSetupOrder() {
+
   }
 
   setStart() :void{
@@ -666,6 +680,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // append to div alertElementError
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
   }
+
+
 }
 
 // For Vertex Response
