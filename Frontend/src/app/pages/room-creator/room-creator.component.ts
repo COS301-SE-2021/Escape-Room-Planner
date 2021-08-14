@@ -582,6 +582,16 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   checkSetupOrder() {
+    if(this._target_start==null){
+      window.alert('set a start vertex first')
+      return
+    }
+
+    if(this._target_end==null){
+      window.alert('set an end vertex first')
+      return
+    }
+
 
   }
 
