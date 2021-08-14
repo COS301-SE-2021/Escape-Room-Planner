@@ -7,8 +7,11 @@ module Api
     class InventoryControllerTest < ActionDispatch::IntegrationTest
       test 'can add graphic to Inventory' do
         test_image = './storage/test/clue1.png'
-        file = Rack::Test::UploadedFile.new(test_image, 'image/png')
-        authed_post_call(api_v1_inventory_index_path, { image: file, type: 'clue' })
+        base64_image =
+          File.open(test_image, 'rb') do |file|
+            Base64.strict_encode64(file.read)
+          end
+        authed_post_call(api_v1_inventory_index_path, { image: base64_image, type: 'clue' })
         response = JSON.parse(@response.body)
         assert_response :success
         assert_equal 'Graphic been added', response['message']

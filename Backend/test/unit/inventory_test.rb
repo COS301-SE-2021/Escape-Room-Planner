@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'base64'
 require './app/Services/InventorySubsystem/inventory_service'
 require './app/Services/InventorySubsystem/Request/add_graphic_request'
 require './app/Services/InventorySubsystem/Response/add_graphic_response'
@@ -14,8 +15,12 @@ class InventoryTest < ActiveSupport::TestCase
   @@fake_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c'
   test 'can add Graphic to Inventory' do
     test_image = './storage/test/clue1.png'
-    file = Rack::Test::UploadedFile.new(test_image, 'image/png')
-    request = AddGraphicRequest.new(login_for_test, file, 'Clue')
+    base64_image =
+      File.open(test_image, 'rb') do |file|
+        Base64.strict_encode64(file.read)
+      end
+    # file = Rack::Test::UploadedFile.new(test_image, 'image/png')
+    request = AddGraphicRequest.new(login_for_test, base64_image, 'Clue')
     serv = InventoryService.new
     response = serv.add_graphic(request)
     assert_equal(response.message, 'Graphic been added')
