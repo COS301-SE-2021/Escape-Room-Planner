@@ -46,7 +46,7 @@ export class InventoryComponent implements OnInit {
 
   private renderInventoryObject( blob_id: string, type:string){
     // <div class="col" element>
-    //    <img src="./assets/images/con1.png" (click)="onClick('Container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+    //    <img src="./assets/images/con1.png" (click)="onClick('Container', 'con1.png', null, 10)" alt="NOT FOUND" class="img-thumbnail">
     //    <button class="btn btn-dark remove-padding delete-button" (click)="deleteImage(element)">
     //      <img src="./assets/svg/trash-fill.svg" alt="delete image">
     //    </button>
@@ -85,31 +85,42 @@ export class InventoryComponent implements OnInit {
     // RENDER
     switch (type){
       case 'container':{
-        this.renderer.appendChild(this.container_div?.nativeElement, new_div)
+        this.renderer.listen(new_img, 'click', (event) => this.onClick('Container','./assets/images/con1.png',Number.parseInt(blob_id), 10));
+        this.renderer.appendChild(this.container_div?.nativeElement, new_div);
         break;
       }
       case 'puzzle':{
-        this.renderer.appendChild(this.puzzle_div?.nativeElement, new_div)
+        this.renderer.listen(new_img, 'click', (event) => this.onClick('Puzzle','./assets/images/puzzle1.png',Number.parseInt(blob_id), 10));
+        this.renderer.appendChild(this.puzzle_div?.nativeElement, new_div);
         break;
       }
       case 'key':{
-        this.renderer.appendChild(this.key_div?.nativeElement, new_div)
+        this.renderer.listen(new_img, 'click', (event) => this.onClick('Keys','./assets/images/key1.png',Number.parseInt(blob_id), 10));
+        this.renderer.appendChild(this.key_div?.nativeElement, new_div);
         break;
       }
       case 'clue':{
-        this.renderer.appendChild(this.clue_div?.nativeElement, new_div)
+        this.renderer.listen(new_img, 'click', (event) => this.onClick('Clue','./assets/images/clue1.png',Number.parseInt(blob_id), 10));
+        this.renderer.appendChild(this.clue_div?.nativeElement, new_div);
         break;
       }
     }
   }
 
-  public onClick(type:string, loc:string, pos:number): void{
+  public onClick(type:string, loc:string, blob_id:number | null, pos:number): void{
+    let src = null;
+
+    if (blob_id) src = this.inventory[blob_id.toString()];
+
     let data: inventoryObject = {
       type: type,
       loc: loc,
-      pos: pos
+      blob_id: blob_id,
+      pos: pos,
+      src: src
     }
 
+    console.log(data)
     this.afterClick.emit(data);
   }
 
@@ -167,7 +178,9 @@ export class InventoryComponent implements OnInit {
 interface inventoryObject{
   type: string,
   loc: string,
-  pos: number
+  blob_id: number | null,
+  pos: number,
+  src: string | null
 }
 
 interface image_object{

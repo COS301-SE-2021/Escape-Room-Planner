@@ -90,7 +90,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //MAKE API CALL BASED ON TYPE
     let name : string = "Object";       //default name
     let description : string = "Works";  //default description
-    this.createVertex(event.type, name, event.loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue');
+    this.createVertex(event.type, name, event.loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue', event.src, event.blob_id);
     //spawns object on plane
   }
 
@@ -323,7 +323,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   //creates Vertex of type with scale at position x,y
   createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
                inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: Date,
-               inDescription: string, inRoom_id: number, inClue: string): void
+               inDescription: string, inRoom_id: number, inClue: string, src:string, blob_id: number): void
   {
     let createVertexBody = {type: inType,
       name: inName,
@@ -335,7 +335,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       estimated_time: inEstimated_time,
       description: inDescription,
       roomid: inRoom_id,
-      clue: inClue
+      clue: inClue,
+      blob_id: blob_id
     };
 
     if(inType != "Puzzle"){
@@ -354,11 +355,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody, {"headers": this.headers}).subscribe(
       response => {
         //get the latest local id for a vertex
-        //get the latest local id for a vertex
-        let current_id = this.vertexService.addVertex(response.data.id,
-          inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
-          inEstimated_time, inDescription, inClue
-        );
+        let current_id;
+
+        if (src){
+          current_id = this.vertexService.addVertex(response.data.id,
+            inType, inName, src, inPos_y, inPos_x, inWidth, inHeight,
+            inEstimated_time, inDescription, inClue
+          );
+        }else {
+          current_id = this.vertexService.addVertex(response.data.id,
+            inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
+            inEstimated_time, inDescription, inClue
+          );
+        }
 
         this.spawnObjects(current_id);
       },
@@ -388,7 +397,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x +'px, '+ vertex.pos_y +'px)');
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
-    this.renderer.setAttribute(newObject,"src", "./assets/images/" + vertex.graphic_id);
+    this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
     this.renderer.setAttribute(newObject,"data-x", vertex.pos_x.toString());
     this.renderer.setAttribute(newObject,"data-y", vertex.pos_y.toString());
 

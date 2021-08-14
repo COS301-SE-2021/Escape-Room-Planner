@@ -17,14 +17,11 @@
         <div class="container-fluid">
           <div class="row" #container_div style="padding-top: 20px;">
             <div class="col">
-              <img src="./assets/images/room1.png" (click)="onClick('Container', 'room1.png', 10)" alt="NOT FOUND" class="img-thumbnail">
-<!--              <button class="btn btn-dark remove-padding delete-button">-->
-<!--                <img src="./assets/svg/trash-fill.svg" alt="delete image">-->
-<!--              </button>-->
+              <img src="./assets/images/room1.png" (click)="onClick('Container', './assets/images/room1.png',null, 10)" alt="NOT FOUND" class="img-thumbnail">
               <p class="text-center text-black-50">Room 1</p>
             </div>
             <div class="col">
-              <img src="./assets/images/con1.png" (click)="onClick('Container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+              <img src="./assets/images/con1.png" (click)="onClick('Container', './assets/images/con1.png',null,10)" alt="NOT FOUND" class="img-thumbnail">
               <button class="btn btn-dark remove-padding delete-button" (click)="deleteImage(null)">
                   <img src="./assets/svg/trash-fill.svg" alt="delete image">
               </button>
@@ -43,7 +40,7 @@
         <div class="container-fluid">
           <div class="row" #puzzle_div style="padding-top: 20px;">
             <div class="col">
-              <img src="./assets/images/puzzle1.png" (click)="onClick('Puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+              <img src="./assets/images/puzzle1.png" (click)="onClick('Puzzle', './assets/images/puzzle1.png',null,10)" alt="NOT FOUND" class="img-thumbnail">
               <p class="text-center text-black-50">Puzzle 1</p>
             </div>
           </div>
@@ -59,7 +56,7 @@
         <div class="container-fluid">
           <div class="row" #key_div style="padding-top: 20px;">
             <div class="col">
-              <img src="./assets/images/key1.png" (click)="onClick('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+              <img src="./assets/images/key1.png" (click)="onClick('Keys', './assets/images/key1.png',null,10)" alt="NOT FOUND" class="img-thumbnail">
               <p class="text-center text-black-50">Key 1</p>
             </div>
           </div>
@@ -75,7 +72,7 @@
         <div class="container-fluid">
           <div class="row" #clue_div style="padding-top: 20px;">
             <div class="col">
-              <img src="./assets/images/clue1.png" (click)="onClick('Clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+              <img src="./assets/images/clue1.png" (click)="onClick('Clue', './assets/images/clue1.png',null,10)" alt="NOT FOUND" class="img-thumbnail">
               <p class="text-center text-black-50">Clue 1</p>
             </div>
           </div>
