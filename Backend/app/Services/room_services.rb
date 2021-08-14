@@ -204,13 +204,12 @@ class RoomServices
       if k.blob_id != 0
         blob = user.graphic.blobs.find_by_id(k.blob_id)
         k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
-        #puts k.graphicid
       end
       { vertex: k,
         connections: k.vertices.ids,
         type: k.type }
     end
-    #puts data
+    # TODO: Fix to be more Efficient
     GetVerticesResponse.new(true, 'Vertices Obtained', data)
   rescue StandardError => e
     puts e
