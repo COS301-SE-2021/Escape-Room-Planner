@@ -120,7 +120,6 @@ export class InventoryComponent implements OnInit {
       src: src
     }
 
-    console.log(data)
     this.afterClick.emit(data);
   }
 
@@ -163,7 +162,6 @@ export class InventoryComponent implements OnInit {
       this.httpClient.delete('http://127.0.0.1:3000/api/v1/inventory/'+blob_id, {"headers": this.headers})
         .subscribe(
         response =>{
-          console.log(response);
           element?.remove();
         },
         error =>{

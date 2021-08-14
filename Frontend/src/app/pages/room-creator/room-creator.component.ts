@@ -175,8 +175,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.lines = [];
 
     //http request to rails api
-    this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
+        console.log(response);
         //render all the vertices
         for (let vertex_t of response.data){
           //spawn objects out;
