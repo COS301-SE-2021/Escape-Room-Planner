@@ -199,15 +199,18 @@ class RoomServices
     ).where(escape_room_id: request.id)
     return GetVerticesResponse.new(true, 'Room has no vertices', nil) if vertices.nil?
 
+    user = User.find_by_id(EscapeRoom.find_by_id(request.id).user_id)
     data = vertices.map do |k|
       if k.blob_id != 0
-        blob = ActiveStorageBlobs.find_by_id(k.blob_id)
-        k.graphicid = Rails.application.routes.url_helpers.rails_blob_url(blob, host: 'localhost:3000')
+        blob = user.graphic.blobs.find_by_id(k.blob_id)
+        k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
+        #puts k.graphicid
       end
       { vertex: k,
         connections: k.vertices.ids,
         type: k.type }
     end
+    #puts data
     GetVerticesResponse.new(true, 'Vertices Obtained', data)
   rescue StandardError => e
     puts e
