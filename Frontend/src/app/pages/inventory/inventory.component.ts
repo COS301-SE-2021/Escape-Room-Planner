@@ -135,6 +135,9 @@ export class InventoryComponent implements OnInit {
         , {"headers": this.headers}).subscribe(
         response => {
           console.log(response);
+          let blob_id = response.data.blob_id.toString();
+          this.inventory[blob_id] = response.data.src;
+          this.renderInventoryObject(blob_id, type);
         },
         error => {
           console.error(error);
