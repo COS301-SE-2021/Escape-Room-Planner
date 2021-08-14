@@ -45,6 +45,7 @@ class InventoryService
                       type: blob.metadata['type']
                     }
                   end
+                  puts image
                   GetGraphicsResponse.new(true, 'User Inventory Graphics Obtained', image)
                 end
   rescue StandardError
