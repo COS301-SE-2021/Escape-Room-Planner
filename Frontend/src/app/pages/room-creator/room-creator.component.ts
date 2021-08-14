@@ -624,7 +624,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       resp => {
         console.log(resp)
         if(resp.data.status=="Success"){
-          window.alert('Setup order is: '+resp.data)
+          window.alert('Setup order is: '+resp.data.order)
         }else {
           window.alert('Unknown failure')
         }
