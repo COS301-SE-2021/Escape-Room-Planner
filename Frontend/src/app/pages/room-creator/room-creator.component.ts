@@ -613,6 +613,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       error => console.error('', error)
     );
 
+    let setUpOrderCheck = {
+      operation: "Setup",
+      startVertex: this._target_start,
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
+      resp => {
+        console.log(resp)
+        if(resp.data.status=="Success"){
+          window.alert('Setup order is: '+resp.data)
+        }else {
+          window.alert('Unknown failure')
+        }
+      },
+      error => console.error('', error)
+    );
+
 
   }
 
