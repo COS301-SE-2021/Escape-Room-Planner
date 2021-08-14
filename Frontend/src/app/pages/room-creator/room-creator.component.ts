@@ -354,6 +354,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody, {"headers": this.headers}).subscribe(
       response => {
         //get the latest local id for a vertex
+        //get the latest local id for a vertex
         let current_id = this.vertexService.addVertex(response.data.id,
           inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
           inEstimated_time, inDescription, inClue

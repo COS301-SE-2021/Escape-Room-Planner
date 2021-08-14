@@ -45,13 +45,18 @@ export class InventoryComponent implements OnInit {
   }
 
   private renderInventoryObject( blob_id: string, type:string){
-    // <div class="col">
-    // <img src="./assets/images/key1.png" (click)="onClick('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-    // <p class="text-center text-black-50">Key 1</p>
+    // <div class="col" element>
+    //    <img src="./assets/images/con1.png" (click)="onClick('Container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+    //    <button class="btn btn-dark remove-padding delete-button" (click)="deleteImage(element)">
+    //      <img src="./assets/svg/trash-fill.svg" alt="delete image">
+    //    </button>
+    //    <p class="text-center text-black-50">Container 1</p>
     // </div>
     let new_div = this.renderer.createElement('div');
     let new_img = this.renderer.createElement('img');
     let new_p = this.renderer.createElement('p');
+    let new_button = this.renderer.createElement('button');
+    let new_button_img = this.renderer.createElement('img');
     // setting classes
     this.renderer.addClass(new_div,'col');
     this.renderer.addClass(new_img, 'img-thumbnail');
@@ -61,8 +66,19 @@ export class InventoryComponent implements OnInit {
     new_p.textContent = type;
     // setting src
     this.renderer.setAttribute(new_img,'src', this.inventory[blob_id]);
+    this.renderer.setAttribute(new_div,'blob-id', blob_id); //sets blob-id attr to follow the array id
     this.renderer.setAttribute(new_img, 'alt', type + 'inventory object');
-
+    // trash icon in button
+    this.renderer.setAttribute(new_button_img, 'src', './assets/svg/trash-fill.svg');
+    this.renderer.setAttribute(new_button_img, 'alt', 'trash can');
+    this.renderer.appendChild(new_button, new_button_img);
+    // delete button
+    this.renderer.addClass(new_button, 'btn');
+    this.renderer.addClass(new_button, 'btn-dark');
+    this.renderer.addClass(new_button, 'remove-padding');
+    this.renderer.addClass(new_button, 'delete-button');
+    this.renderer.listen(new_button,'click',(event) =>  this.deleteImage(new_div));
+    this.renderer.appendChild(new_div, new_button);
     //CHILDREN
     this.renderer.appendChild(new_div, new_img);
     this.renderer.appendChild(new_div, new_p);
@@ -129,21 +145,22 @@ export class InventoryComponent implements OnInit {
     });
   }
 
-  public addImage_2(event:any){
-    // let file = input?.files?.item(0);
-    let form = new FormData(event.target);
-    console.log(form);
-      // send request ot back end render piece on front
-      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/inventory/", form
-        ,{"headers":this.headers}).subscribe(
+  public deleteImage(element:HTMLElement | null):void {
+    let blob_id = element?.getAttribute('blob-id');
+
+    if (blob_id != null){
+      this.httpClient.delete('http://127.0.0.1:3000/api/v1/inventory/'+blob_id, {"headers": this.headers})
+        .subscribe(
         response =>{
           console.log(response);
+          element?.remove();
         },
         error =>{
-          console.error(error);
+          console.error(error.statusText);
           this.error.emit();
         }
       );
+    }
   }
 }
 

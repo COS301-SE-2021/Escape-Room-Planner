@@ -4,7 +4,7 @@
       <li class="border border-dark w-100" style=" background-color: grey; float: left;">Container
 
 
-        <form #form (submit)="addImage_2($event)">
+        <form #form>
           <input type="file" accept="image/*" name="image" #add_container [hidden]="false">
           <button type="submit" style="float: right;" class="btn btn-link remove-padding">
             <img src="./assets/svg/plus.svg" alt="add container image"/>
@@ -18,10 +18,16 @@
           <div class="row" #container_div style="padding-top: 20px;">
             <div class="col">
               <img src="./assets/images/room1.png" (click)="onClick('Container', 'room1.png', 10)" alt="NOT FOUND" class="img-thumbnail">
+<!--              <button class="btn btn-dark remove-padding delete-button">-->
+<!--                <img src="./assets/svg/trash-fill.svg" alt="delete image">-->
+<!--              </button>-->
               <p class="text-center text-black-50">Room 1</p>
             </div>
             <div class="col">
               <img src="./assets/images/con1.png" (click)="onClick('Container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
+              <button class="btn btn-dark remove-padding delete-button" (click)="deleteImage(null)">
+                  <img src="./assets/svg/trash-fill.svg" alt="delete image">
+              </button>
               <p class="text-center text-black-50">Container 1</p>
             </div>
           </div>
