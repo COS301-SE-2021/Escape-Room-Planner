@@ -27,10 +27,10 @@ class InventoryTest < ActiveSupport::TestCase
   end
 
   test 'can handle incorrect image upload' do
-    request = AddGraphicRequest.new(login_for_test, 'incorrect type', 'Clue')
+    request = AddGraphicRequest.new(login_for_test, nil, 'Clue')
     serv = InventoryService.new
     response = serv.add_graphic(request)
-    assert_equal(response.message, 'Error has occurred')
+    assert_equal(response.message, 'Please Send Image')
   end
 
   # TODO: do test on incorrect JWT token given

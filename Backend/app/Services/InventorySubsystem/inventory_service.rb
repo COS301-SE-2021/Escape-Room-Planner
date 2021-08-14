@@ -18,8 +18,7 @@ class InventoryService
     @response = if user.nil?
                   AddGraphicResponse.new(false, 'User can not be found', nil)
                 else
-                  user.graphic.attach(io: StringIO.new(image[:io]), filename: image[:filename],
-                                      content_type: image[:content_type])
+                  user.graphic.attach(io: StringIO.new(image[:io]), filename: image[:filename])
                   blob = user.graphic.blobs.last
                   blob.metadata['type'] = request.type
                   blob.metadata
@@ -77,11 +76,11 @@ class InventoryService
 
   def decode_base64Image(base64_image)
     img_from_base64 = Base64.decode64(base64_image)
-    img_from_base64[0, 8]
-    filetype = /(png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF)/.match(img_from_base64[0, 16])[0]
+    # puts img_from_base64[0, 8]
+    #filetype = /(png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF)/.match(img_from_base64[0, 16])[0]
     # name the file
     file = { io: img_from_base64,
-             content_type: 'image/' + filetype,
-             filename: "inventory-#{Time.current.to_i}." + filetype }
+           #  content_type: 'image/jpg' ,
+             filename: "inventory-#{Time.current.to_i}.jpg"}
   end
 end

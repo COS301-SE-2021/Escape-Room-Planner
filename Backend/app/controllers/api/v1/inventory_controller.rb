@@ -35,7 +35,7 @@ module Api
           auth_token = request.headers['Authorization'].split(' ').last
           req = AddGraphicRequest.new(auth_token, params[:image], params[:type])
           res = @@inventory_service.add_graphic(req)
-          render json: { success: res.success, message: res.message }, status: :ok
+          render json: { success: res.success, message: res.message,data: res.data}, status: :ok
         else
           render json: { success: false, message: 'Unauthorized' }, status: 401
         end
