@@ -1,78 +1,189 @@
-#login-container{
+body {
+  height: 100%;
+  background-color: #222d32;
+  font-family: "Roboto", sans-serif;
+}
+
+.global-container {
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #000;
+  animation: page-load 1s;
+}
 
+@keyframes page-load {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.container-fluid {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  margin-top: 100px;
+  animation: top-load 300ms;
 }
 
 small {
   color: red;
 }
 
-label {
-  font-weight: 600;
+@keyframes top-load {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
 }
 
-#login-card {
-  width: 100%;
-  border-radius: 10px;
-  /*height: 300px;*/
-  box-shadow: 5px 5px 5px gray;
-}
-.form-control {
-  /* border-color: #00fa9a !important; */
-}
-input:focus {
-  border-color: #00fa9a !important;
-  outline: none !important;
-  box-shadow: none !important;
+.logo {
+  height: 50px;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px 5px 0px 0px;
 }
 
-#signin-bt {
-  background: none;
-  border-radius: 10px;
-  border: 2px solid #00fa9a;
-  color: #00fa9a;
-}
-
-#signin-bt:hover {
-  background: none;
-  border-radius: 10px;
-  border: 2px solid #00fa9a;
-  color: #00fa9a;
-
-}
-
-#signup-bt {
-  border-radius: 10px;
-  border: 1px solid blue;
-  background: mediumspringgreen;
-  color: mediumblue;
+.logo h2 {
   text-align: center;
-  width: 95%;
+  font-size: 20px;
 }
 
-* {
-  text-decoration: none;
-  list-style: none;
-}
-
-a:hover {
-  text-decoration: none;
-}
-
-#sign-up {
-  padding-top: 10px;
+.signup {
   text-align: center;
-  color: mediumblue;
+  padding-top: 15px;
 }
 
-#forgot-pass {
-  text-align: center;
-  color: mediumblue;
+login-form {
+  height: 400px;
+  margin: 20px;
+  background: #1a2226;
+  border-radius: 40px 40px 20px 20px;
 }
 
-#welcome {
-  padding-top: 10px;
-  font-family: "Adobe Caslon Pro Bold", monospace;
+.card-body{
+  width: 300px;
 }
+
+
+form {
+  font-size: 14px;
+}
+
+/*imput[type="email"]{*/
+/*  background: #1a2226;*/
+/*  border: 1px solid #0db8de;*/
+/*  border-radius: 8px;*/
+/*  margin-bottom: 25px;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*#login-container{*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+
+/*}*/
+
+/*small {*/
+/*  color: red;*/
+/*}*/
+
+/*label {*/
+/*  font-weight: 600;*/
+/*}*/
+
+/*#login-card {*/
+/*  width: 100%;*/
+/*  border-radius: 10px;*/
+/*  !*height: 300px;*!*/
+/*  box-shadow: 5px 5px 5px gray;*/
+/*}*/
+/*.form-control {*/
+/*  !* border-color: #00fa9a !important; *!*/
+/*}*/
+/*input:focus {*/
+/*  border-color: #00fa9a !important;*/
+/*  outline: none !important;*/
+/*  box-shadow: none !important;*/
+/*}*/
+
+/*#signin-bt {*/
+/*  background: none;*/
+/*  border-radius: 10px;*/
+/*  border: 2px solid #00fa9a;*/
+/*  color: #00fa9a;*/
+/*}*/
+
+/*#signin-bt:hover {*/
+/*  background: none;*/
+/*  border-radius: 10px;*/
+/*  border: 2px solid #00fa9a;*/
+/*  color: #00fa9a;*/
+
+/*}*/
+
+/*#signup-bt {*/
+/*  border-radius: 10px;*/
+/*  border: 1px solid blue;*/
+/*  background: mediumspringgreen;*/
+/*  color: mediumblue;*/
+/*  text-align: center;*/
+/*  width: 95%;*/
+/*}*/
+
+/** {*/
+/*  text-decoration: none;*/
+/*  list-style: none;*/
+/*}*/
+
+/*a:hover {*/
+/*  text-decoration: none;*/
+/*}*/
+
+/*#sign-up {*/
+/*  padding-top: 10px;*/
+/*  text-align: center;*/
+/*  color: mediumblue;*/
+/*}*/
+
+/*#forgot-pass {*/
+/*  text-align: center;*/
+/*  color: mediumblue;*/
+/*}*/
+
+/*#welcome {*/
+/*  padding-top: 10px;*/
+/*  font-family: "Adobe Caslon Pro Bold", monospace;*/
+/*}*/

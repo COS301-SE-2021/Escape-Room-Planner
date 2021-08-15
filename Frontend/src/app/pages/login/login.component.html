@@ -7,44 +7,100 @@
   <title>Bootstrap 4 Layout</title>
 </head>
 
-<div class="container">
-<div class="col-md-12" style="height: 87vh">
-  <div class="row d-flex justify-content-center" style="height: 100%">
-    <div class="col-md-12" id="login-container">
-      <div class="card" id="login-card"  style="overflow: hidden;">
-        <div class="card-body p-0">
-          <div class="row" style="height: 100%">
-            <div class="col-12 col-md-7 px-4 py-3">
-              <h2>Login</h2>
-              <hr class="mt-2 mb-3"/>
-              <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">
-                <div class="form-group">
-                  <label for="username">Username</label>
-                  <input style="background: #E5E4E2" type="text" class="form-control" id="username" name="username" #username="ngModel"
-                         ngModel [class.is-invalid]="username.invalid && username.touched">
-                  <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
-                </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input style="background: #E5E4E2" type="password" class="form-control" id="password" name="password_digest"
-                         ngModel #password="ngModel" [class.is-invalid]="username.invalid && username.touched" required>
-                  <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
-                  <small [style.display]="display">Password is incorrect.</small>
-                </div>
-                <a href=""><p id="forgot-pass">Forgot Your Password?</p></a>
-                <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign in</button>
-                <a href="signup"><p id="sign-up"><span style="color: black">Need An Account? </span>Create Account</p></a>
-              </form>
-            </div>
-            <div class="col-md-5 text-center text-white" style="background-image: linear-gradient(#00fa9a, #00fa9a, #00cc99); border-radius: 15px 0px 0px 15px">
-              <h1 id="welcome">Welcome</h1>
-              <p style="font-family: 'Adobe Caslon Pro Bold',monospace; font-size: 20px;">This is Escape Rooom Planner blah blah, maybe some more information just to kinda make it more professional or something</p>
-              <button id="signup-bt" class="btn btn-primary ">Sign Up</button>
-            </div>
+<div class="container-fluid">
+<div class="card logo">
+  <h2>Sign in</h2>
+</div>
+</div>
+
+<div class="global-container">
+  <div class="card login-form" style="border-radius: 0px 0px 5px 5px;">
+    <div class="card-body">
+      <div class="card-text">
+        <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">
+          <div class="form-group">
+            <label for="exampleInputEmail">Username</label>
+            <input style="background: #E5E4E2" type="email" id="exampleInputEmail"
+                   class="form-control form-control-sm" ngModel required
+                   [class.is-invalid]="username.invalid && username.touched" #username="ngModel">
+            <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
           </div>
-        </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <a href="#" style="float: right; font-size: 12px;">Forgot Password?</a>
+            <input style="background: #E5E4E2" type="password" id="password" name="password_digest"
+                   class="form-control form-control-sm"
+                   ngModel #password="ngModel" [class.is-invalid]="password.invalid && password.touched" required>
+            <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
+            <small [style.display]="display">Username or password is incorrect.</small>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <div class="signup">
+            Need an account? <a href="signup">Create Account.</a>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </div>
-</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="global-container">-->
+<!--<div class="col-md-12" style="height: 87vh">-->
+<!--  <div class="row d-flex justify-content-center" style="height: 100%">-->
+<!--    <div class="col-md-12" id="login-container">-->
+<!--      <div class="card" id="login-card"  style="overflow: hidden;">-->
+<!--        <div class="card-body p-0">-->
+<!--          <div class="row" style="height: 100%">-->
+<!--            <div class="col-12 col-md-7 px-4 py-3">-->
+<!--              <h2>Login</h2>-->
+<!--              <hr class="mt-2 mb-3"/>-->
+<!--              <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">-->
+<!--                <div class="form-group">-->
+<!--                  <label for="username">Username</label>-->
+<!--                  <input style="background: #E5E4E2" type="text" class="form-control" id="username" name="username" #username="ngModel"-->
+<!--                         ngModel [class.is-invalid]="username.invalid && username.touched">-->
+<!--                  <small [class.d-none]="username.valid || username.untouched">Username is required.</small>-->
+<!--                </div>-->
+<!--                <div class="form-group">-->
+<!--                  <label for="password">Password</label>-->
+<!--                  <input style="background: #E5E4E2" type="password" class="form-control" id="password" name="password_digest"-->
+<!--                         ngModel #password="ngModel" [class.is-invalid]="username.invalid && username.touched" required>-->
+<!--                  <small [class.d-none]="password.valid || password.untouched">Password is required.</small>-->
+<!--                  <small [style.display]="display">Password is incorrect.</small>-->
+<!--                </div>-->
+<!--                <a href=""><p id="forgot-pass">Forgot Your Password?</p></a>-->
+<!--                <button id="signin-bt" class="btn btn-primary btn-block" type="submit">Sign in</button>-->
+<!--                <a href="signup"><p id="sign-up"><span style="color: black">Need An Account? </span>Create Account</p></a>-->
+<!--              </form>-->
+<!--            </div>-->
+<!--            <div class="col-md-5 text-center text-white" style="background-image: linear-gradient(#00fa9a, #00fa9a, #00cc99); border-radius: 15px 0px 0px 15px">-->
+<!--              <h1 id="welcome">Welcome</h1>-->
+<!--              <p style="font-family: 'Adobe Caslon Pro Bold',monospace; font-size: 20px;">This is Escape Rooom Planner blah blah, maybe some more information just to kinda make it more professional or something</p>-->
+<!--              <button id="signup-bt" class="btn btn-primary ">Sign Up</button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+<!--</div>-->
