@@ -22,7 +22,7 @@
             <label for="username">Username</label>
             <input type="text" id="username" ngModel required name="username" #username="ngModel"
                    class="form-control form-control-sm" [class.is-invalid]="username.invalid && username.touched"
-                   style="background: #E5E4E2">
+                   style="background: #E5E4E2" autocomplete="none">
             <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
           </div>
 
@@ -49,14 +49,15 @@
           <div class="form-group">
             <label for="confirm">Confirm Password</label>
             <input type="password" id="confirm" ngModel required #confirm="ngModel" name="confirm"
-                   class="form-control form-control-sm" style="background: #E5E4E2">
+                   class="form-control form-control-sm" style="background: #E5E4E2"
+                   (keyup)="(checkSomething(password.value, confirm.value))">
             <small *ngIf="confirm.errors?.required && confirm.touched">Confirm password is required.</small>
-            <small [style.display]="display">Your passwords do not match.</small>
+            <small>{{errorMessage}}</small>
           </div>
           <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
 
           <div class="signup">
-            Already have an account? <a href="login">Login.</a>
+            Already have an account? <a href="login">Login</a>
           </div>
         </form>
       </div>

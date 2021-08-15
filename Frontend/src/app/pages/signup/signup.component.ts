@@ -13,8 +13,17 @@ export class SignupComponent implements OnInit {
   display = ' none'
   ngOnInit(): void {}
 
+  errorMessage = "";
+
+  checkSomething(pass: string, cpassword: string) {
+    if (pass != cpassword) {
+      this.errorMessage = "Password does not match.";
+    } else this.errorMessage = "";
+  }
+
+
   onSubmit(data:any) {
-    this.display = 'none';
+
     let extra_data = {
       username: data["username"],
       email: data["email"],
