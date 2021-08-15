@@ -1,6 +1,11 @@
 :root {
   --main-bg: #010409;
   --sec-bg: #161b22;
+  --green: #49D091;
+}
+
+small {
+  color: #ff6666;
 }
 
 body {

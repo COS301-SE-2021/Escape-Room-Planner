@@ -4,18 +4,6 @@
   align-items: center;
   justify-content: center;
   color: #000;
-  animation: page-load 1s;
-  /*animation-delay: 1s;*/
-}
-
-@keyframes page-load {
-  0% {
-    transform: translateX(-100%);
-  }
-
-  100% {
-    transform: translateX(0);
-  }
 }
 
 .container-fluid {
@@ -25,20 +13,23 @@
   justify-content: center;
   color: #000;
   margin-top: 100px;
-  animation: top-load 300ms;
 }
 
-small {
-  color: red;
+.fade-in {
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 0.5s;
 }
 
-@keyframes top-load {
+@keyframes fadeInOpacity {
   0% {
-    transform: translateY(-100%);
+    opacity: 0;
+    transform: translateY(20px);
   }
-
   100% {
-    transform: translateY(0);
+    opacity: 1;
   }
 }
 
@@ -74,6 +65,23 @@ login-form {
 
 form {
   font-size: 14px;
+}
+
+a {
+  color: var(--green);
+}
+
+a:hover {
+  color: var(--green)
+}
+
+.btn:hover {
+  background: #49D091;
+}
+
+.btn {
+  color: #49D091;
+  border-color: #49D091;
 }
 
 /*imput[type="email"]{*/
