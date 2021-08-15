@@ -40,7 +40,7 @@ module Api
             return
           end
 
-          req = RegisterUserRequest.new(username, password, email, true)
+          req = RegisterUserRequest.new(username, password, email)
           res = serv.register_user(req)
 
         when 'Login'

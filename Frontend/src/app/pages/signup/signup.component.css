@@ -34,6 +34,10 @@ body {
   animation: top-load 300ms;
 }
 
+small {
+  color: red;
+}
+
 @keyframes top-load {
   0% {
     transform: translateY(-100%);

@@ -21,7 +21,7 @@
           <div class="form-group">
             <label for="exampleInputEmail">Username</label>
             <input style="background: #E5E4E2" type="email" id="exampleInputEmail"
-                   class="form-control form-control-sm" ngModel required
+                   class="form-control form-control-sm" ngModel required name="username"
                    [class.is-invalid]="username.invalid && username.touched" #username="ngModel">
             <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
           </div>
