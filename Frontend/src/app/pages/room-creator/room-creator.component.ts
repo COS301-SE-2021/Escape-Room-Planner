@@ -60,8 +60,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   getInitialVertices():void{
+    // @ts-ignore
+    document.getElementById("Solvability-panel").style.backgroundColor="grey"
     this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
+
         // @ts-ignore
         document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
         this._target_start=response.data.startVertex;
