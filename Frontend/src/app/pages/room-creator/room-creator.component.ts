@@ -68,6 +68,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         // @ts-ignore
         document.getElementById("Start-Vertex-label").innerHTML = response.data.startVertex;
 
+        // @ts-ignore
+        document.getElementById("End-Vertex-label").innerHTML = response.data.endVertex;
       },
       //Render error if bad request
       error => this.renderAlertError('There was an error retrieving your rooms')
