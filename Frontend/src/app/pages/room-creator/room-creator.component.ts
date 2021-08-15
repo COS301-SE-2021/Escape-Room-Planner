@@ -62,9 +62,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   getInitialVertices():void{
     this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
-        //rendering <li> elements by using response
-       console.log(response)
-
         // @ts-ignore
         document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
         this._target_start=response.data.startVertex;
@@ -74,7 +71,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this._target_end=response.data.endVertex
       },
       //Render error if bad request
-      error => this.renderAlertError('There was an error retrieving your rooms')
+      error => this.renderAlertError('There was an error retrieving the start vertices')
     );
   }
 
@@ -570,11 +567,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   checkSolvable(): void{
     if(this._target_start==null){
+      // @ts-ignore
+      document.getElementById("Solvability-panel").style.backgroundColor="red"
       window.alert('set a start vertex first')
       return
     }
 
     if(this._target_end==null){
+      // @ts-ignore
+      document.getElementById("Solvability-panel").style.backgroundColor="red"
       window.alert('set an end vertex first')
       return
     }
@@ -591,8 +592,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         //rendering <li> elements by using render function
         console.log(response)
         if (response.data.solvable==true){
+          // @ts-ignore
+          document.getElementById("Solvability-panel").style.backgroundColor="green"
           window.alert('Solvable')
         }else {
+          // @ts-ignore
+          document.getElementById("Solvability-panel").style.backgroundColor="red"
           window.alert('not Solvable')
         }
 

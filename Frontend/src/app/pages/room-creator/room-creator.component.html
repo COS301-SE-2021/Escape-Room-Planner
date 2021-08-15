@@ -6,9 +6,10 @@
       <div class="overflow-auto" style="height: 94vh; width: 315px;">
 
         <!-- SOLVABILITY STARTS HERE -->
-        <button (click)="checkSolvable()">Solvable?</button>
-        <button (click)="checkSetupOrder()">Setup order</button>
-        <div class="Solvability-panel">
+
+        <div id="Solvability-panel" class="Solvability-panel">
+          <button (click)="checkSolvable()">Solvable?</button>
+          <button (click)="checkSetupOrder()">Setup order</button>
           <div id="Start-Vertex-label" class="Start-Vertex-label">Start Vertex:</div>
           <div id="End-Vertex-label" class="End-Vertex-label">End Vertex:</div>
         </div>
