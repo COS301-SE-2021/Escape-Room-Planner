@@ -10,9 +10,8 @@ import { Router } from '@angular/router';
 export class SignupComponent implements OnInit {
 
   constructor(private http:HttpClient, private router:Router) { }
-  display = ' none'
   ngOnInit(): void {}
-
+  display = 'none';
   errorMessage = "";
 
   checkSomething(pass: string, cpassword: string) {
@@ -23,7 +22,7 @@ export class SignupComponent implements OnInit {
 
 
   onSubmit(data:any) {
-
+    this.display = 'none';
     let extra_data = {
       username: data["username"],
       email: data["email"],
@@ -38,7 +37,8 @@ export class SignupComponent implements OnInit {
           this.router.navigate(['/']).then(r => alert("Success"));
       },
           error => {
-            this.display = 'block';
+            if (error["message"] == "User already exists")
+              this.display = 'block';
         })
   }
 }
