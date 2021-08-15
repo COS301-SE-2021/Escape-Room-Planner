@@ -60,10 +60,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   getInitialVertices():void{
-    this.httpClient.get<EscapeRoomArray>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using response
        console.log(response)
+
+        // @ts-ignore
+        document.getElementById("Start-Vertex-label").innerHTML = response.data.startVertex;
 
       },
       //Render error if bad request
