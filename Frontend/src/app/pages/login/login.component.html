@@ -8,19 +8,19 @@
 </head>
 
 <div class="container-fluid">
-<div class="card logo">
+<div class="card logo" id="sign-in">
   <h2>Sign in</h2>
 </div>
 </div>
 
 <div class="global-container">
-  <div class="card login-form" style="border-radius: 0px 0px 5px 5px;">
+  <div class="card login-form" id="form-card">
     <div class="card-body">
       <div class="card-text">
         <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">
           <div class="form-group">
             <label for="exampleInputEmail">Username</label>
-            <input style="background: #E5E4E2" type="email" id="exampleInputEmail"
+            <input style="background: var(--main-bg)" type="email" id="exampleInputEmail"
                    class="form-control form-control-sm" ngModel required name="username"
                    [class.is-invalid]="username.invalid && username.touched" #username="ngModel">
             <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
@@ -28,7 +28,7 @@
           <div class="form-group">
             <label for="password">Password</label>
             <a href="reset-not" style="float: right; font-size: 12px;">Forgot Password?</a>
-            <input style="background: #E5E4E2" type="password" id="password" name="password_digest"
+            <input style="background: var(--main-bg)" type="password" id="password" name="password_digest"
                    class="form-control form-control-sm"
                    ngModel #password="ngModel" [class.is-invalid]="password.invalid && password.touched" required>
             <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
