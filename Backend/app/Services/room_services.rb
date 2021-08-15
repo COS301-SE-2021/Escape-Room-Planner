@@ -204,7 +204,7 @@ class RoomServices
 
     user = User.find_by_id(EscapeRoom.find_by_id(request.id).user_id)
     data = vertices.map do |k|
-      if k.blob_id != 0
+      if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
         blob = user.graphic.blobs.find_by_id(k.blob_id)
         k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
       end
