@@ -4,8 +4,8 @@ class PuzzleTest < ActiveSupport::TestCase
   test 'test create puzzle' do
     before_test = Puzzle.count
     room_id = 1
-    req = CreatePuzzleRequest.new 'test', 0, 0, 0.2, 0.2,
-                                  'graphic', Time.now, 'test description', room_id
+    req = CreatePuzzleRequest.new 'test', 0, 0, 0.2, 0.2, 'graphic',
+                                  Time.now, 'test description', room_id, 1
     rs = RoomServices.new
     rs.create_puzzle(req)
 
