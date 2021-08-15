@@ -59,6 +59,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //use for testing new functionality
   }
 
+  getInitialVertices():void{
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using response
+       console.log(response)
+
+        // @ts-ignore
+        document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
+        this._target_start=response.data.startVertex;
+
+        // @ts-ignore
+        document.getElementById("End-Vertex-label").innerHTML = "End Vertex: "+response.data.endVertex;
+        this._target_end=response.data.endVertex
+      },
+      //Render error if bad request
+      error => this.renderAlertError('There was an error retrieving your rooms')
+    );
+  }
+
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
     let update_lines = this.vertexService.getLineIndex(vertex_index);
@@ -140,12 +159,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       return; // do not reload the vertices again
 
     // update room id
-    this.currentRoomId = clickedEscapeRoom.getAttribute('escape-room-id');
 
+    this.currentRoomId = clickedEscapeRoom.getAttribute('escape-room-id');
+    //this._target_start= clickedEscapeRoom.getAttribute('');
     // @ts-ignore
     this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
     //load the vertices for the newly selected room
     this.getVertexFromRoom();
+    this.getInitialVertices();
   }
 
   //Get to get all vertex for room
