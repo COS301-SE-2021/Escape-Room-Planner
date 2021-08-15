@@ -4,10 +4,15 @@
     <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
 
       <div class="overflow-auto" style="height: 94vh; width: 315px;">
-        <!-- INVENTORY STARTS HERE -->
 
+        <!-- SOLVABILITY STARTS HERE -->
         <button (click)="checkSolvable()">Solvable?</button>
         <button (click)="checkSetupOrder()">Setup order</button>
+        <div class="panel panel-default">
+          <div class="Solvability-panel">Start Vertex</div>
+        </div>
+
+        <!-- INVENTORY STARTS HERE -->
         <ul class="nav flex-column">
           <li class="border border-dark w-100" style=" background-color: grey">Container</li>
 
