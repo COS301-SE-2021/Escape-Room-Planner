@@ -3,17 +3,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
-  animation: page-load 1s;
+  color: #fff;
+  animation: page-load 300ms;
 }
 
-@keyframes page-load {
-  0% {
-    transform: translateX(-100%);
-  }
+/*@keyframes page-load {*/
+/*  0% {*/
+/*    transform: translateX(-10%);*/
+/*  }*/
 
+/*  100% {*/
+/*    transform: translateX(0);*/
+/*  }*/
+/*}*/
+
+.fade-in {
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 0.5s;
+}
+
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
   100% {
-    transform: translateX(0);
+    opacity: 1;
   }
 }
 
@@ -22,7 +40,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #000;
+  color: #fff;
   margin-top: 100px;
   animation: top-load 300ms;
 }
@@ -31,15 +49,15 @@ small {
   color: red;
 }
 
-@keyframes top-load {
-  0% {
-    transform: translateY(-100%);
-  }
+/*@keyframes top-load {*/
+/*  0% {*/
+/*    transform: translateY(-100%);*/
+/*  }*/
 
-  100% {
-    transform: translateY(0);
-  }
-}
+/*  100% {*/
+/*    transform: translateY(0);*/
+/*  }*/
+/*}*/
 
 .logo {
   height: 50px;
@@ -58,6 +76,11 @@ small {
 .signup {
   text-align: center;
   padding-top: 15px;
+}
+
+input {
+  border: none;
+  box-shadow: none;
 }
 
 login-form {
@@ -88,6 +111,20 @@ login-form {
 form {
   font-size: 14px;
 }
+
+a {
+  color: #49D091;
+}
+
+.btn:hover {
+  background: #49D091;
+}
+
+.btn {
+  color: #49D091;
+  border-color: #49D091;
+}
+
 
 /*imput[type="email"]{*/
 /*  background: #1a2226;*/

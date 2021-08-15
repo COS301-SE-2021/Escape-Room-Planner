@@ -8,13 +8,12 @@
 </head>
 
 <div class="container-fluid">
-<div class="card logo" id="sign-in">
+<div class="card logo fade-in" id="sign-in">
   <h2>Sign in</h2>
 </div>
 </div>
-
 <div class="global-container">
-  <div class="card login-form" id="form-card">
+  <div class="card login-form fade-in" id="form-card">
     <div class="card-body">
       <div class="card-text">
         <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">
@@ -34,7 +33,7 @@
             <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
             <small [style.display]="display">Username or password is incorrect.</small>
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          <button type="submit" class="btn btn-outline-primary btn-block">Sign in</button>
           <div class="signup">
             Need an account? <a href="signup">Create Account.</a>
           </div>
