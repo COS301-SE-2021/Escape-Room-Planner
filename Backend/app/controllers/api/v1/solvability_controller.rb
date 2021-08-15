@@ -37,12 +37,17 @@ module Api
           end
 
           if operation == 'Setup'
-            start_vert = params[:startVertex]
+            room_id = params[:roomid]
+            start_vert = EscapeRoom.find_by_id(room_id).startVertex
+            end_vert  = EscapeRoom.find_by_id(room_id).endVertex
 
-            end_vert = params[:endVertex]
-
-            vertices = params[:vertices]
-
+            all = Vertex.all.where(escape_room_id: room_id)
+            icount = 0
+            vertices = []
+            all.each do |v|
+              vertices[icount] = v.id
+              icount += 1
+            end
 
             set_up_order(start_vert, end_vert, vertices)
           end

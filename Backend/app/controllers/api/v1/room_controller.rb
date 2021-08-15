@@ -23,7 +23,7 @@ module Api
       def show
         # TODO: this should be a user_id or jwt token that will be decoded
         # if authorise(request)
-          room = EscapeRoom.select(:id, :name).find(params[:id])
+          room = EscapeRoom.select(:id, :name,:startVertex,:endVertex).find(params[:id])
           render json: { status: 'SUCCESS', message: 'Escape Rooms', data: room }, status: :ok
         # else
           #   render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
