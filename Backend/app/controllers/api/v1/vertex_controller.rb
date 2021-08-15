@@ -163,7 +163,7 @@ module Api
             res = serv.create_puzzle(req)
 
           when 'Keys'
-            req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid)
+            req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid, blob_id)
             res = serv.create_key(req)
 
           when 'Container'

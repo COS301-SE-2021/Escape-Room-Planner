@@ -48,6 +48,7 @@ class RoomServices
     @key.height = request.height
     @key.graphicid = request.graphic_id
     @key.escape_room_id = request.room_id
+    @key.blob_id = request.blob_id
 
     @response = if @key.save
                   CreateKeyResponse.new(@key.id, true)
