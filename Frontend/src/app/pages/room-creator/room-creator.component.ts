@@ -568,17 +568,29 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
-  checkSolvable(): void{
-    if(this._target_start==null){
+  setSolvability(input: any): void{
+    if(input){
+      // @ts-ignore
+      document.getElementById("Solvability-panel").style.backgroundColor="green"
+      // @ts-ignore
+      document.getElementById("Solvable").innerHTML="Solvable: True"
+    }else{
       // @ts-ignore
       document.getElementById("Solvability-panel").style.backgroundColor="red"
+      // @ts-ignore
+      document.getElementById("Solvable").innerHTML="Solvable: False"
+    }
+  }
+
+  checkSolvable(): void{
+    if(this._target_start==null){
+      this.setSolvability(false);
       window.alert('set a start vertex first')
       return
     }
 
     if(this._target_end==null){
-      // @ts-ignore
-      document.getElementById("Solvability-panel").style.backgroundColor="red"
+      this.setSolvability(false);
       window.alert('set an end vertex first')
       return
     }
@@ -595,13 +607,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         //rendering <li> elements by using render function
         console.log(response)
         if (response.data.solvable==true){
-          // @ts-ignore
-          document.getElementById("Solvability-panel").style.backgroundColor="green"
-          window.alert('Solvable')
+          this.setSolvability(true);
         }else {
-          // @ts-ignore
-          document.getElementById("Solvability-panel").style.backgroundColor="red"
-          window.alert('not Solvable')
+          this.setSolvability(false);
         }
 
 
@@ -634,7 +642,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         console.log(response)
         if (response.data.solvable==true){
         }else {
-          window.alert('Graph needs to be Solvable before you can check set up order')
+          this.setSolvability(false);
         }
 
 
@@ -652,8 +660,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
       resp => {
         console.log(resp)
-        if(resp.data.status=="Success"){
-          window.alert('Setup order is: '+resp.data.order)
+        let order =[]
+        let i=0
+
+
+         if(resp.data.status=="Success"){
+           // @ts-ignore
+           document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
+           /* resp.data.order.forEach(
+              (value: any) => {
+               this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/"+value).subscribe(
+                  resp => {
+                    console.log(resp)
+                  }
+              )
+              } )*/
         }else {
           window.alert('Unknown failure')
         }
