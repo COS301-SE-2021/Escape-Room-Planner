@@ -122,6 +122,7 @@ class RoomServices
     @clue.graphicid = request.graphic_id
     @clue.clue = request.clue
     @clue.escape_room_id = request.room_id
+    @clue.blob_id = request.blob_id
 
     @response = if @clue.save
                   CreateClueResponse.new(@clue.id, true)

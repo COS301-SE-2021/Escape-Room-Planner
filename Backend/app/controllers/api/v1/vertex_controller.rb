@@ -176,7 +176,7 @@ module Api
               return
             end
 
-            req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid)
+            req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid, blob_id)
             res = serv.create_clue(req)
 
           else
