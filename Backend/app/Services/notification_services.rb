@@ -4,7 +4,7 @@ class NotificationServices
   def send_email_notification(request)
     return SendEmailNotificationResponse.new(false, 'Request null') if request.nil?
 
-    resp = UserNotifierMailer.send_signup_email(request.email).deliver
+    resp = UserNotifierMailer.send_test_email(request.email).deliver
     puts resp
     SendEmailNotificationResponse.new(true, 'Email sent successfully')
 
