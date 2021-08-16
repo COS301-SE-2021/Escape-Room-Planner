@@ -59,6 +59,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //use for testing new functionality
   }
 
+  getInitialVertices():void{
+    // @ts-ignore
+    document.getElementById("Solvability-panel").style.backgroundColor="grey"
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
+      response => {
+
+        // @ts-ignore
+        document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
+        this._target_start=response.data.startVertex;
+
+        // @ts-ignore
+        document.getElementById("End-Vertex-label").innerHTML = "End Vertex: "+response.data.endVertex;
+        this._target_end=response.data.endVertex
+      },
+      //Render error if bad request
+      error => this.renderAlertError('There was an error retrieving the start vertices')
+    );
+  }
+
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
     let update_lines = this.vertexService.getLineIndex(vertex_index);
@@ -140,12 +159,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       return; // do not reload the vertices again
 
     // update room id
-    this.currentRoomId = clickedEscapeRoom.getAttribute('escape-room-id');
 
+    this.currentRoomId = clickedEscapeRoom.getAttribute('escape-room-id');
+    //this._target_start= clickedEscapeRoom.getAttribute('');
     // @ts-ignore
     this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
     //load the vertices for the newly selected room
     this.getVertexFromRoom();
+    this.getInitialVertices();
   }
 
   //Get to get all vertex for room
@@ -547,7 +568,33 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  setSolvability(input: any): void{
+    if(input){
+      // @ts-ignore
+      document.getElementById("Solvability-panel").style.backgroundColor="green"
+      // @ts-ignore
+      document.getElementById("Solvable").innerHTML="Solvable: True"
+    }else{
+      // @ts-ignore
+      document.getElementById("Solvability-panel").style.backgroundColor="red"
+      // @ts-ignore
+      document.getElementById("Solvable").innerHTML="Solvable: False"
+    }
+  }
+
   checkSolvable(): void{
+    if(this._target_start==null){
+      this.setSolvability(false);
+      window.alert('set a start vertex first')
+      return
+    }
+
+    if(this._target_end==null){
+      this.setSolvability(false);
+      window.alert('set an end vertex first')
+      return
+    }
+
     let SolvableCheck = {
       operation: "Solvable",
       startVertex: this._target_start,
@@ -560,15 +607,82 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         //rendering <li> elements by using render function
         console.log(response)
         if (response.data.solvable==true){
-          window.alert('Solvable')
+          this.setSolvability(true);
         }else {
-          window.alert('not Solvable')
+          this.setSolvability(false);
         }
 
 
       },
       error => console.error('', error)
     );
+  }
+
+  checkSetupOrder() {
+    if(this._target_start==null){
+      window.alert('set a start vertex first')
+      return
+    }
+
+    if(this._target_end==null){
+      window.alert('set an end vertex first')
+      return
+    }
+
+    let SolvableCheck = {
+      operation: "Solvable",
+      startVertex: this._target_start,
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        console.log(response)
+        if (response.data.solvable==true){
+        }else {
+          this.setSolvability(false);
+        }
+
+
+      },
+      error => console.error('', error)
+    );
+
+    let setUpOrderCheck = {
+      operation: "Setup",
+      startVertex: this._target_start,
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
+      resp => {
+        console.log(resp)
+        let order =[]
+        let i=0
+
+
+         if(resp.data.status=="Success"){
+           // @ts-ignore
+           document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
+           /* resp.data.order.forEach(
+              (value: any) => {
+               this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/"+value).subscribe(
+                  resp => {
+                    console.log(resp)
+                  }
+              )
+              } )*/
+        }else {
+          window.alert('Unknown failure')
+        }
+      },
+      error => console.error('', error)
+    );
+
+
   }
 
   setStart() :void{
@@ -666,6 +780,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // append to div alertElementError
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
   }
+
+
 }
 
 // For Vertex Response

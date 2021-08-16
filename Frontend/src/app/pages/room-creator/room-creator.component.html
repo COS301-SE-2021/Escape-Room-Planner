@@ -2,10 +2,21 @@
   <div class="container-fluid" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row">
     <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
-      <div class="overflow-auto" style="height: 94vh; width: 315px;">
-        <!-- INVENTORY STARTS HERE -->
 
-        <button (click)="checkSolvable()">Solvable?</button>
+      <div class="overflow-auto" style="height: 94vh; width: 315px;">
+
+        <!-- SOLVABILITY STARTS HERE -->
+
+        <div id="Solvability-panel" class="Solvability-panel">
+          <button (click)="checkSolvable()">Solvable?</button>
+          <button (click)="checkSetupOrder()">Setup order</button>
+          <div id="Start-Vertex-label" class="Start-Vertex-label">Start Vertex:</div>
+          <div id="End-Vertex-label" class="End-Vertex-label">End Vertex:</div>
+          <div id="Solvable" class="Solvable">Solvable:</div>
+          <div id="SetupOrder" class="SetupOrder">Set up order:</div>
+        </div>
+
+        <!-- INVENTORY STARTS HERE -->
         <ul class="nav flex-column">
           <li class="border border-dark w-100" style=" background-color: grey">Container</li>
 
@@ -156,6 +167,8 @@
   </div>
 </div>
 
+
+
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -183,9 +196,13 @@
           </div>
         </form>
       </div>
+
       <div class="modal-footer form-group">
         <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom(NewEscapeRoomForm)" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>
+
 </div>
+
+
