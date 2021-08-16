@@ -186,6 +186,8 @@ class RoomServices
                 end
   end
 
+  # @param [GetVerticesRequest] request
+  # @return [GetVerticesResponse]
   def get_vertices(request)
     return GetVerticesResponse.new(false, 'Can not locate user', nil) if EscapeRoom.find_by_id(request.id).nil?
 
@@ -217,5 +219,21 @@ class RoomServices
   rescue StandardError => e
     puts e
     GetVerticesResponse.new(false, 'Error occurred while getting Vertices', nil)
+  end
+
+  # @param [GetRoomsRequest] request
+  # @return [GetRoomsResponse]
+  def get_rooms(request)
+    decoded_token = JsonWebToken.decode(request.token)
+    user = User.find_by_id(decoded_token['id'])
+    @response = if user.nil?
+                  GetRoomsResponse.new(false, 'User can not be found', nil)
+                else
+                  data = EscapeRoom.select(:id, :name).where(user_id: decoded_token['id'])
+                  GetRoomsResponse.new(true, 'Rooms obtained', data)
+                end
+  rescue StandardError => e
+    puts e
+    GetRoomsResponse.new(false, 'Error occurred while getting Rooms', nil)
   end
 end

@@ -8,6 +8,8 @@ require './app/models/Keys'
 require './app/models/Container'
 require './app/Services/RoomSubsystem/Request/get_vertices_request'
 require './app/Services/RoomSubsystem/Response/get_vertices_response'
+require './app/Services/RoomSubsystem/Request/get_rooms_request'
+require './app/Services/RoomSubsystem/Response/get_rooms_response'
 
 # rubocop:disable Metrics/ClassLength
 class ErTest < ActiveSupport::TestCase
@@ -271,5 +273,12 @@ class ErTest < ActiveSupport::TestCase
     assert_not_nil(resp.data)
   end
   # TODO: Test get vertices fully
+
+  test 'can get rooms' do
+    req = GetRoomsRequest.new(login_for_test)
+    rs = RoomServices.new
+    resp = rs.get_rooms(req)
+    assert_equal(resp.message, 'Rooms obtained')
+  end
 end
 # rubocop:enable Metrics/ClassLength
