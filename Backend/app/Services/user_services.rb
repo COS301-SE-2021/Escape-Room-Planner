@@ -57,23 +57,17 @@ class UserServices
                 end
   end
 
+  #sends a reset password notification email
   def reset_password_notification(request)
     return ResetPasswordNotificationResponse.new(false, 'Reset Password Notification request null') if request.nil?
-    puts 'It did come here!'
-    # @user = User.find_by_email(request.email)
 
-    mail = Mail.new do
-      from    'fivestack7@gmail.com'
-      to      request.email
-      subject 'Confirm reset password'
-      body    'http://localhost:4000/reset'
-    end
+    return ResetPasswordNotificationResponse.new(false, 'Email does not exist') unless User.find_by_email(request.email)
 
-    mail.to_s
+    resp = UserNotifierMailer.send_reset_password_email(request.email).deliver
+    puts resp
 
-    puts mail.inspect
-
-    return ResetPasswordNotificationResponse.new(false, 'Email does not exist') if @user.nil?
+    #gotta do a resend notification button and request. Will talk to NQ about that
+    return ResetPasswordNotificationResponse.new(true, 'Email sent')
   end
 
   def reset_password(request)
