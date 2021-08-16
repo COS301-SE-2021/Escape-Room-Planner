@@ -72,8 +72,8 @@ class UserServices
     # mail.to_s
     #
     # puts mail.inspect
-
-    UserMailer.with(user: 'nqfreelance@gmail.com').email.deliver_later
+    puts request.email.inspect
+    UserMailer.with(user: request.email).welcome_email.deliver_later
 
     return ResetPasswordNotificationResponse.new(false, 'Email does not exist') if @user.nil?
   end
