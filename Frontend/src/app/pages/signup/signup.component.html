@@ -38,10 +38,10 @@
 
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" ngModel required #password="ngModel" name="password_digest"
+            <input type="password" id="password" ngModel #password="ngModel" name="password_digest"
                    class="form-control form-control-sm" [class.is-invalid]="password.invalid && password.touched"
                    pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?#&])[A-Za-z\d$@$!%*?#&].{7,}"
-                   style="background: var(--main-bg)">
+                   style="background: var(--main-bg)" required>
             <small *ngIf="password.errors?.required && password.touched">Password is required.</small>
             <small *ngIf="password.errors?.pattern && password.touched">
               Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.
@@ -49,9 +49,9 @@
           </div>
           <div class="form-group">
             <label for="confirm">Confirm Password</label>
-            <input type="password" id="confirm" ngModel required #confirm="ngModel" name="confirm"
+            <input type="password" id="confirm" ngModel #confirm="ngModel" name="confirm"
                    class="form-control form-control-sm" style="background: var(--main-bg)"
-                   (keyup)="(checkSomething(password.value, confirm.value))">
+                   (keyup)="(checkSomething(password.value, confirm.value))" required>
             <small *ngIf="confirm.errors?.required && confirm.touched">Confirm password is required.</small>
             <small>{{errorMessage}}</small>
           </div>
