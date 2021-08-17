@@ -131,12 +131,10 @@ export class InventoryComponent implements OnInit {
 
     if (file != null && file.size < 1000000 && file.type.includes('image')) {
       // send request ot back end render piece on front
-      let image = (await this.toBase64(file) as string).replace('data:image/jpeg;base64,', '');
-
+      let image = (await this.toBase64(file) as string).replace('base64,', '');
       this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/inventory/", {image: image, type: type}
         , {"headers": this.headers}).subscribe(
         response => {
-          console.log(response);
           let blob_id = response.data.blob_id.toString();
           this.inventory[blob_id] = response.data.src;
           this.renderInventoryObject(blob_id, type);
