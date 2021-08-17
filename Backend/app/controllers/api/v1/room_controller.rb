@@ -4,6 +4,8 @@ require './app/Services/room_services'
 require './app/Services/services_helper'
 require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
+require './app/Services/RoomSubsystem/Request/get_rooms_request'
+require './app/Services/RoomSubsystem/Response/get_rooms_response'
 
 module Api
   module V1
@@ -12,10 +14,13 @@ module Api
       # GET api/v1/room , shows all the rooms in db
       def index
         if authorise(request)
-          rooms = EscapeRoom.select(:id, :name)
-          render json: { status: 'SUCCESS', message: 'Escape Rooms', data: rooms }, status: :ok
+          auth_token = request.headers['Authorization'].split(' ').last
+          req = GetRoomsRequest.new(auth_token)
+          serv = RoomServices.new
+          resp = serv.get_rooms(req)
+          render json: { status: resp.success, message: resp.message, data: resp.data}, status: :ok
         else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+          render json: { status: false, message: 'Unauthorized' }, status: 401
         end
       end
 
