@@ -9,7 +9,9 @@ module Api
       protect_from_forgery with: :null_session
 
       def create
+        if authorise(request)
 
+        end
       end
 
     end
