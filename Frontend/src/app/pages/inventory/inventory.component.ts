@@ -20,7 +20,8 @@ export class InventoryComponent implements OnInit {
   @ViewChild('clue_div') clue_div: ElementRef | undefined;
 
   constructor(private httpClient: HttpClient, private renderer: Renderer2) {
-    this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
+      .set("Authorization2",'Basic ' + localStorage.getItem('username'));
   }
 
   ngOnInit(): void {
@@ -63,11 +64,12 @@ export class InventoryComponent implements OnInit {
     this.renderer.addClass(new_p, 'text-center');
     this.renderer.addClass(new_p, 'text-black-5');
     // setting text, change later todo
-    new_p.textContent = type;
+    // new_p.textContent = type;
     // setting src
     this.renderer.setAttribute(new_img,'src', this.inventory[blob_id]);
     this.renderer.setAttribute(new_div,'blob-id', blob_id); //sets blob-id attr to follow the array id
     this.renderer.setAttribute(new_img, 'alt', type + 'inventory object');
+    this.renderer.setAttribute(new_img, 'title', type);
     // trash icon in button
     this.renderer.setAttribute(new_button_img, 'src', './assets/svg/trash-fill.svg');
     this.renderer.setAttribute(new_button_img, 'alt', 'trash can');

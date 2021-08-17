@@ -42,7 +42,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     if(localStorage.getItem('token') ==  null) {
       this.router.navigate(['login']).then(r => console.log('no jwt stored'));
     }
-      this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+      this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
+        .set("Authorization2",'Basic ' + localStorage.getItem('username'));
   }
 
 
@@ -75,6 +76,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       error => this.renderAlertError('There was an error retrieving the start vertices')
     );
   }
+
   // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
@@ -131,7 +133,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         error => {
           if (error.status === 401){
             if (this.router.routerState.snapshot.url !== '/login' &&
-              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect 1'));
           }else{
             this.renderAlertError('There was an error retrieving your rooms');
           }
@@ -666,17 +668,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  checkSolvable(): void{
+  checkSolvable(solv_div: HTMLElement): void{
     if(this._target_start==null){
       this.setSolvability(false);
-      window.alert('set a start vertex first')
-      return
+      window.alert('set a start vertex first');
+      return;
     }
 
     if(this._target_end==null){
       this.setSolvability(false);
-      window.alert('set an end vertex first')
-      return
+      window.alert('set an end vertex first');
+      return;
     }
 
     let SolvableCheck = {
@@ -686,17 +688,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       roomid: this.currentRoomId
     };
 
+    solv_div.hidden = false;
+
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
         console.log(response)
-        if (response.data.solvable==true){
-          this.setSolvability(true);
-        }else {
-          this.setSolvability(false);
-        }
-
-
+        this.setSolvability(response.data.solvable);
       },
       error => console.error('', error)
     );
