@@ -1,7 +1,10 @@
-class CreateKeyRequest
-  attr_accessor :name, :pos_x, :pos_y, :width, :height, :graphic_id, :description, :room_id
+# frozen_string_literal: true
 
-  def initialize(name, pos_x, pos_y, width, height, graphic_id, room_id)
+# request for Create Key feature
+class CreateKeyRequest
+  attr_accessor :name, :pos_x, :pos_y, :width, :height, :graphic_id, :description, :room_id, :blob_id
+
+  def initialize(name, pos_x, pos_y, width, height, graphic_id, room_id, blob_id)
     @name = name
     @pos_x = pos_x
     @pos_y = pos_y
@@ -9,5 +12,6 @@ class CreateKeyRequest
     @height = height
     @graphic_id = graphic_id
     @room_id = room_id
+    @blob_id = blob_id
   end
 end

@@ -7,7 +7,7 @@ class ClueTest < ActiveSupport::TestCase
     num_clues_before = Clue.count
     room_id = 1
     req = CreateClueRequest.new 'test', 0, 0, 0.1, 0.1,
-                                'graphic', 'clue', room_id
+                                'graphic', 'clue', room_id, 1
     rs = RoomServices.new
     resp=rs.create_clue(req)
     assert_not_equal(Clue.count, num_clues_before)

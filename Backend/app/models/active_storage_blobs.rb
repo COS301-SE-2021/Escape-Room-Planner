@@ -1,0 +1,3 @@
+class ActiveStorageBlobs < ApplicationRecord
+
+end

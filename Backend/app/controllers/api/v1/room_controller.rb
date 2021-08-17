@@ -4,6 +4,8 @@ require './app/Services/room_services'
 require './app/Services/services_helper'
 require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
+require './app/Services/RoomSubsystem/Request/get_rooms_request'
+require './app/Services/RoomSubsystem/Response/get_rooms_response'
 
 module Api
   module V1
@@ -11,12 +13,15 @@ module Api
       protect_from_forgery with: :null_session
       # GET api/v1/room , shows all the rooms in db
       def index
-        # if authorise(request)
-          rooms = EscapeRoom.select(:id, :name)
-         render json: { status: 'SUCCESS', message: 'Escape Rooms', data: rooms }, status: :ok
-        #  else
-        #   render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        #  end
+        if authorise(request)
+          auth_token = request.headers['Authorization1'].split(' ').last
+          req = GetRoomsRequest.new(auth_token)
+          serv = RoomServices.new
+          resp = serv.get_rooms(req)
+          render json: { status: resp.success, message: resp.message, data: resp.data}, status: :ok
+        else
+          render json: { status: false, message: 'Unauthorized' }, status: 401
+        end
       end
 
       # GET api/v1/room/id , returns a room by id
@@ -47,17 +52,16 @@ module Api
 
       # delete api call http://host/api/v1/room/"+room_id
       def destroy
-        #if authorise(request)
-        #puts params[:id]
+        if authorise(request)
           room = EscapeRoom.find_by_id(params[:id])
           if room.nil?
             render json: { status: 'SUCCESS', message: 'Room does not exist' }, status: :bad_request
             return
           end
           render json: { status: 'SUCCESS', message: 'Deleted Room' }, status: :ok if room.destroy
-        # else
-        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        # end
+        else
+        render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       end
 
       def update
