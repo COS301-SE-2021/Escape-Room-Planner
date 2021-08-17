@@ -14,6 +14,7 @@ export class InventoryComponent implements OnInit {
 
   @Output() public afterClick: EventEmitter<inventoryObject> = new EventEmitter();
   @Output() public error: EventEmitter<inventoryObject> = new EventEmitter();
+  @Output() public checkSolvable: EventEmitter<inventoryObject> = new EventEmitter();
   @ViewChild('container_div') container_div: ElementRef | undefined;
   @ViewChild('puzzle_div') puzzle_div: ElementRef | undefined;
   @ViewChild('key_div') key_div: ElementRef | undefined;
@@ -173,6 +174,11 @@ export class InventoryComponent implements OnInit {
         }
       );
     }
+  }
+
+  //calls rooms creator check solvable
+  public async checkSolve(){
+    this.checkSolvable.emit();
   }
 }
 
