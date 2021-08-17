@@ -17,6 +17,8 @@ class UserServices
       @user.password = request.password
 
       @response = if @user.save!
+                    #send email to verify account
+                    UserNotifierMailer.send_verify_account_email(request.email).deliver
                     RegisterUserResponse.new(true, 'User Created Successfully')
                   else
                     RegisterUserResponse.new(false, 'User Not Created')
@@ -144,7 +146,21 @@ class UserServices
 
   def update_account(request); end
 
-  def verify_account(request); end
+  def verify_account(request)
+    return VerifyAccountResponse.new(false, 'Request is null') if request.nil?
+
+    return VerifyAccountResponse.new(false, 'Username does not exist') unless User.find_by_username(request.username)
+
+    @user = User.find_by_username(request.username)
+
+    @user.verified = true
+
+    @response = if @user.save!
+                  VerifyAccountResponse.new(true, 'Account verified')
+                else
+                  VerifyAccountResponse.new(false, 'Account verification unsuccessful')
+                end
+  end
 
   def authenticate_user(encoded_token, username)
     decoded_token = JsonWebToken.decode(encoded_token)
