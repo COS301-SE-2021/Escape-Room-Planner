@@ -4,7 +4,7 @@
 
     <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')"></app-inventory>
 
-    <div #solvability_div class="modal-body" [hidden]="true" style="position: absolute; top: 50%; left: 25%; background-color: wheat; width: 50%">
+    <div #solvability_div class="modal-body" [hidden]="true" style="position: absolute; top: 50%; left: 25%; background-color: wheat; width: 50%; z-index: 10000">
       <button (click)="solvability_div.hidden=true">Close</button>
       <div id="Solvability-panel" class="Solvability-panel">
         <button (click)="checkSetupOrder()">Setup order</button>
