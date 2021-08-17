@@ -18,7 +18,7 @@ module Api
               return
 
               else
-                resp=ResetPassword(params[:email])
+                resp = reset_password(params[:email])
                 render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
               end
 
@@ -28,9 +28,9 @@ module Api
         end
       end
 
-      def ResetPassword(email)
+      def reset_password(email)
         req = ResetPasswordNotificationRequest.new(email)
-        serv=UserServices.new
+        serv = UserServices.new
         serv.reset_password(req)
       end
 
