@@ -668,17 +668,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  checkSolvable(): void{
+  checkSolvable(solv_div: HTMLElement): void{
     if(this._target_start==null){
       this.setSolvability(false);
-      window.alert('set a start vertex first')
-      return
+      window.alert('set a start vertex first');
+      return;
     }
 
     if(this._target_end==null){
       this.setSolvability(false);
-      window.alert('set an end vertex first')
-      return
+      window.alert('set an end vertex first');
+      return;
     }
 
     let SolvableCheck = {
@@ -688,17 +688,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       roomid: this.currentRoomId
     };
 
+    solv_div.hidden = false;
+
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
         console.log(response)
-        if (response.data.solvable==true){
-          this.setSolvability(true);
-        }else {
-          this.setSolvability(false);
-        }
-
-
+        this.setSolvability(response.data.solvable);
       },
       error => console.error('', error)
     );

@@ -4,21 +4,24 @@
 
     <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')"></app-inventory>
 
-<!--             &lt;!&ndash; SOLVABILITY STARTS HERE &ndash;&gt;-->
+    <div #solvability_div class="modal-body" [hidden]="true" style="position: absolute; top: 50%; left: 25%; background-color: wheat; width: 50%">
+      <button (click)="solvability_div.hidden=true">Close</button>
+      <div id="Solvability-panel" class="Solvability-panel">
+        <button (click)="checkSetupOrder()">Setup order</button>
+        <div id="Start-Vertex-label" class="Start-Vertex-label">Start Vertex:</div>
+        <div id="End-Vertex-label" class="End-Vertex-label">End Vertex:</div>
+        <div id="Solvable" class="Solvable">Solvable:</div>
+        <div id="SetupOrder" class="SetupOrder">Set up order:</div>
+      </div>
+    </div>
 
-<!--        <div id="Solvability-panel" class="Solvability-panel">-->
-<!--          <button (click)="checkSolvable()">Solvable?</button>-->
-<!--          <button (click)="checkSetupOrder()">Setup order</button>-->
-<!--          <div id="Start-Vertex-label" class="Start-Vertex-label">Start Vertex:</div>-->
-<!--          <div id="End-Vertex-label" class="End-Vertex-label">End Vertex:</div>-->
-<!--          <div id="Solvable" class="Solvable">Solvable:</div>-->
-<!--          <div id="SetupOrder" class="SetupOrder">Set up order:</div>-->
-<!--        </div>-->
 
     <div class="col-sm-10 d-lg-flex remove-padding">
       <div class="container-fluid remove-padding">
         <div class="row">
           <div class="col-sm-12 dropdown remove-padding">
+            <!-- SOLVABILITY STARTS HERE -->
+            <button (click)="checkSolvable(solvability_div)">Solvable?</button>
             <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
