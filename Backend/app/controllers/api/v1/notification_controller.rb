@@ -31,7 +31,7 @@ module Api
       def reset_password(email)
         req = ResetPasswordNotificationRequest.new(email)
         serv = UserServices.new
-        serv.reset_password(req)
+        serv.reset_password_notification(req)
       end
 
     end
