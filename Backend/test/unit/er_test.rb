@@ -16,7 +16,7 @@ class ErTest < ActiveSupport::TestCase
   # test if escape room can be made (good case)
   test 'test create escape room' do
     before_test = EscapeRoom.count
-    req = CreateEscapeRoomRequest.new('test name')
+    req = CreateEscapeRoomRequest.new('test name', login_for_test)
     rs = RoomServices.new
     rs.create_escape_room(req)
 

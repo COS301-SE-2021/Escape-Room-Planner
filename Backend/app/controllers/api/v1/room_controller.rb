@@ -18,7 +18,7 @@ module Api
           req = GetRoomsRequest.new(auth_token)
           serv = RoomServices.new
           resp = serv.get_rooms(req)
-          render json: { status: resp.success, message: resp.message, data: resp.data}, status: :ok
+          render json: { status: resp.success, message: resp.message, data: resp.data }, status: :ok
         else
           render json: { status: false, message: 'Unauthorized' }, status: 401
         end
@@ -27,27 +27,27 @@ module Api
       # GET api/v1/room/id , returns a room by id
       def show
         # TODO: this should be a user_id or jwt token that will be decoded
-        # if authorise(request)
+        if authorise(request)
           room = EscapeRoom.select(:id, :name, :startVertex, :endVertex).find(params[:id])
           render json: { status: 'SUCCESS', message: 'Escape Rooms', data: room }, status: :ok
-        # else
-          #   render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        # end
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       rescue StandardError
         render json: { status: 'Fail', message: 'Escape Room might not exist' }, status: :not_found
       end
 
       # POST api/v1/room, creates a new room
       def create
-        #  if authorise(request)
-          req = CreateEscapeRoomRequest.new(params[:name])
+        if authorise(request)
+          auth_token = request.headers['Authorization1'].split(' ').last
+          req = CreateEscapeRoomRequest.new(params[:name], auth_token)
           serv = RoomServices.new
           resp = serv.create_escape_room(req)
-
           render json: { status: 'SUCCESS', message: 'Added room id:', data: resp }, status: :ok
-        # else
-        #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        # end
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       end
 
       # delete api call http://host/api/v1/room/"+room_id
@@ -60,12 +60,11 @@ module Api
           end
           render json: { status: 'SUCCESS', message: 'Deleted Room' }, status: :ok if room.destroy
         else
-        render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
       end
 
       def update
-
         if params[:operation].nil?
           render json: { status: 'Failed', message: 'Specify operation' }, status: :bad_request
           return
@@ -77,7 +76,6 @@ module Api
             render json: { status: 'Failed', message: 'Ensure fields are filled in' }, status: :bad_request
             return
           end
-
 
           room = EscapeRoom.find_by_id(params[:id])
           room.startVertex = params[:startVertex]
@@ -99,7 +97,6 @@ module Api
 
           render json: { status: 'Success', message: 'End vertex saved' }, status: :ok
         end
-
       rescue StandardError
         render json: { status: 'Fail', message: 'Escape Room might not exist' }, status: :not_found
       end
