@@ -4,6 +4,17 @@
 
     <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')"></app-inventory>
 
+             <!-- SOLVABILITY STARTS HERE -->
+
+        <div id="Solvability-panel" class="Solvability-panel">
+          <button (click)="checkSolvable()">Solvable?</button>
+          <button (click)="checkSetupOrder()">Setup order</button>
+          <div id="Start-Vertex-label" class="Start-Vertex-label">Start Vertex:</div>
+          <div id="End-Vertex-label" class="End-Vertex-label">End Vertex:</div>
+          <div id="Solvable" class="Solvable">Solvable:</div>
+          <div id="SetupOrder" class="SetupOrder">Set up order:</div>
+        </div>
+  
     <div class="col-sm-10 d-lg-flex remove-padding">
       <div class="container-fluid remove-padding">
         <div class="row">
@@ -54,6 +65,24 @@
             </div>
             <hr class="dropdown-divider text-white">
             <div class="row">
+              <div class="col" id="set_start">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="setStart()">
+                  Set Start
+                  <img src="/assets/svg/flag.svg" alt="NOT FOUND">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="col" id="set_end">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="setEnd()">
+                  Set End
+                  <img src="/assets/svg/flag-fill.svg" alt="NOT FOUND">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
               <div class="col" id="delete_button">
                 <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="removeVertex()">
                   Delete
@@ -70,6 +99,8 @@
     </div>
   </div>
 </div>
+
+
 
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -98,9 +129,13 @@
           </div>
         </form>
       </div>
+
       <div class="modal-footer form-group">
         <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom()" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>
+
 </div>
+
+

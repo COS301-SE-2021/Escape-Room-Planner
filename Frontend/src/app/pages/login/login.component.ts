@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -8,12 +9,14 @@ import { HttpClient } from '@angular/common/http';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient, private router:Router) { }
 
   ngOnInit() {
   }
 
+  display = 'none';
   onSubmit(data:any) {
+    this.display = 'none';
     let extra_data = {
       username: data["username"],
       password: data["password_digest"],
@@ -23,9 +26,13 @@ export class LoginComponent implements OnInit {
     this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe(
         res => {
-          localStorage.setItem('token', res["auth_token"]);
-          alert("Success");
-        })
+            localStorage.setItem('token: ', res["auth_token"]);
+            this.router.navigate(['/room']).then(r => alert("Success"));
+        },
+          error => {
+            this.display = 'block';
+          }
+        )
   }
 
 }

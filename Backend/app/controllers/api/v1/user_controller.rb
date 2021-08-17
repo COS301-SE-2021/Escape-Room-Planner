@@ -19,6 +19,7 @@ module Api
         # is_admin = params[:is_admin]
         username = params[:username]
         password = params[:password]
+        new_password = params[:new_password]
 
         serv = UserServices.new
 
@@ -31,6 +32,11 @@ module Api
 
           if User.where('username = ?', username).count >= 1
             render json: { status: 'Fail', message: 'User already exists', data: "Created: false" }, status: :bad_request
+            return
+          end
+
+          if new_password != password
+            render json: { status: 'FAILED', message: 'Password does not match.' }, status: 401
             return
           end
 

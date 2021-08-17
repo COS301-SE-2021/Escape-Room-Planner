@@ -23,6 +23,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public newEscapeRoomNameValid:boolean = false; // flag using regex
 
   private _target_vertex: any;
+  private _target_start: any;
+  private _target_end: any;
   private isConnection = false;
   private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
@@ -55,6 +57,24 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //use for testing new functionality
   }
 
+  getInitialVertices():void{
+    // @ts-ignore
+    document.getElementById("Solvability-panel").style.backgroundColor="grey"
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
+      response => {
+
+        // @ts-ignore
+        document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
+        this._target_start=response.data.startVertex;
+
+        // @ts-ignore
+        document.getElementById("End-Vertex-label").innerHTML = "End Vertex: "+response.data.endVertex;
+        this._target_end=response.data.endVertex
+      },
+      //Render error if bad request
+      error => this.renderAlertError('There was an error retrieving the start vertices')
+    );
+  }
   // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
@@ -160,6 +180,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
     //load the vertices for the newly selected room
     this.getVertexFromRoom();
+    this.getInitialVertices();
   }
 
   // todo
@@ -631,6 +652,162 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
+  setSolvability(input: any): void{
+    if(input){
+      // @ts-ignore
+      document.getElementById("Solvability-panel").style.backgroundColor="green"
+      // @ts-ignore
+      document.getElementById("Solvable").innerHTML="Solvable: True"
+    }else{
+      // @ts-ignore
+      document.getElementById("Solvability-panel").style.backgroundColor="red"
+      // @ts-ignore
+      document.getElementById("Solvable").innerHTML="Solvable: False"
+    }
+  }
+
+  checkSolvable(): void{
+    if(this._target_start==null){
+      this.setSolvability(false);
+      window.alert('set a start vertex first')
+      return
+    }
+
+    if(this._target_end==null){
+      this.setSolvability(false);
+      window.alert('set an end vertex first')
+      return
+    }
+
+    let SolvableCheck = {
+      operation: "Solvable",
+      startVertex: this._target_start,
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        console.log(response)
+        if (response.data.solvable==true){
+          this.setSolvability(true);
+        }else {
+          this.setSolvability(false);
+        }
+
+
+      },
+      error => console.error('', error)
+    );
+  }
+
+  checkSetupOrder() {
+    if(this._target_start==null){
+      window.alert('set a start vertex first')
+      return
+    }
+
+    if(this._target_end==null){
+      window.alert('set an end vertex first')
+      return
+    }
+
+    let SolvableCheck = {
+      operation: "Solvable",
+      startVertex: this._target_start,
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        console.log(response)
+        if (response.data.solvable==true){
+        }else {
+          this.setSolvability(false);
+        }
+
+
+      },
+      error => console.error('', error)
+    );
+
+    let setUpOrderCheck = {
+      operation: "Setup",
+      startVertex: this._target_start,
+      endVertex: this._target_end,
+      roomid: this.currentRoomId
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
+      resp => {
+        console.log(resp)
+        let order =[]
+        let i=0
+
+
+         if(resp.data.status=="Success"){
+           // @ts-ignore
+           document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
+           /* resp.data.order.forEach(
+              (value: any) => {
+               this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/"+value).subscribe(
+                  resp => {
+                    console.log(resp)
+                  }
+              )
+              } )*/
+        }else {
+          window.alert('Unknown failure')
+        }
+      },
+      error => console.error('', error)
+    );
+
+
+  }
+
+  setStart() :void{
+    this._target_start= this._target_vertex;
+    let id=this.vertexService.vertices[this._target_start.getAttribute("vertex-id")].id
+    this._target_start=id
+    let connection = {
+      operation: 'setStart',
+      startVertex: id , //convert local to real id
+    };
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        console.log(response);
+      },
+      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      //console.error('There was an error while updating the vertex', error)
+    );
+  }
+
+  setEnd() :void{
+    this._target_end= this._target_vertex;
+    var id=this.vertexService.vertices[this._target_end.getAttribute("vertex-id")].id
+    this._target_end=id
+    let connection = {
+      operation: 'setEnd',
+      endVertex: id , //convert local to real id
+    };
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        console.log(response);
+      },
+      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      //console.error('There was an error while updating the vertex', error)
+    );
+
+  }
+
   // todo
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
@@ -688,6 +865,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // append to div alertElementError
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
   }
+
+
 }
 
 // For Vertex Response

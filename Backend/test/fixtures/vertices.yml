@@ -12,9 +12,10 @@ one:
   graphicid: MyString
   escape_room_id: 1
   blob_id: 0
+  
 two:
   id: 2
-  type: Clue
+  type: Puzzle
   name: two
   posx: 1
   posy: 1
@@ -23,10 +24,132 @@ two:
   graphicid: MyString
   escape_room_id: 1
   blob_id: 1
+  
 three:
   id: 3
-  type: Clue
-  name: three
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+  
+four:
+  id: 4
+  type: Keys
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+five:
+  id: 5
+  type: Container
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+six:
+  id: 6
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+#For illegal move tests
+seven:
+  id: 700
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+eight:
+  id: 701
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+nine:
+  id: 702
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+ten:
+  id: 703
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+eleven:
+  id: 704
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+twelve:
+  id: 705
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+thirteen:
+  id: 706
+  type: Container
+  name: one
   posx: 1
   posy: 1
   width: 1.5
@@ -34,3 +157,112 @@ three:
   graphicid: MyString
   escape_room_id: 1
   blob_id: 10
+
+fourteen:
+  id: 707
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+fifteen:
+  id: 708
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+sixteen:
+  id: 709
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+seventeen:
+  id: 710
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+eighteen:
+  id: 711
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+#test with circle
+c1:
+  id: 801
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+c2:
+  id: 802
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+c3:
+  id: 803
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+c4:
+  id: 804
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
