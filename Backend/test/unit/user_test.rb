@@ -5,7 +5,7 @@ require './app/Services/user_services'
 class UserTest < ActiveSupport::TestCase
   test 'test register user' do
     before_test = User.count
-    req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
+    req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com')
     us = UserServices.new
     us.register_user(req)
 
@@ -13,7 +13,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'test a user saves' do
-    req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com', false)
+    req = RegisterUserRequest.new('rTest', 'rTest', 'rTest@gmail.com')
     us = UserServices.new
     resp = us.register_user(req)
 
@@ -97,6 +97,30 @@ class UserTest < ActiveSupport::TestCase
     req = ResetPasswordRequest.new('rando', '12345')
     us = UserServices.new
     resp = us.reset_password(req)
+
+    assert_equal(false, resp.success)
+  end
+
+  test 'test verify account will null request' do
+    req = VerifyAccountRequest.new(nil)
+    us = UserServices.new
+    resp = us.verify_account(req)
+
+    assert_equal(false, resp.success)
+  end
+
+  test 'test verify account with a valid username' do
+    req = VerifyAccountRequest.new('testUser')
+    us = UserServices.new
+    resp = us.verify_account(req)
+
+    assert( resp.success)
+  end
+
+  test 'test verify account with an invalid username' do
+    req = VerifyAccountRequest.new('user')
+    us = UserServices.new
+    resp = us.verify_account(req)
 
     assert_equal(false, resp.success)
   end

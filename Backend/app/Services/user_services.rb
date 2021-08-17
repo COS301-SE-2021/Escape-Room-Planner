@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'mail'
 
 class UserServices
   def register_user(request)
@@ -126,6 +125,22 @@ class UserServices
                 end
   end
 
+  def verify_account(request)
+    return VerifyAccountResponse.new(false, 'Request is null') if request.nil?
+
+    return VerifyAccountResponse.new(false, 'Username does not exist') unless User.find_by_username(request.username)
+
+    @user = User.find_by_username(request.username)
+
+    @user.verified = true
+
+    @response = if @user.save!
+                  VerifyAccountResponse.new(true, 'Account verified')
+                else
+                  VerifyAccountResponse.new(false, 'Account verification unsuccessful')
+                end
+  end
+
   # def setAdmin(request)
   #   raise 'SetAdminRequest null' if request.nil?
   #
@@ -145,22 +160,6 @@ class UserServices
   def get_users(request); end
 
   def update_account(request); end
-
-  def verify_account(request)
-    return VerifyAccountResponse.new(false, 'Request is null') if request.nil?
-
-    return VerifyAccountResponse.new(false, 'Username does not exist') unless User.find_by_username(request.username)
-
-    @user = User.find_by_username(request.username)
-
-    @user.verified = true
-
-    @response = if @user.save!
-                  VerifyAccountResponse.new(true, 'Account verified')
-                else
-                  VerifyAccountResponse.new(false, 'Account verification unsuccessful')
-                end
-  end
 
   def authenticate_user(encoded_token, username)
     decoded_token = JsonWebToken.decode(encoded_token)
