@@ -34,7 +34,8 @@ export class AppComponent {
   }
 
   verifyJWT(): void{
-    this.headers = this.headers.set("Authorization",'Bearer ' + localStorage.getItem('token') as string);
+    this.headers = this.headers.set("Authorization1",'Bearer ' + localStorage.getItem('token'))
+      .set("Authorization2",'Basic ' + localStorage.getItem('username'));
 
     let request_body = {
       operation: 'Verify'

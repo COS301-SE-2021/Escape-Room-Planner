@@ -42,7 +42,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     if(localStorage.getItem('token') ==  null) {
       this.router.navigate(['login']).then(r => console.log('no jwt stored'));
     }
-      this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+      this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
+        .set("Authorization2",'Basic ' + localStorage.getItem('username'));
   }
 
 
@@ -75,6 +76,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       error => this.renderAlertError('There was an error retrieving the start vertices')
     );
   }
+
   // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
@@ -131,7 +133,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         error => {
           if (error.status === 401){
             if (this.router.routerState.snapshot.url !== '/login' &&
-              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect 1'));
           }else{
             this.renderAlertError('There was an error retrieving your rooms');
           }

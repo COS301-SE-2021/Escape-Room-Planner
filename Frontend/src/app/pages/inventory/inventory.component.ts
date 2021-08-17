@@ -20,7 +20,8 @@ export class InventoryComponent implements OnInit {
   @ViewChild('clue_div') clue_div: ElementRef | undefined;
 
   constructor(private httpClient: HttpClient, private renderer: Renderer2) {
-    this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+    this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
+      .set("Authorization2",'Basic ' + localStorage.getItem('username'));
   }
 
   ngOnInit(): void {
