@@ -10,8 +10,22 @@ module Api
 
       def create
         if authorise(request)
+          operation = params[:operation]
 
+          if operation == "Reset Password"
+            if params[:email].nil?
+              render json: { status: 'FAILED', message: 'No email received' }, status: 400
+              return
+            end
+
+          end
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
+      end
+
+      def ResetPassword(email)
+
       end
 
     end
