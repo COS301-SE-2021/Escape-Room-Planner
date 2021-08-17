@@ -14,7 +14,7 @@ module Api
       # GET api/v1/room , shows all the rooms in db
       def index
         if authorise(request)
-          auth_token = request.headers['Authorization'].split(' ').last
+          auth_token = request.headers['Authorization1'].split(' ').last
           req = GetRoomsRequest.new(auth_token)
           serv = RoomServices.new
           resp = serv.get_rooms(req)
@@ -59,9 +59,9 @@ module Api
             return
           end
           render json: { status: 'SUCCESS', message: 'Deleted Room' }, status: :ok if room.destroy
-        # else
-        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        # end
+        else
+        render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       end
 
       def update

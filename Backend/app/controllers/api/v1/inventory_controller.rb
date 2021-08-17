@@ -19,7 +19,7 @@ module Api
       # get api/v1/inventory
       def index
         if authorise(request)
-          auth_token = request.headers['Authorization'].split(' ').last
+          auth_token = request.headers['Authorization1'].split(' ').last
           req = GetGraphicsRequest.new(auth_token)
           res = @@inventory_service.get_graphics(req)
           render json: { success: res.success, message: res.message, image: res.image }, status: :ok
@@ -32,7 +32,7 @@ module Api
       def create
         if authorise(request)
           # get auth_token to get user id
-          auth_token = request.headers['Authorization'].split(' ').last
+          auth_token = request.headers['Authorization1'].split(' ').last
           req = AddGraphicRequest.new(auth_token, params[:image], params[:type])
           res = @@inventory_service.add_graphic(req)
           render json: { success: res.success, message: res.message,data: res.data}, status: :ok
@@ -45,15 +45,7 @@ module Api
       def destroy
         if authorise(request)
           # get auth_token to get user id
-          auth_token = request.headers['Authorization'].split(' ').last
-
-          puts 'cocka'
-          puts 'cocka'
-          puts 'cocka'
-          puts 'cocka'
-          puts 'cocka'
-          puts params[:id]
-
+          auth_token = request.headers['Authorization1'].split(' ').last
           req = DeleteGraphicRequest.new(auth_token, params[:id].to_i)
           res = @@inventory_service.delete_graphic(req)
           render json: { success: res.success, message: res.message }, status: :ok
