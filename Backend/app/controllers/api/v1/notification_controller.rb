@@ -16,7 +16,11 @@ module Api
             if params[:email].nil?
               render json: { status: 'FAILED', message: 'No email received' }, status: 400
               return
-            end
+
+              else
+                resp=ResetPassword(params[:email])
+                render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+              end
 
           end
         else
