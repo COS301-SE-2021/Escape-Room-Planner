@@ -7,16 +7,6 @@
   animation: page-load 300ms;
 }
 
-/*@keyframes page-load {*/
-/*  0% {*/
-/*    transform: translateX(-10%);*/
-/*  }*/
-
-/*  100% {*/
-/*    transform: translateX(0);*/
-/*  }*/
-/*}*/
-
 .fade-in {
   opacity: 1;
   animation-name: fadeInOpacity;
@@ -45,16 +35,6 @@
   animation: top-load 300ms;
 }
 
-/*@keyframes top-load {*/
-/*  0% {*/
-/*    transform: translateY(-100%);*/
-/*  }*/
-
-/*  100% {*/
-/*    transform: translateY(0);*/
-/*  }*/
-/*}*/
-
 .logo {
   height: 50px;
   width: 300px;
@@ -62,6 +42,7 @@
   align-items: center;
   border-radius: 5px 5px 0px 0px;
   background: var(--sec-bg);
+  border-bottom: 2px solid black;
 }
 
 .logo h2 {
@@ -77,12 +58,13 @@
 input {
   border: none;
   box-shadow: none;
+  color: white
 }
 
 login-form {
   height: 400px;
   margin: 20px;
-  background: #1a2226;
+  background: var(--sec-bg);
   border: none;
 }
 
@@ -116,13 +98,9 @@ a:hover {
   color: var(--green)
 }
 
-.btn:hover {
-  background: #49D091;
-}
-
 .btn {
-  color: #49D091;
-  border-color: #49D091;
+  color: var(--green);
+  border-color: var(--green);
 }
 
 

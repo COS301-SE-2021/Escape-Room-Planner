@@ -8,13 +8,13 @@
 </head>
 
 <div class="container-fluid">
-  <div class="card logo">
+  <div class="card logo" id="sign-in">
     <h2>Sign up</h2>
   </div>
 </div>
 
 <div class="global-container">
-  <div class="card login-form" style="border-radius: 0px 0px 5px 5px;">
+  <div class="card login-form fade-in" id="form-card">
     <div class="card-body">
       <div class="card-text">
         <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm.value)">
@@ -22,7 +22,7 @@
             <label for="username">Username</label>
             <input type="text" id="username" ngModel required name="username" #username="ngModel"
                    class="form-control form-control-sm" [class.is-invalid]="username.invalid && username.touched"
-                   style="background: #E5E4E2" autocomplete="none">
+                   style="background: var(--main-bg)" autocomplete="none">
             <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
 <!--            <small [style-display="display"]>Username is taken.</small>-->
           </div>
@@ -31,17 +31,17 @@
             <label for="email">Email</label>
             <input type="email" id="email" ngModel required #email="ngModel" name="email"
                    class="form-control form-control-sm" [class.is-invalid]="email.invalid && email.touched"
-                   pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" style="background: #E5E4E2">
+                   pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" style="background: var(--main-bg)">
             <small *ngIf="email.errors?.required && email.touched">Email is required.</small>
             <small *ngIf="email.errors?.pattern && email.touched">Please enter a valid email.</small>
           </div>
 
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" ngModel required #password="ngModel" name="password_digest"
+            <input type="password" id="password" ngModel #password="ngModel" name="password_digest"
                    class="form-control form-control-sm" [class.is-invalid]="password.invalid && password.touched"
                    pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?#&])[A-Za-z\d$@$!%*?#&].{7,}"
-                   style="background: #E5E4E2">
+                   style="background: var(--main-bg)" required>
             <small *ngIf="password.errors?.required && password.touched">Password is required.</small>
             <small *ngIf="password.errors?.pattern && password.touched">
               Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.
@@ -49,13 +49,13 @@
           </div>
           <div class="form-group">
             <label for="confirm">Confirm Password</label>
-            <input type="password" id="confirm" ngModel required #confirm="ngModel" name="confirm"
-                   class="form-control form-control-sm" style="background: #E5E4E2"
-                   (keyup)="(checkSomething(password.value, confirm.value))">
+            <input type="password" id="confirm" ngModel #confirm="ngModel" name="confirm"
+                   class="form-control form-control-sm" style="background: var(--main-bg)"
+                   (keyup)="(checkSomething(password.value, confirm.value))" required>
             <small *ngIf="confirm.errors?.required && confirm.touched">Confirm password is required.</small>
             <small>{{errorMessage}}</small>
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+          <button type="submit" class="btn btn-outline-success btn-block">Sign Up</button>
 
           <div class="signup">
             Already have an account? <a href="login">Login</a>
