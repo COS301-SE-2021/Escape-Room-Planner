@@ -52,6 +52,31 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(false, resp.success)
   end
 
+  test 'teset null request reset password notification' do
+    req = ResetPasswordNotificationRequest.new(nil)
+    us = UserServices.new
+    resp = us.reset_password_notification(req)
+
+    assert_equal(false, resp.success)
+  end
+
+  test 'test reset password notification given valid email' do
+    req = ResetPasswordNotificationRequest.new('test@gmail.com')
+    us = UserServices.new
+    resp = us.reset_password_notification(req)
+
+    assert(resp.success)
+
+  end
+
+  test 'test reset password notification given an invalid email' do
+    req = ResetPasswordNotificationRequest.new('other@gmail.com')
+    us = UserServices.new
+    resp = us.reset_password_notification(req)
+
+    assert_equal(false, resp.success)
+  end
+
   test 'test password reset' do
     req = ResetPasswordRequest.new('testUser', '12345')
     us = UserServices.new
