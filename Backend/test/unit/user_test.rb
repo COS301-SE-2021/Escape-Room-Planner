@@ -85,6 +85,22 @@ class UserTest < ActiveSupport::TestCase
     assert(resp.success)
   end
 
+  test 'test null request reset password' do
+    req = ResetPasswordRequest.new(nil, nil)
+    us = UserServices.new
+    resp = us.reset_password(req)
+
+    assert_equal(false, resp.success)
+  end
+
+  test 'test invalid username reset password' do
+    req = ResetPasswordRequest.new('rando', '12345')
+    us = UserServices.new
+    resp = us.reset_password(req)
+
+    assert_equal(false, resp.success)
+  end
+
   test 'test sending null token to authenticate user' do
     us = UserServices.new
     assert_equal(false, us.authenticate_user(nil, 'testUser'))
