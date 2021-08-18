@@ -18,37 +18,23 @@ module Api
 
         operation = params[:operation]
 
+        room_id = params[:roomid]
+        start_vert = EscapeRoom.find_by_id(room_id).startVertex
+        end_vert  = EscapeRoom.find_by_id(room_id).endVertex
+
+        all = Vertex.all.where(escape_room_id: room_id)
+        icount = 0
+        vertices = []
+        all.each do |v|
+          vertices[icount] = v.id
+          icount += 1
+        end
+
         if operation == 'Solvable'
-
-          room_id = params[:roomid]
-          start_vert = EscapeRoom.find_by_id(room_id).startVertex
-          end_vert  = EscapeRoom.find_by_id(room_id).endVertex
-
-          all = Vertex.all.where(escape_room_id: room_id)
-          icount = 0
-          vertices = []
-          all.each do |v|
-            vertices[icount] = v.id
-            icount += 1
-          end
-
           solvability(start_vert, end_vert, vertices)
-
         end
 
         if operation == 'Setup'
-          room_id = params[:roomid]
-          start_vert = EscapeRoom.find_by_id(room_id).startVertex
-          end_vert  = EscapeRoom.find_by_id(room_id).endVertex
-
-          all = Vertex.all.where(escape_room_id: room_id)
-          icount = 0
-          vertices = []
-          all.each do |v|
-            vertices[icount] = v.id
-            icount += 1
-          end
-
           set_up_order(start_vert, end_vert, vertices)
         end
 
