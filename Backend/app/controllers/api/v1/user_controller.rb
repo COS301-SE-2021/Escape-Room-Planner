@@ -70,7 +70,8 @@ module Api
 
 
         when 'reset_password'
-          req = R
+          req = ResetPasswordRequest(username, new_password)
+          res = serv.reset_password(req)
 
         # when 'Verify'
 
