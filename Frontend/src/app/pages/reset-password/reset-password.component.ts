@@ -28,7 +28,7 @@ export class ResetPasswordComponent implements OnInit {
     this.display = 'none';
 
     let extra_data = {
-      username: data["username"],
+      new_password: data["password_digest"],
       operation: 'reset_password'
     };
 

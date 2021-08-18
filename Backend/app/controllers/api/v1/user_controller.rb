@@ -68,6 +68,10 @@ module Api
           req = ResetPasswordNotificationRequest.new(email)
           res = serv.reset_password_notification(req)
 
+
+        when 'reset_password'
+          req = R
+
         # when 'Verify'
 
         # when 'login'
