@@ -9,6 +9,7 @@ import { SignupComponent } from './pages/signup/signup.component';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import { InventoryComponent } from './pages/inventory/inventory.component';
+import { SolvabilityComponent } from './pages/solvability/solvability.component';
 
 const routes: Routes = [
   // { path: '', component: AppComponent },
@@ -25,7 +26,8 @@ const routes: Routes = [
     LoginComponent,
     RoomCreatorComponent,
     SignupComponent,
-    InventoryComponent
+    InventoryComponent,
+    SolvabilityComponent
   ],
     imports: [
         BrowserModule,

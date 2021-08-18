@@ -1,0 +1,10 @@
+<div #solve_div [hidden]="true" class="modal-body rounded border border-dark border-4" style=" top: 50%; left: 25%; background-color: #6a6969; width: 60%; z-index: 10000">
+  <button (click)="solve_div.hidden=true">Close</button>
+  <div id="Solvability-panel" class="Solvability-panel">
+    <button (click)="checkSetupOrder()">Setup order</button>
+    <div id="Start-Vertex-label" class="Start-Vertex-label">Start Vertex:</div>
+    <div id="End-Vertex-label" class="End-Vertex-label">End Vertex:</div>
+    <div id="Solvable" class="Solvable">Solvable:</div>
+    <div id="SetupOrder" class="SetupOrder">Set up order:</div>
+  </div>
+</div>

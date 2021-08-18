@@ -29,7 +29,8 @@ class RoomServices
   def create_escape_room(request)
     raise 'CreateEscapeRoomRequest null' if request.nil?
 
-    @escape_room = EscapeRoom.new(name: request.name)
+    decoded_token = JsonWebToken.decode(request.token)
+    @escape_room = EscapeRoom.new(name: request.name, user_id: decoded_token['id'])
     @response = if @escape_room.save
                   CreateEscapeRoomResponse.new(@escape_room.id, @escape_room.name)
                 else

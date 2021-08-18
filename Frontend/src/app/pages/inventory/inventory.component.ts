@@ -14,6 +14,7 @@ export class InventoryComponent implements OnInit {
 
   @Output() public afterClick: EventEmitter<inventoryObject> = new EventEmitter();
   @Output() public error: EventEmitter<inventoryObject> = new EventEmitter();
+  @Output() public checkSolvable: EventEmitter<inventoryObject> = new EventEmitter();
   @ViewChild('container_div') container_div: ElementRef | undefined;
   @ViewChild('puzzle_div') puzzle_div: ElementRef | undefined;
   @ViewChild('key_div') key_div: ElementRef | undefined;
@@ -131,12 +132,10 @@ export class InventoryComponent implements OnInit {
 
     if (file != null && file.size < 1000000 && file.type.includes('image')) {
       // send request ot back end render piece on front
-      let image = (await this.toBase64(file) as string).replace('data:image/jpeg;base64,', '');
-
+      let image = (await this.toBase64(file) as string).replace('base64,', '');
       this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/inventory/", {image: image, type: type}
         , {"headers": this.headers}).subscribe(
         response => {
-          console.log(response);
           let blob_id = response.data.blob_id.toString();
           this.inventory[blob_id] = response.data.src;
           this.renderInventoryObject(blob_id, type);
@@ -175,6 +174,11 @@ export class InventoryComponent implements OnInit {
         }
       );
     }
+  }
+
+  //calls rooms creator check solvable
+  public async checkSolve(){
+    this.checkSolvable.emit();
   }
 }
 
