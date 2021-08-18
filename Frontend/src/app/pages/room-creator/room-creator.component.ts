@@ -58,26 +58,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(){
     //use for testing new functionality
+    this.solveComponent?.setRoom(this.currentRoomId);
+    this.solveComponent?.getInitialVertices();
   }
 
-  getInitialVertices():void{
-    // @ts-ignore
-    document.getElementById("Solvability-panel").style.backgroundColor="grey"
-    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
-      response => {
 
-        // @ts-ignore
-        document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
-        this._target_start=response.data.startVertex;
-
-        // @ts-ignore
-        document.getElementById("End-Vertex-label").innerHTML = "End Vertex: "+response.data.endVertex;
-        this._target_end=response.data.endVertex
-      },
-      //Render error if bad request
-      error => this.renderAlertError('There was an error retrieving the start vertices')
-    );
-  }
 
   // todo
   //updates all lines connected to this vertex
@@ -184,7 +169,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
     //load the vertices for the newly selected room
     this.getVertexFromRoom();
-    this.getInitialVertices();
+    this.solveComponent?.getInitialVertices();
   }
 
   // todo

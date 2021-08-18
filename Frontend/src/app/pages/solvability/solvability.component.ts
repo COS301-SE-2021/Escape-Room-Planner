@@ -23,6 +23,30 @@ export class SolvabilityComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+  }
+
+  setRoom(room_id: number){
+    this._current_room_id = room_id;
+  }
+
+  getInitialVertices():void{
+    // @ts-ignore
+    document.getElementById("Solvability-panel").style.backgroundColor="grey"
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this._current_room_id, {"headers": this.headers}).subscribe(
+      response => {
+
+        // @ts-ignore
+        document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
+        this._target_start=response.data.startVertex;
+
+        // @ts-ignore
+        document.getElementById("End-Vertex-label").innerHTML = "End Vertex: "+response.data.endVertex;
+        this._target_end=response.data.endVertex
+      },
+      //Render error if bad request
+      error => alert('There was an error retrieving the start vertices')
+    );
   }
 
   checkSolvable(target_start: HTMLElement, target_end: HTMLElement, current_room_id: Number){
@@ -65,12 +89,20 @@ export class SolvabilityComponent implements OnInit {
       // @ts-ignore
       document.getElementById("Solvability-panel").style.backgroundColor="green"
       // @ts-ignore
+      document.getElementById("Start-Vertex-label").innerText="Start Vertex: "+this._target_start
+      // @ts-ignore
+      document.getElementById("End-Vertex-label").innerText="End Vertex: "+this._target_end
+      // @ts-ignore
       document.getElementById("Solvable").innerHTML="Solvable: True"
     }else{
       // @ts-ignore
       document.getElementById("Solvability-panel").style.backgroundColor="red"
       // @ts-ignore
       document.getElementById("Solvable").innerHTML="Solvable: False"
+      // @ts-ignore
+      document.getElementById("Start-Vertex-label").innerText="Start Vertex: "+this._target_start
+      // @ts-ignore
+      document.getElementById("End-Vertex-label").innerText="End Vertex: "+this._target_end
     }
   }
 
