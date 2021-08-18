@@ -34,7 +34,7 @@ export class SignupComponent implements OnInit {
 
     this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe((response)=> {
-          this.router.navigate(['/']).then(r => alert("Success"));
+          this.router.navigate(['/login']).then(r => alert("Success"));
       },
           error => {
             if (error["message"] == "User already exists")
