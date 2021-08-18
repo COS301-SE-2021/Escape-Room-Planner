@@ -64,10 +64,6 @@ class UserServices
 
     return ResetPasswordNotificationResponse.new(false, 'Email does not exist') unless User.find_by_email(request.email)
     UserNotifierMailer.send_reset_password_email(request.email).deliver
-    # resp = UserNotifierMailer.send_reset_password_email(request.email).deliver
-    # puts resp
-
-    #gotta do a resend notification button and request. Will talk to NQ about that
     return ResetPasswordNotificationResponse.new(true, 'Email sent')
   end
 
