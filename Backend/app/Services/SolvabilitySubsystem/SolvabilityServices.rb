@@ -110,7 +110,7 @@ class SolvabilityService
       # has to go to container
       if Vertex.find_by(id: from_vert_id).type == puzzle_const
         if Vertex.find_by(id: to_vertex_id).type != container_const
-          @reason= "Error occurred at #{from_vert_id} #{to_vertex_id} because puzzle can only go to container"
+          @reason = "Error occurred at #{from_vert_id} #{to_vertex_id} because puzzle can only go to container"
           return false
         end
       end
