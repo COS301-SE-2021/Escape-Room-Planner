@@ -1,79 +1,110 @@
-#login-container{
+.global-container {
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  color: #fff;
+  animation: page-load 300ms;
 }
 
-small {
-  color: red;
+.fade-in {
+  opacity: 1;
+  animation-name: fadeInOpacity;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 0.5s;
 }
 
-label {
-  font-weight: 600;
+@keyframes fadeInOpacity {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
-#login-card {
-  width: 100%;
-  border-radius: 10px;
-  /*height: 300px;*/
-  box-shadow: 5px 5px 5px gray;
-}
-.form-control {
-  /* border-color: #00fa9a !important; */
-}
-input:focus {
-  border-color: #00fa9a !important;
-  outline: none !important;
-  box-shadow: none !important;
+.container-fluid {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-top: 100px;
+  animation: top-load 300ms;
 }
 
-#signin-bt {
-  background: none;
-  border-radius: 10px;
-  border: 2px solid #00fa9a;
-  color: #00fa9a;
+.logo {
+  height: 50px;
+  width: 300px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px 5px 0px 0px;
+  background: var(--sec-bg);
+  border-bottom: 2px solid black;
 }
 
-#signin-bt:hover {
-  background: none;
-  border-radius: 10px;
-  border: 2px solid #00fa9a;
-  color: #00fa9a;
-
-}
-
-#signup-bt {
-  border-radius: 10px;
-  border: 1px solid blue;
-  background: mediumspringgreen;
-  color: mediumblue;
+.logo h2 {
   text-align: center;
-  width: 95%;
+  font-size: 20px;
 }
 
-* {
-  text-decoration: none;
-  list-style: none;
+.signup {
+  text-align: center;
+  padding-top: 15px;
+}
+
+input {
+  border: none;
+  box-shadow: none;
+  background: var(--main-bg);
+  color: white;
+}
+
+input:focus {
+  background: var(--main-bg);
+  color: white;
+}
+
+login-form {
+  height: 400px;
+  margin: 20px;
+  background: var(--sec-bg);
+  border: none;
+}
+
+.card-body{
+  width: 300px;
+  background: var(--sec-bg);
+}
+
+#form-card {
+  border-radius: 0px 0px 5px 5px;
+}
+
+#sign-in {
+  border-radius: 5px 5px 0px 0px;
+}
+
+.card {
+  border: none;
+  overflow: hidden;
+}
+
+form {
+  font-size: 14px;
+}
+
+a {
+  color: var(--green);
 }
 
 a:hover {
-  text-decoration: none;
+  color: var(--green)
 }
 
-#sign-up {
-  padding-top: 10px;
-  text-align: center;
-  color: mediumblue;
-}
-
-#forgot-pass {
-  text-align: center;
-  color: mediumblue;
-}
-
-#welcome {
-  padding-top: 10px;
-  font-family: "Adobe Caslon Pro Bold", monospace;
-  text-shadow: 2px 2px 2px black;
+.btn {
+  color: var(--green);
+  border-color: var(--green);
 }

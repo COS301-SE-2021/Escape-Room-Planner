@@ -64,6 +64,7 @@ class UserServices
 
     return ResetPasswordNotificationResponse.new(false, 'Email does not exist') unless User.find_by_email(request.email)
     UserNotifierMailer.send_reset_password_email(request.email).deliver
+    puts 'Does it at least come here'
     return ResetPasswordNotificationResponse.new(true, 'Email sent')
   end
 

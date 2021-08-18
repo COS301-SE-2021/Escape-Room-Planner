@@ -69,7 +69,6 @@ module Api
           res = serv.reset_password_notification(req)
 
         when 'reset_password'
-          puts 'Does it atleast come here'
           req = ResetPasswordRequest.new(username, new_password)
           res = serv.reset_password(req)
 
