@@ -13,7 +13,7 @@ import {FormsModule} from "@angular/forms";
 import { VerifyComponent } from './pages/verify/verify.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ResetPasswordNotComponent } from './pages/reset-password-not/reset-password-not.component';
-import { ResetSuccessComponent } from './reset-success/reset-success.component';
+import { ResetSuccessComponent } from './pages/reset-success/reset-success.component';
 
 const routes: Routes = [
   { path: '', component: RoomCreatorComponent },
@@ -22,6 +22,7 @@ const routes: Routes = [
   { path: 'verify', component: VerifyComponent },
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'reset-not', component: ResetPasswordNotComponent },
+  { path: 'reset-success', component: ResetSuccessComponent },
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];

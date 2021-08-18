@@ -42,7 +42,6 @@
   align-items: center;
   border-radius: 5px 5px 0px 0px;
   background: var(--green);
-  border-bottom: 2px solid black;
 }
 
 .card-text h2 {
