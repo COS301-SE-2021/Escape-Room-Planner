@@ -79,6 +79,10 @@ export class SolvabilityComponent implements OnInit {
       response => {
         //rendering <li> elements by using render function
         this.setSolvability(response.data.solvable);
+
+        if(response.data.solvable==false){
+          window.alert(response.data.reason)
+        }
       },
       error => console.error('', error)
     );
