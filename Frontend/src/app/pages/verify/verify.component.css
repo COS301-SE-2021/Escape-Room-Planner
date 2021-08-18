@@ -37,12 +37,16 @@
 
 .logo {
   height: 50px;
-  width: 300px;
+  width: 450px;
   justify-content: center;
   align-items: center;
   border-radius: 5px 5px 0px 0px;
-  background: var(--sec-bg);
+  background: var(--green);
   border-bottom: 2px solid black;
+}
+
+.card-text h2 {
+  text-align: center;
 }
 
 .logo h2 {
@@ -75,7 +79,7 @@ login-form {
 }
 
 .card-body{
-  width: 300px;
+  width: 450px;
   background: var(--sec-bg);
 }
 

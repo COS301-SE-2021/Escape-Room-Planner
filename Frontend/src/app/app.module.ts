@@ -13,6 +13,7 @@ import {FormsModule} from "@angular/forms";
 import { VerifyComponent } from './pages/verify/verify.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ResetPasswordNotComponent } from './pages/reset-password-not/reset-password-not.component';
+import { ResetSuccessComponent } from './reset-success/reset-success.component';
 
 const routes: Routes = [
   { path: '', component: RoomCreatorComponent },
@@ -35,7 +36,8 @@ const routes: Routes = [
     DroppableDirective,
     VerifyComponent,
     ResetPasswordComponent,
-    ResetPasswordNotComponent
+    ResetPasswordNotComponent,
+    ResetSuccessComponent
   ],
     imports: [
         BrowserModule,
