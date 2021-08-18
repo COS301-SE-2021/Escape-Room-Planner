@@ -6,7 +6,7 @@ class UserNotifierMailer < ApplicationMailer
       #sends reset password link to user's email
       mail(to: email,
            subject: 'Confirm Reset Password',
-           body: 'http://localhost:4000/reset')
+           body: 'http://localhost:4200/login')
   end
 
   def send_verify_account_email(email)

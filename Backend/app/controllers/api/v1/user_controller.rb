@@ -65,11 +65,8 @@ module Api
         # end
 
         when 'reset_password_notification'
-          puts 'Did we?'
           req = ResetPasswordNotificationRequest.new(email)
           res = serv.reset_password_notification(req)
-          puts 'It came back'
-
 
         # when 'Verify'
 
