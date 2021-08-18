@@ -25,7 +25,13 @@ module Api
         assert_equal 'Please Send Image', response['message']
       end
 
-      # TODO: inventory test with fake JWT
+      test 'JWT not added on add image request' do
+        post api_v1_inventory_index_path, params: { image_fake: 'test',
+                                                    type: 'Clue'}
+        response = JSON.parse(@response.body)
+        assert_response 401
+        assert_equal 'Unauthorized', response['message']
+      end
 
       test 'can get graphics for user' do
         authed_get_call(api_v1_inventory_index_path)
@@ -34,13 +40,27 @@ module Api
         assert_not_nil response['image']
       end
 
-      # TODO: Assert get expected response for get graphics
+      test 'JWT not added on get graphics request' do
+        get api_v1_inventory_index_path, params: { image_fake: 'test',
+                                                    type: 'Clue'}
+        response = JSON.parse(@response.body)
+        assert_response 401
+        assert_equal 'Unauthorized', response['message']
+      end
 
       test 'can delete graphic through api call' do
         authed_delete_call("#{api_v1_inventory_index_path}/1", { blob_id: 1 })
         response = JSON.parse(@response.body)
         assert_response :success
         assert_equal 'Graphic been deleted', response['message']
+      end
+
+      test 'JWT not added on delete graphic request' do
+        delete "#{api_v1_inventory_index_path}/1", params: { image_fake: 'test',
+                                                   type: 'Clue'}
+        response = JSON.parse(@response.body)
+        assert_response 401
+        assert_equal 'Unauthorized', response['message']
       end
     end
   end
