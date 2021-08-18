@@ -13,6 +13,14 @@ export class ResetPasswordComponent implements OnInit {
 
   display = 'none';
 
+  errorMessage = "";
+
+  checkSomething(pass: string, cpassword: string) {
+    if (pass != cpassword) {
+      this.errorMessage = "Password does not match.";
+    } else this.errorMessage = "";
+  }
+
   ngOnInit(): void {
   }
 
