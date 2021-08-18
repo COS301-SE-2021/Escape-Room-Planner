@@ -75,12 +75,12 @@ class InventoryService
   end
 
   def decode_base64Image(base64_image)
-    img_from_base64 = Base64.decode64(base64_image)
-    # puts img_from_base64[0, 8]
-    #filetype = /(png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF)/.match(img_from_base64[0, 16])[0]
-    # name the file
+    img = base64_image.split(';').last
+    filetype = base64_image.split(';').first
+    filetype = /(png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF)/.match(filetype)
+    img_from_base64 = Base64.decode64(img)
     file = { io: img_from_base64,
-           #  content_type: 'image/jpg' ,
-             filename: "inventory-#{Time.current.to_i}.jpg"}
+             content_type: "image/#{filetype}",
+             filename: "inventory-#{Time.current.to_i}.#{filetype}" }
   end
 end

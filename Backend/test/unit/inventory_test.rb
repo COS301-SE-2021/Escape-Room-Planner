@@ -19,7 +19,7 @@ class InventoryTest < ActiveSupport::TestCase
       File.open(test_image, 'rb') do |file|
         Base64.strict_encode64(file.read)
       end
-    # file = Rack::Test::UploadedFile.new(test_image, 'image/png')
+    base64_image = "data:image/png;#{base64_image}"
     request = AddGraphicRequest.new(login_for_test, base64_image, 'Clue')
     serv = InventoryService.new
     response = serv.add_graphic(request)
