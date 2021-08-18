@@ -4,15 +4,7 @@
   align-items: center;
   justify-content: center;
   color: #fff;
-}
-
-.container-fluid {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  margin-top: 100px;
+  animation: page-load 300ms;
 }
 
 .fade-in {
@@ -33,6 +25,16 @@
   }
 }
 
+.container-fluid {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-top: 100px;
+  animation: top-load 300ms;
+}
+
 .logo {
   height: 50px;
   width: 300px;
@@ -40,6 +42,7 @@
   align-items: center;
   border-radius: 5px 5px 0px 0px;
   background: var(--sec-bg);
+  border-bottom: 2px solid black;
 }
 
 .logo h2 {
@@ -52,27 +55,27 @@
   padding-top: 15px;
 }
 
+input {
+  border: none;
+  box-shadow: none;
+  background: var(--main-bg);
+}
+
+input:focus {
+  background: var(--main-bg);
+  color: white;
+}
+
 login-form {
   height: 400px;
   margin: 20px;
   background: var(--sec-bg);
-  border-radius: 40px 40px 20px 20px;
+  border: none;
 }
 
 .card-body{
   width: 300px;
   background: var(--sec-bg);
-}
-
-input {
-  border: none;
-  box-shadow: none;
-  color: white
-}
-
-.card {
-  border: none;
-  overflow: hidden;
 }
 
 #form-card {
@@ -81,6 +84,11 @@ input {
 
 #sign-in {
   border-radius: 5px 5px 0px 0px;
+}
+
+.card {
+  border: none;
+  overflow: hidden;
 }
 
 form {
@@ -95,14 +103,11 @@ a:hover {
   color: var(--green)
 }
 
-.btn:hover {
-  background: var(--green);
-}
-
 .btn {
   color: var(--green);
   border-color: var(--green);
 }
+
 
 /*imput[type="email"]{*/
 /*  background: #1a2226;*/
@@ -209,93 +214,4 @@ a:hover {
 /*#welcome {*/
 /*  padding-top: 10px;*/
 /*  font-family: "Adobe Caslon Pro Bold", monospace;*/
-/*}*/
-
-
-
-
-
-
-
-
-
-
-/*#login-container{*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-
-/*}*/
-
-/*small {*/
-/*  color: red;*/
-/*}*/
-
-/*label {*/
-/*  font-weight: 600;*/
-/*}*/
-
-/*#login-card {*/
-/*  width: 100%;*/
-/*  border-radius: 10px;*/
-/*  !*height: 300px;*!*/
-/*  box-shadow: 5px 5px 5px gray;*/
-/*}*/
-/*.form-control {*/
-/*  !* border-color: #00fa9a !important; *!*/
-/*}*/
-/*input:focus {*/
-/*  border-color: #00fa9a !important;*/
-/*  outline: none !important;*/
-/*  box-shadow: none !important;*/
-/*}*/
-
-/*#signin-bt {*/
-/*  background: none;*/
-/*  border-radius: 10px;*/
-/*  border: 2px solid #00fa9a;*/
-/*  color: #00fa9a;*/
-/*}*/
-
-/*#signin-bt:hover {*/
-/*  background: none;*/
-/*  border-radius: 10px;*/
-/*  border: 2px solid #00fa9a;*/
-/*  color: #00fa9a;*/
-
-/*}*/
-
-/*#signup-bt {*/
-/*  border-radius: 10px;*/
-/*  border: 1px solid blue;*/
-/*  background: mediumspringgreen;*/
-/*  color: mediumblue;*/
-/*  text-align: center;*/
-/*  width: 95%;*/
-/*}*/
-
-/** {*/
-/*  text-decoration: none;*/
-/*  list-style: none;*/
-/*}*/
-
-/*a:hover {*/
-/*  text-decoration: none;*/
-/*}*/
-
-/*#sign-up {*/
-/*  padding-top: 10px;*/
-/*  text-align: center;*/
-/*  color: mediumblue;*/
-/*}*/
-
-/*#forgot-pass {*/
-/*  text-align: center;*/
-/*  color: mediumblue;*/
-/*}*/
-
-/*#welcome {*/
-/*  padding-top: 10px;*/
-/*  font-family: "Adobe Caslon Pro Bold", monospace;*/
-/*  text-shadow: 2px 2px 2px black;*/
 /*}*/

@@ -19,7 +19,7 @@
         <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">
           <div class="form-group">
             <label for="exampleInputEmail">Username</label>
-            <input style="background: var(--main-bg)" type="email" id="exampleInputEmail"
+            <input type="email" id="exampleInputEmail"
                    class="form-control form-control-sm" ngModel required name="username" autocomplete="off"
                    [class.is-invalid]="username.invalid && username.touched" #username="ngModel">
             <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
@@ -27,7 +27,7 @@
           <div class="form-group">
             <label for="password">Password</label>
             <a href="reset-not" style="float: right; font-size: 12px;">Forgot Password?</a>
-            <input style="background: var(--main-bg)" type="password" id="password" name="password_digest"
+            <input type="password" id="password" name="password_digest"
                    class="form-control form-control-sm"
                    ngModel #password="ngModel" [class.is-invalid]="password.invalid && password.touched" required>
             <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
