@@ -1,6 +1,6 @@
 require './app/Services/login_request'
 require './app/Services/register_user_request'
-require './app/Services/register_user_request'
+require './app/Services/services_helper'
 
 module Api
   module V1
@@ -21,15 +21,15 @@ module Api
         password = params[:password]
         new_password = params[:new_password]
 
-        if password.nil? || username.nil?
-          render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
-          return
-        end
-
         serv = UserServices.new
 
         case operation
         when 'Register'
+          if password.nil? || username.nil?
+            render json: { status: 'FAILED', message: 'Ensure correct parameters are given for register' }, status: :not_found
+            return
+          end
+
           if User.where('username = ?', username).count >= 1
             render json: { status: 'Fail', message: 'User already exists', data: "Created: false" }, status: :bad_request
             return
@@ -57,6 +57,14 @@ module Api
             return
           else
             render json: { status: 'FAILED', message: res.message }, status: 401
+            return
+          end
+        when 'Verify'
+          if authorise(request)
+            render json: { status: 'SUCCESS' }, status: :ok
+            return
+          else
+            render json: { status: 'FAILED' }, status: :unauthorized
             return
           end
         else

@@ -2,7 +2,6 @@
 
 require 'test_helper'
 class VertexControllerTest < ActionDispatch::IntegrationTest
-
   test 'can get index' do
     # us = UserServices.new
     # req_l = LoginRequest.new('testUser', 'testPass')
@@ -23,21 +22,15 @@ class VertexControllerTest < ActionDispatch::IntegrationTest
     #     headers: { "Authorization": "\"Bearer #{res_l.token}\"" }
 
     authed_get_call("#{api_v1_vertex_index_path}/1")
-    puts @response.body
 
     assert_response :ok
   end
 
   test 'can handle a show when incorrect escape room id is provided' do
-    # us = UserServices.new
-    # req_l = LoginRequest.new('testUser', 'testPass')
-    # res_l = us.login(req_l)
-    # get "#{api_v1_vertex_index_path}/-1",
-    #     headers: { "Authorization": "\"Bearer #{res_l.token}\"" }
-
     authed_get_call("#{api_v1_vertex_index_path}/-1")
-
-    assert_response :bad_request
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal(response['message'], 'Can not locate user')
   end
 
   test 'can create Puzzle' do

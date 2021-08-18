@@ -10,10 +10,7 @@ class RoomControllerTest < ActionDispatch::IntegrationTest
     # res_l = us.login(req_l)
     # get api_v1_room_index_path,
     #     headers: { "Authorization": "#{BEARER}#{res_l.token}\"" }
-
     authed_get_call(api_v1_room_index_path)
-    puts @response.body
-
     assert_response :success
   end
 

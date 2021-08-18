@@ -5,12 +5,14 @@ import {VertexService} from "../../services/vertex.service";
 import {Router} from "@angular/router";
 // Leader Line JS library imports
 import 'leader-line';
+import {InventoryComponent} from "../inventory/inventory.component";
+import {SolvabilityComponent} from "../solvability/solvability.component"
 declare let LeaderLine: any;
 
 @Component({
   selector: 'app-room-creator',
   templateUrl: './room-creator.component.html',
-  styleUrls: ['./room-creator.component.css']
+  styleUrls: ['./room-creator.component.css'],
 })
 export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public lastPos : number = 0; // used to populate new objects in line
@@ -33,51 +35,36 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
   @ViewChild("contextMenu") contextMenuRef : ElementRef | undefined;
+  @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private router:Router)
   {
-    // todo change to work with login token and not test token
 
-    localStorage.setItem('token', "test");
-    //localStorage.clear();
     if(localStorage.getItem('token') ==  null) {
-      this.router.navigate(['login']).then(r => alert("login test"));
+      this.router.navigate(['login']).then(r => console.log('no jwt stored'));
     }
-      this.headers = this.headers.set('Authorization', 'Bearer ' + localStorage.getItem('token'));
+      this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
+        .set("Authorization2",'Basic ' + localStorage.getItem('username'));
   }
 
 
   ngOnInit(): void {
     //set the currentRoomId to 1 by default, later to actual first room id?
-    this.currentRoomId = 13;
+    this.currentRoomId = 1;
     this.getEscapeRooms();
     this.getVertexFromRoom();
   }
 
   ngAfterViewInit(){
     //use for testing new functionality
+    this.solveComponent?.setRoom(this.currentRoomId);
+    this.solveComponent?.getInitialVertices();
   }
 
-  getInitialVertices():void{
-    // @ts-ignore
-    document.getElementById("Solvability-panel").style.backgroundColor="grey"
-    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, {"headers": this.headers}).subscribe(
-      response => {
 
-        // @ts-ignore
-        document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
-        this._target_start=response.data.startVertex;
 
-        // @ts-ignore
-        document.getElementById("End-Vertex-label").innerHTML = "End Vertex: "+response.data.endVertex;
-        this._target_end=response.data.endVertex
-      },
-      //Render error if bad request
-      error => this.renderAlertError('There was an error retrieving the start vertices')
-    );
-  }
-
+  // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
     let update_lines = this.vertexService.getLineIndex(vertex_index);
@@ -105,16 +92,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.is_disconnect = true;
   }
 
-  //adds an object to drag on our 'canvas'
-  addObjects(type: string, loc: string, pos: number): void{
-    this.lastPos += pos;
+  // todo
+  // adds an object to drag on our 'canvas'
+  addObjects(event:any): void{
+    this.lastPos += event.pos;
     //MAKE API CALL BASED ON TYPE
     let name : string = "Object";       //default name
     let description : string = "Works";  //default description
-    this.createVertex(type, name, loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue');
+    this.createVertex(event.type, name, event.loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue', event.src, event.blob_id);
     //spawns object on plane
   }
 
+  // todo
   //use get to get all the rooms stored in db
   getEscapeRooms(): void{
     //http request to rails api
@@ -128,15 +117,23 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           }
       },
         //Render error if bad request
-        error => this.renderAlertError('There was an error retrieving your rooms')
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect 1'));
+          }else{
+            this.renderAlertError('There was an error retrieving your rooms');
+          }
+        }
     );
   }
 
+  // todo
   deleteRoom(event: any): void{
     //confirmation box on deleting room
     let confirmation = confirm("Are you sure you want to delete this room?");
     let room_id = event.target.getAttribute("escape-room-id");
-    if(confirmation === true){
+    if(confirmation){
       this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/room/"+room_id,
         {"headers": this.headers}).subscribe(
         response => {
@@ -146,12 +143,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           }else
             this.renderAlertError("Unable To Delete Room");
         },
-        error => this.renderAlertError("Unable To Delete Room")
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else{
+            this.renderAlertError("Unable To Delete Room");
+          }
+        }
         //console.error('There was an error while updating the vertex', error)
       );
     }
   }
 
+  // todo
   changeRoom(event: any): void{
     let clickedEscapeRoom = event.target;
     //check if the selected room is not the one shown
@@ -159,16 +164,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       return; // do not reload the vertices again
 
     // update room id
-
     this.currentRoomId = clickedEscapeRoom.getAttribute('escape-room-id');
-    //this._target_start= clickedEscapeRoom.getAttribute('');
     // @ts-ignore
     this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
     //load the vertices for the newly selected room
     this.getVertexFromRoom();
-    this.getInitialVertices();
+    this.solveComponent?.getInitialVertices();
   }
 
+  // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
     // resets the vertices on room switch
@@ -181,7 +185,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.lines = [];
 
     //http request to rails api
-    this.httpClient.get<VertexArray>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
+    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
       response => {
         //render all the vertices
         for (let vertex_t of response.data){
@@ -226,12 +230,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         }
       },
       //Error retrieving vertices message
-      error => this.renderAlertError("There was an error retrieving vertices for the room")
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("There was an error retrieving vertices for the room");
+        }
+      }
     );
   }
 
+  // todo
   // POST to create new room for a user
-  createEscapeRoom(NewEscapeRoomForm:any): void{
+  createEscapeRoom(): void{
     // regex to extract valid strings, removes all the spaces and allows any character
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -247,7 +259,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           //rendering <li> elements by using render function
           this.renderNewRoom(response.data.id, response.data.name);
         },
-        error => console.error('There was an error creating your rooms', error)
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else {
+            console.error('There was an error creating your rooms', error);
+          }
+        }
       );
     }
 
@@ -255,6 +274,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.newEscapeRoomName = ""; // resets the input box text
   }
 
+  // todo
   isNewEscapeRoomNameValid():void{
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -262,6 +282,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.newEscapeRoomNameValid = regexResult !== null;
   }
 
+  // todo
   //just renders new room text in the list
   renderNewRoom(id:number, name:string): void{
     // <li><div><div> class="dropdown-item">ROOM 1</div><div><button></button><img></div></div></li>-->
@@ -308,10 +329,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
 
+  // todo
   //creates Vertex of type with scale at position x,y
   createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
                inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: Date,
-               inDescription: string, inRoom_id: number, inClue: string): void
+               inDescription: string, inRoom_id: number, inClue: string, src:string, blob_id: number): void
   {
     let createVertexBody = {type: inType,
       name: inName,
@@ -323,7 +345,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       estimated_time: inEstimated_time,
       description: inDescription,
       roomid: inRoom_id,
-      clue: inClue
+      clue: inClue,
+      blob_id: blob_id
     };
 
     if(inType != "Puzzle"){
@@ -342,20 +365,35 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody, {"headers": this.headers}).subscribe(
       response => {
         //get the latest local id for a vertex
-        let current_id = this.vertexService.addVertex(response.data.id,
-          inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
-          inEstimated_time, inDescription, inClue
-        );
+        let current_id;
+
+        if (src){
+          current_id = this.vertexService.addVertex(response.data.id,
+            inType, inName, src, inPos_y, inPos_x, inWidth, inHeight,
+            inEstimated_time, inDescription, inClue
+          );
+        }else {
+          current_id = this.vertexService.addVertex(response.data.id,
+            inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
+            inEstimated_time, inDescription, inClue
+          );
+        }
 
         this.spawnObjects(current_id);
       },
       error => {
-        console.error('There was an error while creating a vertex', error);
-        this.renderAlertError("Couldn't create a vertex");
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          console.error('There was an error while creating a vertex', error);
+          this.renderAlertError("Couldn't create a vertex");
+        }
       }
     );
   }
 
+  // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
     let newObject = this.renderer.createElement("img"); // create image
@@ -369,7 +407,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x +'px, '+ vertex.pos_y +'px)');
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
-    this.renderer.setAttribute(newObject,"src", "./assets/images/" + vertex.graphic_id);
+    this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
     this.renderer.setAttribute(newObject,"data-x", vertex.pos_x.toString());
     this.renderer.setAttribute(newObject,"data-y", vertex.pos_y.toString());
 
@@ -384,6 +422,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     });
   }
 
+  // todo
   //checks if in a operation for a vertex
   vertexOperation(event: any): void{
     if (this.isConnection)
@@ -392,6 +431,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.disconnectConnection(event);
   }
 
+  // todo
   //disconnects two vertex logically and visually
   disconnectConnection(event: any):void {
     let to_vertex_id = event.target.getAttribute('vertex-id');
@@ -411,6 +451,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.is_disconnect = false;
   }
 
+  // todo
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
     let real_from_id = this.vertexService.vertices[from_vertex].id;
     let remove_connection = {
@@ -434,11 +475,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.renderAlertError("Unable to remove vertex")
         }
       },
-      error => this.renderAlertError("Unable to remove vertex")
-      //console.error('There was an error while updating the vertex', error)
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("Unable to remove vertex");
+          console.error('There was an error while updating the vertex', error);
+        }
+      }
     );
   }
 
+  // todo
   //makes a connection between two vertices
   makeConnection(event: any): void{
     let to_vertex = event.target;
@@ -472,13 +521,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             this.renderLines(from_vertex_id, this._target_vertex, +to_vertex_id, to_vertex);
           }
         },
-        error => this.renderAlertError("There was an Error Updating Vertex Position")
-        //console.error('There was an error while updating the vertex', error)
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else {
+            this.renderAlertError("There was an Error Updating Vertex Position");
+          }
+        }
       );
     }
 
   }
 
+  // todo, test by rendering a function and clicking on a make connections
   private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
     this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
@@ -492,6 +548,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // store on array
   }
 
+  // todo
   // shows a context menu when right button clicked over the vertex
   showContextMenu(event: any): void{
     this._target_vertex = event.target;
@@ -513,6 +570,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
+  // todo
   // updates the position on db from user moving it
   updateVertex(event: any): void{
     let targetVertex = event.target;
@@ -540,11 +598,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.vertexService.vertices[local_target_id].width = new_width;
         this.vertexService.vertices[local_target_id].height = new_height;
       },
-      error => this.renderAlertError("There was an Error Updating Vertex Position") // todo also try to reset the old position
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("There was an Error Updating Vertex Position"); // todo also try to reset the old position
+        }
+      }
       //console.error('There was an error while updating the vertex', error)
     );
   }
 
+  // todo
   //DELETES VERTEX FROM BACKEND AND REMOVES ON SCREEN
   removeVertex(): void{
     let local_target_id = this._target_vertex.getAttribute('vertex-id');
@@ -563,126 +629,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.removeLines(local_target_id);
         this._target_vertex.remove();
       },
-      error => this.renderAlertError("Unable to remove vertex")
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("Unable to remove vertex");
+        }
+      }
       //console.error('There was an error while updating the vertex', error)
     );
   }
 
-  setSolvability(input: any): void{
-    if(input){
-      // @ts-ignore
-      document.getElementById("Solvability-panel").style.backgroundColor="green"
-      // @ts-ignore
-      document.getElementById("Solvable").innerHTML="Solvable: True"
-    }else{
-      // @ts-ignore
-      document.getElementById("Solvability-panel").style.backgroundColor="red"
-      // @ts-ignore
-      document.getElementById("Solvable").innerHTML="Solvable: False"
-    }
-  }
-
   checkSolvable(): void{
-    if(this._target_start==null){
-      this.setSolvability(false);
-      window.alert('set a start vertex first')
-      return
-    }
-
-    if(this._target_end==null){
-      this.setSolvability(false);
-      window.alert('set an end vertex first')
-      return
-    }
-
-    let SolvableCheck = {
-      operation: "Solvable",
-      startVertex: this._target_start,
-      endVertex: this._target_end,
-      roomid: this.currentRoomId
-    };
-
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
-      response => {
-        //rendering <li> elements by using render function
-        console.log(response)
-        if (response.data.solvable==true){
-          this.setSolvability(true);
-        }else {
-          this.setSolvability(false);
-        }
-
-
-      },
-      error => console.error('', error)
-    );
-  }
-
-  checkSetupOrder() {
-    if(this._target_start==null){
-      window.alert('set a start vertex first')
-      return
-    }
-
-    if(this._target_end==null){
-      window.alert('set an end vertex first')
-      return
-    }
-
-    let SolvableCheck = {
-      operation: "Solvable",
-      startVertex: this._target_start,
-      endVertex: this._target_end,
-      roomid: this.currentRoomId
-    };
-
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
-      response => {
-        //rendering <li> elements by using render function
-        console.log(response)
-        if (response.data.solvable==true){
-        }else {
-          this.setSolvability(false);
-        }
-
-
-      },
-      error => console.error('', error)
-    );
-
-    let setUpOrderCheck = {
-      operation: "Setup",
-      startVertex: this._target_start,
-      endVertex: this._target_end,
-      roomid: this.currentRoomId
-    };
-
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
-      resp => {
-        console.log(resp)
-        let order =[]
-        let i=0
-
-
-         if(resp.data.status=="Success"){
-           // @ts-ignore
-           document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
-           /* resp.data.order.forEach(
-              (value: any) => {
-               this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/"+value).subscribe(
-                  resp => {
-                    console.log(resp)
-                  }
-              )
-              } )*/
-        }else {
-          window.alert('Unknown failure')
-        }
-      },
-      error => console.error('', error)
-    );
-
-
+    this.solveComponent?.checkSolvable(this._target_start, this._target_end, this.currentRoomId);
   }
 
   setStart() :void{
@@ -724,7 +684,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   }
 
-
+  // todo
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
     let incoming_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
@@ -765,6 +725,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.addClass(newDiv,'alert-dismissible');
     this.renderer.addClass(newDiv,'fade');
     this.renderer.addClass(newDiv,'show');
+    this.renderer.setStyle(newDiv, 'margin','0');
     this.renderer.setAttribute(newDiv, 'role', 'alert');
     //add text to <strong>
     this.renderer.appendChild(newStrong, this.renderer.createText(message));

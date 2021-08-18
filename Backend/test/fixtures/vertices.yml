@@ -11,7 +11,8 @@ one:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
-
+  blob_id: 0
+  
 two:
   id: 2
   type: Puzzle
@@ -22,7 +23,8 @@ two:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
-
+  blob_id: 1
+  
 three:
   id: 3
   type: Puzzle
@@ -33,7 +35,8 @@ three:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
-
+  blob_id: 1
+  
 four:
   id: 4
   type: Keys
@@ -44,6 +47,7 @@ four:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 five:
   id: 5
@@ -55,6 +59,7 @@ five:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 six:
   id: 6
@@ -66,6 +71,7 @@ six:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 #For illegal move tests
 seven:
@@ -78,6 +84,7 @@ seven:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 eight:
   id: 701
@@ -89,6 +96,7 @@ eight:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 nine:
   id: 702
@@ -100,6 +108,7 @@ nine:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 ten:
   id: 703
@@ -111,6 +120,7 @@ ten:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 eleven:
   id: 704
@@ -122,6 +132,7 @@ eleven:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 twelve:
   id: 705
@@ -133,6 +144,7 @@ twelve:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 thirteen:
   id: 706
@@ -144,6 +156,7 @@ thirteen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 10
 
 fourteen:
   id: 707
@@ -155,6 +168,7 @@ fourteen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 fifteen:
   id: 708
@@ -166,6 +180,7 @@ fifteen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 sixteen:
   id: 709
@@ -177,6 +192,7 @@ sixteen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 seventeen:
   id: 710
@@ -188,6 +204,7 @@ seventeen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 eighteen:
   id: 711
@@ -199,6 +216,7 @@ eighteen:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 #test with circle
 c1:
@@ -211,6 +229,7 @@ c1:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 c2:
   id: 802
@@ -222,6 +241,7 @@ c2:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 c3:
   id: 803
@@ -233,6 +253,7 @@ c3:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
+  blob_id: 1
 
 c4:
   id: 804
@@ -244,5 +265,4 @@ c4:
   height: 1.5
   graphicid: MyString
   escape_room_id: 1
-
-
+  blob_id: 1

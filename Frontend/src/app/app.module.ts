@@ -6,15 +6,16 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
 import { SignupComponent } from './pages/signup/signup.component';
-import { DraggableDirective } from './directives/draggable.directive';
-import { DroppableDirective } from './directives/droppable.directive';
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
+import { InventoryComponent } from './pages/inventory/inventory.component';
+import { SolvabilityComponent } from './pages/solvability/solvability.component';
 
 const routes: Routes = [
-  { path: '', component: RoomCreatorComponent },
+  // { path: '', component: AppComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'escape-room', component: RoomCreatorComponent},
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
@@ -25,14 +26,14 @@ const routes: Routes = [
     LoginComponent,
     RoomCreatorComponent,
     SignupComponent,
-    DraggableDirective,
-    DroppableDirective
+    InventoryComponent,
+    SolvabilityComponent
   ],
     imports: [
         BrowserModule,
         RouterModule.forRoot(routes),
         HttpClientModule,
-        FormsModule,
+        FormsModule
     ],
   providers: [],
   bootstrap: [AppComponent]

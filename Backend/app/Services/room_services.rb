@@ -17,6 +17,7 @@ class RoomServices
     @puzzle.estimatedTime = request.estimated_time
     @puzzle.description = request.description
     @puzzle.escape_room_id = request.room_id
+    @puzzle.blob_id = request.blob_id
 
     @response = if @puzzle.save
                   CreatePuzzleResponse.new(@puzzle.id, true)
@@ -28,7 +29,8 @@ class RoomServices
   def create_escape_room(request)
     raise 'CreateEscapeRoomRequest null' if request.nil?
 
-    @escape_room = EscapeRoom.new(name: request.name)
+    decoded_token = JsonWebToken.decode(request.token)
+    @escape_room = EscapeRoom.new(name: request.name, user_id: decoded_token['id'])
     @response = if @escape_room.save
                   CreateEscapeRoomResponse.new(@escape_room.id, @escape_room.name)
                 else
@@ -47,6 +49,7 @@ class RoomServices
     @key.height = request.height
     @key.graphicid = request.graphic_id
     @key.escape_room_id = request.room_id
+    @key.blob_id = request.blob_id
 
     @response = if @key.save
                   CreateKeyResponse.new(@key.id, true)
@@ -68,7 +71,7 @@ class RoomServices
     @container.name = request.name
     @container.graphicid = request.graphic_id
     @container.escape_room_id = request.room_id
-
+    @container.blob_id = request.blob_id unless request.blob_id.nil?
     @response = if @container.save
                   CreateContainerResponse.new(@container.id, true)
                 else
@@ -120,6 +123,7 @@ class RoomServices
     @clue.graphicid = request.graphic_id
     @clue.clue = request.clue
     @clue.escape_room_id = request.room_id
+    @clue.blob_id = request.blob_id
 
     @response = if @clue.save
                   CreateClueResponse.new(@clue.id, true)
@@ -181,5 +185,56 @@ class RoomServices
                 else
                   UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
                 end
+  end
+
+  # @param [GetVerticesRequest] request
+  # @return [GetVerticesResponse]
+  def get_vertices(request)
+    return GetVerticesResponse.new(false, 'Can not locate user', nil) if EscapeRoom.find_by_id(request.id).nil?
+
+    vertices = Vertex.select(
+      :id,
+      :type,
+      :name,
+      :posx,
+      :posy,
+      :width,
+      :height,
+      :graphicid,
+      :blob_id
+    ).where(escape_room_id: request.id)
+    return GetVerticesResponse.new(true, 'Room has no vertices', nil) if vertices.nil?
+
+    user = User.find_by_id(EscapeRoom.find_by_id(request.id).user_id)
+    data = vertices.map do |k|
+      if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
+        blob = user.graphic.blobs.find_by_id(k.blob_id)
+        k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
+      end
+      { vertex: k,
+        connections: k.vertices.ids,
+        type: k.type }
+    end
+    # TODO: Fix to be more Efficient
+    GetVerticesResponse.new(true, 'Vertices Obtained', data)
+  rescue StandardError => e
+    puts e
+    GetVerticesResponse.new(false, 'Error occurred while getting Vertices', nil)
+  end
+
+  # @param [GetRoomsRequest] request
+  # @return [GetRoomsResponse]
+  def get_rooms(request)
+    decoded_token = JsonWebToken.decode(request.token)
+    user = User.find_by_id(decoded_token['id'])
+    @response = if user.nil?
+                  GetRoomsResponse.new(false, 'User can not be found', nil)
+                else
+                  data = EscapeRoom.select(:id, :name).where(user_id: decoded_token['id'])
+                  GetRoomsResponse.new(true, 'Rooms obtained', data)
+                end
+  rescue StandardError => e
+    puts e
+    GetRoomsResponse.new(false, 'Error occurred while getting Rooms', nil)
   end
 end
