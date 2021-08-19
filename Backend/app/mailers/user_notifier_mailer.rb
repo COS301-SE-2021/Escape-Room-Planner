@@ -15,8 +15,8 @@ class UserNotifierMailer < ApplicationMailer
 
   def send_verify_account_email(email)
     mail(to: email,
-         subject: 'Account Verification',
-         body: 'Your account has been verified. add a verify account link that the user can select to verify account')
+         subject: 'Account Verification')
+         # body: 'Your account has been verified. add a verify account link that the user can select to verify account')
   end
 
   def send_test_email(email)
