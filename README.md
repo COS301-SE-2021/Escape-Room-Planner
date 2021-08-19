@@ -43,11 +43,11 @@ Demo 2 Video
 <a href="https://drive.google.com/file/d/1uy35Gb0zIIfnhL9dCspSV_aeQDtsN8_1/view?usp=sharing"> D2 </a>
  
 <figcaption>Patric Edwards</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C4E03AQFQKbfxwCC34w/profile-displayphoto-shrink_800_800/0/1618567484082?e=1628121600&v=beta&t=5rXbdwkUjsTv8ePwINdrc7unpIbnHsQgxxPcvAcMRMw" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C4E03AQFQKbfxwCC34w/profile-displayphoto-shrink_200_200/0/1618567484082?e=1634774400&v=beta&t=DA1foKTnr8GwnyIK1hFocHMtkc50ic4dnCjKXhjxEHI" alt="drawing" width="200"/>
 
 <br>
 <figcaption>Donavan Tristan Roux</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C5603AQEn75RL-BbDYg/profile-displayphoto-shrink_200_200/0/1622747131588?e=1628121600&v=beta&t=uR4jZIGGcfoZXGFlrAJZt8r58SG_3zejjuq8bDKJn5c" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C5603AQEn75RL-BbDYg/profile-displayphoto-shrink_200_200/0/1622747131588?e=1634774400&v=beta&t=lWvYIR300quJGS3vEawa-Ogs8W7dGLIUEc1rzSkN7-M" alt="drawing" width="200"/>
 
 <br>
 <figcaption>Egor Kharatyan</figcaption>
@@ -55,11 +55,11 @@ Demo 2 Video
 
 <br>
 <figcaption>Kayla Latty</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C4E03AQHh0m-cWuPkwA/profile-displayphoto-shrink_800_800/0/1618642120802?e=1628121600&v=beta&t=NWwJ7Qlxr5AIcirm0UFXGjaklZQ-zVDF9Oc1ADeRmbk" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C4E03AQHh0m-cWuPkwA/profile-displayphoto-shrink_200_200/0/1618642120802?e=1634774400&v=beta&t=dAUPs-kvP_BDOEYPY__mkGzt_f4AIBulHokNoz-FpLw" alt="drawing" width="200"/>
 
 <br>
 <figcaption>Maseko Nqedile</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_800_800/0/1618731388530?e=1628121600&v=beta&t=S0Om7jjeeWL5_yeW-zOlvmTSVAvZthRiUCZbsrAjuJE" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_200_200/0/1618731388530?e=1634774400&v=beta&t=TUvGyESDUy0QVSkjiRnF5aAY5IxcpboVZzQ8yqvs4tA" alt="drawing" width="200"/>
 
 ## Profiles
 
