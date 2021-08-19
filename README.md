@@ -26,9 +26,11 @@ Project Description:
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
 <br>
 Team:Five Stack <br>
-SRS Document: https://www.overleaf.com/read/scwrrchtjrdv <br>
-SRS Document D2: https://www.overleaf.com/read/qycbxywmqbdk <br>
-Architectural Design Document D2: https://www.overleaf.com/read/frwpzvzjwpbf <br>
+SRS Document: https://www.overleaf.com/read/wkfykfynsmzm <br>
+Architectural Design Document: https://www.overleaf.com/read/ctwwpzfmfpng <br>
+Installation guide: https://www.overleaf.com/read/kccmqpkpxmgd <br>
+User Manual: 
+Coding Standards: 
 Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1
 
 
