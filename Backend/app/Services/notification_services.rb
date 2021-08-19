@@ -10,13 +10,13 @@ class NotificationServices
 
     case request.mailer_type
     when 'verifyAccount'
-      puts UserNotifierMailer.send_verify_account_email(request.email).deliver
+      UserNotifierMailer.send_verify_account_email(request.email).deliver
       SendEmailNotificationResponse.new(true, 'Email sent successfully')
     when 'resetPassword'
-      puts UserNotifierMailer.send_reset_password_email(request.email).deliver
+      UserNotifierMailer.send_reset_password_email(request.email).deliver
       SendEmailNotificationResponse.new(true, 'Email sent successfully')
     when 'testEmail'
-      puts UserNotifierMailer.send_test_email(request.email).deliver
+      UserNotifierMailer.send_test_email(request.email).deliver
       SendEmailNotificationResponse.new(true, 'Email sent successfully')
     else
       SendEmailNotificationResponse.new(false, 'Notifier type does not exist')

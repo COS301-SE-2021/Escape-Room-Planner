@@ -6,7 +6,8 @@ require './app/Services/user_services'
 module Api
   module V1
     class NotificationController < ApplicationController
-      protect_from_forgery with: :null_session
+      # protect_from_forgery with: :null_session
+      skip_before_action :verify_authenticity_token
 
       def create
         # if authorise(request)
@@ -16,19 +17,41 @@ module Api
             if params[:email].nil?
               render json: { status: 'FAILED', message: 'No email received' }, status: 400
               return
+            else
+              resp = reset_password(params[:email])
+              render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+            end
 
-              else
-                resp = reset_password(params[:email])
-                render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
-              end
+          end
+
+          if operation == "Verify Account"
+            if params[:email].nil?
+              render json: { status: 'FAILED', message: 'No email received' }, status: 400
+              return
+
+            else
+              resp = verify_account(params[:email])
+              render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+            end
 
           end
       end
 
       def reset_password(email)
-        req = ResetPasswordNotificationRequest.new(email)
-        serv = UserServices.new
-        serv.reset_password_notification(req)
+        # req = ResetPasswordNotificationRequest.new(email)
+        # serv = UserServices.new
+        # serv.reset_password_notification(req)
+
+        req = SendEmailNotificationRequest.new('resetPassword', email)
+        serv = NotificationServices.new
+        serv.send_email_notification(req)
+      end
+
+
+      def verify_account(email)
+        req = SendEmailNotificationRequest.new('verifyAccount', email)
+        serv = NotificationServices.new
+        serv.send_email_notification(req)
       end
 
     end
