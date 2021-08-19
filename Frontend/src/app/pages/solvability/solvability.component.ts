@@ -31,8 +31,6 @@ export class SolvabilityComponent implements OnInit {
   }
 
   getInitialVertices():void{
-    // @ts-ignore
-    document.getElementById("Solvability-panel").style.backgroundColor="grey"
     this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this._current_room_id, {"headers": this.headers}).subscribe(
       response => {
 
@@ -91,7 +89,7 @@ export class SolvabilityComponent implements OnInit {
   setSolvability(input: any): void{
     if(input){
       // @ts-ignore
-      document.getElementById("Solvability-panel").style.backgroundColor="green"
+      this.solve_div?.nativeElement.setAttribute('class', 'modal-body rounded border border-4 border-success bg-dark');
       // @ts-ignore
       document.getElementById("Start-Vertex-label").innerText="Start Vertex: "+this._target_start
       // @ts-ignore
@@ -100,7 +98,7 @@ export class SolvabilityComponent implements OnInit {
       document.getElementById("Solvable").innerHTML="Solvable: True"
     }else{
       // @ts-ignore
-      document.getElementById("Solvability-panel").style.backgroundColor="red"
+      this.solve_div?.nativeElement.setAttribute('class', 'modal-body rounded border border-4 border-danger bg-dark');
       // @ts-ignore
       document.getElementById("Solvable").innerHTML="Solvable: False"
       // @ts-ignore
