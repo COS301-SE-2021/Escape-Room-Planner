@@ -14,6 +14,7 @@ describe('RoomCreatorComponent', () => {
   let mockLeaderLine: jasmine.SpyObj<any>;
 
   beforeEach(async () => {
+    localStorage.setItem('token', 'testToken');
     // mockVertexService = jasmine.createSpyObj(['getLineIndex']);
     mockVertexService = jasmine.createSpyObj('VertexService',[
       'getLineIndex',

@@ -13,8 +13,8 @@ class SolvabilityService
     if request.startVert.nil? || request.endVert.nil? 
       raise 'Parameters in request object cannot be null'
     end
-
-    CalculateSolvableResponse.new(detect_cycle(request))
+    @reason = 'No reason given'
+    CalculateSolvableResponse.new(detect_cycle(request),@reason)
 
   end
 
@@ -92,7 +92,7 @@ class SolvabilityService
       # can only interact with puzzle
       if Vertex.find_by(id: from_vert_id).type == key_const || Vertex.find_by(id: from_vert_id).type == clue_const
         if Vertex.find_by(id: to_vertex_id).type != puzzle_const
-          puts "Error occurred at #{from_vert_id} #{to_vertex_id} because clue not to puzzle"
+          @reason = "Error occurred at #{from_vert_id} #{to_vertex_id} because clue can only go to puzzle"
           return false
         end
       end
@@ -101,7 +101,7 @@ class SolvabilityService
       # has to go to key or clue
       if Vertex.find_by(id: from_vert_id).type == container_const
         if Vertex.find_by(id: to_vertex_id).type == puzzle_const
-          puts "Error occurred at #{from_vert_id} #{to_vertex_id} because container not to clue or key"
+          @reason = "Error occurred at #{from_vert_id} #{to_vertex_id} because container can only go to keys/clues or containers"
           return false
         end
       end
@@ -110,7 +110,7 @@ class SolvabilityService
       # has to go to container
       if Vertex.find_by(id: from_vert_id).type == puzzle_const
         if Vertex.find_by(id: to_vertex_id).type != container_const
-          puts "Error occurred at #{from_vert_id} #{to_vertex_id} because puzzle not to container"
+          @reason = "Error occurred at #{from_vert_id} #{to_vertex_id} because puzzle can only go to container"
           return false
         end
       end
@@ -146,6 +146,8 @@ class SolvabilityService
         @visited[@visited_count] = to.id
         @visited_count += 1
         traverse(to)
+      else
+        @reason = 'Cycle detected'
                end
 
     end

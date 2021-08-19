@@ -22,7 +22,7 @@ describe('VertexService', () => {
   it('#addVertex should return a correct local_id after adding a vertex', () => {
     expect(service.addVertex(
       1,
-      'type',
+      'Clue',
       'name',
       'graphicid',
       0,

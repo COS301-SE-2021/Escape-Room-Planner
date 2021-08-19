@@ -12,9 +12,9 @@ default: &default
 
 development:
   adapter: postgresql
-  database: EscapeRoomPlanner
+  database: NewTest
   username: postgres
-  password:
+  password: 
   encoding: UTF8
 
 test:
@@ -24,7 +24,8 @@ test:
   username: <%= ENV.fetch('PG_USER', 'postgres') %> # replace nil with your username if you don't want to set up the environment variable in windows/unix
   password: <%= ENV.fetch('PG_PASSWORD', 'root') %> # replace nil with your username if you don't want to set up the environment variable in windows/unix
   port:     <%= ENV.fetch('PG_PORT', 5432) %>
+
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
-
+ 
