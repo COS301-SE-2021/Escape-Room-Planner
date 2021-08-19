@@ -18,10 +18,10 @@ export class ResetPasswordNotComponent implements OnInit {
 
     let extra_data = {
       email: data["email"],
-      operation: 'reset_password_notification'
+      operation: 'Reset Password'
     };
 
-    this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
+    this.http.post<any>(' http://127.0.0.1:3000/api/v1/notification', extra_data)
       .subscribe((response) => {
           this.router.navigate(['/login']).then(r => alert("Success"));
         })

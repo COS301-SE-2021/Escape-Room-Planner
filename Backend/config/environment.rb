@@ -12,5 +12,5 @@ ActionMailer::Base.smtp_settings = {
   domain: 'gmail.com',
   authentication: 'plain',
   user_name: 'fivestack7@gmail.com',
-  password: '@Stack555'
+  password: 'FiveS1234'
 }

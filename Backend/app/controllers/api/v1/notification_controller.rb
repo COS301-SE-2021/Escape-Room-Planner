@@ -9,7 +9,7 @@ module Api
       protect_from_forgery with: :null_session
 
       def create
-        if authorise(request)
+        # if authorise(request)
           operation = params[:operation]
 
           if operation == "Reset Password"
@@ -23,9 +23,6 @@ module Api
               end
 
           end
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
       end
 
       def reset_password(email)
