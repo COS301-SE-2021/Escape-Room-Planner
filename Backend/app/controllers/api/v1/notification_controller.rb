@@ -8,6 +8,8 @@ module Api
     class NotificationController < ApplicationController
       # protect_from_forgery with: :null_session
       skip_before_action :verify_authenticity_token
+      rescue_from JWT::ExpiredSignature, with: :forbidden
+      rescue_from JWT::DecodeError, with: :forbidden
 
       def create
         # if authorise(request)
@@ -34,6 +36,17 @@ module Api
               render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
             end
 
+          end
+
+          if operation == "check_expiration"
+            if params[:encoded_token].nil?
+              render json: { status: 'FAILED', message: 'No token received' }, status: 400
+              return
+
+            else
+              JsonWebToken.decode(params[:encoded_token])
+              render json: { status: 'Response received'}, status: :ok
+            end
           end
       end
 
