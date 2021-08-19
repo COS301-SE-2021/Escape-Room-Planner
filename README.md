@@ -29,20 +29,22 @@ Team:Five Stack <br>
 SRS Document: https://www.overleaf.com/read/wkfykfynsmzm <br>
 Architectural Design Document: https://www.overleaf.com/read/ctwwpzfmfpng <br>
 Installation guide: https://www.overleaf.com/read/kccmqpkpxmgd <br>
-User Manual: 
-Coding Standards: 
+User Manual: <br>
+Coding Standards: <br> 
 Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1
 
 
 Demo 1 Video
 
-<a href="https://drive.google.com/file/d/1VtmkSUeQapy-gyjzaYj9HEbwj1sxbXGJ/view"> SRS </a>
-
-<a href="https://drive.google.com/file/d/18oJmJ5V3iW2OtqRNgZ6lAsLhN4sm4L43/view?usp=sharing"> Testing </a>
+<a href="https://drive.google.com/file/d/1Em9AlEbCi5XUoBylOSh817M6wGMkWlOJ/view?usp=sharing"> D1 </a>
 
 Demo 2 Video 
 
 <a href="https://drive.google.com/file/d/1uy35Gb0zIIfnhL9dCspSV_aeQDtsN8_1/view?usp=sharing"> D2 </a>
+
+Demo 3 Video
+
+<a href="https://drive.google.com/file/d/18C6vxLCTuvy_rBk-ZNHq3pq2yRfKYChr/view?usp=sharing"> D3 </a>
  
 <figcaption>Patric Edwards</figcaption>
 <img src="https://media-exp1.licdn.com/dms/image/C4E03AQFQKbfxwCC34w/profile-displayphoto-shrink_200_200/0/1618567484082?e=1634774400&v=beta&t=DA1foKTnr8GwnyIK1hFocHMtkc50ic4dnCjKXhjxEHI" alt="drawing" width="200"/>
