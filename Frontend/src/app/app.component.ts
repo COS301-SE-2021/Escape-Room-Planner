@@ -52,6 +52,7 @@ export class AppComponent {
         if (error.status === 401){
           this.is_valid_user = false;
           if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/reset-not' &&
             this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
         }else alert("Something went wrong");
       }
