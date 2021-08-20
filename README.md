@@ -1,4 +1,10 @@
-[![Build Status](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner.svg?branch=master)](https://www.travis-ci.com/COS301-SE-2021/Escape-Room-Planner)
+Most likely failing, because of herooku upload
+
+[![Build Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2FCOS301-SE-2021%2FEscape-Room-Planner%2Fbadge%3Fref%3Dmaster&style=for-the-badge)](https://actions-badge.atrox.dev/COS301-SE-2021/Escape-Room-Planner/goto?ref=master)
+
+[![Ruby on Rails CI](https://github.com/COS301-SE-2021/Escape-Room-Planner/actions/workflows/ruby.yml/badge.svg?branch=master)](https://github.com/COS301-SE-2021/Escape-Room-Planner/actions/workflows/ruby.yml)
+[![Node.js CI](https://github.com/COS301-SE-2021/Escape-Room-Planner/actions/workflows/node.js.yml/badge.svg?branch=master)](https://github.com/COS301-SE-2021/Escape-Room-Planner/actions/workflows/node.js.yml)
+
 ![Uptime Robot status](https://img.shields.io/uptimerobot/status/m788368677-4f8867187e66b07802dca277)
 
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=bugs)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
@@ -20,28 +26,32 @@ Project Description:
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
 <br>
 Team:Five Stack <br>
-SRS Document: https://www.overleaf.com/read/scwrrchtjrdv <br>
-SRS Document D2: https://www.overleaf.com/read/qycbxywmqbdk <br>
-Architectural Design Document D2: https://www.overleaf.com/read/frwpzvzjwpbf <br>
+SRS Document: https://www.overleaf.com/read/wkfykfynsmzm <br>
+Architectural Design Document: https://www.overleaf.com/read/ctwwpzfmfpng <br>
+Installation guide: https://www.overleaf.com/read/kccmqpkpxmgd <br>
+User Manual: <br>
+Coding Standards: <br> 
 Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1
 
 
 Demo 1 Video
 
-<a href="https://drive.google.com/file/d/1VtmkSUeQapy-gyjzaYj9HEbwj1sxbXGJ/view"> SRS </a>
-
-<a href="https://drive.google.com/file/d/18oJmJ5V3iW2OtqRNgZ6lAsLhN4sm4L43/view?usp=sharing"> Testing </a>
+<a href="https://drive.google.com/file/d/1Em9AlEbCi5XUoBylOSh817M6wGMkWlOJ/view?usp=sharing"> D1 </a>
 
 Demo 2 Video 
 
 <a href="https://drive.google.com/file/d/1uy35Gb0zIIfnhL9dCspSV_aeQDtsN8_1/view?usp=sharing"> D2 </a>
+
+Demo 3 Video
+
+<a href="https://drive.google.com/file/d/18C6vxLCTuvy_rBk-ZNHq3pq2yRfKYChr/view?usp=sharing"> D3 </a>
  
 <figcaption>Patric Edwards</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C4E03AQFQKbfxwCC34w/profile-displayphoto-shrink_800_800/0/1618567484082?e=1628121600&v=beta&t=5rXbdwkUjsTv8ePwINdrc7unpIbnHsQgxxPcvAcMRMw" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C4E03AQFQKbfxwCC34w/profile-displayphoto-shrink_200_200/0/1618567484082?e=1634774400&v=beta&t=DA1foKTnr8GwnyIK1hFocHMtkc50ic4dnCjKXhjxEHI" alt="drawing" width="200"/>
 
 <br>
 <figcaption>Donavan Tristan Roux</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C5603AQEn75RL-BbDYg/profile-displayphoto-shrink_200_200/0/1622747131588?e=1628121600&v=beta&t=uR4jZIGGcfoZXGFlrAJZt8r58SG_3zejjuq8bDKJn5c" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C5603AQEn75RL-BbDYg/profile-displayphoto-shrink_200_200/0/1622747131588?e=1634774400&v=beta&t=lWvYIR300quJGS3vEawa-Ogs8W7dGLIUEc1rzSkN7-M" alt="drawing" width="200"/>
 
 <br>
 <figcaption>Egor Kharatyan</figcaption>
@@ -49,11 +59,11 @@ Demo 2 Video
 
 <br>
 <figcaption>Kayla Latty</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C4E03AQHh0m-cWuPkwA/profile-displayphoto-shrink_800_800/0/1618642120802?e=1628121600&v=beta&t=NWwJ7Qlxr5AIcirm0UFXGjaklZQ-zVDF9Oc1ADeRmbk" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C4E03AQHh0m-cWuPkwA/profile-displayphoto-shrink_200_200/0/1618642120802?e=1634774400&v=beta&t=dAUPs-kvP_BDOEYPY__mkGzt_f4AIBulHokNoz-FpLw" alt="drawing" width="200"/>
 
 <br>
 <figcaption>Maseko Nqedile</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_800_800/0/1618731388530?e=1628121600&v=beta&t=S0Om7jjeeWL5_yeW-zOlvmTSVAvZthRiUCZbsrAjuJE" alt="drawing" width="200"/>
+<img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_200_200/0/1618731388530?e=1634774400&v=beta&t=TUvGyESDUy0QVSkjiRnF5aAY5IxcpboVZzQ8yqvs4tA" alt="drawing" width="200"/>
 
 ## Profiles
 
