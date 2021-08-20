@@ -11,7 +11,6 @@ import {FormsModule} from "@angular/forms";
 import { VerifyComponent } from './pages/verify/verify.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ResetPasswordNotComponent } from './pages/reset-password-not/reset-password-not.component';
-import { ResetSuccessComponent } from './pages/reset-success/reset-success.component';
 import { InventoryComponent } from './pages/inventory/inventory.component';
 import { SolvabilityComponent } from './pages/solvability/solvability.component';
 
@@ -22,7 +21,6 @@ const routes: Routes = [
   { path: 'verify', component: VerifyComponent },
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'reset-not', component: ResetPasswordNotComponent },
-  { path: 'reset-success', component: ResetSuccessComponent },
   { path: 'escape-room', component: RoomCreatorComponent},
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
@@ -34,12 +32,9 @@ const routes: Routes = [
     LoginComponent,
     RoomCreatorComponent,
     SignupComponent,
-    DraggableDirective,
-    DroppableDirective,
     VerifyComponent,
     ResetPasswordComponent,
     ResetPasswordNotComponent,
-    ResetSuccessComponent,
     InventoryComponent,
     SolvabilityComponent
   ],
