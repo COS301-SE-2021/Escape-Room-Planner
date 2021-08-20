@@ -40,7 +40,7 @@ module Api
             return
           end
 
-          req = RegisterUserRequest.new(username, password, email, true)
+          req = RegisterUserRequest.new(username, password, email)
           res = serv.register_user(req)
 
         when 'Login'
@@ -72,46 +72,10 @@ module Api
           return
         end
 
-
-
-
         # when 'Verify'
 
-        # when 'login'
-        #   if username.nil? || password.nil?
-        #     #return token
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given for login' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = LoginRequest.new(username, password)
-        #   res = serv.login(req)
-        #
-        #   if res.success
-        #     render json: { status: 'SUCCESS', message: res.message, auth_token: res.token}, status: :ok
-        #   else
-        #     render json: { status: 'FAILED', message: res.message}, status: 401
-        #   end
-        # when 'Login'
-        #   if username.nil? || password.nil?
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = LoginRequest.new(username, password)
-        #   res = serv.login(req)
-        #
         # when 'UpdateAccount'
-        #
-        # when 'resetPassword'
-        #   if username.nil? || password.nil? || newPassword.nil?
-        #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
-        #     return
-        #   end
-        #
-        #   req = ResetPasswordRequest.new(username, password, newPassword)
-        #   res = serv.resetPassword(req)
-        #
+
         # when 'GetUserDetails'
         #   if username.nil? || password.nil? || email.nil?
         #     render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :not_found
@@ -140,9 +104,8 @@ module Api
         # end
 
         render json: { status: 'SUCCESS', message: 'User:', data: "Created: #{res.success}" }, status: :ok
-      rescue StandardError
-        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :not_found
-
+      # rescue StandardError
+      #   render json: { status: 'FAILED', message: 'Unspecified error' }, status: :not_found
       end
     end
   end

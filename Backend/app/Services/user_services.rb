@@ -8,13 +8,16 @@ class UserServices
       @user = User.new
       @user.username = request.username
       @user.email = request.email
-      @user.is_admin = true
+      @user.is_admin = false
+      @user.verified = false
 
       # salt and hash password and store it
 
       @user.password = request.password
 
       @response = if @user.save!
+                    #send email to verify account
+                    UserNotifierMailer.send_verify_account_email(request.email).deliver
                     RegisterUserResponse.new(true, 'User Created Successfully')
                   else
                     RegisterUserResponse.new(false, 'User Not Created')
@@ -53,6 +56,15 @@ class UserServices
                 else
                   LoginResponse.new(false, 'Login Failed', nil, request.username)
                 end
+  end
+
+  #sends a reset password notification email
+  def reset_password_notification(request)
+    return ResetPasswordNotificationResponse.new(false, 'Reset Password Notification request null') if request.nil?
+
+    return ResetPasswordNotificationResponse.new(false, 'Email does not exist') unless User.find_by_email(request.email)
+    UserNotifierMailer.send_reset_password_email(request.email).deliver
+    return ResetPasswordNotificationResponse.new(true, 'Email sent')
   end
 
   def reset_password(request)
@@ -109,6 +121,22 @@ class UserServices
                 end
   end
 
+  def verify_account(request)
+    return VerifyAccountResponse.new(false, 'Request is null') if request.nil?
+
+    return VerifyAccountResponse.new(false, 'Username does not exist') unless User.find_by_username(request.username)
+
+    @user = User.find_by_username(request.username)
+
+    @user.verified = true
+
+    @response = if @user.save!
+                  VerifyAccountResponse.new(true, 'Account verified')
+                else
+                  VerifyAccountResponse.new(false, 'Account verification unsuccessful')
+                end
+  end
+
   # def setAdmin(request)
   #   raise 'SetAdminRequest null' if request.nil?
   #
@@ -128,8 +156,6 @@ class UserServices
   def get_users(request); end
 
   def update_account(request); end
-
-  def verify_account(request); end
 
   def authenticate_user(encoded_token, username)
     decoded_token = JsonWebToken.decode(encoded_token)

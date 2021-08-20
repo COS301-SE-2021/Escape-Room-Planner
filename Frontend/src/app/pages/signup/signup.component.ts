@@ -10,8 +10,16 @@ import { Router } from '@angular/router';
 export class SignupComponent implements OnInit {
 
   constructor(private http:HttpClient, private router:Router) { }
-  display = ' none'
   ngOnInit(): void {}
+  display = 'none';
+  errorMessage = "";
+
+  checkSomething(pass: string, cpassword: string) {
+    if (pass != cpassword) {
+      this.errorMessage = "Password does not match.";
+    } else this.errorMessage = "";
+  }
+
 
   onSubmit(data:any) {
     this.display = 'none';
@@ -26,10 +34,11 @@ export class SignupComponent implements OnInit {
 
     this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe((response)=> {
-          this.router.navigate(['/']).then(r => alert("Success"));
+          this.router.navigate(['/verify']).then(r => alert("Success"));
       },
           error => {
-            this.display = 'block';
+            if (error["message"] == "User already exists")
+              this.display = 'block';
         })
   }
 }
