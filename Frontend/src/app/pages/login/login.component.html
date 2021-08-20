@@ -1,0 +1,44 @@
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Bootstrap 4 Layout</title>
+</head>
+
+<div class="container-fluid">
+<div class="card logo fade-in" id="sign-in">
+  <h2>Sign in</h2>
+</div>
+</div>
+<div class="global-container">
+  <div class="card login-form fade-in" id="form-card">
+    <div class="card-body">
+      <div class="card-text">
+        <form #login="ngForm" (ngSubmit)="onSubmit(login.value)">
+          <div class="form-group">
+            <label for="exampleInputEmail">Username</label>
+            <input type="email" id="exampleInputEmail"
+                   class="form-control form-control-sm" ngModel required name="username" autocomplete="off"
+                   [class.is-invalid]="username.invalid && username.touched" #username="ngModel">
+            <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <a href="reset-not" style="float: right; font-size: 12px;">Forgot Password?</a>
+            <input type="password" id="password" name="password_digest"
+                   class="form-control form-control-sm"
+                   ngModel #password="ngModel" [class.is-invalid]="password.invalid && password.touched" required>
+            <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
+            <small [style.display]="display">Username or password is incorrect.</small>
+          </div>
+          <button type="submit" class="btn btn-outline-success btn-block">Sign in</button>
+          <div class="signup">
+            Need an account? <a href="signup">Create Account.</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

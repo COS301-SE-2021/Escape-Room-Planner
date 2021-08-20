@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-sm navbar-dark sticky-top">
+  <div class="container-fluid d-lg-flex">
+    <a class="navbar-brand" routerLink="**" (click)="verifyJWT()">Escape Room Planner</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav flex-row flex-wrap ms-lg-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Account
+          </a>
+          <div *ngIf="isUserValid(); then logged_in else logged_out"></div>
+          <ng-template #logged_out>
+            <ul class="dropdown-menu  dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <p class="dropdown-item">You are not logged in!</p>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" routerLink="/login"> Login </a>
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/signup"> Sign-Up </a>
+              </li>
+            </ul>
+          </ng-template>
+          <!-- If user is logged in -->
+          <ng-template #logged_in>
+            <ul class="dropdown-menu  dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <p class="dropdown-item">Hi, [user's name]</p>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" (click)="quit()" routerLink="/login"> Sign-Out </a>
+              </li>
+            </ul>
+          </ng-template>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<!-- main content container -->
+<router-outlet></router-outlet>
+

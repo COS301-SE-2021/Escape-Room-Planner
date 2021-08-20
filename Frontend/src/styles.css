@@ -1,0 +1,19 @@
+:root {
+  --main-bg: #010409;
+  --sec-bg: #161b22;
+  --green: #49D091;
+}
+
+small {
+  color: #ff6666;
+}
+
+body {
+  background: var(--main-bg) !important;
+  height: 100%;
+  font-family: "Roboto", sans-serif;
+}
+
+.navbar {
+  background: var(--main-bg);
+}
