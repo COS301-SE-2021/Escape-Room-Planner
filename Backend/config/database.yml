@@ -12,7 +12,7 @@ default: &default
 
 development:
   adapter: postgresql
-  database: NewTest
+  database: EscapeRoomPlanner
   username: postgres
   password: 
   encoding: UTF8

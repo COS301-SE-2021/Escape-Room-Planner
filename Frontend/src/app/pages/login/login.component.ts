@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
         res => {
             localStorage.setItem('username', extra_data.username);
             localStorage.setItem('token', res["auth_token"]);
-            this.router.navigate(['/room']).then(r => alert("Success"));
+            this.router.navigate(['/escape-room']).then(r => console.log("Success"));
         },
           error => {
             this.display = 'block';
