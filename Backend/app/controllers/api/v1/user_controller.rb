@@ -106,7 +106,6 @@ module Api
         render json: { status: 'SUCCESS', message: 'User:', data: "Created: #{res.success}" }, status: :ok
       # rescue StandardError
       #   render json: { status: 'FAILED', message: 'Unspecified error' }, status: :not_found
-          end
       end
     end
   end
