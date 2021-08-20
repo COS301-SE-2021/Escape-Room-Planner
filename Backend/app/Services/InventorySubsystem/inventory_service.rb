@@ -29,9 +29,8 @@ class InventoryService
                   # TODO: change metadata before upload
                   AddGraphicResponse.new(true, 'Graphic been added', data)
                 end
-  rescue StandardError => e
-    puts e
-    AddGraphicResponse.new(false, 'Error has occurred', nil)
+  rescue StandardError
+    AddGraphicResponse.new(false, 'Error has occurred, can not add graphic', nil)
   end
 
   # @param [GetGraphicsRequest] request
@@ -69,8 +68,7 @@ class InventoryService
                   user.graphic.where(blob_id: request.blob_id).purge
                   DeleteGraphicResponse.new(true, 'Graphic been deleted')
                 end
-  rescue StandardError => e
-    puts e
+  rescue StandardError
     DeleteGraphicResponse.new(false, 'Error has occurred, unable to delete graphic')
   end
 

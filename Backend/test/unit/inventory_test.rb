@@ -33,7 +33,12 @@ class InventoryTest < ActiveSupport::TestCase
     assert_equal(response.message, 'Please Send Image')
   end
 
-  # TODO: do test on incorrect JWT token given
+  test 'can handle fake JWT request image upload' do
+    request = AddGraphicRequest.new(@@fake_token, "lop", 'Clue')
+    serv = InventoryService.new
+    response = serv.add_graphic(request)
+    assert_equal(response.message, 'Error has occurred, can not add graphic')
+  end
 
   test 'gets all user graphics' do
     request = GetGraphicsRequest.new(login_for_test)
@@ -56,5 +61,27 @@ class InventoryTest < ActiveSupport::TestCase
     response = serv.delete_graphic(request)
     assert_not(ActiveStorageAttachments.where(blob_id: 1).nil?)
     assert_equal(response.message, 'Graphic been deleted')
+  end
+
+  test 'can handle no existent blob id' do
+    request = DeleteGraphicRequest.new(login_for_test, 50)
+    serv = InventoryService.new
+    response = serv.delete_graphic(request)
+    assert_not(ActiveStorageAttachments.where(blob_id: 50).nil?)
+    assert(response.success)
+  end
+
+  test 'can handle nil existent blob id' do
+    request = DeleteGraphicRequest.new(login_for_test, nil)
+    serv = InventoryService.new
+    response = serv.delete_graphic(request)
+    assert_equal(response.message, 'Please send real blob id')
+  end
+
+  test 'can handle fake JWT on delete graphic request' do
+    request = DeleteGraphicRequest.new(@@fake_token, 1)
+    serv = InventoryService.new
+    response = serv.delete_graphic(request)
+    assert_equal(response.message, 'Error has occurred, unable to delete graphic')
   end
 end

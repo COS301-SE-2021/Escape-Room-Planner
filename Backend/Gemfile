@@ -61,3 +61,6 @@ gem 'rack-cors'
 gem 'jwt'
 
 gem 'base64'
+
+gem 'azure-storage-blob'
+
