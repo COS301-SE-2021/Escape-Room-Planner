@@ -20,7 +20,6 @@ export class VertexService {
   addVertex(inId:number, inType: string, inName: string, inGraphicID: string,
             inPos_y: number, inPos_x: number, inWidth: number,
             inHeight: number, inEstimated_time: Date, inDescription: string, inClue: string): number {
-    // todo Fix this to instantiate proper class
     let new_vertex = null;
     if (inType === "Clue") {
       new_vertex = new Clue(this._local_id_count++, inId, inName,

@@ -63,3 +63,8 @@ gem 'rack-cors'
 
 # To make use of JWT tokens for authentication
 gem 'jwt'
+
+gem 'base64'
+
+gem 'azure-storage-blob'
+

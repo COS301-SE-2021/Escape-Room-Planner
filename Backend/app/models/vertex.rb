@@ -8,6 +8,7 @@ class Vertex < ApplicationRecord
   validates :type, :name, :graphicid, presence: true # just presence for now
   validates :posx, :posy, numericality: { greater_than: -1.0 }
   validates :width, :height, numericality: { greater_than: 0.0 } # forces to be a number and greater than 0
+  attribute :blob_id, :integer, default: 0
   # validates :estimatedTime
   # validates :description
   # validates :clue

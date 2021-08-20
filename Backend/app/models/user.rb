@@ -2,6 +2,8 @@
 
 class User < ApplicationRecord
   has_secure_password
+  has_many_attached :graphic
+
   has_many :escape_rooms
 
   validates :id, :username, :email, uniqueness: true

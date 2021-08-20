@@ -61,3 +61,13 @@ jobs:
         bundle exec rake db:create
         bundle exec rake db:migrate
         bundle exec rake test
+        echo "web bin/rails server -p 80 -e $RAILS_ENV" > Procfile
+        
+    - name: Deploy to heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        working-directory: Backend
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+      if: contains(github.ref, 'master') && github.event_name == 'push'

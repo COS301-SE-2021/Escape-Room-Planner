@@ -12,6 +12,8 @@ require './app/Services/remove_vertex_response'
 require './app/Services/update_vertex_request'
 require './app/Services/update_vertex_response'
 require './app/Services/services_helper'
+require './app/Services/RoomSubsystem/Request/get_vertices_request'
+require './app/Services/RoomSubsystem/Response/get_vertices_response'
 
 # rubocop:disable Metrics/ClassLength
 module Api
@@ -27,7 +29,7 @@ module Api
       # @return [JSON object with a status code or error message]
       def update
         # checks if user is authorized
-        if authorise(request)
+        # if authorise(request)
           # operation parameter tells what put operation should be done on vertex
           operation = params[:operation]
 
@@ -39,9 +41,9 @@ module Api
           else
             render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
           end
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        # else
+        #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        # end
       end
 
       # @param [ActionController::Parameters] id
@@ -52,7 +54,6 @@ module Api
       # @return JSON
       def update_transformation(id, pos_x, pos_y, width, height)
         # used as update method that does transformation updates
-        # todo remake the tests, and add extra ones
         if id.nil? || pos_y.nil? || pos_x.nil? || width.nil? || height.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
@@ -90,57 +91,34 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
-
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
 
       def index
-        if authorise(request)
+        # if authorise(request)
           vertices = Vertex.all
           render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        #  else
+        #   render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        # end
       end
 
       # returns all the vertices for a specific room id
       def show
         if authorise(request)
-          # this is an escape room id
-          id = params[:id]
-
-          if EscapeRoom.find_by(id: id).nil?
-            render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
-            return
-          end
-
-          response = Vertex.select(
-            :id,
-            :type,
-            :name,
-            :posx,
-            :posy,
-            :width,
-            :height,
-            :graphicid
-          ).where(escape_room_id: id)
-
-          render json: { status: 'SUCCESS', message: 'Vertices', data: response.map do |k|
-            { vertex: k,
-              connections: k.vertices.ids,
-              type: k.type }
-          end }, status: :ok
+          req = GetVerticesRequest.new(params[:id])
+          serv = RoomServices.new
+          res = serv.get_vertices(req)
+          render json: { success: res.success, message: res.message, data: res.data }, status: :ok
         else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+          render json: { success: 'FAILED', message: 'Unauthorized', data: nil }, status: 401
         end
-      rescue StandardError
-        render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
 
       # POST api/v1/vertex
       def create
-        if authorise(request)
+        #if authorise(request)
           type = params[:type]
 
           name = params[:name]
@@ -163,6 +141,8 @@ module Api
 
           roomid = params[:roomid]
 
+          blob_id = params[:blob_id]
+
           if name.nil? || graphicid.nil? || posy.nil? || posx.nil? || width.nil? || height.nil? || roomid.nil?
             render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
             return
@@ -178,15 +158,16 @@ module Api
               return
             end
 
-            req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
+            req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description,
+                                          roomid, blob_id)
             res = serv.create_puzzle(req)
 
           when 'Keys'
-            req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid)
+            req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid, blob_id)
             res = serv.create_key(req)
 
           when 'Container'
-            req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name)
+            req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name, blob_id)
             res = serv.create_container(req)
 
           when 'Clue'
@@ -195,7 +176,7 @@ module Api
               return
             end
 
-            req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid)
+            req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid, blob_id)
             res = serv.create_clue(req)
 
           else
@@ -204,9 +185,9 @@ module Api
           end
 
           render json: { status: 'SUCCESS', message: 'Vertex:', data: res }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        #  else
+        #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #  end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
@@ -214,7 +195,7 @@ module Api
 
       # delete api call http://host/api/v1/vertex/"+real_target_id
       def destroy
-        if authorise(request)
+        # if authorise(request)
           operation = params[:operation]
           case operation
           when 'remove_vertex'
@@ -224,15 +205,15 @@ module Api
           else
             render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
           end
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        # else
+        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #  end
       end
 
       # @param [ActionController::Parameters] id
       # @return JSON
       def delete_vertex(id)
-        if authorise(request)
+        # if authorise(request)
           if id.nil?
             render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
             return
@@ -248,9 +229,9 @@ module Api
           end
 
           render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        #  else
+        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        # end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
@@ -259,7 +240,7 @@ module Api
       # @param [ActionController::Parameters] to_vertex_id
       # @return JSON
       def delete_connection(from_vertex_id, to_vertex_id)
-        if authorise(request)
+        # if authorise(request)
           if from_vertex_id.nil? || to_vertex_id.nil?
             render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
             return
@@ -272,9 +253,9 @@ module Api
             return
           end
           render json: { status: 'SUCCESS', message: resp.message }, status: :ok
-        else
-          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
-        end
+        #  else
+        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        # end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end

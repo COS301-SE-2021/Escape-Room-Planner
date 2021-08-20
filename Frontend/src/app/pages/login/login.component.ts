@@ -26,7 +26,8 @@ export class LoginComponent implements OnInit {
     this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
       .subscribe(
         res => {
-            localStorage.setItem('token: ', res["auth_token"]);
+            localStorage.setItem('username', extra_data.username);
+            localStorage.setItem('token', res["auth_token"]);
             this.router.navigate(['/room']).then(r => alert("Success"));
         },
           error => {

@@ -1,6 +1,6 @@
 require './app/Services/login_request'
 require './app/Services/register_user_request'
-require './app/Services/register_user_request'
+require './app/Services/services_helper'
 
 module Api
   module V1
@@ -59,18 +59,18 @@ module Api
             render json: { status: 'FAILED', message: res.message }, status: 401
             return
           end
-        # else
-        #   render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
-        #   return
-        # end
-
-        when 'reset_password_notification'
-          req = ResetPasswordNotificationRequest.new(email)
-          res = serv.reset_password_notification(req)
-
-        when 'reset_password'
-          req = ResetPasswordRequest.new(username, new_password)
-          res = serv.reset_password(req)
+        when 'Verify'
+          if authorise(request)
+            render json: { status: 'SUCCESS' }, status: :ok
+            return
+          else
+            render json: { status: 'FAILED' }, status: :unauthorized
+            return
+          end
+        else
+          render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
+          return
+        end
 
         # when 'Verify'
 

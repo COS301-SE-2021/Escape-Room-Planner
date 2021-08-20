@@ -1,77 +1,18 @@
-<div class="container-fluid" (click)="hideContextMenu($event)">
-  <div class="container-fluid" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
+<div class="container-fluid remove-padding" (click)="hideContextMenu($event)">
+  <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row">
-    <div class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid">
-      <div class="overflow-auto" style="height: 94vh; width: 315px;">
-        <!-- INVENTORY STARTS HERE -->
-        <ul class="nav flex-column">
-          <li class="border border-dark w-100" style=" background-color: grey">Container</li>
-          <li id="containerInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/room1.png" (click)="addObjects('Container', 'room1.png', 10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Room 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/con1.png" (click)="addObjects('Container', 'con1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Container 1</p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="border border-dark w-100" style=" background-color: grey">Puzzle</li>
-          <li id="PuzzleInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/puzzle1.png" (click)="addObjects('Puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Puzzle 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/puzzle1.png" (click)="addObjects('Puzzle', 'puzzle1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Puzzle 2</p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="border border-dark w-100" style=" background-color: grey">Key</li>
-          <li id="KeyInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/key1.png" (click)="addObjects('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Key 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/key1.png" (click)="addObjects('Keys', 'key1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Key 2</p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="border border-dark w-100" style=" background-color: grey">Clue</li>
-          <li id="ClueInventory" class="bg-secondary text-white" style="width: 100%;">
-            <div class="container-fluid">
-              <div class="row" style="padding-top: 20px;">
-                <div class="col">
-                  <img src="./assets/images/clue1.png" (click)="addObjects('Clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Clue 1</p>
-                </div>
-                <div class="col">
-                  <img src="./assets/images/clue1.png" (click)="addObjects('Clue', 'clue1.png',10)" alt="NOT FOUND" class="img-thumbnail">
-                  <p class="text-center text-black-50">Clue 2</p>
-                </div>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+
+    <!-- INVENTORY STARTS HERE -->
+    <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
+    <!-- SOLVE-ABILITY STARTS HERE -->
+    <app-solvability style="position: absolute;"></app-solvability>
+    <!-- ESCAPE ROOMS START HERE -->
     <div class="col-sm-10 d-lg-flex remove-padding">
       <div class="container-fluid remove-padding">
         <div class="row">
           <div class="col-sm-12 dropdown remove-padding">
+            <!-- SOLVE_ABILITY STARTS HERE
+            <button (click)="checkSolvable(solvability_div)">Solvable?</button> -->
             <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
@@ -89,7 +30,7 @@
           </div>
         </div>
         <div class="row vh-100">
-          <div class="container-fluid escape-room remove-padding" style="background-color: grey" #escapeRoomDiv>
+          <div class="container-fluid escape-room remove-padding" id="room-plan" style="background-color: grey" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
           </div>
 
@@ -118,6 +59,24 @@
             </div>
             <hr class="dropdown-divider text-white">
             <div class="row">
+              <div class="col" id="set_start">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="setStart()">
+                  Set Start
+                  <img src="/assets/svg/flag.svg" alt="NOT FOUND">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="col" id="set_end">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="setEnd()">
+                  Set End
+                  <img src="/assets/svg/flag-fill.svg" alt="NOT FOUND">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
               <div class="col" id="delete_button">
                 <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="removeVertex()">
                   Delete
@@ -135,6 +94,8 @@
   </div>
 </div>
 
+
+
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -148,7 +109,7 @@
         <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="!newEscapeRoomNameValid">
           <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters
         </div>
-        <form name="NewEscapeRoomForm" #NewEscapeRoomForm = "ngForm">
+        <form name="NewEscapeRoomForm">
           <div class="mb-3 form-group">
             <label for="recipient-name" class="col-form-label">Room Name:</label>
             <input type="text"
@@ -162,9 +123,13 @@
           </div>
         </form>
       </div>
+
       <div class="modal-footer form-group">
-        <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom(NewEscapeRoomForm)" [disabled]="!newEscapeRoomNameValid">Create</button>
+        <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom()" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>
+
 </div>
+
+
