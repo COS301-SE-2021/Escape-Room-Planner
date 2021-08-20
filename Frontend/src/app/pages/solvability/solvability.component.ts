@@ -79,6 +79,9 @@ export class SolvabilityComponent implements OnInit {
         this.setSolvability(response.data.solvable);
 
         if(response.data.solvable==false){
+         if(response.data.reason === "No reason given")
+           window.alert('Could not find connection between objects')
+          else
           window.alert(response.data.reason)
         }
       },
