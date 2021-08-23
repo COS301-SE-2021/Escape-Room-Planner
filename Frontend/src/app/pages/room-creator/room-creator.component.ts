@@ -22,7 +22,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public currentRoomId: number = 0; // used to check currently selected room
   public newEscapeRoomName:string = ""; // used when submitting a new room creation
   public newEscapeRoomNameValid:boolean = false; // flag using regex
+  public hasRooms:boolean = true;
 
+  private _room_count:number = 0;
   private _target_vertex: any;
   private _target_start: any;
   private _target_end: any;
@@ -51,9 +53,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     //set the currentRoomId to 1 by default, later to actual first room id?
-    this.currentRoomId = 1;
+    this.currentRoomId = -1;
     this.getEscapeRooms();
-    this.getVertexFromRoom();
   }
 
   ngAfterViewInit(){
@@ -112,8 +113,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           //rendering <li> elements by using response
           this.escapeRooms = response;
           //render all the rooms
+          if(response.data[0] !== undefined) {
+            this.currentRoomId = response.data[0].id;
+            this.getVertexFromRoom();
+          }else{
+            this.currentRoomId = -1;
+            this._room_count = 0;
+            this.hasRooms = false;
+          }
           for (let er of response.data){
             this.renderNewRoom(er.id, er.name);
+            this._room_count++;
           }
       },
         //Render error if bad request
@@ -139,6 +149,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         response => {
           //remove Room From screen here
           if(response.status == "SUCCESS"){
+            //checks if no more rooms
+            this._room_count--;
+            if(this._room_count === 0)
+              this.hasRooms = false;
             document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
           }else
             this.renderAlertError("Unable To Delete Room");
@@ -175,70 +189,72 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
-    // resets the vertices on room switch
-    this.vertexService.reset_array();
-    // resets the lines array
-    for (let line of this.lines){
-      if(line !== null)
-        line.remove();
-    }
-    this.lines = [];
+    if(this.currentRoomId !== -1) {
+      // resets the vertices on room switch
+      this.vertexService.reset_array();
+      // resets the lines array
+      for (let line of this.lines) {
+        if (line !== null)
+          line.remove();
+      }
+      this.lines = [];
 
-    //http request to rails api
-    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
-      response => {
-        //render all the vertices
-        for (let vertex_t of response.data){
-          //spawn objects out;
-          let vertex = vertex_t.vertex
-          let vertex_type = vertex_t.type;
-          let vertex_connections = vertex_t.connections;
+      //http request to rails api
+      this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
+        response => {
+          //render all the vertices
+          for (let vertex_t of response.data) {
+            //spawn objects out;
+            let vertex = vertex_t.vertex
+            let vertex_type = vertex_t.type;
+            let vertex_connections = vertex_t.connections;
 
-          let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
-                                       vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
-                                       vertex.description, vertex.clue);
+            let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
+              vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
+              vertex.description, vertex.clue);
 
-          // @ts-ignore
-          for (let vertex_connection of vertex_connections)
-            this.vertexService.addVertexConnection(current_id, vertex_connection);
+            // @ts-ignore
+            for (let vertex_connection of vertex_connections)
+              this.vertexService.addVertexConnection(current_id, vertex_connection);
 
-          this.spawnObjects(current_id);
-        }
+            this.spawnObjects(current_id);
+          }
 
-        // TODO consider using some other method to locate these, cause triple for loop is not pog
-        // converts real connection to local connection
-        for (let vertex of this.vertexService.vertices){
-          let vertex_connections = vertex.getConnections();
+          // TODO consider using some other method to locate these, cause triple for loop is not pog
+          // converts real connection to local connection
+          for (let vertex of this.vertexService.vertices) {
+            let vertex_connections = vertex.getConnections();
 
-          for (let vertex_connection of vertex_connections){
-            // go through all the connections
-            // for each location locate the vertex with that real id and use its local id in place of real one
+            for (let vertex_connection of vertex_connections) {
+              // go through all the connections
+              // for each location locate the vertex with that real id and use its local id in place of real one
 
-            for (let vertex_to of this.vertexService.vertices){
+              for (let vertex_to of this.vertexService.vertices) {
 
-              if (vertex_to.id === vertex_connection){
-                this.vertexService.removeVertexConnection(vertex.local_id ,vertex_connection);
+                if (vertex_to.id === vertex_connection) {
+                  this.vertexService.removeVertexConnection(vertex.local_id, vertex_connection);
 
-                let from_vertex = document.querySelectorAll('[vertex-id="'+vertex.local_id+'"]')[0];
-                let to_vertex = document.querySelectorAll('[vertex-id="'+vertex_to.local_id+'"]')[0];
+                  let from_vertex = document.querySelectorAll('[vertex-id="' + vertex.local_id + '"]')[0];
+                  let to_vertex = document.querySelectorAll('[vertex-id="' + vertex_to.local_id + '"]')[0];
 
-                this.renderLines(vertex.local_id, from_vertex, vertex_to.local_id, to_vertex);
-                break; // so that not the whole array is traversed
+                  this.renderLines(vertex.local_id, from_vertex, vertex_to.local_id, to_vertex);
+                  break; // so that not the whole array is traversed
+                }
               }
             }
           }
+        },
+        //Error retrieving vertices message
+        error => {
+          if (error.status === 401) {
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !== '/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          } else {
+            this.renderAlertError("There was an error retrieving vertices for the room");
+          }
         }
-      },
-      //Error retrieving vertices message
-      error => {
-        if (error.status === 401){
-          if (this.router.routerState.snapshot.url !== '/login' &&
-            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
-        }else {
-          this.renderAlertError("There was an error retrieving vertices for the room");
-        }
-      }
-    );
+      );
+    }
   }
 
   // todo
@@ -258,6 +274,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         response => {
           //rendering <li> elements by using render function
           this.renderNewRoom(response.data.id, response.data.name);
+          this.hasRooms = true;
+          this.vertexService.reset_array();
+          // @ts-ignore
+          this.escapeRoomDivRef?.nativeElement.textContent = "";
+          this._room_count++;
+          this.currentRoomId = response.data.id;
         },
         error => {
           if (error.status === 401){

@@ -1,4 +1,16 @@
-<div class="container-fluid remove-padding" (click)="hideContextMenu($event)">
+<div #backdrop_div [hidden]="hasRooms" class="container-fluid remove-padding border-top border-secondary">
+  <div class="text-center">
+    <img src="./assets/svg/key_logo.svg" draggable="false" alt="NOT FOUND">
+  </div>
+  <div class="text-center" style="font-family: Brush Script MT, Brush Script Std, cursive;">
+    <h1>Begin Your Experience</h1>
+  </div>
+  <div class="text-center" style="margin-top: 20rem;">
+    <button data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm" class="btn btn-outline-success btn-block">Create Room</button>
+  </div>
+
+</div>
+<div  [hidden]="!backdrop_div.hidden"  class="container-fluid remove-padding" (click)="hideContextMenu($event)">
   <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row">
 
