@@ -59,6 +59,18 @@ module Api
             render json: { status: 'FAILED', message: res.message }, status: 401
             return
           end
+
+        when 'reset_password'
+          if params[:reset_token].nil?
+            render json: { status: 'FAILED', message: 'No reset_token received' }, status: 400
+            return
+          else
+            req = ResetPasswordRequest.new(params[:reset_token], new_password)
+            resp = serv.reset_password(req)
+            render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+            return
+          end
+
         when 'Verify'
           if authorise(request)
             render json: { status: 'SUCCESS' }, status: :ok
@@ -71,6 +83,7 @@ module Api
           render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
           return
         end
+
 
         # when 'Verify'
 
