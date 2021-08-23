@@ -47,8 +47,6 @@ export class ResetPasswordComponent implements OnInit {
 
   onSubmit(data:any) {
 
-    console.log("i'm here" + this.token)
-
     let extra_data = {
       reset_token: this.token,
       new_password: data["password_digest"],

@@ -6,8 +6,8 @@ require './app/Services/user_services'
 module Api
   module V1
     class NotificationController < ApplicationController
-      # protect_from_forgery with: :null_session
-      skip_before_action :verify_authenticity_token
+      protect_from_forgery with: :null_session
+      # skip_before_action :verify_authenticity_token
       rescue_from JWT::ExpiredSignature, with: :forbidden
       rescue_from JWT::DecodeError, with: :forbidden
 

@@ -78,7 +78,16 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'test password reset' do
-    req = ResetPasswordRequest.new('testUser', '12345')
+    token = JsonWebToken.encode(1)
+    req = ResetPasswordRequest.new(token, '12345')
+    us = UserServices.new
+    resp = us.reset_password(req)
+
+    assert(resp.success)
+  end
+
+  test 'test nil token ' do
+    req = ResetPasswordRequest.new(nil, '12345')
     us = UserServices.new
     resp = us.reset_password(req)
 
@@ -93,8 +102,17 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(false, resp.success)
   end
 
-  test 'test invalid username reset password' do
-    req = ResetPasswordRequest.new('rando', '12345')
+  test 'test null new password reset password' do
+    token = JsonWebToken.encode(1)
+    req = ResetPasswordRequest.new(token, nil)
+    us = UserServices.new
+    resp = us.reset_password(req)
+
+    assert_equal(false, resp.success)
+  end
+
+  test 'test invalid token reset password' do
+    req = ResetPasswordRequest.new('1234', '12345')
     us = UserServices.new
     resp = us.reset_password(req)
 

@@ -70,21 +70,17 @@ class UserServices
   def reset_password(request)
     return ResetPasswordResponse.new(false, 'Reset Password request null') if request.nil?
 
-    puts 'in here1'
     @decoded_token = JsonWebToken.decode(request.reset_token)
     @user = User.find_by_id(@decoded_token['id'])
     return ResetPasswordResponse.new(false, 'User does not exist') if @user.nil?
-    puts 'in here2'
 
     return ResetPasswordResponse.new(false, 'No new password received') if request.new_password.nil?
 
     @user.update(password: request.new_password)
 
     @response = if @user.save
-                  puts 'in here3'
                   ResetPasswordResponse.new(true, 'Password reset Successfully')
                 else
-                  puts 'in here4'
                   ResetPasswordResponse.new(false, 'Password Not Reset')
                 end
   end
