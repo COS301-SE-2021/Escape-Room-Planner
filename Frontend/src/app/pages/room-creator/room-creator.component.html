@@ -45,8 +45,20 @@
           <div class="container-fluid escape-room remove-padding" id="room-plan" style="background-color: grey" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
           </div>
-
-          <div id="context_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute;" [hidden]="true" #contextMenu>
+          <!-- CONTEXT MENU HERE -->
+          <div id="context_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute; z-index: 99999999" [hidden]="true" #contextMenu>
+            <div class="row" data-close="true">
+              <div class="col" id="PUT ID HERE" style="text-align: center" data-close="true">
+                <button type="button"  class="text-start btn btn-dark remove-padding" data-close="true" style="float: left;" (click)="changeCurrentZ(-1)">
+                  <img src="/assets/svg/dash-square.svg" alt="bring forwards" data-close="true">
+                </button>
+                {{_target_vertex_z_index}}
+                <button type="button"  class="text-start btn btn-dark remove-padding" data-close="true" style="float: right;" (click)="changeCurrentZ(1)">
+                  <img src="/assets/svg/plus-square.svg" alt="bring backwards" data-close="true">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
             <div class="row">
               <div class="col">
                 <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="connectVertex()">

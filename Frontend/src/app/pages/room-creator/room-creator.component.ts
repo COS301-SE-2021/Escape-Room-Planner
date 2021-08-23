@@ -18,10 +18,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public lastPos : number = 0; // used to populate new objects in line
   // @ts-ignore
   public escapeRooms: EscapeRoomArray; // array of escape rooms used to populate drop down
-  //todo fix this to be a session?
   public currentRoomId: number = 0; // used to check currently selected room
   public newEscapeRoomName:string = ""; // used when submitting a new room creation
   public newEscapeRoomNameValid:boolean = false; // flag using regex
+  public _target_vertex_z_index:number = 0; // stores a z-index of _target_vertex
   public hasRooms:boolean = true;
 
   private _room_count:number = 0;
@@ -427,6 +427,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newObject,"position", "absolute");
     this.renderer.setStyle(newObject,"user-select", "none");
     this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x +'px, '+ vertex.pos_y +'px)');
+    this.renderer.setStyle(newObject,"z-index",5); // todo: use the actual stored value for z-index
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
@@ -580,13 +581,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     // moves the context menu where needed based on the vertex
     this.contextMenuRef?.nativeElement.style.setProperty("transform",'translate('+ x_pos +'px, '+ y_pos +'px)');
+    this.changeCurrentZ(0);
     // @ts-ignore
     this.contextMenuRef?.nativeElement.hidden = false;
   }
 
   // hides the context menu
   hideContextMenu(event:any): void{
-    if (event.target !== this.contextMenuRef?.nativeElement){
+    if (!event.target.getAttribute('data-close')){
       // @ts-ignore
       this.contextMenuRef?.nativeElement.hidden = true;
     }
@@ -609,7 +611,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       pos_y: new_y_pos,
       pos_x: new_x_pos,
       height: new_height,
-      width: new_width
+      width: new_width,
+      z_index: 5  // todo fix this as well, use the service class here
     };
     // updates all the data of vertex
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody, {"headers": this.headers}).subscribe(
@@ -764,7 +767,51 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
   }
 
+  changeCurrentZ(i : number): void{
+    if (i === 0) {
+      console.log('reeee')
+      this._target_vertex_z_index = this._target_vertex.style.zIndex;
+      return;
+    }
 
+    if ((this._target_vertex_z_index + i) < 5) return;
+
+    console.log('cocka')
+    let old_z = this._target_vertex_z_index;
+    let local_id = this._target_vertex.getAttribute('vertex-id');
+
+    this._target_vertex_z_index = +this._target_vertex.style.zIndex + i;
+
+    let vertex = this.vertexService.vertices[local_id];
+
+    let updateVertexZ = {
+      operation: 'transformation',
+      id: vertex.id, //convert local to real id
+      pos_y: vertex.pos_y,
+      pos_x: vertex.pos_x,
+      height: vertex.height,
+      width: vertex.width,
+      z_index: this._target_vertex_z_index
+    };
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, updateVertexZ, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        this._target_vertex.style.zIndex = this._target_vertex_z_index;
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this._target_vertex_z_index = old_z;
+          this.renderAlertError("There was an Error Updating Vertex Z position");
+        }
+      }
+      //console.error('There was an error while updating the vertex', error)
+    );
+
+  }
 }
 
 // For Vertex Response
@@ -790,6 +837,7 @@ interface Vertex{
   clue: string;
   description: string;
   estimatedTime: Date;
+  z_index: number;
 }
 
 //for Escape Room Response
