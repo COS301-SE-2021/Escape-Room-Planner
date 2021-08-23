@@ -167,6 +167,7 @@ class RoomServices
                 end
   end
 
+  # updates a Vertex transformation attributes
   # @param [UpdateVertexRequest] request
   # @return [UpdateVertexResponse]
   def update_vertex(request)
@@ -179,11 +180,12 @@ class RoomServices
     vertex.posy = request.pos_y
     vertex.width = request.width
     vertex.height = request.height
+    vertex.z_index = request.z_index
 
     @response = if vertex.save
                   UpdateVertexResponse.new(true, 'Vertex Updated')
                 else
-                  UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
+                  UpdateVertexResponse.new(false, 'Incorrect Update Parameters')
                 end
   end
 

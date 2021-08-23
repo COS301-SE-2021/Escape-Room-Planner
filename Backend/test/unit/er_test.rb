@@ -143,7 +143,7 @@ class ErTest < ActiveSupport::TestCase
     width = 25
     height = 26
 
-    req = UpdateVertexRequest.new(vertex_id, pos_x, pos_y, width, height)
+    req = UpdateVertexRequest.new(vertex_id, pos_x, pos_y, width, height, 10)
     rs = RoomServices.new # creates a room service object to test it's functionality
     res = rs.update_vertex(req)
 
@@ -165,7 +165,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if update service doesn't update when vertex doesn't exist
   test 'can handle non-existent vertex when updating a vertex' do
-    req = UpdateVertexRequest.new(9, 5, 5, 5, 5)
+    req = UpdateVertexRequest.new(9, 5, 5, 5, 5, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -175,7 +175,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative height is given (bad case)
   test 'cannot update vertex when negative height is used' do
-    req = UpdateVertexRequest.new(1, 5, 5, 5, -1)
+    req = UpdateVertexRequest.new(1, 5, 5, 5, -1, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -187,7 +187,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative width is given (bad case)
   test 'cannot update vertex when negative width is used' do
-    req = UpdateVertexRequest.new(1, 5, 5, -1, 1)
+    req = UpdateVertexRequest.new(1, 5, 5, -1, 1, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -199,7 +199,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when incorrect type is given (bad case)
   test 'cannot update vertex when incorrect type is used' do
-    req = UpdateVertexRequest.new(1, 123, 5, -1, 1)
+    req = UpdateVertexRequest.new(1, 123, 5, -1, 1, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
     vertex = Vertex.find_by_id(1)
@@ -213,7 +213,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative x coordinate is given (bad case)
   test 'cannot update vertex when negative x coordinate is used' do
-    req = UpdateVertexRequest.new(1, -5, 5, 1, 1)
+    req = UpdateVertexRequest.new(1, -5, 5, 1, 1, 20)
 
     rs = RoomServices.new
     res = rs.update_vertex(req)
@@ -225,7 +225,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative y coordinate is given (bad case)
   test 'cannot update vertex when negative y coordinate is used' do
-    req = UpdateVertexRequest.new(1, 5, -5, 1, 1)
+    req = UpdateVertexRequest.new(1, 5, -5, 1, 1, 10)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
