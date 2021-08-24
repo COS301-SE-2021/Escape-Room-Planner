@@ -179,7 +179,7 @@ class SolvabilityService
 
   def find_unnecessary_vertices(request)
     find_all_edges(request)
-
+    find_all_paths(request.start_vert, request.end_vert)
     @edges.each do |to|
       puts to
     end
@@ -210,21 +210,41 @@ class SolvabilityService
   def find_all_paths(start_vert, dest_vert)
     @all_paths_visited = []
     @all_paths_visited_count = 0
-    @all_paths_list = []
-    @all_paths_list_count = 0
+    all_paths_list = []
+    @possible_paths=[]
 
-    @all_paths_list[@all_paths_visited_count] = start_vert
-    @all_paths_list_count += 1
-    find_all_paths_util(start_vert,dest_vert)
+    all_paths_list.push(start_vert)
+    find_all_paths_util(start_vert, dest_vert,all_paths_list)
   end
 
-  def find_all_paths_util(current , dest)
+  def find_all_paths_util(current , dest ,all_paths_list)
+    #if match found then no need to traverse to depth
     if current == dest
-      @all_paths_list[@all_paths_visited_count] = current
-      @all_paths_list_count += 1
-      return 
+
+      @possible_paths.push(all_paths_list)
+      puts @possible_paths
+      return
     end
 
+    #mark current node
+    @all_paths_visited[current] = true
+
+    #Recur for all vertices adjacent to current
+    vert = Vertex.find_by(id: current)
+    to_vertex = vert.vertices.all
+
+    to_vertex.each do |v|
+      unless @all_paths_visited[v.id]
+
+        all_paths_list.push(v.id)
+
+        find_all_paths_util(v.id, dest,all_paths_list)
+
+        all_paths_list.delete(v.id)
+      end
+    end
+
+    @all_paths_visited[current] = false
   end
 
 end
