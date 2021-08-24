@@ -12,20 +12,17 @@ class SolvabilityService
 
 
   def find_all_paths_service(request)
-    if request.start_vert.nil? || request.end_vert.nil?
-      raise 'Request cant be null'
-    end
-    
+    raise 'Request cant be null' if request.start_vert.nil? || request.end_vert.nil?
+
     find_all_paths(request.start_vert, request.end_vert)
+    FindAllPathsResponse.new(@possible_paths, '', 0,request.end_vert)
   end
 
   def calculate_solvability(request)
 
     raise 'Solvability Request cant be null' if request.nil?
 
-    if request.startVert.nil? || request.endVert.nil?
-      raise 'Parameters in request object cannot be null'
-    end
+    raise 'Parameters in request object cannot be null' if request.startVert.nil? || request.endVert.nil?
     @reason = 'No reason given'
     CalculateSolvableResponse.new(detect_cycle(request), @reason)
 
@@ -40,9 +37,7 @@ class SolvabilityService
     end
 
 
-    unless calculate_solvability(request)
-      return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first')
-    end
+    return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first') unless calculate_solvability(request)
     @visited = []
     @visited_count = 0
     @order_count = 0
@@ -141,9 +136,7 @@ class SolvabilityService
 
     @found = true if vert.id == @end_node
 
-    if vert.vertices.all.nil?
-      return @found
-    end
+    return @found if vert.vertices.all.nil?
 
     to_vertex = vert.vertices.all
     to_vertex.each do |to|
