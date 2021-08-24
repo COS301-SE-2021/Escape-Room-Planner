@@ -52,7 +52,7 @@ class SolvabilityService
     @visited = []
     @visited_count = 0
     @vertices = []
-    find_unnecessary_vertices(request.startVert)
+    find_unnecessary_vertices(request)
 
   end
 
