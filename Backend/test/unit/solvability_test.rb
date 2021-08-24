@@ -131,12 +131,10 @@ class SolvabilityTest < ActiveSupport::TestCase
     assert_equal('Success', resp.status)
   end
 
-  def test_unnescessary_vertices_legal_graph
-    vertices = [1, 2, 3, 4, 5, 6]
+  def test_find_all_paths_legal_graph
 
-    solvability_req = ReturnUnnecessaryRequest.new(1, 6, vertices)
     serv = SolvabilityService.new
-    resp = serv.return_unnecessary_vertices(solvability_req)
+    serv.find_all_paths(901 ,912)
   end
 
 end

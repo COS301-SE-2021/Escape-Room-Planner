@@ -4,9 +4,20 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+
 
 class SolvabilityService
 
+
+  def find_all_paths_service(request)
+    if request.start_vert.nil? || request.end_vert.nil?
+      raise 'Request cant be null'
+    end
+    
+    find_all_paths(request.start_vert, request.end_vert)
+  end
 
   def calculate_solvability(request)
 
