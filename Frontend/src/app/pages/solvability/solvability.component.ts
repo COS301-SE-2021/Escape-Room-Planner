@@ -133,7 +133,11 @@ export class SolvabilityComponent implements OnInit {
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", PathsCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
-        window.alert(response.vertices)
+        response.data.vertices.forEach(
+          (value: any) => {
+            window.alert(value)
+          }
+        )
       },
       error => console.error('', error)
     );
