@@ -42,6 +42,10 @@ class SolvabilityService
 
   end
 
+  def return_unnecessary_vertices(request)
+
+  end
+
   def calculate_estimated_time(request)
 
     raise 'Solvability Request cant be null' if request.nil?
