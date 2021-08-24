@@ -23,7 +23,12 @@ module Api
 
         room_id = params[:roomid]
         start_vert = EscapeRoom.find_by_id(room_id).startVertex
-        end_vert  = EscapeRoom.find_by_id(room_id).endVertex
+        end_vert = EscapeRoom.find_by_id(room_id).endVertex
+
+
+        if operation == 'ReturnPaths'
+          find_paths(start_vert, end_vert)
+        end
 
         all = Vertex.all.where(escape_room_id: room_id)
         icount = 0
@@ -41,9 +46,7 @@ module Api
           set_up_order(start_vert, end_vert, vertices)
         end
 
-        if operation == 'ReturnPaths'
-          find_paths(start_vert, end_vert)
-        end
+
 
       #  else
       # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
@@ -78,21 +81,23 @@ module Api
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       end
-    end
 
-    def find_paths(start_vert, end_vert)
+      def find_paths(start_vert, end_vert)
+        if start_vert.nil? || end_vert.nil?
+          render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+          return
+        end
 
-      if start_vert.nil? || end_vert.nil?
-        render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
-        return
+        req = FindAllPathsRequest.new(start_vert, end_vert)
+        serv = SolvabilityService.new
+        resp = serv.find_all_paths_service(req)
+
+        render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       end
 
-      req = FindAllPathsRequest.new(start_vert, end_vert)
-      serv = SolvabilityService.new
-      resp = serv.find_all_paths_service(req)
-
-      render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
     end
+
+
 
   end
 end
