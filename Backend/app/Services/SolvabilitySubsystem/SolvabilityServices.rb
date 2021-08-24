@@ -45,6 +45,10 @@ class SolvabilityService
   end
 
   def return_unnecessary_vertices(request)
+    if request.startVert.nil? || request.endVert.nil? || request.vertices.nil?
+      return SetUpOrderResponse.new(nil, 'Parameters in request object cannot be null')
+    end
+
 
   end
 
