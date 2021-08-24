@@ -83,6 +83,10 @@ class UserServices
                 else
                   ResetPasswordResponse.new(false, 'Password Not Reset')
                 end
+  rescue JWT::ExpiredSignature
+    ResetPasswordResponse.new(false, 'Expired token')
+  rescue StandardError
+    ResetPasswordResponse.new(false, 'Invalid Token')
   end
 
   def get_user_details(request)
@@ -127,9 +131,11 @@ class UserServices
   def verify_account(request)
     return VerifyAccountResponse.new(false, 'Request is null') if request.nil?
 
-    return VerifyAccountResponse.new(false, 'Username does not exist') unless User.find_by_username(request.username)
+    @decoded_token = JsonWebToken.decode(request.verify_token)
 
-    @user = User.find_by_username(request.username)
+    return VerifyAccountResponse.new(false, 'User does not exist') unless User.find_by_id(@decoded_token['id'])
+
+    @user = User.find_by_id(@decoded_token['id'])
 
     @user.verified = true
 
@@ -138,6 +144,10 @@ class UserServices
                 else
                   VerifyAccountResponse.new(false, 'Account verification unsuccessful')
                 end
+  rescue JWT::ExpiredSignature
+    VerifyAccountResponse.new(false, 'Expired token')
+  rescue StandardError
+    VerifyAccountResponse.new(false, 'Invalid Token')
   end
 
   # def setAdmin(request)
