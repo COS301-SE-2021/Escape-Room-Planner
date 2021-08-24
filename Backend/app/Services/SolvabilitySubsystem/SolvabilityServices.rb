@@ -15,7 +15,7 @@ class SolvabilityService
     raise 'Request cant be null' if request.start_vert.nil? || request.end_vert.nil?
 
     find_all_paths(request.start_vert, request.end_vert)
-    FindAllPathsResponse.new(@possible_paths, '', 0,request.end_vert)
+    FindAllPathsResponse.new(@possible_paths, '', 0, request.end_vert)
   end
 
   def calculate_solvability(request)
@@ -23,6 +23,7 @@ class SolvabilityService
     raise 'Solvability Request cant be null' if request.nil?
 
     raise 'Parameters in request object cannot be null' if request.startVert.nil? || request.endVert.nil?
+
     @reason = 'No reason given'
     CalculateSolvableResponse.new(detect_cycle(request), @reason)
 
@@ -38,6 +39,7 @@ class SolvabilityService
 
 
     return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first') unless calculate_solvability(request)
+
     @visited = []
     @visited_count = 0
     @order_count = 0
@@ -215,8 +217,8 @@ class SolvabilityService
     @all_paths_visited = []
     @all_paths_visited_count = 0
     all_paths_list = []
-    @possible_paths=[]
-
+    @possible_paths = []
+    
     all_paths_list.push(start_vert)
     find_all_paths_util(start_vert, dest_vert, all_paths_list)
   end
@@ -224,9 +226,16 @@ class SolvabilityService
   def find_all_paths_util(current , dest , all_paths_list)
     #if match found then no need to traverse to depth
     if current == dest
+      return_string = ''
+      all_paths_list.each do |s|
+        return_string = "#{return_string}#{s.to_s},"
 
-      @possible_paths.push(all_paths_list)
-      puts @possible_paths
+      end
+      return_string = return_string[0..return_string.length - 2]
+
+
+
+      @possible_paths.push(return_string)
       return
     end
 
