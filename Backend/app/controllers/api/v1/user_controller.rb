@@ -1,6 +1,13 @@
-require './app/Services/login_request'
-require './app/Services/register_user_request'
 require './app/Services/services_helper'
+require './app/Services/UserSubsystem/Request/login_request'
+require './app/Services/UserSubsystem/Response/login_response'
+require './app/Services/UserSubsystem/Request/register_user_request'
+require './app/Services/UserSubsystem/Response/register_user_response'
+require './app/Services/UserSubsystem/Request/reset_password_request'
+require './app/Services/UserSubsystem/Response/reset_password_response'
+require './app/Services/UserSubsystem/Request/verify_account_request'
+require './app/Services/UserSubsystem/Response/verify_account_response'
+require './app/Services/UserSubsystem/user_services'
 
 module Api
   module V1
