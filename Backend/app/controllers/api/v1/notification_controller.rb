@@ -1,7 +1,7 @@
 require './app/Services/services_helper'
-require './app/Services/reset_password_notification_request'
-require './app/Services/reset_password_notification_response'
-require './app/Services/user_services'
+require './app/Services/NotificationSubsystem/notification_services'
+require './app/Services/NotificationSubsystem/Request/send_email_notification_request'
+require './app/Services/NotificationSubsystem/Response/send_email_notification_response'
 
 module Api
   module V1
