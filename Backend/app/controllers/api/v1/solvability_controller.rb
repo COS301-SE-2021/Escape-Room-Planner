@@ -4,6 +4,9 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+
 
 # rubocop:disable Metrics/ClassLength
 module Api
@@ -38,6 +41,10 @@ module Api
           set_up_order(start_vert, end_vert, vertices)
         end
 
+        if operation == 'ReturnPaths'
+          find_paths(start_vert, end_vert)
+        end
+
       #  else
       # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
       #end
@@ -65,12 +72,26 @@ module Api
           return
         end
 
-        req = CalculateSetUpOrderRequest.new(start_vert,end_vert,vertices)
+        req = CalculateSetUpOrderRequest.new(start_vert, end_vert, vertices)
         serv = SolvabilityService.new
         resp = serv.calculate_set_up_order(req)
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       end
+    end
+
+    def find_paths(start_vert, end_vert)
+
+      if start_vert.nil? || end_vert.nil?
+        render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+        return
+      end
+
+      req = FindAllPathsRequest.new(start_vert, end_vert)
+      serv = SolvabilityService.new
+      resp = serv.find_all_paths_service(req)
+
+      render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
     end
 
   end

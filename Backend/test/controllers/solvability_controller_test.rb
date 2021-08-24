@@ -22,5 +22,14 @@ class SolvabilityControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'can make call to check return paths' do
+    response = authed_post_call(api_v1_solvability_index_path, { operation: 'ReturnPaths',
+                                                                 startVertex: 1,
+                                                                 endVertex: 6,
+                                                                 roomid: 1})
+
+    assert_response :success
+  end
+
 
 end
