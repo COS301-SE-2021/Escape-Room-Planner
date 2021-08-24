@@ -214,10 +214,10 @@ class SolvabilityService
     @possible_paths=[]
 
     all_paths_list.push(start_vert)
-    find_all_paths_util(start_vert, dest_vert,all_paths_list)
+    find_all_paths_util(start_vert, dest_vert, all_paths_list)
   end
 
-  def find_all_paths_util(current , dest ,all_paths_list)
+  def find_all_paths_util(current , dest , all_paths_list)
     #if match found then no need to traverse to depth
     if current == dest
 
@@ -238,7 +238,7 @@ class SolvabilityService
 
         all_paths_list.push(v.id)
 
-        find_all_paths_util(v.id, dest,all_paths_list)
+        find_all_paths_util(v.id, dest, all_paths_list)
 
         all_paths_list.delete(v.id)
       end
