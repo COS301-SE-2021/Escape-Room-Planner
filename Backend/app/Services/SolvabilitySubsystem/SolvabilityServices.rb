@@ -45,10 +45,14 @@ class SolvabilityService
   end
 
   def return_unnecessary_vertices(request)
-    if request.startVert.nil? || request.endVert.nil? || request.vertices.nil?
+    if request.start_vert.nil? || request.end_vert.nil? || request.vertices.nil?
       return SetUpOrderResponse.new(nil, 'Parameters in request object cannot be null')
     end
 
+    @visited = []
+    @visited_count = 0
+    @vertices = []
+    find_unnecessary_vertices(request.startVert)
 
   end
 
@@ -185,5 +189,9 @@ class SolvabilityService
       end
 
     end
+  end
+
+  def find_unnecessary_vertices(request)
+
   end
 end
