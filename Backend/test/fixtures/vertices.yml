@@ -266,3 +266,148 @@ c4:
   graphicid: MyString
   escape_room_id: 1
   blob_id: 1
+
+#complex graph
+k1:
+  id: 901
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k2:
+  id: 902
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k3:
+  id: 903
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k4:
+  id: 904
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k5:
+  id: 905
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k6:
+  id: 906
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k7:
+  id: 907
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k8:
+  id: 908
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k9:
+  id: 909
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k10:
+  id: 910
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k11:
+  id: 911
+  type: Puzzle
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
+
+k12:
+  id: 912
+  type: Container
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 1
+  blob_id: 1
