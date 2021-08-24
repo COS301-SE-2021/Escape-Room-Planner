@@ -12,11 +12,11 @@ class SolvabilityService
 
     raise 'Solvability Request cant be null' if request.nil?
 
-    if request.startVert.nil? || request.endVert.nil? 
+    if request.startVert.nil? || request.endVert.nil?
       raise 'Parameters in request object cannot be null'
     end
     @reason = 'No reason given'
-    CalculateSolvableResponse.new(detect_cycle(request),@reason)
+    CalculateSolvableResponse.new(detect_cycle(request), @reason)
 
   end
 
@@ -46,7 +46,7 @@ class SolvabilityService
 
   def return_unnecessary_vertices(request)
     if request.start_vert.nil? || request.end_vert.nil? || request.vertices.nil?
-      return ReturnUnnecessaryResponse.new(nil,'Incorrect parameters')
+      return ReturnUnnecessaryResponse.new(nil, 'Incorrect parameters')
     end
 
     @visited = []
@@ -179,10 +179,11 @@ class SolvabilityService
 
   def find_unnecessary_vertices(request)
     find_all_edges(request)
-    
+
     @edges.each do |to|
       puts to
     end
+
   end
 
   def find_all_edges(request)
@@ -205,4 +206,18 @@ class SolvabilityService
       i += 1
     end
   end
+
+  def find_all_paths(start_vert, dest_vert)
+    @all_paths_visited = []
+    @all_paths_visited_count = 0
+    @all_paths_list = []
+    @all_paths_list_count = 0
+    
+    @all_paths_list[@all_paths_visited_count] = start_vert
+  end
+
+  def find_all_paths_util
+
+  end
+
 end
