@@ -3,7 +3,7 @@ require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solva
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
-require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnecessary_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
 
 class SolvabilityService
 
@@ -46,7 +46,7 @@ class SolvabilityService
 
   def return_unnecessary_vertices(request)
     if request.start_vert.nil? || request.end_vert.nil? || request.vertices.nil?
-      return SetUpOrderResponse.new(nil, 'Parameters in request object cannot be null')
+      return ReturnUnnecessaryResponse.new(nil,'Incorrect parameters')
     end
 
     @visited = []
@@ -77,30 +77,16 @@ class SolvabilityService
     container_const = 'Container'
 
     # Get all edges
-    edges = []
-    edge_count = 0
-    puts
-    i = 0
-    while i < request.vertices.count
-      vert = Vertex.find_by(id: request.vertices[i])
-      to_vertex = vert.vertices.all
+    @edges = []
+    @edge_count = 0
 
-      # for each vertex find edges
-
-      to_vertex.each do |to|
-        edges[edge_count] = "#{request.vertices[i]},#{to.id}"
-        # puts "num: #{edge_count} edge: #{edges[edge_count]}"
-        edge_count += 1
-      end
-
-      i += 1
-    end
+    find_all_edges(request)
 
     # check legal moves
     i = 0
-    while i < edge_count
-      from_vert_id = edges[i].partition(',').first
-      to_vertex_id = edges[i].partition(',').last
+    while i < @edge_count
+      from_vert_id = @edges[i].partition(',').first
+      to_vertex_id = @edges[i].partition(',').last
 
       # if key or clue(Item)
       # can only interact with puzzle
@@ -139,7 +125,7 @@ class SolvabilityService
   end
 
   def traverse(start_node)
-    vert = Vertex.find_by(id:start_node)
+    vert = Vertex.find_by(id: start_node)
     # puts "current node is: #{vert.id}"
 
     @found = true if vert.id == @end_node
@@ -169,7 +155,7 @@ class SolvabilityService
   end
 
   def set_up_order_helper(start_node)
-    vert = Vertex.find_by(id:start_node)
+    vert = Vertex.find_by(id: start_node)
 
     to_vertex = vert.vertices.all
     @order_array[@order_count] = vert.id
@@ -191,7 +177,28 @@ class SolvabilityService
     end
   end
 
-  def find_unnecessary_vertices(request)
+  def find_unnecessary_vertices(start_node)
 
+  end
+
+  def find_all_edges(request)
+    @edges = []
+    @edge_count = 0
+
+    i = 0
+    while i < request.vertices.count
+      vert = Vertex.find_by(id: request.vertices[i])
+      to_vertex = vert.vertices.all
+
+      # for each vertex find edges
+
+      to_vertex.each do |to|
+        @edges[@edge_count] = "#{request.vertices[i]},#{to.id}"
+        # puts "num: #{edge_count} edge: #{edges[edge_count]}"
+        @edge_count += 1
+      end
+
+      i += 1
+    end
   end
 end
