@@ -4,6 +4,8 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
 
 class SolvabilityTest < ActiveSupport::TestCase
 
@@ -127,6 +129,14 @@ class SolvabilityTest < ActiveSupport::TestCase
     resp = serv.calculate_set_up_order(solvability_req)
 
     assert_equal('Success', resp.status)
+  end
+
+  def test_unnescessary_vertices_legal_graph
+    vertices = [1, 2, 3, 4, 5, 6]
+
+    solvability_req = ReturnUnnecessaryRequest.new(1, 6, vertices)
+    serv = SolvabilityService.new
+    resp = serv.return_unnecessary_vertices(solvability_req)
   end
 
 end

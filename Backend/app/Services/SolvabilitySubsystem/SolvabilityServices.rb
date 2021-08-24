@@ -177,8 +177,12 @@ class SolvabilityService
     end
   end
 
-  def find_unnecessary_vertices(start_node)
-
+  def find_unnecessary_vertices(request)
+    find_all_edges(request)
+    
+    @edges.each do |to|
+      puts to
+    end
   end
 
   def find_all_edges(request)
