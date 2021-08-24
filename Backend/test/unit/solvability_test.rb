@@ -4,6 +4,10 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
 
 class SolvabilityTest < ActiveSupport::TestCase
 
@@ -127,6 +131,13 @@ class SolvabilityTest < ActiveSupport::TestCase
     resp = serv.calculate_set_up_order(solvability_req)
 
     assert_equal('Success', resp.status)
+  end
+
+  def test_find_all_paths_legal_graph
+    req = FindAllPathsRequest.new(901,912)
+    serv = SolvabilityService.new
+    resp = serv.find_all_paths_service(req)
+    puts resp.vertices
   end
 
 end

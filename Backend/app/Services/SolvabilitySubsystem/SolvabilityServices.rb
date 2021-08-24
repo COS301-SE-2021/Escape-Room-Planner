@@ -2,19 +2,29 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+
 
 class SolvabilityService
 
+
+  def find_all_paths_service(request)
+    raise 'Request cant be null' if request.start_vert.nil? || request.end_vert.nil?
+
+    find_all_paths(request.start_vert, request.end_vert)
+    FindAllPathsResponse.new(@possible_paths, '', 0,request.end_vert)
+  end
 
   def calculate_solvability(request)
 
     raise 'Solvability Request cant be null' if request.nil?
 
-    if request.startVert.nil? || request.endVert.nil? 
-      raise 'Parameters in request object cannot be null'
-    end
+    raise 'Parameters in request object cannot be null' if request.startVert.nil? || request.endVert.nil?
     @reason = 'No reason given'
-    CalculateSolvableResponse.new(detect_cycle(request),@reason)
+    CalculateSolvableResponse.new(detect_cycle(request), @reason)
 
   end
 
@@ -27,9 +37,7 @@ class SolvabilityService
     end
 
 
-    unless calculate_solvability(request)
-      return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first')
-    end
+    return SetUpOrderResponse.new(nil, 'Escape room needs to be solvable first') unless calculate_solvability(request)
     @visited = []
     @visited_count = 0
     @order_count = 0
@@ -39,6 +47,18 @@ class SolvabilityService
     return SetUpOrderResponse.new(nil, 'Failure') if @order_array.nil?
 
     SetUpOrderResponse.new(@order_array, 'Success')
+
+  end
+
+  def return_unnecessary_vertices(request)
+    if request.start_vert.nil? || request.end_vert.nil? || request.vertices.nil?
+      return ReturnUnnecessaryResponse.new(nil, 'Incorrect parameters')
+    end
+
+    @visited = []
+    @visited_count = 0
+    @vertices = []
+    find_unnecessary_vertices(request)
 
   end
 
@@ -63,30 +83,16 @@ class SolvabilityService
     container_const = 'Container'
 
     # Get all edges
-    edges = []
-    edge_count = 0
-    puts
-    i = 0
-    while i < request.vertices.count
-      vert = Vertex.find_by(id: request.vertices[i])
-      to_vertex = vert.vertices.all
+    @edges = []
+    @edge_count = 0
 
-      # for each vertex find edges
-
-      to_vertex.each do |to|
-        edges[edge_count] = "#{request.vertices[i]},#{to.id}"
-        # puts "num: #{edge_count} edge: #{edges[edge_count]}"
-        edge_count += 1
-      end
-
-      i += 1
-    end
+    find_all_edges(request)
 
     # check legal moves
     i = 0
-    while i < edge_count
-      from_vert_id = edges[i].partition(',').first
-      to_vertex_id = edges[i].partition(',').last
+    while i < @edge_count
+      from_vert_id = @edges[i].partition(',').first
+      to_vertex_id = @edges[i].partition(',').last
 
       # if key or clue(Item)
       # can only interact with puzzle
@@ -125,14 +131,12 @@ class SolvabilityService
   end
 
   def traverse(start_node)
-    vert = Vertex.find_by(id:start_node)
+    vert = Vertex.find_by(id: start_node)
     # puts "current node is: #{vert.id}"
 
     @found = true if vert.id == @end_node
 
-    if vert.vertices.all.nil?
-      return @found
-    end
+    return @found if vert.vertices.all.nil?
 
     to_vertex = vert.vertices.all
     to_vertex.each do |to|
@@ -155,7 +159,7 @@ class SolvabilityService
   end
 
   def set_up_order_helper(start_node)
-    vert = Vertex.find_by(id:start_node)
+    vert = Vertex.find_by(id: start_node)
 
     to_vertex = vert.vertices.all
     @order_array[@order_count] = vert.id
@@ -176,4 +180,75 @@ class SolvabilityService
 
     end
   end
+
+  def find_unnecessary_vertices(request)
+    find_all_edges(request)
+    find_all_paths(request.start_vert, request.end_vert)
+    @edges.each do |to|
+      puts to
+    end
+
+  end
+
+  def find_all_edges(request)
+    @edges = []
+    @edge_count = 0
+
+    i = 0
+    while i < request.vertices.count
+      vert = Vertex.find_by(id: request.vertices[i])
+      to_vertex = vert.vertices.all
+
+      # for each vertex find edges
+
+      to_vertex.each do |to|
+        @edges[@edge_count] = "#{request.vertices[i]},#{to.id}"
+        # puts "num: #{edge_count} edge: #{edges[edge_count]}"
+        @edge_count += 1
+      end
+
+      i += 1
+    end
+  end
+
+  def find_all_paths(start_vert, dest_vert)
+    @all_paths_visited = []
+    @all_paths_visited_count = 0
+    all_paths_list = []
+    @possible_paths=[]
+
+    all_paths_list.push(start_vert)
+    find_all_paths_util(start_vert, dest_vert, all_paths_list)
+  end
+
+  def find_all_paths_util(current , dest , all_paths_list)
+    #if match found then no need to traverse to depth
+    if current == dest
+
+      @possible_paths.push(all_paths_list)
+      puts @possible_paths
+      return
+    end
+
+    #mark current node
+    @all_paths_visited[current] = true
+
+    #Recur for all vertices adjacent to current
+    vert = Vertex.find_by(id: current)
+    to_vertex = vert.vertices.all
+
+    to_vertex.each do |v|
+      unless @all_paths_visited[v.id]
+
+        all_paths_list.push(v.id)
+
+        find_all_paths_util(v.id, dest, all_paths_list)
+
+        all_paths_list.delete(v.id)
+      end
+    end
+
+    @all_paths_visited[current] = false
+  end
+
 end
