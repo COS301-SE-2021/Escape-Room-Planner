@@ -2,6 +2,8 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnecessary_request'
 
 class SolvabilityService
 
