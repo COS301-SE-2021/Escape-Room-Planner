@@ -65,3 +65,54 @@ c3_to_c4:
 c4_to_c2:
   from_vertex_id: 804
   to_vertex_id: 802
+
+#complex graph
+k1_to_k3:
+  from_vertex_id: 901
+  to_vertex_id: 903
+
+k1_to_k2:
+  from_vertex_id: 901
+  to_vertex_id: 902
+
+k2_to_k4:
+  from_vertex_id: 902
+  to_vertex_id: 904
+
+k2_to_k5:
+  from_vertex_id: 902
+  to_vertex_id: 905
+
+k3_to_k6:
+  from_vertex_id: 903
+  to_vertex_id: 906
+
+k6_to_k7:
+  from_vertex_id: 906
+  to_vertex_id: 907
+
+k6_to_k8:
+  from_vertex_id: 906
+  to_vertex_id: 908
+
+k8_to_k9:
+  from_vertex_id: 908
+  to_vertex_id: 909
+
+k5_to_k10:
+  from_vertex_id: 905
+  to_vertex_id: 910
+
+k10_to_k11:
+  from_vertex_id: 910
+  to_vertex_id: 911
+
+k11_to_k12:
+  from_vertex_id: 911
+  to_vertex_id: 912
+
+k9_to_k12:
+  from_vertex_id: 909
+  to_vertex_id: 912
+
+
