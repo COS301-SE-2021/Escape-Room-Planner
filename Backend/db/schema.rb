@@ -43,6 +43,28 @@ ActiveRecord::Schema.define(version: 2021_08_24_092220) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "clue_fields", force: :cascade do |t|
+    t.string "clue"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "clues", force: :cascade do |t|
+    t.string "clue"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "container_fields", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "containerfields", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "escape_rooms", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -51,6 +73,30 @@ ActiveRecord::Schema.define(version: 2021_08_24_092220) do
     t.string "name"
     t.bigint "user_id", default: 1, null: false
     t.index ["user_id"], name: "index_escape_rooms_on_user_id"
+  end
+
+  create_table "key_fields", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "keyfields", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "puzzle_fields", force: :cascade do |t|
+    t.string "estimatedTime"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "puzzles", force: :cascade do |t|
+    t.string "description"
+    t.time "estimatedTime"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -64,6 +110,7 @@ ActiveRecord::Schema.define(version: 2021_08_24_092220) do
     t.string "password_digest", null: false
     t.boolean "is_admin"
     t.string "jwt_token"
+    t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "verified"

@@ -277,7 +277,7 @@ k1:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k2:
@@ -289,7 +289,7 @@ k2:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k3:
@@ -301,7 +301,7 @@ k3:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k4:
@@ -313,7 +313,7 @@ k4:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k5:
@@ -325,7 +325,7 @@ k5:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k6:
@@ -337,7 +337,7 @@ k6:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k7:
@@ -349,7 +349,7 @@ k7:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k8:
@@ -361,7 +361,7 @@ k8:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k9:
@@ -373,7 +373,7 @@ k9:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k10:
@@ -385,7 +385,7 @@ k10:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k11:
@@ -397,7 +397,7 @@ k11:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1
 
 k12:
@@ -409,5 +409,5 @@ k12:
   width: 1.5
   height: 1.5
   graphicid: MyString
-  escape_room_id: 1
+  escape_room_id: 3
   blob_id: 1

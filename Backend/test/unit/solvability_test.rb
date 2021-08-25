@@ -134,10 +134,22 @@ class SolvabilityTest < ActiveSupport::TestCase
   end
 
   def test_find_all_paths_legal_graph
-    req = FindAllPathsRequest.new(901,912)
+    req = FindAllPathsRequest.new(901, 912)
     serv = SolvabilityService.new
     resp = serv.find_all_paths_service(req)
-    puts resp.vertices
+
+    assert_equal("901,902,905,910,911,912",  resp.vertices[0])
+    assert_equal("901,903,906,908,909,912",  resp.vertices[1])
+  end
+
+  def test_find_unnecessary_vertices
+    req = ReturnUnnecessaryRequest.new(901, 912, 3)
+    serv = SolvabilityService.new
+    resp = serv.return_unnecessary_vertices(req)
+
+    assert_equal(904,  resp.vertices[0])
+    assert_equal(907,  resp.vertices[1])
+
   end
 
 end

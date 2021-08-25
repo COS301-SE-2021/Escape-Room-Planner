@@ -53,7 +53,7 @@ class SolvabilityService
   end
 
   def return_unnecessary_vertices(request)
-    if request.start_vert.nil? || request.end_vert.nil? || request.vertices.nil?
+    if request.start_vert.nil? || request.end_vert.nil?
       return ReturnUnnecessaryResponse.new(nil, 'Incorrect parameters')
     end
 
@@ -61,6 +61,8 @@ class SolvabilityService
     @visited_count = 0
     @vertices = []
     find_unnecessary_vertices(request)
+
+    ReturnUnnecessaryResponse.new(@uslessVerts)
 
   end
 
@@ -184,12 +186,35 @@ class SolvabilityService
   end
 
   def find_unnecessary_vertices(request)
-    find_all_edges(request)
     find_all_paths(request.start_vert, request.end_vert)
-    @edges.each do |to|
-      puts to
+
+    all = Vertex.all.where(escape_room_id: request.room_id)
+    icount = 0
+    vertices = []
+    vertexIndices = []
+    all.each do |v|
+      vertices[icount] = v.id
+      vertexIndices[icount] = false
+      icount += 1
     end
 
+    @possible_paths.each do |path|
+      vertices.each do |vert|
+        if path.include? vert.to_s
+          index = vertices.index(vert)
+          vertexIndices[index] = true
+        end
+      end
+    end
+
+    @uslessVerts = []
+    icount = 0
+    vertexIndices.each do |v|
+      if v == false
+        @uslessVerts.push(vertices[icount])
+      end
+      icount += 1
+    end
   end
 
   def find_all_edges(request)
@@ -218,7 +243,7 @@ class SolvabilityService
     @all_paths_visited_count = 0
     all_paths_list = []
     @possible_paths = []
-    
+
     all_paths_list.push(start_vert)
     find_all_paths_util(start_vert, dest_vert, all_paths_list)
   end
