@@ -31,5 +31,14 @@ class SolvabilityControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test 'can make call to find unnecessary vertices' do
+    response = authed_post_call(api_v1_solvability_index_path, { operation: 'FindUnnecessary',
+                                                                 startVertex: 901,
+                                                                 endVertex: 912,
+                                                                 roomid: 3})
+
+    assert_response :success
+  end
+
 
 end

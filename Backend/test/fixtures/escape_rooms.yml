@@ -16,7 +16,7 @@ two:
 
 bigRoom:
   id: 3
-  startVertex: MyStringStart
-  endVertex: MyStringEnd
+  startVertex: 901
+  endVertex: 912
   name: two
   user_id: 1
