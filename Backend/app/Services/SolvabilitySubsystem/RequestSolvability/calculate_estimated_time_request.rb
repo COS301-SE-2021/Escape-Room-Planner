@@ -1,9 +1,9 @@
 class CalculateEstimatedTimeRequest
-  attr_accessor :startVert , :endVert
+  attr_accessor :start_vert , :end_vert
 
-  def initialize(startVert, endVert)
-    @startVert = startVert
-    @endVert = endVert
+  def initialize(start_vert, end_vert)
+    @start_vert = start_vert
+    @end_vert = end_vert
   end
 
 end

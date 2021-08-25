@@ -67,12 +67,16 @@ class SolvabilityService
   end
 
   def calculate_estimated_time(request)
+    raise 'Solvability Request cant be null' if request.nil?
     if request.start_vert.nil? || request.end_vert.nil?
-      return ReturnUnnecessaryResponse.new(nil, 'Incorrect parameters')
+      return CalculateEstimatedTimeResponse.new(nil, 'false')
     end
 
+    find_all_paths(request.start_vert, request.end_vert)
 
-    raise 'Solvability Request cant be null' if request.nil?
+    @possible_paths.each do |path|
+      puts path
+    end
 
   end
 

@@ -8,6 +8,8 @@ require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnesces
 require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_estimated_time_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_estimated_time_response'
 
 class SolvabilityTest < ActiveSupport::TestCase
 
@@ -149,6 +151,12 @@ class SolvabilityTest < ActiveSupport::TestCase
 
     assert_equal(904,  resp.vertices[0])
     assert_equal(907,  resp.vertices[1])
+  end
+
+  def test_calculate_estimated_time
+    req =  CalculateEstimatedTimeRequest.new(901, 912)
+    serv = SolvabilityService.new
+    serv.calculate_estimated_time(req)
   end
 
 end
