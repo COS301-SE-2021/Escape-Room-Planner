@@ -211,7 +211,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
             let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
               vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
-              vertex.description, vertex.clue);
+              vertex.description, vertex.clue, vertex.z_index);
 
             // @ts-ignore
             for (let vertex_connection of vertex_connections)
@@ -392,12 +392,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         if (src){
           current_id = this.vertexService.addVertex(response.data.id,
             inType, inName, src, inPos_y, inPos_x, inWidth, inHeight,
-            inEstimated_time, inDescription, inClue
+            inEstimated_time, inDescription, inClue, 5
           );
         }else {
           current_id = this.vertexService.addVertex(response.data.id,
             inType, inName, inGraphicID, inPos_y, inPos_x, inWidth, inHeight,
-            inEstimated_time, inDescription, inClue
+            inEstimated_time, inDescription, inClue, 5
           );
         }
 
@@ -427,7 +427,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newObject,"position", "absolute");
     this.renderer.setStyle(newObject,"user-select", "none");
     this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x +'px, '+ vertex.pos_y +'px)');
-    this.renderer.setStyle(newObject,"z-index",5); // todo: use the actual stored value for z-index
+    this.renderer.setStyle(newObject,"z-index",vertex.z_index);
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
@@ -612,7 +612,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       pos_x: new_x_pos,
       height: new_height,
       width: new_width,
-      z_index: 5  // todo fix this as well, use the service class here
+      z_index: this.vertexService.vertices[local_target_id].z_index
     };
     // updates all the data of vertex
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody, {"headers": this.headers}).subscribe(
@@ -769,14 +769,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   changeCurrentZ(i : number): void{
     if (i === 0) {
-      console.log('reeee')
       this._target_vertex_z_index = this._target_vertex.style.zIndex;
       return;
     }
 
     if ((this._target_vertex_z_index + i) < 5) return;
 
-    console.log('cocka')
     let old_z = this._target_vertex_z_index;
     let local_id = this._target_vertex.getAttribute('vertex-id');
 
@@ -796,6 +794,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, updateVertexZ, {"headers": this.headers}).subscribe(
       response => {
+        //todo on service level too
         // updates the local array here only after storing on db
         this._target_vertex.style.zIndex = this._target_vertex_z_index;
       },
