@@ -794,9 +794,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, updateVertexZ, {"headers": this.headers}).subscribe(
       response => {
-        //todo on service level too
-        // updates the local array here only after storing on db
-        this._target_vertex.style.zIndex = this._target_vertex_z_index;
+        this.vertexService.vertices[local_id].z_index = this._target_vertex_z_index; // saves in service
+        this._target_vertex.style.zIndex = this._target_vertex_z_index; // update view
       },
       error => {
         if (error.status === 401){
@@ -809,7 +808,35 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       }
       //console.error('There was an error while updating the vertex', error)
     );
+  }
 
+  // ZOOM test
+  test(): void{
+    let multiplier = 1.0;
+    let multiplier2 = 2.0;
+
+    let child = this.escapeRoomDivRef?.nativeElement.children[1];
+
+    child.style.height = child.height*multiplier2 + 'px';
+    child.style.width = child.width*multiplier2 + 'px';
+    console.log(child.getAttribute('data-x'));
+    console.log(child.getAttribute('data-y'));
+    child.style.transform = 'translate('+(child.getAttribute('data-x')*multiplier2)+'px,'+(child.getAttribute('data-y')*multiplier2)+'px)';
+    child.setAttribute('data-x',child.getAttribute('data-x')*multiplier2);
+    child.setAttribute('data-y',child.getAttribute('data-y')*multiplier2);
+
+    this.delay(10000).then(r => {
+      child.style.height = child.height/multiplier2 + 'px';
+      child.style.width = child.width/multiplier2 + 'px';
+      child.style.transform = 'translate('+(child.getAttribute('data-x')/multiplier2)+'px,'+(child.getAttribute('data-y')/multiplier2)+'px)';
+      child.setAttribute('data-x',child.getAttribute('data-x')/multiplier2);
+      child.setAttribute('data-y',child.getAttribute('data-y')/multiplier2);
+    });
+  }
+
+  private async delay(ms: number)
+  {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }
 

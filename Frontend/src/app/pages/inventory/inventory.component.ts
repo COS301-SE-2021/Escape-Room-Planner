@@ -127,6 +127,7 @@ export class InventoryComponent implements OnInit {
   }
 
   public async addImage(input: HTMLInputElement | null, type: 'container' | 'puzzle' | 'key' | 'clue'): Promise<void> {
+    // todo Room image
     let file = input?.files?.item(0);
 
 
@@ -176,6 +177,10 @@ export class InventoryComponent implements OnInit {
     }
   }
 
+  public onClickRoom(): void{
+    // todo, implement this function
+    return;
+  }
   //calls rooms creator check solvable
   public async checkSolve(){
     this.checkSolvable.emit();

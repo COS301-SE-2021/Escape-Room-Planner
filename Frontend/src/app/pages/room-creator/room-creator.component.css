@@ -12,6 +12,11 @@
   color: black;
 }
 
+#room{
+  z-index: 0;
+  position: absolute;
+}
+
 .fade {
   opacity: 0;
   -webkit-transition: opacity 0.25s linear;
