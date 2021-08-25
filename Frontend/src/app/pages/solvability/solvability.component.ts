@@ -113,6 +113,20 @@ export class SolvabilityComponent implements OnInit {
     }
   }
 
+  display(Paramaters : any){
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", Paramaters, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        response.data.vertices.forEach(
+          (value: any) => {
+            window.alert(value)
+          }
+        )
+      },
+      error => console.error('', error)
+    );
+  }
+
   checkUnnecessary(){
     if(this._target_start==null){
       this.setSolvability(false);
@@ -126,22 +140,12 @@ export class SolvabilityComponent implements OnInit {
       return;
     }
 
-    let PathsCheck = {
+    let FindUnnecessary = {
       operation: "FindUnnecessary",
       roomid: this._current_room_id
     };
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", PathsCheck, {"headers": this.headers}).subscribe(
-      response => {
-        //rendering <li> elements by using render function
-        response.data.vertices.forEach(
-          (value: any) => {
-            window.alert(value)
-          }
-        )
-      },
-      error => console.error('', error)
-    );
+    this.display(FindUnnecessary)
 
   }
 
@@ -163,18 +167,7 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", PathsCheck, {"headers": this.headers}).subscribe(
-      response => {
-        //rendering <li> elements by using render function
-        response.data.vertices.forEach(
-          (value: any) => {
-            window.alert(value)
-          }
-        )
-      },
-      error => console.error('', error)
-    );
-
+    this.display(PathsCheck)
 
   }
 
