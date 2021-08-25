@@ -134,7 +134,7 @@ class SolvabilityTest < ActiveSupport::TestCase
   end
 
   def test_find_all_paths_legal_graph
-    req = FindAllPathsRequest.new(901,912)
+    req = FindAllPathsRequest.new(901, 912)
     serv = SolvabilityService.new
     resp = serv.find_all_paths_service(req)
 
@@ -143,7 +143,7 @@ class SolvabilityTest < ActiveSupport::TestCase
   end
 
   def test_find_unnecessary_vertices
-    req = ReturnUnnecessaryRequest.new(901,912, 3)
+    req = ReturnUnnecessaryRequest.new(901, 912, 3)
     serv = SolvabilityService.new
     resp = serv.return_unnecessary_vertices(req)
 
