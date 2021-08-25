@@ -53,7 +53,7 @@ class SolvabilityService
   end
 
   def return_unnecessary_vertices(request)
-    if request.start_vert.nil? || request.end_vert.nil? || request.vertices.nil?
+    if request.start_vert.nil? || request.end_vert.nil?
       return ReturnUnnecessaryResponse.new(nil, 'Incorrect parameters')
     end
 
@@ -61,6 +61,8 @@ class SolvabilityService
     @visited_count = 0
     @vertices = []
     find_unnecessary_vertices(request)
+
+    ReturnUnnecessaryResponse.new(@uslessVerts)
 
   end
 
@@ -213,7 +215,6 @@ class SolvabilityService
       end
       icount += 1
     end
-
   end
 
   def find_all_edges(request)
