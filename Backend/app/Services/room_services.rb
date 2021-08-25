@@ -203,7 +203,8 @@ class RoomServices
       :width,
       :height,
       :graphicid,
-      :blob_id
+      :blob_id,
+      :z_index
     ).where(escape_room_id: request.id)
     return GetVerticesResponse.new(true, 'Room has no vertices', nil) if vertices.nil?
 
