@@ -75,6 +75,10 @@ class SolvabilityService
     find_all_paths(request.start_vert, request.end_vert)
 
     @possible_paths.each do |path|
+      while(path.index(','))
+        puts path[0, path.index(',')]
+        path = path[path.index(',')+1, path.length]
+      end
       puts path
     end
 
