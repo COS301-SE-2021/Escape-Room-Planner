@@ -70,6 +70,7 @@ class SolvabilityService
   end
 
   def calculate_estimated_time(request)
+    puts "six"
     raise 'Solvability Request cant be null' if request.nil?
     return CalculateEstimatedTimeResponse.new(nil, 'false') if request.start_vert.nil? || request.end_vert.nil?
 
@@ -88,7 +89,7 @@ class SolvabilityService
      addVertexTime(path)
     end
 
-    CalculateEstimatedTimeResponse.new((@total_time/@path_count).round, 'success')
+    CalculateEstimatedTimeResponse.new((@total_time/@path_count).round.to_s, 'success')
   end
 
   def addVertexTime(id)
