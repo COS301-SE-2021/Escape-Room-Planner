@@ -186,6 +186,22 @@ class SolvabilityService
   def find_unnecessary_vertices(request)
     find_all_paths(request.start_vert, request.end_vert)
 
+    all = Vertex.all.where(escape_room_id: request.room_id)
+    icount = 0
+    vertices = []
+    all.each do |v|
+      vertices[icount] = v.id
+      icount += 1
+    end
+
+    @possible_paths.each do |path|
+      vertices.each do |vert|
+        if path.include? vert.to_s
+          puts vert.to_s
+        end
+      end
+    end
+
 
   end
 

@@ -13,3 +13,10 @@ two:
   endVertex: MyStringEnd
   name: two
   user_id: 1
+
+bigRoom:
+  id: 3
+  startVertex: MyStringStart
+  endVertex: MyStringEnd
+  name: two
+  user_id: 1
