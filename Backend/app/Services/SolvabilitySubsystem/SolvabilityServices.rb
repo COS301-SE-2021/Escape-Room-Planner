@@ -68,26 +68,37 @@ class SolvabilityService
 
   def calculate_estimated_time(request)
     raise 'Solvability Request cant be null' if request.nil?
-    if request.start_vert.nil? || request.end_vert.nil?
-      return CalculateEstimatedTimeResponse.new(nil, 'false')
-    end
+    return CalculateEstimatedTimeResponse.new(nil, 'false') if request.start_vert.nil? || request.end_vert.nil?
 
 
-    @totalTime=0
+    @total_time = 0
     find_all_paths(request.start_vert, request.end_vert)
 
     @possible_paths.each do |path|
       while path.index(',')
         addVertexTime(path[0, path.index(',')])
-        path = path[path.index(',')+1, path.length]
+        path = path[path.index(',') + 1, path.length]
       end
       addVertexTime(path)
     end
 
+    CalculateEstimatedTimeResponse(@total_time, 'success')
   end
 
   def addVertexTime(id)
+    clue_const = 'Clue'
+    key_const = 'Keys'
+    container_const = 'Container'
 
+    if(Vertex..find_by_id(id).estimatedTime)
+      @total_time += Vertex..find_by_id(id).estimatedTime
+    else
+      @total_time += 5 if Vertex..find_by_id(id).type == key_const
+
+      @total_time += 5 if Vertex..find_by_id(id).type == clue_const
+
+      @total_time += 5 if Vertex..find_by_id(id).type == container_const
+      end
   end
 
   def detect_cycle(request)
@@ -221,9 +232,7 @@ class SolvabilityService
     @uslessVerts = []
     icount = 0
     vertexIndices.each do |v|
-      if v == false
-        @uslessVerts.push(vertices[icount])
-      end
+      @uslessVerts.push(vertices[icount]) if v == false
       icount += 1
     end
   end
