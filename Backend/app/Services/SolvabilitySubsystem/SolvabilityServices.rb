@@ -184,11 +184,8 @@ class SolvabilityService
   end
 
   def find_unnecessary_vertices(request)
-    find_all_edges(request)
     find_all_paths(request.start_vert, request.end_vert)
-    @edges.each do |to|
-      puts to
-    end
+
 
   end
 
