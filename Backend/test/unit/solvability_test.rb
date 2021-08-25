@@ -143,7 +143,7 @@ class SolvabilityTest < ActiveSupport::TestCase
   end
 
   def test_find_unnecessary_vertices
-    req=ReturnUnnecessaryRequest.new(901,912, 1)
+    req=ReturnUnnecessaryRequest.new(901,912, 3)
     serv = SolvabilityService.new
     resp=serv.find_unnecessary_vertices(req)
 

@@ -189,20 +189,34 @@ class SolvabilityService
     all = Vertex.all.where(escape_room_id: request.room_id)
     icount = 0
     vertices = []
+    vertexIndices=[]
     all.each do |v|
       vertices[icount] = v.id
+      vertexIndices[icount]=false
       icount += 1
     end
+
+
 
     @possible_paths.each do |path|
       vertices.each do |vert|
         if path.include? vert.to_s
-          puts vert.to_s
+          index= vertices.index(vert)
+          vertexIndices[index]=true
         end
       end
     end
 
+    @uslessVerts=[]
+    icount=0
+    vertexIndices.each do |v|
+      if v==false
+        @uslessVerts.push(vertices[icount])
+      end
+      icount+=1
+    end
 
+    puts @uslessVerts
   end
 
   def find_all_edges(request)
