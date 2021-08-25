@@ -67,17 +67,14 @@ class SolvabilityService
   end
 
   def calculate_estimated_time(request)
+    if request.start_vert.nil? || request.end_vert.nil?
+      return ReturnUnnecessaryResponse.new(nil, 'Incorrect parameters')
+    end
+
 
     raise 'Solvability Request cant be null' if request.nil?
 
   end
-
-  # Create the graph using the given number of edges and vertices.
-  # Create a recursive function that initializes the current index or vertex, visited, and recursion stack.
-  # Mark the current node as visited and also mark the index in recursion stack.
-  # Find all the vertices which are not visited and are adjacent to the current node. Recursively call the function for those vertices, If the recursive function returns true, return true.
-  # If the adjacent vertices are already marked in the recursion stack then return true.
-  # Create a wrapper class, that calls the recursive function for all the vertices and if any function returns true return true. Else if for all vertices the function returns false return false.
 
   def detect_cycle(request)
 

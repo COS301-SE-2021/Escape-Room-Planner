@@ -149,7 +149,6 @@ class SolvabilityTest < ActiveSupport::TestCase
 
     assert_equal(904,  resp.vertices[0])
     assert_equal(907,  resp.vertices[1])
-
   end
 
 end
