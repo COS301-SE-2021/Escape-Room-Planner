@@ -91,6 +91,7 @@ export class SolvabilityComponent implements OnInit {
 
   setSolvability(input: any): void{
     this.checkPaths()
+    this.checkUnnecessary()
     if(input){
       // @ts-ignore
       this.solve_div?.nativeElement.setAttribute('class', 'modal-body rounded border border-4 border-success bg-dark');
@@ -110,6 +111,38 @@ export class SolvabilityComponent implements OnInit {
       // @ts-ignore
       document.getElementById("End-Vertex-label").innerText="End Vertex: "+this._target_end
     }
+  }
+
+  checkUnnecessary(){
+    if(this._target_start==null){
+      this.setSolvability(false);
+      window.alert('set a start vertex first');
+      return;
+    }
+
+    if(this._target_end==null){
+      this.setSolvability(false);
+      window.alert('set an end vertex first');
+      return;
+    }
+
+    let PathsCheck = {
+      operation: "FindUnnecessary",
+      roomid: this._current_room_id
+    };
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", PathsCheck, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        response.data.vertices.forEach(
+          (value: any) => {
+            window.alert(value)
+          }
+        )
+      },
+      error => console.error('', error)
+    );
+
   }
 
   checkPaths(){
