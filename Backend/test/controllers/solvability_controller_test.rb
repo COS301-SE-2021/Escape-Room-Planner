@@ -17,7 +17,7 @@ class SolvabilityControllerTest < ActionDispatch::IntegrationTest
     response = authed_post_call(api_v1_solvability_index_path, { operation: 'Setup',
                                                                  startVertex: 1,
                                                                  endVertex: 6,
-                                                                 roomid: 1})
+                                                                 roomid: 1 })
 
     assert_response :success
   end
@@ -26,7 +26,7 @@ class SolvabilityControllerTest < ActionDispatch::IntegrationTest
     response = authed_post_call(api_v1_solvability_index_path, { operation: 'ReturnPaths',
                                                                  startVertex: 1,
                                                                  endVertex: 6,
-                                                                 roomid: 1})
+                                                                 roomid: 1 })
 
     assert_response :success
   end
@@ -35,7 +35,14 @@ class SolvabilityControllerTest < ActionDispatch::IntegrationTest
     response = authed_post_call(api_v1_solvability_index_path, { operation: 'FindUnnecessary',
                                                                  startVertex: 901,
                                                                  endVertex: 912,
-                                                                 roomid: 3})
+                                                                 roomid: 3 })
+
+    assert_response :success
+  end
+
+  test "can make call to estimated time" do
+    response = authed_post_call(api_v1_solvability_index_path, { operation: 'EstimatedTime',
+                                                                 roomid: 3 })
 
     assert_response :success
   end
