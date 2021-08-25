@@ -156,7 +156,9 @@ class SolvabilityTest < ActiveSupport::TestCase
   def test_calculate_estimated_time
     req =  CalculateEstimatedTimeRequest.new(901, 912)
     serv = SolvabilityService.new
-    serv.calculate_estimated_time(req)
+    resp=serv.calculate_estimated_time(req)
+
+    puts resp.time
   end
 
 end

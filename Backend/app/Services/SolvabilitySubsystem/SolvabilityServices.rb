@@ -6,6 +6,9 @@ require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnesces
 require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_estimated_time_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_estimated_time_response'
+
 
 
 class SolvabilityService
@@ -72,17 +75,20 @@ class SolvabilityService
 
 
     @total_time = 0
+    @path_count = 0
     find_all_paths(request.start_vert, request.end_vert)
 
-    @possible_paths.each do |path|
-      while path.index(',')
-        addVertexTime(path[0, path.index(',')])
-        path = path[path.index(',') + 1, path.length]
-      end
-      addVertexTime(path)
+
+    @possible_paths.each do |path|\
+     @path_count+=1
+     while path.index(',')
+       addVertexTime(path[0, path.index(',')])
+       path = path[path.index(',') + 1, path.length]
+     end
+     addVertexTime(path)
     end
 
-    CalculateEstimatedTimeResponse(@total_time, 'success')
+    CalculateEstimatedTimeResponse.new((@total_time/@path_count).round, 'success')
   end
 
   def addVertexTime(id)
@@ -90,14 +96,14 @@ class SolvabilityService
     key_const = 'Keys'
     container_const = 'Container'
 
-    if(Vertex..find_by_id(id).estimatedTime)
-      @total_time += Vertex..find_by_id(id).estimatedTime
+    if Vertex.find_by_id(id).estimatedTime
+      @total_time += Vertex.find_by_id(id).estimatedTime
     else
-      @total_time += 5 if Vertex..find_by_id(id).type == key_const
+      @total_time += 5 if Vertex.find_by_id(id).type == key_const
 
-      @total_time += 5 if Vertex..find_by_id(id).type == clue_const
+      @total_time += 5 if Vertex.find_by_id(id).type == clue_const
 
-      @total_time += 5 if Vertex..find_by_id(id).type == container_const
+      @total_time += 5 if Vertex.find_by_id(id).type == container_const
       end
   end
 
