@@ -72,15 +72,21 @@ class SolvabilityService
       return CalculateEstimatedTimeResponse.new(nil, 'false')
     end
 
+
+    @totalTime=0
     find_all_paths(request.start_vert, request.end_vert)
 
     @possible_paths.each do |path|
-      while(path.index(','))
-        puts path[0, path.index(',')]
+      while path.index(',')
+        addVertexTime(path[0, path.index(',')])
         path = path[path.index(',')+1, path.length]
       end
-      puts path
+      addVertexTime(path)
     end
+
+  end
+
+  def addVertexTime(id)
 
   end
 
