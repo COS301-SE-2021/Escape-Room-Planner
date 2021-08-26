@@ -2,4 +2,10 @@
 
 class GeneticAlgorithmService
 
+  def genetic_algorithm(request)
+
+  end
+  
+  
+  
 end
