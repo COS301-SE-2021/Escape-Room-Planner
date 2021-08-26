@@ -6,13 +6,22 @@ class GeneticAlgorithmService
 
   def genetic_algorithm(request)
     if request.vertices.nil? || request.linear.nil? || request.dead_nodes.nil?
-        GeneticAlgorithmResponse.new("False","Parameters required")
+        GeneticAlgorithmResponse.new('False','Parameters required')
     end
-
 
 
   end
   
-  
+  def initial_population_creation(vertices)
+
+  end
+
+  def calculate_fitness; end
+
+  def selection; end
+
+  def crossover; end
+
+  def mutation; end
   
 end
