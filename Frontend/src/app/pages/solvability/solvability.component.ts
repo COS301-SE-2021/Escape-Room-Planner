@@ -92,6 +92,7 @@ export class SolvabilityComponent implements OnInit {
   setSolvability(input: any): void{
     this.checkPaths()
     this.checkUnnecessary()
+    this.checkEstimatedTime()
     if(input){
       // @ts-ignore
       this.solve_div?.nativeElement.setAttribute('class', 'modal-body rounded border border-4 border-success bg-dark');
@@ -113,15 +114,28 @@ export class SolvabilityComponent implements OnInit {
     }
   }
 
-  display(Paramaters : any){
+  display(Paramaters : any, reason :any){
+    let final=''
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", Paramaters, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
+        if (reason=="Paths"){
         response.data.vertices.forEach(
           (value: any) => {
-            window.alert(value)
+            if (reason=="Paths"){
+              // @ts-ignore
+             final=final+value+"<br>"
+            }
           }
         )
+          // @ts-ignore
+          document.getElementById("PossbilePaths").innerHTML="Possible Paths: <br>"+ final;
+        }
+
+        if(reason=="Time"){
+          // @ts-ignore
+          document.getElementById("EstimatedTime").innerHTML="Estimated Time: <br>"+ (response.data.time/60);
+        }
       },
       error => console.error('', error)
     );
@@ -145,8 +159,29 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.display(FindUnnecessary)
+    this.display(FindUnnecessary,"Unnecessary")
 
+  }
+
+  checkEstimatedTime(){
+    if(this._target_start==null){
+      this.setSolvability(false);
+      window.alert('set a start vertex first');
+      return;
+    }
+
+    if(this._target_end==null){
+      this.setSolvability(false);
+      window.alert('set an end vertex first');
+      return;
+    }
+
+    let PathsCheck = {
+      operation: "EstimatedTime",
+      roomid: this._current_room_id
+    };
+
+    this.display(PathsCheck,"Time")
   }
 
   checkPaths(){
@@ -167,7 +202,8 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.display(PathsCheck)
+    this.display(PathsCheck,"Paths")
+    // document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
 
   }
 

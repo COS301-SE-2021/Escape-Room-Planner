@@ -6,6 +6,9 @@ require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnesces
 require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_estimated_time_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_estimated_time_response'
+
 
 
 class SolvabilityService
@@ -69,15 +72,44 @@ class SolvabilityService
   def calculate_estimated_time(request)
 
     raise 'Solvability Request cant be null' if request.nil?
+    return CalculateEstimatedTimeResponse.new(nil, 'false') if request.start_vert.nil? || request.end_vert.nil?
 
+
+    @total_time = 0
+    @path_count = 0
+    find_all_paths(request.start_vert, request.end_vert)
+
+    @possible_paths.each do |path|
+
+     @path_count+=1
+     while path.index(',')
+       addVertexTime(path[0, path.index(',')])
+       path = path[path.index(',') + 1, path.length]
+     end
+     addVertexTime(path)
+    end
+
+    CalculateEstimatedTimeResponse.new((@total_time/@path_count).round.to_s, 'success')
   end
 
-  # Create the graph using the given number of edges and vertices.
-  # Create a recursive function that initializes the current index or vertex, visited, and recursion stack.
-  # Mark the current node as visited and also mark the index in recursion stack.
-  # Find all the vertices which are not visited and are adjacent to the current node. Recursively call the function for those vertices, If the recursive function returns true, return true.
-  # If the adjacent vertices are already marked in the recursion stack then return true.
-  # Create a wrapper class, that calls the recursive function for all the vertices and if any function returns true return true. Else if for all vertices the function returns false return false.
+  def addVertexTime(id)
+    clue_const = 'Clue'
+    key_const = 'Keys'
+    container_const = 'Container'
+    puzzle_const = 'Puzzle'
+    puts id
+    unless Vertex.find_by_id(id).estimatedTime.nil?
+      @total_time += Vertex.find_by_id(id).estimatedTime.to_i
+    else
+      @total_time += 5 if Vertex.find_by_id(id).type == key_const
+
+      @total_time += 5 if Vertex.find_by_id(id).type == clue_const
+
+      @total_time += 5 if Vertex.find_by_id(id).type == container_const
+
+      @total_time += 5 if Vertex.find_by_id(id).type == puzzle_const
+      end
+  end
 
   def detect_cycle(request)
 
@@ -210,9 +242,7 @@ class SolvabilityService
     @uslessVerts = []
     icount = 0
     vertexIndices.each do |v|
-      if v == false
-        @uslessVerts.push(vertices[icount])
-      end
+      @uslessVerts.push(vertices[icount]) if v == false
       icount += 1
     end
   end
