@@ -45,21 +45,25 @@ class GeneticAlgorithmService
 
   def create_chromosone(num_edges, vertices)
     i_count = 1
-    chromosone=[]
+    chromosone = []
+    gene = []
     # Create that number of edges for the chromosome
-    while i_count < num_edges
-      return_vertices(vertices)
-      chromosone[i_count][0] = @vertex1
-      chromosone[i_count][1] = @vertex2
 
+    while i_count < num_edges
+       return_vertices(vertices)
+       gene[0] = @vertex1
+       gene[1] = @vertex2
+
+       chromosone.push(gene)
+       i_count+=1
     end
 
     nil
   end
 
-  def return_vertices(vertices)
-    @vertex1 = vertices(rand(vertices.count))
-    @vertex2 = vertices(rand(vertices.count))
+  def return_vertices(vert)
+    @vertex1 = vertices[rand(vert.count)]
+    @vertex2 = vertices[rand(vert.count)]
 
     # Checks on vertices come here
     return_vertices(vertices) if @vertex1 == @vertex2
