@@ -1,0 +1,28 @@
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>Bootstrap 4 Layout</title>
+</head>
+
+<div class="container-fluid">
+  <div class="card logo" id="sign-in">
+    <h2>Failed Verification</h2>
+  </div>
+</div>
+
+<div class="global-container">
+  <div class="card login-form fade-in" id="form-card">
+    <div class="card-body">
+      <div class="card-text">
+        <h2>Verification token expired.</h2>
+        <div class="signup">
+          Try to verify again?
+        </div>
+        <button routerLink="/login" class="btn btn-outline-success btn-block">Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
