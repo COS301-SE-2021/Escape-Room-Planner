@@ -4,7 +4,7 @@
     <!-- INVENTORY STARTS HERE -->
     <ul class="nav flex-column">
       <li class="border border-dark w-100" style=" background-color: grey; float: left;">Room
-        <input type="file" accept="image/*" name="idk" #add_room [hidden]="true" (input)="addImage(add_room,'container')">
+        <input type="file" accept="image/*" name="idk" #add_room [hidden]="true" (input)="addImage(add_room,'room')">
         <button type="submit" (click)="add_room.click()" style="float: right;" class="btn btn-link remove-padding">
           <img src="./assets/svg/plus.svg" alt="add container image"/>
         </button>
