@@ -97,7 +97,6 @@ class SolvabilityService
     key_const = 'Keys'
     container_const = 'Container'
     puzzle_const = 'Puzzle'
-    puts id
     unless Vertex.find_by_id(id).estimatedTime.nil?
       @total_time += Vertex.find_by_id(id).estimatedTime.to_i
     else
