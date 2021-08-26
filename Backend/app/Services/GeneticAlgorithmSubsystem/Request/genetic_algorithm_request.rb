@@ -1,4 +1,4 @@
-class CalculateEstimatedTimeRequest
+class GeneticAlgorithmRequest
   attr_accessor :vertices, :linear, :dead_nodes
 
   def initialize(vertices, linear, dead_nodes)

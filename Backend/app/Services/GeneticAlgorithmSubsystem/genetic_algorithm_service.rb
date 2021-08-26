@@ -21,11 +21,11 @@ class GeneticAlgorithmService
   
   def initial_population_creation(vertices)
     # Max edges = n(n-1)
-    max_edges = vertices.count(vertices.count-1)
+    max_edges = vertices.count(vertices.count - 1)
     puts "Max edges: #{max_edges}"
 
     # Min edges = n-1
-    min_edges = vertices.count-1
+    min_edges = vertices.count - 1
     puts "Min edges: #{min_edges}"
 
   end
