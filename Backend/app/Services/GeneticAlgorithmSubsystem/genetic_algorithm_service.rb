@@ -6,7 +6,6 @@ require './app/Services/GeneticAlgorithmSubsystem/Response/genetic_algorithm_res
 # Max number edges undirected graph n(n-1)/2
 # Max edges directed graph n(n-1)
 
-
 class GeneticAlgorithmService
 
   def genetic_algorithm(request)
@@ -70,7 +69,7 @@ class GeneticAlgorithmService
 
     @initial_population.push(@chromosome)
     puts "             =========================================================================="
-    puts "             ===================Chromosome number:" + @chromosome_count.to_s + "===================================="
+    puts "             ===================Chromosome number:" + (@chromosome_count+1).to_s + "===================================="
     puts "             =========================================================================="
     i_count = 0
     while i_count < num_edges - 1
