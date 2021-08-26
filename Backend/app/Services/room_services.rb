@@ -241,17 +241,44 @@ class RoomServices
     GetRoomsResponse.new(false, 'Error occurred while getting Rooms', nil)
   end
 
+  # updates vertex attributes
+  # must have either name, clue, time, description of correct type to update
+  # @param request of type UpdateAttributeRequest
+  # @return UpdateVertexResponse object
   def update_attribute(request)
     flag = false
-    return UpdateVertexResponse.new(false, 'Vertex id not valid') if request.id.nil?
+
     vertex = Vertex.find_by_id(request.id)
-    return UpdateVertexResponse.new(false, 'Vertex id not valid') if vertex.nil?
-    if not request.name.nil?
+    return UpdateAttributeResponse.new(false, 'Vertex id not valid') if vertex.nil?
+
+    unless request.name.nil?
       vertex.name = request.name
       flag = true
     end
-    if not request.time_min
-
+    unless request.time.nil?
+      vertex.estimatedTime = request.time
+      flag = true
     end
+
+    unless request.clue.nil?
+      vertex.clue = request.clue
+      flag = true
+    end
+    unless request.description.nil?
+      vertex.description = request.description
+      flag = true
+    end
+    @response = if flag
+                  if vertex.save
+                    UpdateAttributeResponse.new(true, 'Vertex attributes updated')
+                  else
+                    UpdateAttributeResponse.new(false, 'Could not update vertex attribute')
+                  end
+                else
+                  UpdateAttributeResponse.new(false, 'Incorrect vertex attributes given')
+                end
+  rescue StandardError => error
+    puts error
+    UpdateAttributeResponse.new(false, 'Error occurred while updating vertex attributes')
   end
 end

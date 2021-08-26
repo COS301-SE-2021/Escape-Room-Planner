@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # Response for update vertices attribute service
-class GetVerticesResponse
+class UpdateAttributeResponse
   attr_accessor :success, :message
 
   def initialize(success, message)
