@@ -14,6 +14,8 @@ require './app/Services/update_vertex_response'
 require './app/Services/services_helper'
 require './app/Services/RoomSubsystem/Request/get_vertices_request'
 require './app/Services/RoomSubsystem/Response/get_vertices_response'
+require './app/Services/RoomSubsystem/Request/update_attribute_request'
+require './app/Services/RoomSubsystem/Response/update_attribute_response'
 
 # rubocop:disable Metrics/ClassLength
 module Api
@@ -37,8 +39,11 @@ module Api
           when 'connection'
             update_connection(params[:from_vertex_id], params[:to_vertex_id])
           when 'transformation'
-            update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height],
-                                  params[:z_index])
+            update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width],
+                                  params[:height], params[:z_index])
+          when 'attribute'
+            update_attribute(params[:id], params[:name], params[:estimated_time], params[:clue],
+                             params[:description])
           else
             render json: { success: false, message: 'Operation does not exist' }, status: :bad_request
           end
@@ -65,6 +70,21 @@ module Api
         render json: { success: resp.success, message: resp.message }, status: :ok
       rescue StandardError
         render json: { success: false, message: 'Vertex might not exist' }, status: :bad_request
+      end
+
+      # used as update method that does attribute updates
+      # @param [ActionController::Parameters] id
+      # @param [ActionController::Parameters] name
+      # @param [ActionController::Parameters] estimated_time
+      # @param [ActionController::Parameters] clue
+      # @param [ActionController::Parameters] description
+      # @return JSON
+      def update_attribute(id, name, estimated_time, clue, description)
+        req = UpdateAttributeRequest.new(id, name, estimated_time, clue, description)
+        resp = @@room_service.update_vertex(req)
+        render json: { success: resp.success, message: resp.message }, status: :ok
+      rescue StandardError
+        render json: { success: false, message: 'Server Error when Updating' }, status: :bad_request
       end
 
       # calls service to connect two vertices
