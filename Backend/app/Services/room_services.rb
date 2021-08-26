@@ -240,4 +240,18 @@ class RoomServices
     puts e
     GetRoomsResponse.new(false, 'Error occurred while getting Rooms', nil)
   end
+
+  def update_attribute(request)
+    flag = false
+    return UpdateVertexResponse.new(false, 'Vertex id not valid') if request.id.nil?
+    vertex = Vertex.find_by_id(request.id)
+    return UpdateVertexResponse.new(false, 'Vertex id not valid') if vertex.nil?
+    if not request.name.nil?
+      vertex.name = request.name
+      flag = true
+    end
+    if not request.time_min
+
+    end
+  end
 end

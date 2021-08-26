@@ -80,7 +80,7 @@ ActiveRecord::Schema.define(version: 2021_08_23_110516) do
     t.string "graphicid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.time "estimatedTime"
+    t.bigint "estimatedTime"
     t.string "description"
     t.string "clue"
     t.bigint "escape_room_id", default: 1, null: false
