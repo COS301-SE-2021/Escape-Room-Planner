@@ -70,7 +70,7 @@ class SolvabilityService
   end
 
   def calculate_estimated_time(request)
-    puts "six"
+
     raise 'Solvability Request cant be null' if request.nil?
     return CalculateEstimatedTimeResponse.new(nil, 'false') if request.start_vert.nil? || request.end_vert.nil?
 
@@ -79,8 +79,8 @@ class SolvabilityService
     @path_count = 0
     find_all_paths(request.start_vert, request.end_vert)
 
+    @possible_paths.each do |path|
 
-    @possible_paths.each do |path|\
      @path_count+=1
      while path.index(',')
        addVertexTime(path[0, path.index(',')])
@@ -96,15 +96,18 @@ class SolvabilityService
     clue_const = 'Clue'
     key_const = 'Keys'
     container_const = 'Container'
-
-    if Vertex.find_by_id(id).estimatedTime
-      @total_time += Vertex.find_by_id(id).estimatedTime
+    puzzle_const = 'Puzzle'
+    puts id
+    unless Vertex.find_by_id(id).estimatedTime.nil?
+      @total_time += Vertex.find_by_id(id).estimatedTime.to_i
     else
       @total_time += 5 if Vertex.find_by_id(id).type == key_const
 
       @total_time += 5 if Vertex.find_by_id(id).type == clue_const
 
       @total_time += 5 if Vertex.find_by_id(id).type == container_const
+
+      @total_time += 5 if Vertex.find_by_id(id).type == puzzle_const
       end
   end
 

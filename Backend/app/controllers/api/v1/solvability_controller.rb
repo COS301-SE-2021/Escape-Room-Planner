@@ -51,12 +51,12 @@ module Api
         end
 
         if operation == 'FindUnnecessary'
-          find_unnecessary(start_vert,end_vert,room_id)
+          find_unnecessary(start_vert, end_vert, room_id)
         end
 
         if operation == 'EstimatedTime'
           puts "here"
-          estimated_time(start_vert,end_vert)
+          estimated_time(start_vert, end_vert)
         end
 
 
@@ -107,27 +107,27 @@ module Api
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       end
 
-      def find_unnecessary(start_vert, end_vert,room_id)
+      def find_unnecessary(start_vert, end_vert, room_id)
         if start_vert.nil? || end_vert.nil? || room_id.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
         end
 
-        req = ReturnUnnecessaryRequest.new(start_vert,end_vert,room_id)
+        req = ReturnUnnecessaryRequest.new(start_vert, end_vert, room_id)
         serv = SolvabilityService.new
         resp = serv.return_unnecessary_vertices(req)
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       end
 
-      def estimated_time(start_vert,end_vert)
+      def estimated_time(start_vert, end_vert)
 
         if start_vert.nil? || end_vert.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
         end
 
-        req=CalculateEstimatedTimeRequest.new(start_vert,end_vert)
+        req = CalculateEstimatedTimeRequest.new(start_vert, end_vert)
         serv = SolvabilityService.new
         puts "seven"
         resp = serv.calculate_estimated_time(req)
