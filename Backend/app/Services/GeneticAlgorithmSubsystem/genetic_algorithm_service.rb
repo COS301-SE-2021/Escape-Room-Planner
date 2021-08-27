@@ -110,25 +110,31 @@ class GeneticAlgorithmService
       end
     end
 
-    # # Reduced duplicate connections
-    # if (i_count > 1) && (@chromosome[i_count - 1].include? @vertex1) && (@chromosome[i_count - 1].include? @vertex2)
-    #   if @i_stop < 5
-    #     @i_stop += 1
-    #     return_vertices(vert, i_count)
-    #   end
-    # end
-    #
-    # # Reduced reversed connections
-    # if (i_count > 1) && (@chromosome[i_count - 1].include? @vertex2) && (@chromosome[i_count - 1].include? @vertex1)
-    #   if @i_stop < 5
-    #     @i_stop += 1
-    #     return_vertices(vert, i_count)
-    #   end
-    # end
+    # Reduced duplicate connections && reversed connections
+    if i_count > 0
+      i_test = 0
+      while i_test <= i_count
+        if @chromosome[i_test][0] == @vertex1 && @chromosome[i_test][1] == @vertex2
+          if @i_stop < 5
+             @i_stop += 1
+             return_vertices(vert, i_count)
+          end
+        end
+        i_test += 1
+      end
 
-
-
+      i_test = 0
+      while i_test <= i_count
+        if @chromosome[i_test][1] == @vertex1 && @chromosome[i_test][0] == @vertex2
+          if @i_stop < 5
+            @i_stop += 1
+            return_vertices(vert, i_count)
+          end
+        end
+        i_test += 1
+      end
     end
+  end
 
   
   def calculate_fitness; end
