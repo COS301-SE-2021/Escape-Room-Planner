@@ -15,6 +15,8 @@ class UserNotifierMailer < ApplicationMailer
 
   def send_verify_account_email(email)
     @user = User.find_by_email(email)
+    @token = JsonWebToken.encode(id: @user.id)
+    @url = "http://localhost:4200/verify-success?token=#{@token}"
     mail(to: email,
          subject: 'Account Registered')
          # body: 'Your account has been verified. add a verify account link that the user can select to verify account')
