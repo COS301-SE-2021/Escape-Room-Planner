@@ -49,11 +49,11 @@ class GeneticAlgorithmService
     @chromosome_count = 0
 
     while @chromosome_count < @initial_population_size
-      create_chromosone(rand(min_edges..max_edges), vertices)
+      create_chromosome(rand(min_edges..max_edges), vertices)
     end
   end
 
-  def create_chromosone(num_edges, vertices)
+  def create_chromosome(num_edges, vertices)
 
     i_count = 0
     @chromosome = Array.new(num_edges){Array.new(2){}}
@@ -61,7 +61,7 @@ class GeneticAlgorithmService
 
     while i_count < num_edges
       @i_stop = 0
-       return_vertices(vertices,i_count)
+       return_vertices(vertices, i_count)
        @chromosome[i_count][0] = @vertex1
        @chromosome[i_count][1] = @vertex2
       i_count += 1
@@ -80,11 +80,11 @@ class GeneticAlgorithmService
     @chromosome_count += 1
   end
 
-  def return_vertices(vert,i_count)
+  def return_vertices(vert, i_count)
     @vertex1 = vert[rand(vert.count)]
     @vertex2 = vert[rand(vert.count)]
     # Checks on vertices come here
-    return_vertices(vert,i_count) if @vertex1 == @vertex2
+    return_vertices(vert, i_count) if @vertex1 == @vertex2
     t1 = Vertex.find_by_id(@vertex1).type
     t2 = Vertex.find_by_id(@vertex2).type
 
@@ -92,30 +92,39 @@ class GeneticAlgorithmService
     if (t1 == 'Clue' || t1 == 'Keys') && t2 != 'Puzzle'
       if @i_stop < 5
         @i_stop += 1
-        return_vertices(vert,i_count)
+        return_vertices(vert, i_count)
       end
     end
 
     if t1 == 'Container' && t2 == 'Puzzle'
       if @i_stop < 5
         @i_stop += 1
-        return_vertices(vert,i_count)
+        return_vertices(vert, i_count)
       end
     end
 
     if t1 == 'Puzzle' && t2 != 'Container'
       if @i_stop < 5
         @i_stop += 1
-        return_vertices(vert,i_count)
+        return_vertices(vert, i_count)
       end
     end
 
-    if (i_count > 1) && (@chromosome[i_count - 1].include? @vertex1) && (@chromosome[i_count - 1].include? @vertex2)
-      if @i_stop < 5
-        @i_stop += 1
-        return_vertices(vert,i_count)
-      end
-    end
+    # # Reduced duplicate connections
+    # if (i_count > 1) && (@chromosome[i_count - 1].include? @vertex1) && (@chromosome[i_count - 1].include? @vertex2)
+    #   if @i_stop < 5
+    #     @i_stop += 1
+    #     return_vertices(vert, i_count)
+    #   end
+    # end
+    #
+    # # Reduced reversed connections
+    # if (i_count > 1) && (@chromosome[i_count - 1].include? @vertex2) && (@chromosome[i_count - 1].include? @vertex1)
+    #   if @i_stop < 5
+    #     @i_stop += 1
+    #     return_vertices(vert, i_count)
+    #   end
+    # end
 
 
 
