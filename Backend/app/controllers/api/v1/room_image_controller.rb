@@ -21,10 +21,25 @@ module Api
               :pos_x,
               :pos_y,
               :width,
-              :height
+              :height,
+              :blob_id
             ).where(escape_room_id: room_id)
+
+            user = User.find_by_id(EscapeRoom.find_by_id(room_id).user_id)
+            data = room_images.map do |k|
+              blob_url = if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
+                           Rails.application.routes.url_helpers.polymorphic_url(
+                             user.graphic.blobs.find_by_id(k.blob_id), host: 'localhost:3000'
+                           )
+                         else
+                           './assets/images/room.jpg'
+                         end
+              { room_image: k,
+                src: blob_url }
+            end
+
             # TODO: need to return blobs here, look at vertex service
-            render json: { status: true, message: 'Returned the room images', data: room_images }, status: :ok
+            render json: { status: true, message: 'Returned the room images', data: data }, status: :ok
           end
         else
           render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401

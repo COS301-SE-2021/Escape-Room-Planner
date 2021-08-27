@@ -10,7 +10,7 @@ class RoomImageControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :ok # correct status code
     assert_equal response['message'], 'Returned the room images' # correct message
-    assert_equal response['data'][0]['pos_x'], 10 # returns correct data
+    assert_equal response['data'][0]['room_image']['pos_x'], 10 # returns correct data
   end
 
   test 'can get handle request if no image exists' do
@@ -18,9 +18,8 @@ class RoomImageControllerTest < ActionDispatch::IntegrationTest
 
     response = JSON.parse(@response.body)
 
-    assert_response :ok # correct status code
-    assert_equal response['message'], 'Returned the room images' # correct message
-    assert_nil response['data'][0]
+    assert_response :bad_request # correct status code
+    assert_not_nil response['error'] # should give error
   end
 
   test '#create can create the vertex image' do
