@@ -17,11 +17,20 @@
   <div class="card login-form fade-in" id="form-card">
     <div class="card-body">
       <div class="card-text">
-        <h2>Verification token expired.</h2>
-        <div class="signup">
-          Try to verify again?
-        </div>
-        <button routerLink="/login" class="btn btn-outline-success btn-block">Sign in</button>
+        <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm.value)">
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" ngModel required #email="ngModel" name="email"
+                   class="form-control form-control-sm" [class.is-invalid]="email.invalid && email.touched"
+                   pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" autocomplete="off">
+            <small *ngIf="email.errors?.required && email.touched">Email is required.</small>
+            <small *ngIf="email.errors?.pattern && email.touched">Please enter a valid email.</small>
+          </div>
+          <button type="submit" class="btn btn-outline-success btn-block">Send new verify account email</button>
+          <div class="signup">
+            Verification failed. Please input your email and try again.
+          </div>
+        </form>
       </div>
     </div>
   </div>
