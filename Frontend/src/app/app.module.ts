@@ -24,6 +24,8 @@ const routes: Routes = [
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'reset-not', component: ResetPasswordNotComponent },
   { path: 'escape-room', component: RoomCreatorComponent},
+  { path: 'verify-success', component: VerifySuccessComponent},
+  { path: 'verify-failure', component: VerifyFailedComponent},
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
