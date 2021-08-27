@@ -42,6 +42,10 @@ class UserServices
     # check password is correct
     return LoginResponse.new(false, 'Password is incorrect', nil, request.username) unless @user.authenticate(request.password)
 
+
+    # check the user is verified
+    return LoginResponse.new(false, 'User is not verified', nil, request.username) unless @user.verified
+
     # raise 'Incorrect Password' unless @user.authenticate(request.password)
 
     # generate JWT token
