@@ -15,8 +15,8 @@ class GeneticAlgorithmService
     puts "======================================================================================"
 
     # Manipulate this if you want to mess with the initial edges for accuracy
-    @max_edge_initial_factor = 1
-    @min_edge_initial_factor = 1
+    @max_edge_initial_factor = 0.5
+    @min_edge_initial_factor = 0.5
 
     if request.vertices.nil? || request.linear.nil? || request.dead_nodes.nil?
       GeneticAlgorithmResponse.new('False', 'Parameters required')
@@ -35,22 +35,21 @@ class GeneticAlgorithmService
     puts "======================================================================================"
 
     # Max edges = n(n-1)
-    max_edges = (vertices.count) * (vertices.count - 1) * @max_edge_initial_factor
+    max_edges = ((vertices.count) * (vertices.count - 1) * @max_edge_initial_factor).round
     puts "Max edges: #{max_edges}"
 
     # Min edges = n-1
-    min_edges = vertices.count - 1 * @min_edge_initial_factor
+    min_edges = ((vertices.count - 1) * @min_edge_initial_factor).round
     puts "Min edges: #{min_edges}"
     
     # Single Chromosome
     # Array of 2D arrays for initial population
     @initial_population = []
-    @initial_population_size=10
+    @initial_population_size = 10
     @chromosome_count = 0
 
-    while @chromosome_count<@initial_population_size
+    while @chromosome_count < @initial_population_size
       create_chromosone(rand(min_edges..max_edges), vertices)
-
     end
   end
 
@@ -69,7 +68,7 @@ class GeneticAlgorithmService
 
     @initial_population.push(@chromosome)
     puts "             =========================================================================="
-    puts "             ===================Chromosome number:" + (@chromosome_count+1).to_s + "===================================="
+    puts "             ===================Chromosome number:" + (@chromosome_count + 1).to_s + "===================================="
     puts "             =========================================================================="
     i_count = 0
     while i_count < num_edges - 1
