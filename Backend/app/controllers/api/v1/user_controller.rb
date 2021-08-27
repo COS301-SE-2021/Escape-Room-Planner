@@ -79,15 +79,31 @@ module Api
           end
 
         when 'Verify'
-          if params[:reset_token].nil?
-            render json: { status: 'FAILED', message: 'No reset_token received' }, status: 400
+          if authorise(request)
+            render json: { status: 'SUCCESS' }, status: :ok
             return
           else
-            req = VerifyAccountRequest.new(params[:reset_token])
+            render json: { status: 'FAILED' }, status: :unauthorized
+            return
+          end
+
+        when 'verify_account'
+          if params[:verify_token].nil?
+            render json: { status: 'FAILED', message: 'No verify_token received' }, status: 400
+            return
+          else
+            req = VerifyAccountRequest.new(params[:verify_token])
             resp = serv.verify_account(req)
             render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
             return
           end
+
+        else
+          render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
+          return
+        end
+
+
 
 
         # when 'Verify'
@@ -129,4 +145,3 @@ module Api
       end
     end
   end
-end
