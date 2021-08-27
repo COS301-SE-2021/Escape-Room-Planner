@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 require './app/Services/GeneticAlgorithmSubsystem/Request/genetic_algorithm_request'
 require './app/Services/GeneticAlgorithmSubsystem/Response/genetic_algorithm_response'
+require './app/Services/room_services'
+require './app/Services/create_escaperoom_request'
+require './app/Services/create_escaperoom_response'
 
 # Graph theory
 # Max number edges undirected graph n(n-1)/2
@@ -28,7 +31,7 @@ class GeneticAlgorithmService
 
 
   end
-  
+
   def initial_population_creation(vertices)
     puts "======================================================================================"
     puts "==================================Initial Pop========================================="
@@ -41,11 +44,13 @@ class GeneticAlgorithmService
     # Min edges = n-1
     min_edges = ((vertices.count - 1) * @min_edge_initial_factor).round
     puts "Min edges: #{min_edges}"
-    
+
     # Single Chromosome
     # Array of 2D arrays for initial population
     @initial_population = []
     @initial_population_size = 10
+    @fitness_of_population = []
+
     @chromosome_count = 0
 
     while @chromosome_count < @initial_population_size
@@ -136,8 +141,14 @@ class GeneticAlgorithmService
     end
   end
 
-  
-  def calculate_fitness; end
+
+  def calculate_fitness
+
+  end
+
+  def set_up_room
+
+  end
 
   def selection; end
 
