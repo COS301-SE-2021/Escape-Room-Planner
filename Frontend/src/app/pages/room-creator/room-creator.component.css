@@ -12,6 +12,18 @@
   color: black;
 }
 
+#room-plan{
+  /* transparent colour */
+  /*background-blend-mode: darken;*/
+  /*background-image: url("../../../assets/images/grid.png");*/
+  /*background-repeat: repeat;*/
+  background-color: #7f7f7f;
+}
+
+#room-plan > img{
+  opacity: 1;
+}
+
 #room{
   z-index: 0;
   position: absolute;

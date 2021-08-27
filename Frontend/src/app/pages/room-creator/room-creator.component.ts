@@ -106,6 +106,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   // adds an object to drag on our 'canvas'
   addObjects(event:any): void{
+    if (event.type === 'Room'){
+      console.log('room clicked');
+      this.createRoom(event.pos, 0, 50, 125, event.blob_id, event.src);
+      return;
+    }
+
     this.lastPos += event.pos;
     //MAKE API CALL BASED ON TYPE
     let name : string = "Object";       //default name
@@ -209,6 +215,31 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       }
       this.lines = [];
 
+      // gets room images
+      this.httpClient.get<any>('http://127.0.0.1:3000/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
+        response =>{
+          for ( let room_image of response.data){
+            console.log(room_image);
+            this.spawnRoom(
+              room_image.room_image.pos_x,
+              room_image.room_image.pos_y,
+              room_image.room_image.width,
+              room_image.room_image.height,
+              room_image.room_image.id,
+              room_image.src
+            );
+          }
+        },
+        error => {
+          if (error.status === 401) {
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !== '/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          } else {
+            this.renderAlertError("There was an error retrieving room images for the room");
+          }
+        }
+      );
+
       //http request to rails api
       this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
         response => {
@@ -230,7 +261,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             this.spawnObjects(current_id);
           }
 
-          // TODO consider using some other method to locate these, cause triple for loop is not pog
           // converts real connection to local connection
           for (let vertex of this.vertexService.vertices) {
             let vertex_connections = vertex.getConnections();
@@ -460,6 +490,59 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       return false;
     });
   }
+
+  // used to create and spawn a room-image when clicking inventory image
+  createRoom(x: number, y:number, width: number, height:number, blob_id: number, src: string): void{
+
+    let createRoomImageBody = {
+      pos_x: x,
+      pos_y: y,
+      width: width,
+      height: height,
+      escape_room_id: this.currentRoomId,
+      blob_id: blob_id
+    }
+
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room_image/", createRoomImageBody, {"headers": this.headers}).subscribe(
+      response => {
+        this.spawnRoom(x, y, width, height, response.data.id, src);
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          console.error('There was an error while creating a room image', error);
+          this.renderAlertError("Couldn't create a room image");
+        }
+      }
+    );
+  }
+
+  // just spawns the room image on canvas with params given
+  spawnRoom(x: number, y:number, width: number, height:number, id: number, src: string): void{
+    let newRoomImage = this.renderer.createElement('img');
+    this.renderer.addClass(newRoomImage,'resize-drag');
+    // All the styles
+    this.renderer.setStyle(newRoomImage,"width", width + "px");
+    this.renderer.setStyle(newRoomImage,"height", height + "px");
+    this.renderer.setStyle(newRoomImage,"position", "absolute");
+    this.renderer.setStyle(newRoomImage,"user-select", "none");
+    this.renderer.setStyle(newRoomImage,"transform",'translate('+ x +'px, '+ y +'px)');
+    this.renderer.setStyle(newRoomImage,"z-index",0);
+    // Setting all needed attributes
+    this.renderer.setAttribute(newRoomImage,'room-image-id', id.toString());
+    this.renderer.setAttribute(newRoomImage,"src", src);
+    this.renderer.setAttribute(newRoomImage,"data-x", x.toString());
+    this.renderer.setAttribute(newRoomImage,"data-y", y.toString());
+    // todo event listeners
+
+    // spawn
+    this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newRoomImage);
+
+    return;
+  }
+
   // todo
   //checks if in a operation for a vertex
   vertexOperation(event: any): void{

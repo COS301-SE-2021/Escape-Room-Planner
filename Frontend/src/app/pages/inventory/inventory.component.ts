@@ -109,7 +109,7 @@ export class InventoryComponent implements OnInit {
         break;
       }
       case 'room':{
-        this.renderer.listen(new_img, 'click', (event) => this.onClickRoom());
+        this.renderer.listen(new_img, 'click', (event) => this.onClick('Room', new_img.src,Number.parseInt(blob_id), 10));
         this.renderer.appendChild(this.room_div?.nativeElement, new_div);
         break;
       }
