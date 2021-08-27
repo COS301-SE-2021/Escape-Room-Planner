@@ -8,6 +8,7 @@ module Api
   module V1
     # Controller that maps http requests to functions to execute
     class RoomImageController < ApplicationController
+      protect_from_forgery with: :null_session
       # GET api/v1/room_image/id
       def show
         # use id in params to select from room
@@ -18,6 +19,7 @@ module Api
             render json: { status: false, message: 'Invalid room id' }, status: :bad_request
           else
             room_images = RoomImage.select(
+              :id,
               :pos_x,
               :pos_y,
               :width,
@@ -32,13 +34,12 @@ module Api
                              user.graphic.blobs.find_by_id(k.blob_id), host: 'localhost:3000'
                            )
                          else
-                           './assets/images/room.jpg'
+                           './assets/images/room1.png'
                          end
               { room_image: k,
                 src: blob_url }
             end
 
-            # TODO: need to return blobs here, look at vertex service
             render json: { status: true, message: 'Returned the room images', data: data }, status: :ok
           end
         else
@@ -64,7 +65,7 @@ module Api
           else
             RoomImage.create(pos_x: pos_x, pos_y: pos_y, width: width, height: height, blob_id: blob_id,
                              escape_room_id: escape_room_id)
-            render json: { status: true, message: 'Room image created' }, status: :ok
+            render json: { status: true, message: 'Room image created', data: RoomImage.select(:id).last }, status: :ok
           end
         else
           render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
@@ -92,6 +93,7 @@ module Api
             room_image[:pos_y] = new_y
             room_image[:width] = new_width
             room_image[:height] = new_height
+            room_image.save
 
             render json: { status: true, message: 'Room image updated' }, status: :ok
           end

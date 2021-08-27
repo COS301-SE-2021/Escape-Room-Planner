@@ -523,6 +523,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   spawnRoom(x: number, y:number, width: number, height:number, id: number, src: string): void{
     let newRoomImage = this.renderer.createElement('img');
     this.renderer.addClass(newRoomImage,'resize-drag');
+    this.renderer.addClass(newRoomImage,'border');
+    this.renderer.addClass(newRoomImage,'border-dark');
     // All the styles
     this.renderer.setStyle(newRoomImage,"width", width + "px");
     this.renderer.setStyle(newRoomImage,"height", height + "px");
@@ -535,12 +537,41 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setAttribute(newRoomImage,"src", src);
     this.renderer.setAttribute(newRoomImage,"data-x", x.toString());
     this.renderer.setAttribute(newRoomImage,"data-y", y.toString());
-    // todo event listeners
-
+    // event listeners
+    this.renderer.listen(newRoomImage,"mouseup", (event) => this.updateRoomImage(event));
+    this.renderer.listen(newRoomImage,"contextmenu", (event) => {
+      return false;
+    });
     // spawn
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newRoomImage);
+  }
 
-    return;
+  updateRoomImage(event: any): void{
+    let roomImage = event.target;
+
+    console.log(roomImage)
+
+    let updateRoomImageBody = {
+      pos_x: roomImage.getAttribute('data-x'),
+      pos_y: roomImage.getAttribute('data-y'),
+      height: roomImage.style.height.match(/\d+/)[0],
+      width: roomImage.style.width.match(/\d+/)[0]
+    }
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room_image/"+roomImage.getAttribute('room-image-id'), updateRoomImageBody, {"headers": this.headers}).subscribe(
+      response => {
+        // updates the local array here only after storing on db
+        console.log(response);
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("There was an Error Updating Room Image Position");
+        }
+      }
+    );
   }
 
   // todo
