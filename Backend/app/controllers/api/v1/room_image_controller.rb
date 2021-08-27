@@ -12,7 +12,20 @@ module Api
       def show
         # use id in params to select from room
         if authorise(request)
-          10
+          room_id = params[:id]
+
+          if room_id.nil?
+            render json: { status: false, message: 'Invalid room id' }, status: :bad_request
+          else
+            room_images = RoomImage.select(
+              :pos_x,
+              :pos_y,
+              :width,
+              :height
+            ).where(escape_room_id: room_id)
+            # TODO: need to return blobs here, look at vertex service
+            render json: { status: true, message: 'Returned the room images', data: room_images }, status: :ok
+          end
         else
           render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
@@ -36,6 +49,7 @@ module Api
           else
             RoomImage.create(pos_x: pos_x, pos_y: pos_y, width: width, height: height, blob_id: blob_id,
                              escape_room_id: escape_room_id)
+            render json: { status: true, message: 'Room image created' }, status: :ok
           end
         else
           render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
@@ -49,7 +63,23 @@ module Api
         # use image_id to update the position and dimensions
         if authorise(request)
           # take all needed params and update the model in db
-          10
+          image_id = params[:id]
+          new_x = params[:pos_x]
+          new_y = params[:pos_y]
+          new_width = params[:width]
+          new_height = params[:height]
+
+          if image_id.nil? || new_x.nil? || new_y.nil? || new_width.nil? || new_height.nil?
+            render json: { status: false, message: 'Not all parameters were included' }, status: :bad_request
+          else
+            room_image = RoomImage.find(image_id)
+            room_image[:pos_x] = new_x
+            room_image[:pos_y] = new_y
+            room_image[:width] = new_width
+            room_image[:height] = new_height
+
+            render json: { status: true, message: 'Room image updated' }, status: :ok
+          end
         else
           render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
         end
