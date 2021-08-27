@@ -892,7 +892,29 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   updateAttribute(data: any){
+    let local_id = this._target_vertex.getAttribute('vertex-id');
+    let vertex = this.vertexService.vertices[local_id];
+    let time = data['attribute_min']*60 + data['attribute_sec']
+    let update_vertex_attribute = {
+      operation: 'attribute',
+      name: data['attribute_name'],
+      estimated_time: time
+    };
 
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
+      response => {
+        console.log(response);
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("There was an Error Updating Vertex Z position");
+        }
+      }
+      //console.error('There was an error while updating the vertex', error)
+    );
     console.log(data);
   }
 

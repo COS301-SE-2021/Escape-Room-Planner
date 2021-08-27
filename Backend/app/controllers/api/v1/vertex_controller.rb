@@ -81,7 +81,7 @@ module Api
       # @return JSON
       def update_attribute(id, name, estimated_time, clue, description)
         req = UpdateAttributeRequest.new(id, name, estimated_time, clue, description)
-        resp = @@room_service.update_vertex(req)
+        resp = @@room_service.update_attribute(req)
         render json: { success: resp.success, message: resp.message }, status: :ok
       rescue StandardError
         render json: { success: false, message: 'Server Error when Updating' }, status: :bad_request
