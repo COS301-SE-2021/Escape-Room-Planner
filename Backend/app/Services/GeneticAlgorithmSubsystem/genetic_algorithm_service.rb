@@ -29,6 +29,13 @@ class GeneticAlgorithmService
     initial_population_creation(request.vertices)
 
 
+    i_count=0
+    while i_count<@initial_population_size
+      calculate_fitness(@initial_population[i_count],i_count)
+      i_count+=1
+    end
+
+
 
   end
 
@@ -109,7 +116,7 @@ class GeneticAlgorithmService
     end
 
     if t1 == 'Puzzle' && t2 != 'Container'
-      if @i_stop < 5
+      if @i_stop < 10
         @i_stop += 1
         return_vertices(vert, i_count)
       end
@@ -142,12 +149,8 @@ class GeneticAlgorithmService
   end
 
 
-  def calculate_fitness
-
-  end
-
-  def set_up_room
-
+  def calculate_fitness(chromosone,i_count)
+    set_up_room(chromosone)
   end
 
   def selection; end
@@ -156,5 +159,21 @@ class GeneticAlgorithmService
 
   def mutation; end
 
+
+  #helper functions
+  def set_up_room(chromosone)
+    find_start(chromosone)
+  end
+
+  def find_start(chromosone)
+
+    chromosone.each do |row|
+
+    end
+  end
+
+  def find_end
+
+  end
 
 end

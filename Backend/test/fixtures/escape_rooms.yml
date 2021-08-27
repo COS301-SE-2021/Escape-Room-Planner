@@ -20,3 +20,10 @@ bigRoom:
   endVertex: 912
   name: two
   user_id: 1
+
+GATestRoom:
+  id: 5
+  startVertex: 901
+  endVertex: 912
+  name: two
+  user_id: 1
