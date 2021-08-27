@@ -7,7 +7,10 @@ require './app/Services/GeneticAlgorithmSubsystem/Response/genetic_algorithm_res
 # Max edges directed graph n(n-1)
 
 class GeneticAlgorithmService
-
+  @clue_const = 'Clue'
+  @key_const = 'Keys'
+  @container_const = 'Container'
+  @puzzle_const = 'Puzzle'
   def genetic_algorithm(request)
     puts ""
     puts "======================================================================================"
@@ -60,6 +63,7 @@ class GeneticAlgorithmService
     # Create that number of edges for the chromosome
 
     while i_count < num_edges
+      @i_stop = 0
        return_vertices(vertices)
        @chromosome[i_count][0] = @vertex1
        @chromosome[i_count][1] = @vertex2
@@ -72,7 +76,7 @@ class GeneticAlgorithmService
     puts "             =========================================================================="
     i_count = 0
     while i_count < num_edges - 1
-      puts @chromosome[i_count][0].to_s + "," + @chromosome[i_count][1].to_s
+      puts Vertex.find_by_id(@chromosome[i_count][0]).type+":"+@chromosome[i_count][0].to_s + "," + Vertex.find_by_id(@chromosome[i_count][1]).type+":"+@chromosome[i_count][1].to_s
       i_count += 1
     end
     @initial_population[@chromosome_count] = @chromosome
@@ -85,6 +89,40 @@ class GeneticAlgorithmService
 
     # Checks on vertices come here
     return_vertices(vert) if @vertex1 == @vertex2
+
+    # This stops infinite recursion
+
+    # Check legal moves
+    if (Vertex.find_by_id(@vertex1).type == @clue_const || Vertex.find_by_id(@vertex1).type == @key_const) && !Vertex.find_by_id(@vertex2).type == @puzzle_const
+      if @i_stop < 4
+        @i_stop += 1
+        return_vertices(vert)
+      else
+        @vertex1 = nil
+        @vertex2 = nil
+      end
+    end
+
+    if Vertex.find_by_id(@vertex1).type == @container_const && Vertex.find_by_id(@vertex2).type == @puzzle_const
+      if @i_stop < 4
+        @i_stop += 1
+        return_vertices(vert)
+      else
+        @vertex1 = nil
+        @vertex2 = nil
+      end
+    end
+
+    if Vertex.find_by_id(@vertex1).type == @puzzle_const && !Vertex.find_by_id(@vertex2).type == @container_const
+      if @i_stop < 4
+        @i_stop += 1
+        return_vertices(vert)
+      else
+        @vertex1 = nil
+        @vertex2 = nil
+      end
+    end
+
 
 
   end
