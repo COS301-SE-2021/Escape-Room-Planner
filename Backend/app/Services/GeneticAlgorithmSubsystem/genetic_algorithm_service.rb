@@ -113,7 +113,6 @@ class GeneticAlgorithmService
     if (i_count > 1) && (@chromosome[i_count - 1].include? @vertex1) && (@chromosome[i_count - 1].include? @vertex2)
       if @i_stop < 5
         @i_stop += 1
-        puts "here"
         return_vertices(vert,i_count)
       end
     end
