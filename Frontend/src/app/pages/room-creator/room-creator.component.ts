@@ -22,12 +22,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public newEscapeRoomName:string = ""; // used when submitting a new room creation
   public newEscapeRoomNameValid:boolean = false; // flag using regex
   public _target_vertex_z_index:number = 0; // stores a z-index of _target_vertex
+  public vertex_type:string = "Object";
+  public vertex_name_menu:string = "";
+  public vertex_min_menu:number = 0;
+  public vertex_sec_menu:number = 0;
+  public vertex_clue_menu:string = "";
+  public vertex_description_menu:string = "";
   public hasRooms:boolean = true;
+  public hideClue:boolean = true;
+  public hidePuzzle:boolean = true;
 
   private _room_count:number = 0;
   private _target_vertex: any;
   private _target_start: any;
   private _target_end: any;
+  private _is_single_click: Boolean = true;
   private isConnection = false;
   private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
@@ -37,6 +46,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
   @ViewChild("contextMenu") contextMenuRef : ElementRef | undefined;
+  @ViewChild("attributeMenu") attributeMenuRef : ElementRef | undefined;
   @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
@@ -438,20 +448,30 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
     this.renderer.listen(newObject,"click", (event) => this.vertexOperation(event));
+    // double click to show Attribute Menu
+    this.renderer.listen(newObject,"dblclick", (event) => {
+      this._is_single_click = false;
+      this.showAttributeMenu(event);
+      return false;
+    });
     // RIGHT CLICK EVENT FOR OBJECTS
     this.renderer.listen(newObject,"contextmenu", (event) => {
       this.showContextMenu(event);
       return false;
     });
   }
-
   // todo
   //checks if in a operation for a vertex
   vertexOperation(event: any): void{
-    if (this.isConnection)
-      this.makeConnection(event);
-    if(this.is_disconnect)
-      this.disconnectConnection(event);
+    this._is_single_click = true;
+    setTimeout(()=>{
+      if(this._is_single_click){
+         if (this.isConnection)
+           this.makeConnection(event);
+        if(this.is_disconnect)
+          this.disconnectConnection(event);
+      }
+    },250);
   }
 
   // todo
@@ -583,7 +603,37 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.contextMenuRef?.nativeElement.style.setProperty("transform",'translate('+ x_pos +'px, '+ y_pos +'px)');
     this.changeCurrentZ(0);
     // @ts-ignore
+    this.attributeMenuRef?.nativeElement.hidden = true;
+    // @ts-ignore
     this.contextMenuRef?.nativeElement.hidden = false;
+  }
+
+  showAttributeMenu(event: any): void{
+    this._target_vertex = event.target;
+    this.hidePuzzle = true;
+    this.hideClue = true;
+    let vertex = this.vertexService.vertices[this._target_vertex.getAttribute('vertex-id')];
+    this.vertex_type = vertex.type;
+    let x_pos = this._target_vertex.width + Number(this._target_vertex.getAttribute("data-x"));
+    let y_pos = this._target_vertex.getAttribute("data-y");
+
+    this.vertex_name_menu = vertex.name;
+    if(this.vertex_type === "Clue") {
+      // @ts-ignore
+      this.vertex_clue_menu = vertex.clue;
+      this.hideClue = false;
+    }
+    if(this.vertex_type === "Puzzle") {
+      // @ts-ignore
+      this.vertex_description_menu = vertex.description;
+      this.hidePuzzle = false;
+    }
+    // moves the context menu where needed based on the vertex
+    this.attributeMenuRef?.nativeElement.style.setProperty("transform",'translate('+ x_pos +'px, '+ y_pos +'px)');
+    // @ts-ignore
+    this.contextMenuRef?.nativeElement.hidden = true;
+    // @ts-ignore
+    this.attributeMenuRef?.nativeElement.hidden = false;
   }
 
   // hides the context menu
@@ -591,6 +641,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     if (!event.target.getAttribute('data-close')){
       // @ts-ignore
       this.contextMenuRef?.nativeElement.hidden = true;
+      // @ts-ignore
+      //this.attributeMenuRef?.nativeElement.hidden = true;
     }
   }
 
@@ -838,6 +890,34 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
+
+  updateAttribute(data: any){
+    let local_id = this._target_vertex.getAttribute('vertex-id');
+    let vertex = this.vertexService.vertices[local_id];
+    let time = data['attribute_min']*60 + data['attribute_sec']
+    let update_vertex_attribute = {
+      operation: 'attribute',
+      name: data['attribute_name'],
+      estimated_time: time
+    };
+
+    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
+      response => {
+        console.log(response);
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("There was an Error Updating Vertex Z position");
+        }
+      }
+      //console.error('There was an error while updating the vertex', error)
+    );
+    console.log(data);
+  }
+
 }
 
 // For Vertex Response

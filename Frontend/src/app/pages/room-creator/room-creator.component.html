@@ -109,7 +109,73 @@
               </div>
             </div>
           </div>
-
+          <!-- ATTRIBUTE MENU -->
+          <div id="attribute_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute; z-index: 99999999" [hidden]="true" #attributeMenu>
+            <div class="row">
+              <div class="col">
+                <label  class="text-center remove-padding w-100 h-100" (click)="connectVertex()">
+                  Properties
+                </label>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="input-group input-group-sm mb-1">
+                <span class="input-group-text bg-secondary border-secondary col-5">
+                      <small class="text-white">Type</small>
+                   </span>
+                <input class="form-control bg-dark text-white border-secondary" type="text"
+                       placeholder="{{vertex_type}}" readonly>
+              </div>
+            </div>
+            <form #attribute="ngForm" (ngSubmit)="updateAttribute(attribute.value)">
+              <div class="row">
+                 <div class="input-group input-group-sm mb-1">
+                   <span class="input-group-text bg-secondary border-secondary col-5" id="name_attribute">
+                      <small class="text-white">Name</small>
+                   </span>
+                   <input type="text" class="form-control bg-dark text-white border-secondary" ngModel
+                          aria-label="Sizing example input" placeholder="{{vertex_name_menu}}"
+                          aria-describedby="name_attribute" name="attribute_name">
+                 </div>
+              </div>
+              <div class="row">
+                 <div class="input-group input-group-sm mb-1">
+                   <span class="input-group-text bg-secondary border-secondary col-5" id="estimated_time_attribute">
+                      <small class="text-white">Time</small>
+                    </span>
+                   <input type="number" id="estimate_time_min" class="form-control bg-dark text-white border-secondary"
+                          value="{{vertex_min_menu}}" placeholder="min" min="0" aria-label="Sizing example input"  ngModel
+                          aria-describedby="estimated_time_attribute" name="attribute_min">
+                    <input type="number" id="estimate_time_second" class="form-control bg-dark text-white border-secondary"
+                          value="{{vertex_sec_menu}}" placeholder="sec" min="0" max="59" aria-label="Sizing example input" ngModel
+                           aria-describedby="estimated_time_attribute" name="attribute_sec">
+                 </div>
+              </div>
+              <div [hidden]="hideClue" class="row">
+                <div class="input-group input-group-sm mb-1">
+                    <span class="input-group-text bg-secondary border-secondary col-5" id="clue_attribute">
+                     <small class="text-white">Clue</small>
+                   </span>
+                  <input type="text" class="form-control bg-dark text-white border-secondary" ngModel
+                         aria-label="Sizing example input" aria-describedby="clue_attribute" name="attribute_clue"
+                         placeholder="{{vertex_clue_menu}}">
+                </div>
+              </div>
+              <div [hidden]="hidePuzzle" class="row">
+                 <div class="input-group input-group-sm mb-1">
+                   <span class="input-group-text bg-secondary border-secondary col-5" id="description_attribute">
+                     <small class="text-white">Description</small>
+                    </span>
+                   <input type="text" class="form-control bg-dark text-white border-secondary" aria-label="Sizing example input"
+                           aria-describedby="description_attribute" ngModel name="attribute_description"
+                           placeholder="{{vertex_description_menu}}">
+                  </div>
+              </div>
+              <button type="submit" style="display:none">hidden submit</button>
+            </form>
+          </div>
+          <!-- END ATTRIBUTE MENU -->
         </div>
       </div>
     </div>
