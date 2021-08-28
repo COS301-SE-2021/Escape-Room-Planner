@@ -154,9 +154,20 @@ class GeneticAlgorithmService
 
 
   def calculate_fitness(chromosone,i_count,room_id)
+    puts "======================================================================================"
+    puts "==================================Fitness Scores======================================="
+    puts "======================================================================================"
+
+
     # Fitness score out of 100
     set_up_room(chromosone,room_id)
 
+    #init fitness
+    i_init=0
+    while i_init<@initial_population_size
+      @fitness_of_population[i_init]=0
+      i_init+=1
+    end
 
 
     # most important solvable:
@@ -167,12 +178,15 @@ class GeneticAlgorithmService
       vertices[i_vertex_add] = v.id
       i_vertex_add += 1
     end
-    
+
     req = CalculateSolvableRequest.new(EscapeRoom.find_by_id(room_id).startVertex,EscapeRoom.find_by_id(room_id).endVertex,vertices)
     serv = SolvabilityService.new
     resp = serv.calculate_solvability(req)
     unless resp.solvable
       @fitness_of_population[i_count] = 0
+    else
+      @fitness_of_population[i_count]=@fitness_of_population[i_count]+20
+      puts "Fitness of "+(i_count+1).to_s+" :" +@fitness_of_population[i_count].to_s
     end
   end
 
