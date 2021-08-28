@@ -4,6 +4,9 @@ require './app/Services/GeneticAlgorithmSubsystem/Response/genetic_algorithm_res
 require './app/Services/room_services'
 require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
+require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 
 # Graph theory
 # Max number edges undirected graph n(n-1)/2
@@ -26,12 +29,13 @@ class GeneticAlgorithmService
     end
 
 
+    # initial pop
     initial_population_creation(request.vertices)
 
 
     i_count = 0
     while i_count < @initial_population_size
-      calculate_fitness(@initial_population[i_count],i_count,request.room_id)
+      calculate_fitness(@initial_population[i_count], i_count ,request.room_id)
       i_count += 1
     end
 
@@ -150,7 +154,26 @@ class GeneticAlgorithmService
 
 
   def calculate_fitness(chromosone,i_count,room_id)
+    # Fitness score out of 100
     set_up_room(chromosone,room_id)
+
+
+
+    # most important solvable:
+    all = Vertex.all.where(escape_room_id: room_id)
+    i_vertex_add = 0
+    vertices = []
+    all.each do |v|
+      vertices[i_vertex_add] = v.id
+      i_vertex_add += 1
+    end
+    
+    req = CalculateSolvableRequest.new(EscapeRoom.find_by_id(room_id).startVertex,EscapeRoom.find_by_id(room_id).endVertex,vertices)
+    serv = SolvabilityService.new
+    resp = serv.calculate_solvability(req)
+    unless resp.solvable
+      @fitness_of_population[i_count] = 0
+    end
   end
 
   def selection; end
@@ -160,14 +183,11 @@ class GeneticAlgorithmService
   def mutation; end
 
 
-  #helper functions
+  # helper functions
   def set_up_room(chromosone,room_id)
     start_node = find_start(chromosone)
     end_node = find_end(chromosone)
     room = EscapeRoom.find_by_id(room_id)
-
-    # first reset the room
-    Vertex.destroy_by(escape_room_id: room_id).nil?
 
     # add start and end to room
      room.startVertex = start_node
@@ -189,7 +209,7 @@ class GeneticAlgorithmService
           end
         end
 
-      if !found
+      unless found
         goodstart = true
       end
       end
@@ -214,7 +234,7 @@ class GeneticAlgorithmService
            end
          end
 
-         if !found
+         unless found
            goodend = true
          end
        end
