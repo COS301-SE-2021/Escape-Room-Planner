@@ -29,10 +29,10 @@ class GeneticAlgorithmService
     initial_population_creation(request.vertices)
 
 
-    i_count=0
-    while i_count<@initial_population_size
-      calculate_fitness(@initial_population[i_count],i_count)
-      i_count+=1
+    i_count = 0
+    while i_count < @initial_population_size
+      calculate_fitness(@initial_population[i_count],i_count,request.room_id)
+      i_count += 1
     end
 
 
@@ -55,7 +55,7 @@ class GeneticAlgorithmService
     # Single Chromosome
     # Array of 2D arrays for initial population
     @initial_population = []
-    @initial_population_size = 10
+    @initial_population_size = 1
     @fitness_of_population = []
 
     @chromosome_count = 0
@@ -81,11 +81,11 @@ class GeneticAlgorithmService
 
     @initial_population.push(@chromosome)
     puts "             =========================================================================="
-    puts "             ===================Chromosome number:" + (@chromosome_count + 1).to_s + "===================================="
+    puts "             ===================Chromosome number:#{(@chromosome_count + 1).to_s}===================================="
     puts "             =========================================================================="
     i_count = 0
     while i_count < num_edges
-      puts Vertex.find_by_id(@chromosome[i_count][0]).type + ":" + @chromosome[i_count][0].to_s + "," + Vertex.find_by_id(@chromosome[i_count][1]).type + ":" + @chromosome[i_count][1].to_s
+      puts "#{Vertex.find_by_id(@chromosome[i_count][0]).type}:#{@chromosome[i_count][0].to_s},#{Vertex.find_by_id(@chromosome[i_count][1]).type}:#{@chromosome[i_count][1].to_s}"
       i_count += 1
     end
     @initial_population[@chromosome_count] = @chromosome
@@ -149,8 +149,8 @@ class GeneticAlgorithmService
   end
 
 
-  def calculate_fitness(chromosone,i_count)
-    set_up_room(chromosone)
+  def calculate_fitness(chromosone,i_count,room_id)
+    set_up_room(chromosone,room_id)
   end
 
   def selection; end
@@ -161,19 +161,67 @@ class GeneticAlgorithmService
 
 
   #helper functions
-  def set_up_room(chromosone)
-    find_start(chromosone)
+  def set_up_room(chromosone,room_id)
+    start_node = find_start(chromosone)
+    end_node = find_end(chromosone)
+    room = EscapeRoom.find_by_id(room_id)
+
+    # first reset the room
+    Vertex.destroy_by(escape_room_id: room_id).nil?
+
+    # add start and end to room
+     room.startVertex = start_node
+     room.endVertex = end_node
   end
 
   def find_start(chromosone)
-
+    start = chromosone[0][0]
+    goodstart = false
+    found = false
     chromosone.each do |row|
 
+      if Vertex.find_by_id(row[0]).type == "Keys" && !goodstart
+        start = row[0]
+        chromosone.each do |row_inner|
+
+          if row_inner[1] == start
+            found = true
+          end
+        end
+
+      if !found
+        goodstart = true
+      end
+      end
     end
+
+    puts "start_node: #{start.to_s}"
+    start
   end
 
-  def find_end
+  def find_end(chromosone)
+     end_node = chromosone[0][0]
+     goodend = false
+     found = false
+     chromosone.each do |row|
 
+       if Vertex.find_by_id(row[0]).type == "Container" && !goodend
+         end_node = row[0]
+         chromosone.each do |row_inner|
+
+           if row_inner[1] == end_node
+             found = true
+           end
+         end
+
+         if !found
+           goodend = true
+         end
+       end
+     end
+
+     puts "end_node: #{end_node}"
+     end_node
   end
 
 end
