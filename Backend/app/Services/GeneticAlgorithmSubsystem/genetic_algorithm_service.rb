@@ -64,6 +64,14 @@ class GeneticAlgorithmService
     puts '======================================================================================'
     puts '==================================Fitness Scores======================================'
     puts '======================================================================================'
+    # init fitness
+    i_init = 0
+    while i_init < @initial_population_size
+      @fitness_of_population[i_init] = 0
+      i_init += 1
+    end
+
+    # Calculate fitness
     i_count = 0
     while i_count < @initial_population_size
       calculate_fitness(@initial_population[i_count], i_count , request.room_id, request.vertices)
@@ -72,7 +80,24 @@ class GeneticAlgorithmService
     end
 
 
+    puts '======================================================================================'
+    puts '==================================Final Room=========================================='
+    puts '======================================================================================'
+    #Final room setup
+    i_count = 0
+    final_pos = 0
+    highest = @fitness_of_population[i_count]
+    while i_count < @initial_population_size
+      puts highest.to_s + " < "+ @fitness_of_population[i_count].to_s
+      if highest < @fitness_of_population[i_count]
+        final_pos=i_count
 
+        highest = @fitness_of_population[i_count]
+      end
+      i_count += 1
+    end
+    final(@initial_population[final_pos], request.room_id, request.vertices)
+    puts "Room number: "+final_pos.to_s
   end
 
   def initial_population_creation(vertices)
@@ -192,14 +217,6 @@ class GeneticAlgorithmService
     # Fitness score out of 100
     set_up_room(chromosone, room_id, vertices)
 
-    # init fitness
-    i_init = 0
-    while i_init < @initial_population_size
-      @fitness_of_population[i_init] = 0
-      i_init += 1
-    end
-
-
     # most important solvable:
     all = Vertex.all.where(escape_room_id: room_id)
     i_vertex_add = 0
@@ -228,7 +245,7 @@ class GeneticAlgorithmService
     end
 
     # Value num dead nodes
-    req = ReturnUnnecessaryRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex,room_id)
+    req = ReturnUnnecessaryRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex, room_id)
     serv = SolvabilityService.new
     resp = serv.find_all_paths_service(req)
     resp.vertices.each do |v|
@@ -247,6 +264,10 @@ class GeneticAlgorithmService
   def crossover; end
 
   def mutation; end
+
+  def final(chromosone, room_id, vertices)
+    set_up_room(chromosone, room_id, vertices)
+  end
 
 
   # helper functions
