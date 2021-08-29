@@ -22,15 +22,15 @@ class GeneticAlgorithmService
     puts "====================================GA Starts========================================="
     puts "======================================================================================"
 
-    # Manipulate this if you want to mess with the initial edges for accuracy
-    @max_edge_initial_factor = 0.25
-    @min_edge_initial_factor = 0.5
 
-    if request.vertices.nil? || request.linear.nil? || request.dead_nodes.nil?
+
+    if request.vertices.nil? || request.linear.nil? || request.dead_nodes.nil? || request.vertices.nil?
       GeneticAlgorithmResponse.new('False', 'Parameters required')
     end
 
-
+    # Manipulate this if you want to mess with the initial edges for accuracy
+    @max_edge_initial_factor = 0.15 - (request.vertices.count / 100)
+    @min_edge_initial_factor = 0.5
 
     # initial pop
     initial_population_creation(request.vertices)
@@ -197,9 +197,9 @@ class GeneticAlgorithmService
     resp = serv.calculate_solvability(req)
 
     if !resp.solvable
-      @fitness_of_population[i_count] = 0
+      @fitness_of_population[i_count] -= 10
     else
-      @fitness_of_population[i_count] = 10
+      @fitness_of_population[i_count] += 40
     end
   end
 

@@ -544,3 +544,78 @@ GA11:
   graphicid: MyString
   escape_room_id: 5
   blob_id: 1
+
+GA12:
+  id: 212
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA13:
+  id: 213
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA14:
+  id: 214
+  type: Keys
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA15:
+  id: 215
+  type: Keys
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+
+GA16:
+  id: 216
+  type: Container
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA17:
+  id: 217
+  type: Container
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+
