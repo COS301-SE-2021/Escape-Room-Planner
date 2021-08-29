@@ -5,7 +5,9 @@ require './app/Services/room_services'
 require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvabily_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
 require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 
 # Graph theory
@@ -165,13 +167,21 @@ class GeneticAlgorithmService
     # Fitness score out of 100
     set_up_room(chromosone, room_id, vertices)
 
-    #init fitness
+    # init fitness
     i_init = 0
     while i_init < @initial_population_size
       @fitness_of_population[i_init] = 0
       i_init += 1
     end
-    #
+
+    # Value num paths
+
+    req = FindAllPathsRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex)
+    serv = SolvabilityService.new
+    resp = serv.find_all_paths_service(req)
+    resp.vertices.each do |v|
+      @fitness_of_population[i_count] += 10
+    end
 
     # most important solvable:
     all = Vertex.all.where(escape_room_id: room_id)
