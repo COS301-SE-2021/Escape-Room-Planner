@@ -217,7 +217,6 @@ class GeneticAlgorithmService
         from_vertex = Vertex.find_by_id(from)
         to_vertex = from_vertex.vertices.find_by_id(to)
         unless to_vertex.nil?
-          puts "Deleting : #{from.to_s},#{to.to_s}"
           from_vertex.vertices.delete(to)
         end
       end
