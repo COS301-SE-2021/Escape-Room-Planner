@@ -17,10 +17,10 @@ require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 class GeneticAlgorithmService
 
   def genetic_algorithm(request)
-    puts ""
-    puts "======================================================================================"
-    puts "====================================GA Starts========================================="
-    puts "======================================================================================"
+    puts ''
+    puts '======================================================================================'
+    puts '====================================GA Starts========================================='
+    puts '======================================================================================'
 
 
 
@@ -32,13 +32,36 @@ class GeneticAlgorithmService
     @max_edge_initial_factor = 0.15 - (request.vertices.count / 100)
     @min_edge_initial_factor = 0.5
 
+
+
+    # set manipulable variables
+    @path_weight = 5
+    case request.linear
+    when 'low'
+      @path_weight = 10
+    when 'med'
+      @path_weight = 5
+    when 'high'
+      @path_weight = 0
+    end
+
+    @dead_nodes_weight = 2
+    case request.dead_nodes
+    when 'low'
+      @path_weight = 4
+    when 'med'
+      @path_weight = 2
+    when 'high'
+      @path_weight = 0
+    end
+
     # initial pop
     initial_population_creation(request.vertices)
 
 
-    puts "======================================================================================"
-    puts "==================================Fitness Scores======================================"
-    puts "======================================================================================"
+    puts '======================================================================================'
+    puts '==================================Fitness Scores======================================'
+    puts '======================================================================================'
     i_count = 0
     while i_count < @initial_population_size
       calculate_fitness(@initial_population[i_count], i_count , request.room_id, request.vertices)
@@ -51,9 +74,9 @@ class GeneticAlgorithmService
   end
 
   def initial_population_creation(vertices)
-    puts "======================================================================================"
-    puts "==================================Initial Pop========================================="
-    puts "======================================================================================"
+    puts '======================================================================================'
+    puts '==================================Initial Pop========================================='
+    puts '======================================================================================'
 
     # Max edges = n(n-1)
     max_edges = ((vertices.count) * (vertices.count - 1) * @max_edge_initial_factor).round
@@ -91,9 +114,9 @@ class GeneticAlgorithmService
     end
 
     @initial_population.push(@chromosome)
-    puts "             =========================================================================="
+    puts '             =========================================================================='
     puts "             ===================Chromosome number:#{(@chromosome_count + 1).to_s}===================================="
-    puts "             =========================================================================="
+    puts '             =========================================================================='
     i_count = 0
     while i_count < num_edges
       puts "#{Vertex.find_by_id(@chromosome[i_count][0]).type}:#{@chromosome[i_count][0].to_s},#{Vertex.find_by_id(@chromosome[i_count][1]).type}:#{@chromosome[i_count][1].to_s}"
@@ -161,9 +184,9 @@ class GeneticAlgorithmService
 
 
   def calculate_fitness(chromosone, i_count, room_id, vertices)
-    puts "             =========================================================================="
+    puts '             =========================================================================='
     puts "             ===================Chromosome number:#{(i_count + 1).to_s}===================================="
-    puts "             =========================================================================="
+    puts '             =========================================================================='
     # Fitness score out of 100
     set_up_room(chromosone, room_id, vertices)
 
@@ -246,7 +269,7 @@ class GeneticAlgorithmService
     found = false
     chromosone.each do |row|
 
-      if Vertex.find_by_id(row[0]).type == "Keys" && !goodstart
+      if Vertex.find_by_id(row[0]).type == 'Keys' && !goodstart
         start = row[0]
         chromosone.each do |row_inner|
 
@@ -271,7 +294,7 @@ class GeneticAlgorithmService
     found = false
     chromosone.each do |row|
 
-      if Vertex.find_by_id(row[0]).type == "Container" && !goodend
+      if Vertex.find_by_id(row[0]).type == 'Container' && !goodend
         end_node = row[0]
         chromosone.each do |row_inner|
 
