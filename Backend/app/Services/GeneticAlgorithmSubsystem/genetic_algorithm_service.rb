@@ -40,7 +40,7 @@ class GeneticAlgorithmService
     i_count = 0
     while i_count < @initial_population_size
       calculate_fitness(@initial_population[i_count], i_count , request.room_id, request.vertices)
-      puts "Fitness of "+(i_count+1).to_s+" :" +@fitness_of_population[i_count].to_s
+      puts "Fitness of #{(i_count+1).to_s} :#{@fitness_of_population[i_count].to_s}"
       i_count += 1
     end
 
@@ -185,7 +185,8 @@ class GeneticAlgorithmService
     req = CalculateSolvableRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex, vertices)
     serv = SolvabilityService.new
     resp = serv.calculate_solvability(req)
-    unless resp.solvable
+
+    if !resp.solvable
       @fitness_of_population[i_count] = 0
     else
       @fitness_of_population[i_count] = 10
@@ -205,22 +206,23 @@ class GeneticAlgorithmService
     end_node = find_end(chromosone)
     room = EscapeRoom.find_by_id(room_id)
 
+    # add start and end to room
+    room.startVertex = start_node
+    room.endVertex = end_node
+    room.save!
+
     # clear connections
     vertices.each do |from|
       vertices.each do |to|
         from_vertex = Vertex.find_by_id(from)
         to_vertex = from_vertex.vertices.find_by_id(to)
         unless to_vertex.nil?
-          puts "Deleting : "+ from.to_s+","+to.to_s
+          puts "Deleting : #{from.to_s},#{to.to_s}"
           from_vertex.vertices.delete(to)
         end
       end
     end
 
-
-    # add start and end to room
-     room.startVertex = start_node
-     room.endVertex = end_node
   end
 
   def find_start(chromosone)

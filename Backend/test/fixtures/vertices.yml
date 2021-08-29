@@ -411,3 +411,76 @@ k12:
   graphicid: MyString
   escape_room_id: 3
   blob_id: 1
+
+#GA graph
+GA1:
+  id: 201
+  type: Keys
+  name: one
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 0
+
+GA2:
+  id: 202
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA3:
+  id: 203
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA4:
+  id: 204
+  type: Keys
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA5:
+  id: 205
+  type: Container
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
+
+GA6:
+  id: 206
+  type: Puzzle
+  name: two
+  posx: 1
+  posy: 1
+  width: 1.5
+  height: 1.5
+  graphicid: MyString
+  escape_room_id: 5
+  blob_id: 1
