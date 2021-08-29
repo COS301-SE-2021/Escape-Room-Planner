@@ -1,5 +1,5 @@
 require './app/Services/services_helper'
-require './app/Services/GeneticAlgorithmSubsystem/SolvabilityServices'
+require './app/Services/GeneticAlgorithmSubsystem/genetic_algorithm_service'
 require './app/Services/GeneticAlgorithmSubsystem/Request/genetic_algorithm_request'
 require './app/Services/GeneticAlgorithmSubsystem/Response/genetic_algorithm_response'
 
