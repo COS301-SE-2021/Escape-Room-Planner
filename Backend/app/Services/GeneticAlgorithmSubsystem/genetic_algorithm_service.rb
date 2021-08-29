@@ -29,13 +29,18 @@ class GeneticAlgorithmService
     end
 
 
+
     # initial pop
     initial_population_creation(request.vertices)
 
 
+    puts "======================================================================================"
+    puts "==================================Fitness Scores======================================"
+    puts "======================================================================================"
     i_count = 0
     while i_count < @initial_population_size
-      calculate_fitness(@initial_population[i_count], i_count ,request.room_id)
+      calculate_fitness(@initial_population[i_count], i_count , request.room_id, request.vertices)
+      puts "Fitness of "+(i_count+1).to_s+" :" +@fitness_of_population[i_count].to_s
       i_count += 1
     end
 
@@ -59,7 +64,7 @@ class GeneticAlgorithmService
     # Single Chromosome
     # Array of 2D arrays for initial population
     @initial_population = []
-    @initial_population_size = 1
+    @initial_population_size = 10
     @fitness_of_population = []
 
     @chromosome_count = 0
@@ -132,7 +137,7 @@ class GeneticAlgorithmService
       while i_test <= i_count
         if @chromosome[i_test][0] == @vertex1 && @chromosome[i_test][1] == @vertex2
           if @i_stop < 5
-             @i_stop += 1
+            @i_stop += 1
              return_vertices(vert, i_count)
           end
         end
@@ -153,14 +158,12 @@ class GeneticAlgorithmService
   end
 
 
-  def calculate_fitness(chromosone,i_count,room_id)
-    puts "======================================================================================"
-    puts "==================================Fitness Scores======================================="
-    puts "======================================================================================"
-
-
+  def calculate_fitness(chromosone, i_count, room_id, vertices)
+    puts "             =========================================================================="
+    puts "             ===================Chromosome number:#{(i_count + 1).to_s}===================================="
+    puts "             =========================================================================="
     # Fitness score out of 100
-    set_up_room(chromosone,room_id)
+    set_up_room(chromosone, room_id, vertices)
 
     #init fitness
     i_init=0
@@ -168,7 +171,7 @@ class GeneticAlgorithmService
       @fitness_of_population[i_init]=0
       i_init+=1
     end
-
+    #
 
     # most important solvable:
     all = Vertex.all.where(escape_room_id: room_id)
@@ -179,14 +182,13 @@ class GeneticAlgorithmService
       i_vertex_add += 1
     end
 
-    req = CalculateSolvableRequest.new(EscapeRoom.find_by_id(room_id).startVertex,EscapeRoom.find_by_id(room_id).endVertex,vertices)
+    req = CalculateSolvableRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex, vertices)
     serv = SolvabilityService.new
     resp = serv.calculate_solvability(req)
     unless resp.solvable
       @fitness_of_population[i_count] = 0
     else
-      @fitness_of_population[i_count]=@fitness_of_population[i_count]+20
-      puts "Fitness of "+(i_count+1).to_s+" :" +@fitness_of_population[i_count].to_s
+      @fitness_of_population[i_count] = 10
     end
   end
 
@@ -198,10 +200,23 @@ class GeneticAlgorithmService
 
 
   # helper functions
-  def set_up_room(chromosone,room_id)
+  def set_up_room(chromosone, room_id, vertices)
     start_node = find_start(chromosone)
     end_node = find_end(chromosone)
     room = EscapeRoom.find_by_id(room_id)
+
+    # clear connections
+    vertices.each do |from|
+      vertices.each do |to|
+        from_vertex = Vertex.find_by_id(from)
+        to_vertex = from_vertex.vertices.find_by_id(to)
+        unless to_vertex.nil?
+          puts "Deleting : "+ from.to_s+","+to.to_s
+          from_vertex.vertices.delete(to)
+        end
+      end
+    end
+
 
     # add start and end to room
      room.startVertex = start_node
@@ -234,7 +249,7 @@ class GeneticAlgorithmService
   end
 
   def find_end(chromosone)
-     end_node = chromosone[0][0]
+    end_node = chromosone[0][0]
      goodend = false
      found = false
      chromosone.each do |row|
