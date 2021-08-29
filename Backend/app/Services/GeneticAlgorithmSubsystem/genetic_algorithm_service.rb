@@ -8,6 +8,8 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
 require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 
 # Graph theory
@@ -35,12 +37,12 @@ class GeneticAlgorithmService
 
 
     # set manipulable variables
-    @path_weight = 5
+    @path_weight = 4
     case request.linear
     when 'low'
-      @path_weight = 10
+      @path_weight = 4
     when 'med'
-      @path_weight = 5
+      @path_weight = 2
     when 'high'
       @path_weight = 0
     end
@@ -48,11 +50,11 @@ class GeneticAlgorithmService
     @dead_nodes_weight = 2
     case request.dead_nodes
     when 'low'
-      @path_weight = 4
+      @dead_nodes_weight  = 2
     when 'med'
-      @path_weight = 2
+      @dead_nodes_weight  = 1
     when 'high'
-      @path_weight = 0
+      @dead_nodes_weight  = 0
     end
 
     # initial pop
@@ -197,14 +199,6 @@ class GeneticAlgorithmService
       i_init += 1
     end
 
-    # Value num paths
-
-    req = FindAllPathsRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex)
-    serv = SolvabilityService.new
-    resp = serv.find_all_paths_service(req)
-    resp.vertices.each do |v|
-      @fitness_of_population[i_count] += 10
-    end
 
     # most important solvable:
     all = Vertex.all.where(escape_room_id: room_id)
@@ -224,7 +218,29 @@ class GeneticAlgorithmService
     else
       @fitness_of_population[i_count] += 40
     end
+
+    # Value num paths
+    req = FindAllPathsRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex)
+    serv = SolvabilityService.new
+    resp = serv.find_all_paths_service(req)
+    resp.vertices.each do |v|
+      @fitness_of_population[i_count] += @path_weight
+    end
+
+    # Value num dead nodes
+    req = ReturnUnnecessaryRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex,room_id)
+    serv = SolvabilityService.new
+    resp = serv.find_all_paths_service(req)
+    resp.vertices.each do |v|
+      @fitness_of_population[i_count] += @dead_nodes_weight
+    end
+
+    # If start == end disgard this vertex
+    if (EscapeRoom.find_by_id(room_id).startVertex == EscapeRoom.find_by_id(room_id).endVertex)
+      @fitness_of_population[i_count] = -20
+    end
   end
+
 
   def selection; end
 
