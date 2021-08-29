@@ -40,7 +40,7 @@ class GeneticAlgorithmService
     i_count = 0
     while i_count < @initial_population_size
       calculate_fitness(@initial_population[i_count], i_count , request.room_id, request.vertices)
-      puts "Fitness of #{(i_count+1).to_s} :#{@fitness_of_population[i_count].to_s}"
+      puts "Fitness of #{(i_count + 1).to_s} :#{@fitness_of_population[i_count].to_s}"
       i_count += 1
     end
 
@@ -82,9 +82,9 @@ class GeneticAlgorithmService
 
     while i_count < num_edges
       @i_stop = 0
-       return_vertices(vertices, i_count)
-       @chromosome[i_count][0] = @vertex1
-       @chromosome[i_count][1] = @vertex2
+      return_vertices(vertices, i_count)
+      @chromosome[i_count][0] = @vertex1
+      @chromosome[i_count][1] = @vertex2
       i_count += 1
     end
 
@@ -138,7 +138,7 @@ class GeneticAlgorithmService
         if @chromosome[i_test][0] == @vertex1 && @chromosome[i_test][1] == @vertex2
           if @i_stop < 5
             @i_stop += 1
-             return_vertices(vert, i_count)
+            return_vertices(vert, i_count)
           end
         end
         i_test += 1
@@ -166,10 +166,10 @@ class GeneticAlgorithmService
     set_up_room(chromosone, room_id, vertices)
 
     #init fitness
-    i_init=0
-    while i_init<@initial_population_size
-      @fitness_of_population[i_init]=0
-      i_init+=1
+    i_init = 0
+    while i_init < @initial_population_size
+      @fitness_of_population[i_init] = 0
+      i_init += 1
     end
     #
 
@@ -223,6 +223,12 @@ class GeneticAlgorithmService
       end
     end
 
+    chromosone.each do |connection|
+      from_vertex = Vertex.find_by_id(connection[0])
+      to_vertex = Vertex.find_by_id(connection[1])
+      from_vertex.vertices.append(to_vertex)
+    end
+
   end
 
   def find_start(chromosone)
@@ -240,9 +246,9 @@ class GeneticAlgorithmService
           end
         end
 
-      unless found
-        goodstart = true
-      end
+        unless found
+          goodstart = true
+        end
       end
     end
 
@@ -252,27 +258,27 @@ class GeneticAlgorithmService
 
   def find_end(chromosone)
     end_node = chromosone[0][0]
-     goodend = false
-     found = false
-     chromosone.each do |row|
+    goodend = false
+    found = false
+    chromosone.each do |row|
 
-       if Vertex.find_by_id(row[0]).type == "Container" && !goodend
-         end_node = row[0]
-         chromosone.each do |row_inner|
+      if Vertex.find_by_id(row[0]).type == "Container" && !goodend
+        end_node = row[0]
+        chromosone.each do |row_inner|
 
-           if row_inner[1] == end_node
-             found = true
-           end
-         end
+          if row_inner[1] == end_node
+            found = true
+          end
+        end
 
-         unless found
-           goodend = true
-         end
-       end
-     end
+        unless found
+          goodend = true
+        end
+      end
+    end
 
-     puts "end_node: #{end_node}"
-     end_node
+    puts "end_node: #{end_node}"
+    end_node
   end
 
 end

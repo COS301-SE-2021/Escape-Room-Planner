@@ -22,7 +22,6 @@ class SolvabilityService
   end
 
   def calculate_solvability(request)
-    puts "here for: "+ request.startVert.to_s
     return CalculateSolvableResponse.new(false, 'Parameters in request object cannot be null') if request.nil?
 
     return CalculateSolvableResponse.new(false, 'Parameters in request object cannot be null') if request.startVert.nil? || request.endVert.nil?
