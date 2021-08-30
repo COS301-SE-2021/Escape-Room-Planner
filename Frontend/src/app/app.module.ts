@@ -26,7 +26,7 @@ const routes: Routes = [
   { path: 'escape-room', component: RoomCreatorComponent},
   { path: 'escape', component: DependencyDiagramComponent },
   // otherwise redirect to login
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'escape' }
 ];
 
 @NgModule({
