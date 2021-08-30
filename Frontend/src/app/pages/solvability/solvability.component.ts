@@ -31,6 +31,7 @@ export class SolvabilityComponent implements OnInit {
   }
 
   getInitialVertices():void{
+    console.log(this._current_room_id)
     this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this._current_room_id, {"headers": this.headers}).subscribe(
       response => {
 
