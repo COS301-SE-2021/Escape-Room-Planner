@@ -744,6 +744,23 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
 
   GenerateRoomGA() {
+    let connection = {
+      room_id: this.currentRoomId,
+      linear: "med",
+      dead_nodes: "med"
+    };
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/genetic_algorithm/", connection , {"headers": this.headers}).subscribe(
+      resp => {
+        console.log(resp)
+        //  let order =[]
+        //  let i=0
+        this.changeRoom(this.currentRoomId)
+        window.location.reload();
+
+      },
+      error => console.error('', error)
+    );
+
 
   }
 }
