@@ -22,10 +22,9 @@ class SolvabilityService
   end
 
   def calculate_solvability(request)
+    return CalculateSolvableResponse.new(false, 'Parameters in request object cannot be null') if request.nil?
 
-    raise 'Solvability Request cant be null' if request.nil?
-
-    raise 'Parameters in request object cannot be null' if request.startVert.nil? || request.endVert.nil?
+    return CalculateSolvableResponse.new(false, 'Parameters in request object cannot be null') if request.startVert.nil? || request.endVert.nil?
 
     @reason = 'No reason given'
     CalculateSolvableResponse.new(detect_cycle(request), @reason)
@@ -97,7 +96,6 @@ class SolvabilityService
     key_const = 'Keys'
     container_const = 'Container'
     puzzle_const = 'Puzzle'
-    puts id
     unless Vertex.find_by_id(id).estimatedTime.nil?
       @total_time += Vertex.find_by_id(id).estimatedTime.to_i
     else

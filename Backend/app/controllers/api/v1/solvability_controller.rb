@@ -55,7 +55,6 @@ module Api
         end
 
         if operation == 'EstimatedTime'
-          puts "here"
           estimated_time(start_vert, end_vert)
         end
 
@@ -129,7 +128,6 @@ module Api
 
         req = CalculateEstimatedTimeRequest.new(start_vert, end_vert)
         serv = SolvabilityService.new
-        puts "seven"
         resp = serv.calculate_estimated_time(req)
 
 
