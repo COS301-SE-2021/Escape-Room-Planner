@@ -172,6 +172,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.solveComponent?.getInitialVertices();
   }
 
+  changeRoomByID(id: any){
+    this.currentRoomId=id
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
+    //load the vertices for the newly selected room
+    this.getVertexFromRoom();
+    this.solveComponent?.getInitialVertices();
+  }
+
   // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
@@ -743,6 +752,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
 
+  GenerateRoomGA() {
+    let connection = {
+      room_id: this.currentRoomId,
+      linear: "med",
+      dead_nodes: "med"
+    };
+    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/genetic_algorithm/", connection , {"headers": this.headers}).subscribe(
+      resp => {
+        console.log(resp)
+        //  let order =[]
+        //  let i=0
+        this.changeRoomByID(this.currentRoomId)
+
+      },
+      error => console.error('', error)
+    );
+
+
+  }
 }
 
 // For Vertex Response
