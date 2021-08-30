@@ -10,7 +10,10 @@ declare var mxHierarchicalLayout: any;
 })
 
 export class DependencyDiagramComponent implements AfterViewInit {
-  // @ViewChild('graphContainer') graphContainer: ElementRef;
+   constructor(private vertexService: VertexService) {}
+
+  //Get the vertex of the graph
+
   @ViewChild('graphContainer') graphContainer!: ElementRef;
   ngAfterViewInit() {
     const graph = new mxGraph(this.graphContainer.nativeElement);
@@ -19,17 +22,14 @@ export class DependencyDiagramComponent implements AfterViewInit {
       graph.getModel().beginUpdate();
       const vertex1 = graph.insertVertex(parent, '1', 'Vertex 1', 0, 0, 200, 80);
       const vertex2 = graph.insertVertex(parent, '2', 'Vertex 2', 0, 0, 200, 80);
+      const vertex3 = graph.insertVertex(parent, '3', 'Vertex 3', 0, 0, 200, 80);
+      const vertex4 = graph.insertVertex(parent, '4', 'Vertex 4', 0, 0, 200, 80);
       graph.insertEdge(parent, '', '', vertex1, vertex2);
+      graph.insertEdge(parent, '', '', vertex1, vertex4);
+      graph.insertEdge(parent, '', '', vertex2, vertex3);
     } finally {
       graph.getModel().endUpdate();
       new mxHierarchicalLayout(graph).execute(graph.getDefaultParent());
     }
   }
 }
-// export class DependencyDiagramComponent implements OnInit {
-//
-//   constructor(private vertexService: VertexService) { }
-//
-//   ngOnInit(): void {}
-//
-// }
