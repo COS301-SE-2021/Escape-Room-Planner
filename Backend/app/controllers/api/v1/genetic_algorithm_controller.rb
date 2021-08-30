@@ -9,9 +9,10 @@ module Api
   module V1
     # Controller that maps http requests to functions to execute
     class GeneticAlgorithmController < ApplicationController
+      protect_from_forgery with: :null_session
       def create
 
-        room_id=params[:room_id]
+        room_id = params[:room_id]
         linear = params[:linear]
         dead_nodes = params[:dead_nodes]
         all = Vertex.all.where(escape_room_id: room_id)

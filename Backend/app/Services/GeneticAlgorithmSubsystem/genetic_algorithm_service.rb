@@ -33,6 +33,7 @@ class GeneticAlgorithmService
     # Manipulate this if you want to mess with the initial edges for accuracy
     @max_edge_initial_factor = 0.15 - (request.vertices.count / 100)
     @min_edge_initial_factor = 0.5
+    @number_of_runs = 100
 
 
 
@@ -106,7 +107,8 @@ class GeneticAlgorithmService
     puts '======================================================================================'
 
     # Max edges = n(n-1)
-    max_edges = ((vertices.count) * (vertices.count - 1) * @max_edge_initial_factor).round
+    # initial calc: ((vertices.count) * (vertices.count - 1) * @max_edge_initial_factor).round
+    max_edges = vertices.count + ((vertices.count)/2).round
     puts "Max edges: #{max_edges}"
 
     # Min edges = n-1
