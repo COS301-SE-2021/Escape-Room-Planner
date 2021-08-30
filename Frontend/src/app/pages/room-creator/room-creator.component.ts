@@ -117,7 +117,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //MAKE API CALL BASED ON TYPE
     let name : string = "Object";       //default name
     let description : string = "Works";  //default description
-    this.createVertex(event.type, name, event.loc, 0, this.lastPos, 75, 75, new Date(), description, this.currentRoomId, 'some clue', event.src, event.blob_id);
+    this.createVertex(event.type, name, event.loc, 0, this.lastPos, 75, 75, 0, description, this.currentRoomId, 'some clue', event.src, event.blob_id);
     //spawns object on plane
   }
 
@@ -395,7 +395,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //creates Vertex of type with scale at position x,y
   createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
-               inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: Date,
+               inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: number,
                inDescription: string, inRoom_id: number, inClue: string, src:string, blob_id: number): void
   {
     let createVertexBody = {type: inType,
@@ -415,8 +415,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     if(inType != "Puzzle"){
       // @ts-ignore
       delete  createVertexBody.description;
-      // @ts-ignore
-      delete  createVertexBody.estimated_time;
     }
     // removes parameters for clue
     if (inType != 'Clue'){

@@ -19,20 +19,22 @@ export class VertexService {
 
   addVertex(inId:number, inType: string, inName: string, inGraphicID: string,
             inPos_y: number, inPos_x: number, inWidth: number,
-            inHeight: number, inEstimated_time: Date, inDescription: string, inClue: string, z_index: number): number {
+            inHeight: number, inEstimated_time: number, inDescription: string, inClue: string, z_index: number): number {
     let new_vertex = null;
+    if(inEstimated_time === null)
+      inEstimated_time = 0;
     if (inType === "Clue") {
       new_vertex = new Clue(this._local_id_count++, inId, inName,
                             inPos_x, inPos_y, inWidth, inHeight,
-                            inGraphicID, inClue, z_index);
+                            inGraphicID, inEstimated_time, inClue, z_index);
     } else if (inType === "Container") {
       new_vertex = new Container(this._local_id_count++, inId, inName,
                                  inPos_x, inPos_y, inWidth, inHeight,
-                                  inGraphicID, z_index);
+                                  inGraphicID, inEstimated_time, z_index);
     }  else if (inType === "Keys")  {
       new_vertex = new Key(this._local_id_count++, inId, inName,
                            inPos_x, inPos_y, inWidth, inHeight,
-                           inGraphicID,  z_index);
+                           inGraphicID, inEstimated_time, z_index);
 
     } else if(inType === "Puzzle"){
       new_vertex = new Puzzle(this._local_id_count++, inId, inName,
