@@ -203,6 +203,9 @@ class RoomServices
       :width,
       :height,
       :graphicid,
+      :clue,
+      :description,
+      :estimatedTime,
       :blob_id,
       :z_index
     ).where(escape_room_id: request.id)

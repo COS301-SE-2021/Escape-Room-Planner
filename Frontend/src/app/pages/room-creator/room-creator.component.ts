@@ -245,12 +245,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
         response => {
           //render all the vertices
+          console.log(response.data);
           for (let vertex_t of response.data) {
             //spawn objects out;
             let vertex = vertex_t.vertex
             let vertex_type = vertex_t.type;
             let vertex_connections = vertex_t.connections;
-
             let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
               vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
               vertex.description, vertex.clue, vertex.z_index);
@@ -742,7 +742,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let y_pos = this._target_vertex.getAttribute("data-y");
 
     this.resetAttributeMenuValue();
-    console.log(vertex.name);
     this.vertex_name_menu = vertex.name;
     let min = ~~(vertex.estimated_time/60);
     let sec = vertex.estimated_time%60;
