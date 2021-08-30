@@ -10,7 +10,7 @@
   </div>
 
 </div>
-<div  [hidden]="!backdrop_div.hidden"  class="container-fluid remove-padding room-creater-margin-top" (click)="hideContextMenu($event)">
+<div  [hidden]="!backdrop_div.hidden"  class="container-fluid remove-padding room-creater-margin-top" (click)="hideMenus($event)">
   <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row room-creater-space">
 
@@ -113,7 +113,7 @@
           <div id="attribute_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute; z-index: 99999999" [hidden]="true" #attributeMenu>
             <div class="row">
               <div class="col">
-                <label  class="text-center remove-padding w-100 h-100" (click)="connectVertex()">
+                <label  data-close="true" class="text-center remove-padding w-100 h-100" (click)="connectVertex()">
                   Properties
                 </label>
               </div>
@@ -124,7 +124,7 @@
                 <span class="input-group-text bg-secondary border-secondary col-5">
                       <small class="text-white">Type</small>
                    </span>
-                <input class="form-control bg-dark text-white border-secondary" type="text"
+                <input class="form-control bg-dark text-white border-secondary" type="text" data-close="true"
                        placeholder="{{vertex_type}}" readonly>
               </div>
             </div>
@@ -136,7 +136,7 @@
                    </span>
                    <input type="text" class="form-control bg-dark text-white border-secondary" ngModel
                           aria-label="Sizing example input" placeholder="{{vertex_name_menu}}"
-                          aria-describedby="name_attribute" name="attribute_name">
+                          aria-describedby="name_attribute" name="attribute_name" data-close="true">
                  </div>
               </div>
               <div class="row">
@@ -146,10 +146,10 @@
                     </span>
                    <input type="number" class="form-control bg-dark text-white border-secondary"
                           placeholder="{{vertex_min_menu}}" min="0" aria-label="Sizing example input"  ngModel
-                          aria-describedby="estimated_time_attribute" name="attribute_min">
+                          aria-describedby="estimated_time_attribute" name="attribute_min" data-close="true">
                    <input type="number" class="form-control bg-dark text-white border-secondary"
                           placeholder="{{vertex_sec_menu}}" min="0" max="59" aria-label="Sizing example input" ngModel
-                          aria-describedby="estimated_time_attribute" name="attribute_sec">
+                          aria-describedby="estimated_time_attribute" name="attribute_sec" data-close="true">
                  </div>
               </div>
               <div [hidden]="hideClue" class="row">
@@ -159,7 +159,7 @@
                    </span>
                   <input type="text" class="form-control bg-dark text-white border-secondary" ngModel
                          aria-label="Sizing example input" aria-describedby="clue_attribute" name="attribute_clue"
-                         placeholder="{{vertex_clue_menu}}">
+                         placeholder="{{vertex_clue_menu}}" data-close="true">
                 </div>
               </div>
               <div [hidden]="hidePuzzle" class="row">
@@ -169,10 +169,10 @@
                     </span>
                    <input type="text" class="form-control bg-dark text-white border-secondary" aria-label="Sizing example input"
                            aria-describedby="description_attribute" ngModel name="attribute_description"
-                           placeholder="{{vertex_description_menu}}">
+                           placeholder="{{vertex_description_menu}}" data-close="true">
                   </div>
               </div>
-              <button type="submit" style="display:none">hidden submit</button>
+              <button type="submit" style="display:none" data-close="true">hidden submit</button>
             </form>
           </div>
           <!-- END ATTRIBUTE MENU -->

@@ -245,7 +245,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
         response => {
           //render all the vertices
-          console.log(response.data);
           for (let vertex_t of response.data) {
             //spawn objects out;
             let vertex = vertex_t.vertex
@@ -773,12 +772,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   // hides the context menu
-  hideContextMenu(event:any): void{
+  hideMenus(event:any): void{
     if (!event.target.getAttribute('data-close')){
       // @ts-ignore
       this.contextMenuRef?.nativeElement.hidden = true;
       // @ts-ignore
-      //this.attributeMenuRef?.nativeElement.hidden = true;
+      this.attributeMenuRef?.nativeElement.hidden = true;
     }
   }
 
