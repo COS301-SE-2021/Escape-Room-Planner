@@ -743,6 +743,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
 
+  GenerateRoomGA() {
+
+  }
 }
 
 // For Vertex Response

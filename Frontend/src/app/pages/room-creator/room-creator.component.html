@@ -3,6 +3,7 @@
   <div class="row">
 
     <!-- INVENTORY STARTS HERE -->
+    <button  type="button" mdbBtn color="primary" mdbWavesEffect (click)="GenerateRoomGA()">AI do your magic!</button>
     <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
