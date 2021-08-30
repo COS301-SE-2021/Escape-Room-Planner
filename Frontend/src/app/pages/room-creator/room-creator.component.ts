@@ -172,6 +172,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.solveComponent?.getInitialVertices();
   }
 
+  changeRoomByID(id: any){
+    this.currentRoomId=id
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.textContent = ""; // textContent is faster that innerHTML since doesn't invoke browser HTML parser
+    //load the vertices for the newly selected room
+    this.getVertexFromRoom();
+    this.solveComponent?.getInitialVertices();
+  }
+
   // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
@@ -754,8 +763,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         console.log(resp)
         //  let order =[]
         //  let i=0
-        this.changeRoom(this.currentRoomId)
-        window.location.reload();
+        this.changeRoomByID(this.currentRoomId)
 
       },
       error => console.error('', error)
