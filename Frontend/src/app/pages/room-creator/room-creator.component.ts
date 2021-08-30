@@ -31,6 +31,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public hasRooms:boolean = true;
   public hideClue:boolean = true;
   public hidePuzzle:boolean = true;
+  public  zoomValue: number = 1.0;
 
   private _room_count:number = 0;
   private _target_vertex: any;
@@ -219,7 +220,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.httpClient.get<any>('http://127.0.0.1:3000/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
         response =>{
           for ( let room_image of response.data){
-            console.log(room_image);
+
             this.spawnRoom(
               room_image.room_image.pos_x,
               room_image.room_image.pos_y,
@@ -537,6 +538,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setAttribute(newRoomImage,"src", src);
     this.renderer.setAttribute(newRoomImage,"data-x", x.toString());
     this.renderer.setAttribute(newRoomImage,"data-y", y.toString());
+    //attrs for zoom
+    this.renderer.setAttribute(newRoomImage,"data-norm-x",(x/this.zoomValue).toString());
+    this.renderer.setAttribute(newRoomImage,"data-norm-y",(y/this.zoomValue).toString());
+    this.renderer.setAttribute(newRoomImage,"data-norm-width",(width/this.zoomValue).toString());
+    this.renderer.setAttribute(newRoomImage,"data-norm-height",(height/this.zoomValue).toString());
     // event listeners
     this.renderer.listen(newRoomImage,"mouseup", (event) => this.updateRoomImage(event));
     this.renderer.listen(newRoomImage,"contextmenu", (event) => {
@@ -549,19 +555,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   updateRoomImage(event: any): void{
     let roomImage = event.target;
 
-    console.log(roomImage)
+    let new_pos_x = roomImage.getAttribute('data-x') / this.zoomValue;
+    let new_pos_y = roomImage.getAttribute('data-y') / this.zoomValue;
+    let new_height = roomImage.style.height.match(/\d+/)[0] / this.zoomValue;
+    let new_width = roomImage.style.width.match(/\d+/)[0] / this.zoomValue;
 
     let updateRoomImageBody = {
-      pos_x: roomImage.getAttribute('data-x'),
-      pos_y: roomImage.getAttribute('data-y'),
-      height: roomImage.style.height.match(/\d+/)[0],
-      width: roomImage.style.width.match(/\d+/)[0]
+      pos_x: new_pos_x,
+      pos_y: new_pos_y,
+      height: new_height,
+      width: new_width
     }
 
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room_image/"+roomImage.getAttribute('room-image-id'), updateRoomImageBody, {"headers": this.headers}).subscribe(
       response => {
-        // updates the local array here only after storing on db
-        console.log(response);
+        // update the norm attributes
+        roomImage.setAttribute('data-norm-x', new_pos_x);
+        roomImage.setAttribute('data-norm-y', new_pos_y);
+        roomImage.setAttribute('data-norm-width', new_width);
+        roomImage.setAttribute('data-norm-height', new_height);
       },
       error => {
         if (error.status === 401){
@@ -766,10 +778,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let targetVertex = event.target;
     let local_target_id = targetVertex.getAttribute('vertex-id');
     let real_target_id = this.vertexService.vertices[local_target_id].id;
-    let new_y_pos = targetVertex.getAttribute('data-y');
-    let new_x_pos = targetVertex.getAttribute('data-x');
-    let new_height = targetVertex.style.height.match(/\d+/)[0];
-    let new_width = targetVertex.style.width.match(/\d+/)[0];
+    let new_y_pos = targetVertex.getAttribute('data-y') / this.zoomValue;
+    let new_x_pos = targetVertex.getAttribute('data-x') / this.zoomValue;
+    let new_height = targetVertex.style.height.match(/\d+/)[0] / this.zoomValue;
+    let new_width = targetVertex.style.width.match(/\d+/)[0] / this.zoomValue;
 
     let updateVertexBody = {
       operation: 'transformation',
@@ -976,35 +988,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // ZOOM test
-  test(): void{
-    let multiplier = 1.0;
-    let multiplier2 = 2.0;
-
-    let child = this.escapeRoomDivRef?.nativeElement.children[1];
-
-    child.style.height = child.height*multiplier2 + 'px';
-    child.style.width = child.width*multiplier2 + 'px';
-    console.log(child.getAttribute('data-x'));
-    console.log(child.getAttribute('data-y'));
-    child.style.transform = 'translate('+(child.getAttribute('data-x')*multiplier2)+'px,'+(child.getAttribute('data-y')*multiplier2)+'px)';
-    child.setAttribute('data-x',child.getAttribute('data-x')*multiplier2);
-    child.setAttribute('data-y',child.getAttribute('data-y')*multiplier2);
-
-    this.delay(10000).then(r => {
-      child.style.height = child.height/multiplier2 + 'px';
-      child.style.width = child.width/multiplier2 + 'px';
-      child.style.transform = 'translate('+(child.getAttribute('data-x')/multiplier2)+'px,'+(child.getAttribute('data-y')/multiplier2)+'px)';
-      child.setAttribute('data-x',child.getAttribute('data-x')/multiplier2);
-      child.setAttribute('data-y',child.getAttribute('data-y')/multiplier2);
-    });
-  }
-
-  private async delay(ms: number)
-  {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   updateAttribute(data: any){
     let local_id = this._target_vertex.getAttribute('vertex-id');
     let vertex = this.vertexService.vertices[local_id];
@@ -1030,6 +1013,56 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       //console.error('There was an error while updating the vertex', error)
     );
     console.log(data);
+  }
+
+  updateZoomValue(zoom_val: string, elem2: HTMLLabelElement):void{
+    this.zoomValue = Number.parseFloat(zoom_val);
+  }
+
+  // ZOOM test
+  // TODO: remove from prod
+  test(): void{
+    let children = this.escapeRoomDivRef?.nativeElement.childNodes;
+    //  go through every html element inside canvas
+    for(let child of children){
+      // child.getAttribute('')
+      // check if room or vertex
+      let vertex_id = child.getAttribute('vertex-id');
+      if (vertex_id){
+        // use vertex_id in service
+        let vertex = this.vertexService.vertices[vertex_id];
+        let zoomed_x_pos = vertex.pos_x * this.zoomValue;
+        let zoomed_y_pos = vertex.pos_y * this.zoomValue;
+
+        child.style.width = (vertex.width * this.zoomValue) + 'px';
+        child.style.height = (vertex.height * this.zoomValue) + 'px';
+        child.setAttribute('data-x', zoomed_x_pos);
+        child.setAttribute('data-y', zoomed_y_pos);
+        child.style.transform = 'translate('+ zoomed_x_pos +'px,'+ zoomed_y_pos +'px)';
+        // update every line that is connected ez
+
+        this.updateLine(vertex_id);
+      }else {
+        // now, how do this???
+        // only storing the default on db but no need to call
+        // so need to store defaults on element itself, then updating defaults like with a call
+        let norm_x = child.getAttribute('data-norm-x');
+        let norm_y = child.getAttribute('data-norm-y');
+        let norm_width = child.getAttribute('data-norm-width');
+        let norm_height = child.getAttribute('data-norm-height');
+
+        child.style.width = (norm_width*this.zoomValue) + 'px';
+        child.style.height = (norm_height*this.zoomValue) + 'px';
+        child.setAttribute('data-x', child.getAttribute('data-x')*this.zoomValue);
+        child.setAttribute('data-y', child.getAttribute('data-y')*this.zoomValue);
+        child.style.transform = 'translate('+ child.getAttribute('data-x')*this.zoomValue +'px,'+ child.getAttribute('data-y')*this.zoomValue +'px)';
+      }
+    }
+  }
+
+  private async delay(ms: number)
+  {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
 }
