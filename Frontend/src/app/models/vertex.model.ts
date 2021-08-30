@@ -11,6 +11,7 @@ export class Vertex {
   private _width: number;
   private _height: number;
   private _graphic_id: string;
+  private _estimated_time: number;
   private _z_index: number;
   private _deleted: boolean; // a flag to see if the vertex was deleted in the current session
   private _connections: any[] = [];
@@ -26,6 +27,7 @@ export class Vertex {
               width: number,
               height: number,
               graphic_id: string,
+              estimated_time: number,
               z_index: number) {
       this._local_id = local_id;
       this._id = id;
@@ -36,6 +38,7 @@ export class Vertex {
       this._width = width;
       this._height = height;
       this._graphic_id = graphic_id;
+      this._estimated_time = estimated_time;
       this._deleted = false; // default is false since user would need to create the vertex or it comes from db
       this._z_index = z_index;
   }

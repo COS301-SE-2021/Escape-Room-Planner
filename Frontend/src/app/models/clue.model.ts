@@ -11,9 +11,10 @@ export class Clue extends Vertex{
               width: number,
               height: number,
               graphic_id: string,
+              estimated_time: number,
               clue:string,
               z_index: number) {
-    super( local_id, id, name, 'Clue', pos_x, pos_y, width, height, graphic_id, z_index);
+    super( local_id, id, name, 'Clue', pos_x, pos_y, width, height, graphic_id, estimated_time, z_index);
     this._clue = clue;
   }
 
