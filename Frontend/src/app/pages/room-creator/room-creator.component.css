@@ -2,6 +2,10 @@
   padding: 0;
 }
 
+.remove-margin{
+  margin: 0;
+}
+
 /* Escape Room selection menu colour on hover */
 .dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {
   background-color:grey;
