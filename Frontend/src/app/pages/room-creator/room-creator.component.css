@@ -51,9 +51,13 @@
 
 .room-creater-margin-left
 {
-  margin-left: 17%;
+  margin-left: 20%;
 }
 
+.dropdown-margin
+{
+  margin-left: 6%;
+}
 .inventory-depth
 {
   z-index: 2;
