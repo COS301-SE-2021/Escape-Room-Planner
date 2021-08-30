@@ -89,9 +89,9 @@ class GeneticAlgorithmService
     final_pos = 0
     highest = @fitness_of_population[i_count]
     while i_count < @initial_population_size
-      puts highest.to_s + " < "+ @fitness_of_population[i_count].to_s
+      puts highest.to_s + " < " + @fitness_of_population[i_count].to_s
       if highest < @fitness_of_population[i_count]
-        final_pos=i_count
+        final_pos = i_count
 
         highest = @fitness_of_population[i_count]
       end
@@ -99,14 +99,14 @@ class GeneticAlgorithmService
     end
 
     #Run N number of times
-    i_count=0
-    while i_count<@number_of_runs
-
-      i_count+=1
+    i_count = 0
+    while i_count < @number_of_runs
+      
+      i_count += 1
     end
 
     final(@initial_population[final_pos], request.room_id, request.vertices)
-    puts "Room number: "+final_pos.to_s
+    puts "Room number: " + final_pos.to_s
   end
 
   def initial_population_creation(vertices)
@@ -116,7 +116,7 @@ class GeneticAlgorithmService
 
     # Max edges = n(n-1)
     # initial calc: ((vertices.count) * (vertices.count - 1) * @max_edge_initial_factor).round
-    max_edges = vertices.count + ((vertices.count)/2).round
+    max_edges = vertices.count + ((vertices.count) / 2).round
     puts "Max edges: #{max_edges}"
 
     # Min edges = n-1
