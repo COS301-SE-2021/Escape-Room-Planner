@@ -1053,9 +1053,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
         child.style.width = (norm_width*this.zoomValue) + 'px';
         child.style.height = (norm_height*this.zoomValue) + 'px';
-        child.setAttribute('data-x', child.getAttribute('data-x')*this.zoomValue);
-        child.setAttribute('data-y', child.getAttribute('data-y')*this.zoomValue);
-        child.style.transform = 'translate('+ child.getAttribute('data-x')*this.zoomValue +'px,'+ child.getAttribute('data-y')*this.zoomValue +'px)';
+        child.setAttribute('data-x', norm_x*this.zoomValue);
+        child.setAttribute('data-y', norm_y*this.zoomValue);
+        child.style.transform = 'translate('+ norm_x*this.zoomValue +'px,'+ norm_y*this.zoomValue +'px)';
       }
     }
   }
