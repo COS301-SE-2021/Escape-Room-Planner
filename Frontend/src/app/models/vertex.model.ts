@@ -116,6 +116,14 @@ export class Vertex {
     this._graphic_id = value;
   }
 
+  get estimated_time(): number {
+    return this._estimated_time;
+  }
+
+  set estimated_time(value: number) {
+    this._estimated_time = value;
+  }
+
   set z_index(value: number) {
     this._z_index = value;
   }

@@ -21,7 +21,7 @@ export class VertexService {
             inPos_y: number, inPos_x: number, inWidth: number,
             inHeight: number, inEstimated_time: number, inDescription: string, inClue: string, z_index: number): number {
     let new_vertex = null;
-    if(inEstimated_time === null)
+    if(inEstimated_time === undefined)
       inEstimated_time = 0;
     if (inType === "Clue") {
       new_vertex = new Clue(this._local_id_count++, inId, inName,

@@ -24,8 +24,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public _target_vertex_z_index:number = 0; // stores a z-index of _target_vertex
   public vertex_type:string = "Object";
   public vertex_name_menu:string = "";
-  public vertex_min_menu:number = 0;
-  public vertex_sec_menu:number = 0;
+  public vertex_min_menu:string = "min";
+  public vertex_sec_menu:string = "sec";
   public vertex_clue_menu:string = "";
   public vertex_description_menu:string = "";
   public hasRooms:boolean = true;
@@ -741,7 +741,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let x_pos = this._target_vertex.width + Number(this._target_vertex.getAttribute("data-x"));
     let y_pos = this._target_vertex.getAttribute("data-y");
 
+    this.resetAttributeMenuValue();
+    console.log(vertex.name);
     this.vertex_name_menu = vertex.name;
+    let min = ~~(vertex.estimated_time/60);
+    let sec = vertex.estimated_time%60;
+    if (min === 0)
+      this.vertex_min_menu = "min";
+    else
+      this.vertex_min_menu = "" + min;
+    if (sec === 0)
+      this.vertex_sec_menu = "sec";
+    else
+      this.vertex_sec_menu = "" + sec;
+
     if(this.vertex_type === "Clue") {
       // @ts-ignore
       this.vertex_clue_menu = vertex.clue;
@@ -989,16 +1002,44 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   updateAttribute(data: any){
     let local_id = this._target_vertex.getAttribute('vertex-id');
     let vertex = this.vertexService.vertices[local_id];
-    let time = data['attribute_min']*60 + data['attribute_sec']
     let update_vertex_attribute = {
       operation: 'attribute',
-      name: data['attribute_name'],
-      estimated_time: time
     };
+    if(data['attribute_name'] !== ''){
+      // @ts-ignore
+      update_vertex_attribute['name'] = data['attribute_name'];
+      this.vertex_name_menu = data['attribute_name'];
+      vertex.name = this.vertex_name_menu;
+    }
+    if(data['attribute_min'] !== ''){
+      // @ts-ignore
+      update_vertex_attribute['estimated_time'] = data['attribute_min']*60 + data['attribute_sec'];
+      this.vertex_min_menu = data['attribute_min'];
+      this.vertex_sec_menu = data['attribute_sec'];
+      vertex.estimated_time = data['attribute_min']*60 + data['attribute_sec'];
+    }
+    if(data['attribute_clue'] !== ''){
+      // @ts-ignore
+      update_vertex_attribute['clue'] = data['attribute_clue'];
+      this.vertex_clue_menu = data['attribute_clue'];
+      // @ts-ignore
+      vertex.clue = this.vertex_clue_menu;
+    }
+    if(data['attribute_description'] !== ''){
+      // @ts-ignore
+      update_vertex_attribute['description'] = data['attribute_description'];
+      this.vertex_description_menu = data['attribute_description'];
+      // @ts-ignore
+      vertex.description = this.vertex_description_menu;
+    }
 
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
       response => {
-        console.log(response);
+        if (response.success){
+          this.resetAttributeMenuValue();
+        }else{
+          this.renderAlertError(response.message);
+        }
       },
       error => {
         if (error.status === 401){
@@ -1010,7 +1051,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       }
       //console.error('There was an error while updating the vertex', error)
     );
-    console.log(data);
   }
 
   updateZoomValue(zoom_val: string, elem2: HTMLLabelElement):void{
@@ -1063,6 +1103,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  resetAttributeMenuValue(){
+    // @ts-ignore
+    document.getElementsByName("attribute_name")[0].value = "";
+    // @ts-ignore
+    document.getElementsByName("attribute_min")[0].value = "";
+    // @ts-ignore
+    document.getElementsByName("attribute_sec")[0].value = "";
+    // @ts-ignore
+    document.getElementsByName("attribute_clue")[0].value = "";
+    // @ts-ignore
+    document.getElementsByName("attribute_description")[0].value = "";
+  }
 }
 
 // For Vertex Response
