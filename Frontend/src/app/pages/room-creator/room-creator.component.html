@@ -19,11 +19,11 @@
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
     <!-- ESCAPE ROOMS START HERE -->
-    <div class="col-sm-10 d-lg-flex remove-padding ">
+    <div class="col-sm-10 d-lg-flex remove-padding room-creater-margin-left">
       <div class="container-fluid remove-padding">
-        <div class="row dropdown-margin">
-          <div class="col-sm-12 dropdown remove-padding position-fixed">
-            <button class=" btn-secondary dropdown-toggle w-100 remove-padding center" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+        <div class="row container-fluid remove-padding remove-margin">
+          <div class="col-sm-12 dropdown remove-padding">
+            <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
             <ul class="dropdown-menu w-100 overflow-auto remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
@@ -39,8 +39,8 @@
             </ul>
           </div>
         </div>
-        <div class="row vh-100 ml-4">
-          <div class="container-fluid escape-room remove-padding room-creater-margin-left" id="room-plan" #escapeRoomDiv>
+        <div class="row container-fluid vh-100 ml-4 container-fluid remove-padding remove-margin">
+          <div class="container escape-room remove-padding" id="room-plan" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
           </div>
           <!-- CONTEXT MENU HERE -->
@@ -182,7 +182,10 @@
   </div>
 </div>
 
-
+<div  class="container-sm position-fixed w-25 bottom-0 end-0" style="z-index: 99999">
+  <label for="customRange1" class="form-label" #zoom_label>{{zoomValue.toFixed(2)}}</label>
+  <input type="range" class="form-range" id="customRange1" min="0.2" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="test()">
+</div>
 
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -217,7 +220,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 
