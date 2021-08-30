@@ -97,6 +97,14 @@ class GeneticAlgorithmService
       end
       i_count += 1
     end
+
+    #Run N number of times
+    i_count=0
+    while i_count<@number_of_runs
+
+      i_count+=1
+    end
+
     final(@initial_population[final_pos], request.room_id, request.vertices)
     puts "Room number: "+final_pos.to_s
   end
