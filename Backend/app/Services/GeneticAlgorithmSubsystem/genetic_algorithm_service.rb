@@ -101,7 +101,14 @@ class GeneticAlgorithmService
     #Run N number of times
     i_count = 0
     while i_count < @number_of_runs
-      
+      # Selection
+
+      # Crossover
+
+      # Mutation
+
+      # Calculate fitness
+
       i_count += 1
     end
 
@@ -269,7 +276,10 @@ class GeneticAlgorithmService
   end
 
 
-  def selection; end
+  def selection
+    # First sort the array
+
+  end
 
   def crossover; end
 
