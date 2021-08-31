@@ -120,6 +120,7 @@ export class InventoryComponent implements OnInit {
     let src = null;
 
     if (blob_id) src = this.inventory[blob_id.toString()];
+    if (blob_id === -1) src = loc;
 
     let data: inventoryObject = {
       type: type,

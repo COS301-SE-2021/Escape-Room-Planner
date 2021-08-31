@@ -109,7 +109,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // adds an object to drag on our 'canvas'
   addObjects(event:any): void{
     if (event.type === 'Room'){
-      console.log('room clicked');
       this.createRoom(event.pos, 0, 50, 125, event.blob_id, event.src);
       return;
     }
