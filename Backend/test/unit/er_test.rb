@@ -273,6 +273,14 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(resp.message, 'Vertices Obtained')
     assert_not_nil(resp.data)
   end
+
+  test 'get correct start and end vertex' do
+    req = GetVerticesRequest.new(1)
+    rs = RoomServices.new
+    resp = rs.get_vertices(req)
+    assert_equal(resp.data[0][:position], 'start')
+    assert_equal(resp.data[5][:position], 'end')
+  end
   # TODO: Test get vertices fully
 
   test 'can get rooms' do

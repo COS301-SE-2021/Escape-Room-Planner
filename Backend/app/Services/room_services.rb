@@ -211,15 +211,22 @@ class RoomServices
     ).where(escape_room_id: request.id)
     return GetVerticesResponse.new(true, 'Room has no vertices', nil) if vertices.nil?
 
+    escape_room = EscapeRoom.find_by_id(request.id)
+    start_vertex_id = escape_room.startVertex
+    end_vertex_id = escape_room.endVertex
     user = User.find_by_id(EscapeRoom.find_by_id(request.id).user_id)
     data = vertices.map do |k|
+      pos = 'none'
+      pos = 'start' if k.id == start_vertex_id
+      pos = 'end' if k.id == end_vertex_id
       if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
         blob = user.graphic.blobs.find_by_id(k.blob_id)
         k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
       end
       { vertex: k,
         connections: k.vertices.ids,
-        type: k.type }
+        type: k.type,
+        position: pos }
     end
     # TODO: Fix to be more Efficient
     GetVerticesResponse.new(true, 'Vertices Obtained', data)
