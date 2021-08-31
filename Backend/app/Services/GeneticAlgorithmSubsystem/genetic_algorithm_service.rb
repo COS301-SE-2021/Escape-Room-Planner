@@ -260,15 +260,15 @@ class GeneticAlgorithmService
     num_paths = resp.vertices.count
     case @path_weight
     when 4
-      if num_paths>3
+      if num_paths > 3
         @fitness_of_population[i_count] += 10
       end
     when 2
-      if num_paths>2
+      if num_paths > 2
         @fitness_of_population[i_count] += 10
        end
     when 0
-      if num_paths>1
+      if num_paths > 1
         @fitness_of_population[i_count] += 10
       end
     end
@@ -284,15 +284,15 @@ class GeneticAlgorithmService
     num_useless = resp.vertices.count
     case @dead_nodes_weight
     when 2
-      if num_useless>3
+      if num_useless > 3
         @fitness_of_population[i_count] += 10
       end
     when 1
-      if num_useless>2
+      if num_useless > 2
         @fitness_of_population[i_count] += 10
       end
     when 0
-      if num_useless>1
+      if num_useless > 1
         @fitness_of_population[i_count] += 10
       end
     end
