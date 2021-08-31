@@ -397,6 +397,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
                inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: number,
                inDescription: string, inRoom_id: number, inClue: string, src:string, blob_id: number): void
   {
+    // scale to 1.0 zoom for storing
+    inPos_x /= this.zoomValue;
+    inPos_x /= this.zoomValue;
+    inWidth /= this.zoomValue;
+    inHeight /= this.zoomValue;
+
+
     let createVertexBody = {type: inType,
       name: inName,
       graphicid: inGraphicID,
@@ -456,21 +463,22 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
+    // * zoomValue to get the zoomed representation
     let newObject = this.renderer.createElement("img"); // create image
     this.renderer.addClass(newObject, "resize-drag");
     // All the styles
     let vertex = this.vertexService.vertices[local_id];
-    this.renderer.setStyle(newObject,"width", vertex.width + "px");
-    this.renderer.setStyle(newObject,"height", vertex.height + "px");
+    this.renderer.setStyle(newObject,"width", vertex.width*this.zoomValue + "px");
+    this.renderer.setStyle(newObject,"height", vertex.height*this.zoomValue + "px");
     this.renderer.setStyle(newObject,"position", "absolute");
     this.renderer.setStyle(newObject,"user-select", "none");
-    this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x +'px, '+ vertex.pos_y +'px)');
+    this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
     this.renderer.setStyle(newObject,"z-index",vertex.z_index);
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
-    this.renderer.setAttribute(newObject,"data-x", vertex.pos_x.toString());
-    this.renderer.setAttribute(newObject,"data-y", vertex.pos_y.toString());
+    this.renderer.setAttribute(newObject,"data-x", (vertex.pos_x*this.zoomValue).toString());
+    this.renderer.setAttribute(newObject,"data-y", (vertex.pos_y*this.zoomValue).toString());
 
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     // Event listener
