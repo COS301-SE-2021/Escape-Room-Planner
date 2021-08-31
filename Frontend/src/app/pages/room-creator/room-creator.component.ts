@@ -867,22 +867,29 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   checkSolvable(): void{
-    this.solveComponent?.checkSolvable(this._target_start, this._target_end, this.currentRoomId);
+    if(this._target_start !== undefined || this._target_end !== undefined) {
+      // @ts-ignore
+      this.solveComponent?.checkSolvable(this.vertexService.vertices[this._target_start].id,
+        this.vertexService.vertices[this._target_end].id, this.currentRoomId);
+    }else{
+      this.renderAlertError("Please set start and end vertex");
+    }
   }
 
   setStart() :void{
-    this._target_start= this._target_vertex;
-    let id=this.vertexService.vertices[this._target_start.getAttribute("vertex-id")].id
-    this._target_start=id
+    if(this._target_start !== undefined)
+      document.querySelectorAll('[vertex-id="' + this._target_start + '"]')[0]
+        .setAttribute('class', 'resize-drag');
+    let local_id = this._target_vertex.getAttribute("vertex-id");
     let connection = {
       operation: 'setStart',
-      startVertex: id , //convert local to real id
+      startVertex: this.vertexService.vertices[local_id].id, //convert local to real id
     };
-
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
       response => {
         // updates the local array here only after storing on db
-        console.log(response);
+        this._target_start = local_id;
+        this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-primary')
       },
       error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
       //console.error('There was an error while updating the vertex', error)
@@ -890,23 +897,23 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   setEnd() :void{
-    this._target_end= this._target_vertex;
-    var id=this.vertexService.vertices[this._target_end.getAttribute("vertex-id")].id
-    this._target_end=id
+    if(this._target_end !== undefined)
+      document.querySelectorAll('[vertex-id="' + this._target_end + '"]')[0]
+        .setAttribute('class', 'resize-drag');
+    let local_id = this._target_vertex.getAttribute("vertex-id");
     let connection = {
       operation: 'setEnd',
-      endVertex: id , //convert local to real id
+      endVertex: this.vertexService.vertices[local_id].id, //convert local to real id
     };
-
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
       response => {
         // updates the local array here only after storing on db
-        console.log(response);
+        this._target_end = local_id;
+        this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-info');
       },
       error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
       //console.error('There was an error while updating the vertex', error)
     );
-
   }
 
   // todo
