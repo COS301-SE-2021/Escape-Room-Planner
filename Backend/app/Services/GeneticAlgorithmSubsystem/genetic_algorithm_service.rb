@@ -257,18 +257,45 @@ class GeneticAlgorithmService
     req = FindAllPathsRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex)
     serv = SolvabilityService.new
     resp = serv.find_all_paths_service(req)
-    resp.vertices.each do |v|
-      @fitness_of_population[i_count] += @path_weight
+    num_paths = resp.vertices.count
+    case @path_weight
+    when 4
+      if num_paths>3
+        @fitness_of_population[i_count] += 10
+      end
+    when 2
+      if num_paths>2
+        @fitness_of_population[i_count] += 10
+       end
+    when 0
+      if num_paths>1
+        @fitness_of_population[i_count] += 10
+      end
     end
+    
+    # resp.vertices.each do |v|
+    # fitness_of_population[i_count] += 10
+    # end
 
     # Value num dead nodes
     req = ReturnUnnecessaryRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex, room_id)
     serv = SolvabilityService.new
-    resp = serv.find_all_paths_service(req)
-    resp.vertices.each do |v|
-      @fitness_of_population[i_count] += @dead_nodes_weight
+    resp = serv.return_unnecessary_vertices(req)
+    num_useless = resp.vertices.count
+    case @dead_nodes_weight
+    when 2
+      if num_useless>3
+        @fitness_of_population[i_count] += 10
+      end
+    when 1
+      if num_useless>2
+        @fitness_of_population[i_count] += 10
+      end
+    when 0
+      if num_useless>1
+        @fitness_of_population[i_count] += 10
+      end
     end
-
     # If start == end disgard this vertex
     if (EscapeRoom.find_by_id(room_id).startVertex == EscapeRoom.find_by_id(room_id).endVertex)
       @fitness_of_population[i_count] = -20
