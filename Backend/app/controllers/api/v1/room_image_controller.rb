@@ -9,6 +9,7 @@ module Api
     # Controller that maps http requests to functions to execute
     class RoomImageController < ApplicationController
       protect_from_forgery with: :null_session
+      @@room_service = RoomServices.new
       # GET api/v1/room_image/id
       def show
         # use id in params to select from room
@@ -102,6 +103,23 @@ module Api
         end
       rescue StandardError => e
         render json: { status: false, error: e }, status: :bad_request
+      end
+
+      # delete api/v1/room_image/image_id
+      def destroy
+        if authorise(request)
+          room_image = RoomImage.find_by_id(params[:id])
+          if room_image.nil?
+            render json: { success: false, message: 'Room can not be found' }
+          else
+            room_image.destroy
+            render json: { success: true, message: 'Room Deleted' }
+          end
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
+      rescue StandardError => e
+        render json: { success: false, error: e }, status: :bad_request
       end
     end
   end
