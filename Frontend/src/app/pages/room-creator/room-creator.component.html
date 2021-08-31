@@ -3,9 +3,10 @@
   <div class="row">
 
     <!-- INVENTORY STARTS HERE -->
-    <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
+    <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()" (generate)="generateDiagram()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
+    <app-dependency-diagram></app-dependency-diagram>
     <!-- ESCAPE ROOMS START HERE -->
     <div class="col-sm-10 d-lg-flex remove-padding">
       <div class="container-fluid remove-padding">

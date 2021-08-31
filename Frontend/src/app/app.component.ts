@@ -46,7 +46,7 @@ export class AppComponent {
         this.cdr.detectChanges();
         // response so go to escape room planner
         this.is_valid_user = true;
-        this.router.navigate(['escape-room']).then(r => console.log('already logged in'));
+        // this.router.navigate(['escape-room']).then(r => console.log('already logged in'));
       },
       error => {
         if (error.status === 401){

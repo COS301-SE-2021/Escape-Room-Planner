@@ -23,10 +23,9 @@ const routes: Routes = [
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'reset-not', component: ResetPasswordNotComponent },
   { path: 'escape-room', component: RoomCreatorComponent},
-  { path: 'escape-room', component: RoomCreatorComponent},
-  { path: 'escape', component: DependencyDiagramComponent },
+  { path: 'diagram', component: DependencyDiagramComponent },
   // otherwise redirect to login
-  { path: '**', redirectTo: 'escape' }
+  { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({

@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import 'leader-line';
 import {InventoryComponent} from "../inventory/inventory.component";
 import {SolvabilityComponent} from "../solvability/solvability.component"
+import { DependencyDiagramComponent } from '../dependency-diagram/dependency-diagram.component';
 declare let LeaderLine: any;
 
 @Component({
@@ -36,6 +37,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
   @ViewChild("contextMenu") contextMenuRef : ElementRef | undefined;
   @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
+  @ViewChild(DependencyDiagramComponent) diagramComponent: DependencyDiagramComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private router:Router)
@@ -643,6 +645,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   checkSolvable(): void{
     this.solveComponent?.checkSolvable(this._target_start, this._target_end, this.currentRoomId);
+  }
+
+  generateDiagram(): void {
+    console.log("Room");
+    this.diagramComponent?.generate();
   }
 
   setStart() :void{

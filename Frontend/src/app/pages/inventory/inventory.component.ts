@@ -15,6 +15,7 @@ export class InventoryComponent implements OnInit {
   @Output() public afterClick: EventEmitter<inventoryObject> = new EventEmitter();
   @Output() public error: EventEmitter<inventoryObject> = new EventEmitter();
   @Output() public checkSolvable: EventEmitter<inventoryObject> = new EventEmitter();
+  @Output() public generate: EventEmitter<inventoryObject> = new EventEmitter();
   @ViewChild('container_div') container_div: ElementRef | undefined;
   @ViewChild('puzzle_div') puzzle_div: ElementRef | undefined;
   @ViewChild('key_div') key_div: ElementRef | undefined;
@@ -180,6 +181,12 @@ export class InventoryComponent implements OnInit {
   public async checkSolve(){
     this.checkSolvable.emit();
   }
+
+  public async generateDiagram() {
+    console.log("Inventory");
+    this.generate.emit();
+  }
+
 }
 
 interface inventoryObject{
