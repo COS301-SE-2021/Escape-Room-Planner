@@ -100,6 +100,7 @@ class GeneticAlgorithmService
 
     #Run N number of times
     i_count = 0
+    selection
     while i_count < @number_of_runs
       # Selection
 
@@ -234,6 +235,9 @@ class GeneticAlgorithmService
     # Fitness score out of 100
     set_up_room(chromosone, room_id, vertices)
 
+    #defaults
+    start_vert = EscapeRoom.find_by_id(room_id).startVertex
+    end_vert = EscapeRoom.find_by_id(room_id).endVertex
     # most important solvable:
     all = Vertex.all.where(escape_room_id: room_id)
     i_vertex_add = 0
@@ -243,7 +247,7 @@ class GeneticAlgorithmService
       i_vertex_add += 1
     end
 
-    req = CalculateSolvableRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex, vertices)
+    req = CalculateSolvableRequest.new( start_vert, end_vert, vertices)
     serv = SolvabilityService.new
     resp = serv.calculate_solvability(req)
 
@@ -254,7 +258,7 @@ class GeneticAlgorithmService
     end
 
     # Value num paths
-    req = FindAllPathsRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex)
+    req = FindAllPathsRequest.new(start_vert, end_vert)
     serv = SolvabilityService.new
     resp = serv.find_all_paths_service(req)
     num_paths = resp.vertices.count
@@ -272,13 +276,20 @@ class GeneticAlgorithmService
         @fitness_of_population[i_count] += 10
       end
     end
-    
+
     # resp.vertices.each do |v|
     # fitness_of_population[i_count] += 10
     # end
 
+    # favour graphs with longer paths
+    resp = serv.longest_path(start_vert,end_vert)
+    if resp < (vertices.count / 4).round
+      @fitness_of_population[i_count] += 20
+    end
+
+
     # Value num dead nodes
-    req = ReturnUnnecessaryRequest.new(EscapeRoom.find_by_id(room_id).startVertex, EscapeRoom.find_by_id(room_id).endVertex, room_id)
+    req = ReturnUnnecessaryRequest.new(start_vert, end_vert, room_id)
     serv = SolvabilityService.new
     resp = serv.return_unnecessary_vertices(req)
     num_useless = resp.vertices.count
@@ -298,13 +309,31 @@ class GeneticAlgorithmService
     end
     # If start == end disgard this vertex
     if (EscapeRoom.find_by_id(room_id).startVertex == EscapeRoom.find_by_id(room_id).endVertex)
-      @fitness_of_population[i_count] = -20
+      @fitness_of_population[i_count] = -40
     end
   end
 
 
   def selection
     # First sort the array
+    sort
+    puts @initial_population
+  end
+  
+  def sort
+    i = 0
+    while i < @initial_population_size - 1
+      j = 0
+      while j < @initial_population_size - i - 1
+        if(@fitness_of_population[j] < @fitness_of_population[j + 1])
+           temp = @initial_population[j]
+           @initial_population[j] = @initial_population[j + 1]
+           @initial_population[j + 1] = temp
+        end
+        j += 1
+        end
+      i += 1
+    end
 
   end
 
