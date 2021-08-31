@@ -4,6 +4,12 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_solvab
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_solvability_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up_order_request'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_estimated_time_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_estimated_time_response'
 
 class SolvabilityTest < ActiveSupport::TestCase
 
@@ -127,6 +133,30 @@ class SolvabilityTest < ActiveSupport::TestCase
     resp = serv.calculate_set_up_order(solvability_req)
 
     assert_equal('Success', resp.status)
+  end
+
+  def test_find_all_paths_legal_graph
+    req = FindAllPathsRequest.new(901, 912)
+    serv = SolvabilityService.new
+    resp = serv.find_all_paths_service(req)
+
+    assert_equal("901,902,905,910,911,912",  resp.vertices[0])
+    assert_equal("901,903,906,908,909,912",  resp.vertices[1])
+  end
+
+  def test_find_unnecessary_vertices
+    req = ReturnUnnecessaryRequest.new(901, 912, 3)
+    serv = SolvabilityService.new
+    resp = serv.return_unnecessary_vertices(req)
+
+    assert_equal(904,  resp.vertices[0])
+    assert_equal(907,  resp.vertices[1])
+  end
+
+  def test_calculate_estimated_time
+    req =  CalculateEstimatedTimeRequest.new(901, 912)
+    serv = SolvabilityService.new
+    resp=serv.calculate_estimated_time(req)
   end
 
 end
