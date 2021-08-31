@@ -7,6 +7,8 @@ class UserNotifierMailer < ApplicationMailer
 
       @user = User.find_by_email(email)
       @token = JsonWebToken.encode(id: @user.id)
+      @message = 'reset your password'
+      @button_type = 'Reset Password'
       @url = "http://localhost:4200/reset?token=#{@token}"
       mail(to: email,
            subject: 'Confirm Reset Password')
@@ -16,6 +18,8 @@ class UserNotifierMailer < ApplicationMailer
   def send_verify_account_email(email)
     @user = User.find_by_email(email)
     @token = JsonWebToken.encode(id: @user.id)
+    @message = 'verify your account'
+    @button_type = 'Verify Account'
     @url = "http://localhost:4200/verify-success?token=#{@token}"
     mail(to: email,
          subject: 'Account Registered')
