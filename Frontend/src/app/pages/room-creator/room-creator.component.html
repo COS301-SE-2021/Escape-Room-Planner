@@ -184,7 +184,7 @@
 
 <div  class="container-sm position-fixed w-25 bottom-0 end-0" style="z-index: 99999">
   <label for="customRange1" class="form-label" #zoom_label>{{zoomValue.toFixed(2)}}</label>
-  <input type="range" class="form-range" id="customRange1" min="0.2" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="test()">
+  <input type="range" class="form-range" id="customRange1" min="0.2" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="scale()">
 </div>
 
 <!-- modal view popout here-->

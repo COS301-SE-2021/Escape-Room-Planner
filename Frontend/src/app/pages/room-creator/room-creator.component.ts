@@ -43,6 +43,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   private lines:any = []; // to store lines for update and deletion
   private headers: HttpHeaders = new HttpHeaders();
 
+  @ViewChild("zoom") zoomRef: ElementRef | undefined;
   @ViewChild("escapeRoomDiv") escapeRoomDivRef : ElementRef | undefined; // escape room canvas div block
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
@@ -189,6 +190,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // todo
   changeRoom(event: any): void{
+    //reset the zoom values
+    // @ts-ignore
+    this.zoomRef?.nativeElement.value = 1;
+    this.zoomValue = 1;
+
     let clickedEscapeRoom = event.target;
     //check if the selected room is not the one shown
     if(clickedEscapeRoom.getAttribute("escape-room-id") === this.currentRoomId )
@@ -1065,7 +1071,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // ZOOM test
   // TODO: remove from prod
-  test(): void{
+  scale(): void{
     let children = this.escapeRoomDivRef?.nativeElement.childNodes;
     //  go through every html element inside canvas
     for(let child of children){
