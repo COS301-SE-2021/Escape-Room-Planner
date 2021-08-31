@@ -28,12 +28,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public vertex_sec_menu:string = "sec";
   public vertex_clue_menu:string = "";
   public vertex_description_menu:string = "";
+  public room_context_menu:boolean = true;
   public hasRooms:boolean = true;
   public hideClue:boolean = true;
   public hidePuzzle:boolean = true;
   public  zoomValue: number = 1.0;
 
   private _room_count:number = 0;
+  private _target_room: any;
   private _target_vertex: any;
   private _target_start: any;
   private _target_end: any;
@@ -48,6 +50,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("EscapeRoomList") escapeRoomListRef : ElementRef | undefined; // escape room list element reference
   @ViewChild("alertElementError") alertElementErrorRef : ElementRef | undefined;
   @ViewChild("contextMenu") contextMenuRef : ElementRef | undefined;
+  @ViewChild("roomContextMenu") roomContextMenuRef : ElementRef | undefined;
   @ViewChild("attributeMenu") attributeMenuRef : ElementRef | undefined;
   @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
 
@@ -211,6 +214,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
+    this._target_start = undefined;
+    this._target_end = undefined;
     if(this.currentRoomId !== -1) {
       // resets the vertices on room switch
       this.vertexService.reset_array();
@@ -570,6 +575,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // event listeners
     this.renderer.listen(newRoomImage,"mouseup", (event) => this.updateRoomImage(event));
     this.renderer.listen(newRoomImage,"contextmenu", (event) => {
+      this.showRoomContextMenu(event);
       return false;
     });
     // spawn
@@ -753,9 +759,26 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.contextMenuRef?.nativeElement.style.setProperty("transform",'translate('+ x_pos +'px, '+ y_pos +'px)');
     this.changeCurrentZ(0);
     // @ts-ignore
+    this.roomContextMenuRef?.nativeElement.hidden = true;
+    // @ts-ignore
     this.attributeMenuRef?.nativeElement.hidden = true;
     // @ts-ignore
     this.contextMenuRef?.nativeElement.hidden = false;
+  }
+
+  showRoomContextMenu(event: any): void{
+    this._target_room = event.target;
+
+    let x_pos = this._target_room.width + Number(this._target_room.getAttribute("data-x"));
+    let y_pos = this._target_room.getAttribute("data-y");
+    // moves the context menu where needed based on room location
+    this.roomContextMenuRef?.nativeElement.style.setProperty("transform",'translate('+ x_pos +'px, '+ y_pos +'px)');
+    // @ts-ignore
+    this.attributeMenuRef?.nativeElement.hidden = true;
+    // @ts-ignore
+    this.contextMenuRef?.nativeElement.hidden = true;
+    // @ts-ignore
+    this.roomContextMenuRef?.nativeElement.hidden = false;
   }
 
   showAttributeMenu(event: any): void{
@@ -805,6 +828,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.contextMenuRef?.nativeElement.hidden = true;
       // @ts-ignore
       this.attributeMenuRef?.nativeElement.hidden = true;
+      // @ts-ignore
+      this.roomContextMenuRef?.nativeElement.hidden = true;
     }
   }
 
@@ -1147,6 +1172,24 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     document.getElementsByName("attribute_clue")[0].value = "";
     // @ts-ignore
     document.getElementsByName("attribute_description")[0].value = "";
+  }
+
+  removeRoom(){
+    let room_target_id = this._target_room.getAttribute('room-image-id');
+    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/room_image/"+room_target_id, {"headers": this.headers}).subscribe(
+      response => {
+        //remove room image from canvas
+        this._target_room.remove();
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          this.renderAlertError("Unable to remove Room");
+        }
+      }
+    );
   }
 }
 
