@@ -258,7 +258,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
               vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
               vertex.description, vertex.clue, vertex.z_index);
-
+            if(vertex_t.position === "start")
+              this._target_start = current_id;
+            else if (vertex_t.position === "end")
+              this._target_end = current_id;
             // @ts-ignore
             for (let vertex_connection of vertex_connections)
               this.vertexService.addVertexConnection(current_id, vertex_connection);
@@ -470,7 +473,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   spawnObjects(local_id: number): void{
     // * zoomValue to get the zoomed representation
     let newObject = this.renderer.createElement("img"); // create image
-    this.renderer.addClass(newObject, "resize-drag");
+    if(local_id === this._target_start) {
+      this.renderer.addClass(newObject, "resize-drag");
+      this.renderer.addClass(newObject, "border");
+      this.renderer.addClass(newObject, "border-3");
+      this.renderer.addClass(newObject, "border-primary");
+    }else if(local_id === this._target_end) {
+      this.renderer.addClass(newObject, "resize-drag");
+      this.renderer.addClass(newObject, "border");
+      this.renderer.addClass(newObject, "border-3");
+      this.renderer.addClass(newObject, "border-info");
+    }else
+      this.renderer.addClass(newObject, "resize-drag");
     // All the styles
     let vertex = this.vertexService.vertices[local_id];
     this.renderer.setStyle(newObject,"width", vertex.width*this.zoomValue + "px");
@@ -867,7 +881,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   checkSolvable(): void{
-    if(this._target_start !== undefined || this._target_end !== undefined) {
+    if(this._target_start !== undefined && this._target_end !== undefined) {
+      // TODO: check if vertex been deleted
       // @ts-ignore
       this.solveComponent?.checkSolvable(this.vertexService.vertices[this._target_start].id,
         this.vertexService.vertices[this._target_end].id, this.currentRoomId);
