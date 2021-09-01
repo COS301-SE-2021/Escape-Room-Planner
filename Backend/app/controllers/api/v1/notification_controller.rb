@@ -21,7 +21,7 @@ module Api
               return
             else
               resp = reset_password(params[:email])
-              render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+              render json: { status: 'Response received', message: resp.message}, status: :ok
             end
 
           end
@@ -33,7 +33,7 @@ module Api
 
             else
               resp = verify_account(params[:email])
-              render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+              render json: { status: 'Response received',  message: resp.message }, status: :ok
             end
 
           end
