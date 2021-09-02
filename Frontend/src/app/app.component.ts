@@ -13,10 +13,10 @@ export class AppComponent {
   private headers: HttpHeaders = new HttpHeaders();
   private is_valid_user = false;
 
-  //todo
+  public username: string|null = '';
 
   constructor(private httpClient: HttpClient, private router: Router, private cdr: ChangeDetectorRef) {
-
+    this.username = localStorage.getItem('username');
   }
 
   ngOnInit(){

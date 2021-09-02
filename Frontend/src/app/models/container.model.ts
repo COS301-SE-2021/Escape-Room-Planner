@@ -8,7 +8,9 @@ export class Container extends Vertex{
               pos_y: number,
               width: number,
               height: number,
-              graphic_id: string) {
-    super(local_id, id, name, 'Container', pos_x, pos_y, width, height, graphic_id);
+              graphic_id: string,
+              estimated_time: number,
+              z_index: number) {
+    super(local_id, id, name, 'Container', pos_x, pos_y, width, height, graphic_id,estimated_time, z_index);
   }
 }

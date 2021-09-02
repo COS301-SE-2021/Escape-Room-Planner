@@ -2,6 +2,10 @@
   padding: 0;
 }
 
+.remove-margin{
+  margin: 0;
+}
+
 /* Escape Room selection menu colour on hover */
 .dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {
   background-color:grey;
@@ -10,6 +14,23 @@
 #delete_button > button:hover {
   background-color: #a31818;
   color: black;
+}
+
+#room-plan{
+  /* transparent colour */
+  /*background-blend-mode: darken;*/
+  background-image: url("../../../assets/images/grid.png");
+  background-repeat: repeat;
+  background-color: #7f7f7f;
+}
+
+#room-plan > img{
+  opacity: 1;
+}
+
+#room{
+  z-index: 0;
+  position: absolute;
 }
 
 .fade {
@@ -21,4 +42,28 @@
 }
 .fade.show {
   opacity: 1;
+}
+
+.room-creater-margin-top
+{
+  margin-top: 3%;
+}
+
+.room-creater-margin-left
+{
+  margin-left: 20%;
+}
+
+.dropdown-margin
+{
+  margin-left: 20% !important;
+}
+.inventory-depth
+{
+  z-index: 2;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }

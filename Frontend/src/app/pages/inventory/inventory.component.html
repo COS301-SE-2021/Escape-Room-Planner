@@ -3,6 +3,23 @@
     <button (click)="checkSolve()" class="border border-dark w-100">Solvable</button>
     <!-- INVENTORY STARTS HERE -->
     <ul class="nav flex-column">
+      <li class="border border-dark w-100" style=" background-color: grey; float: left;">Room
+        <input type="file" accept="image/*" name="idk" #add_room [hidden]="true" (input)="addImage(add_room,'room')">
+        <button type="submit" (click)="add_room.click()" style="float: right;" class="btn btn-link remove-padding">
+          <img src="./assets/svg/plus.svg" alt="add container image"/>
+        </button>
+      </li>
+      <li id="roomInventory" class="bg-secondary text-white" style="width: 100%;">
+        <div class="container-fluid">
+          <div class="row" #room_div style="padding-top: 20px;">
+            <div class="col">
+              <img src="./assets/images/room1.png" title="Room" (click)="onClick('Room','./assets/images/room1.png',-1, 10)" alt="NOT FOUND" class="img-thumbnail">
+              <p class="text-center text-black-50"></p>
+            </div>
+          </div>
+        </div>
+      </li>
+      <!-- Container -->
       <li class="border border-dark w-100" style=" background-color: grey; float: left;">Container
         <input type="file" accept="image/*" name="idk" #add_container [hidden]="true" (input)="addImage(add_container,'container')">
         <button type="submit" (click)="add_container.click()" style="float: right;" class="btn btn-link remove-padding">

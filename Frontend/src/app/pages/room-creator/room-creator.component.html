@@ -1,22 +1,32 @@
-<div class="container-fluid remove-padding" (click)="hideContextMenu($event)">
+<div #backdrop_div [hidden]="hasRooms" class="container-fluid remove-padding border-top border-secondary">
+  <div class="text-center">
+    <img src="./assets/svg/key_logo.svg" draggable="false" alt="NOT FOUND">
+  </div>
+  <div class="text-center" style="font-family: Brush Script MT, Brush Script Std, cursive;">
+    <h1>Begin Your Experience</h1>
+  </div>
+  <div class="text-center" style="margin-top: 20rem;">
+    <button data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm" class="btn btn-outline-success btn-block">Create Room</button>
+  </div>
+
+</div>
+<div  [hidden]="!backdrop_div.hidden"  class="container-fluid remove-padding room-creater-margin-top" (click)="hideMenus($event)">
   <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
-  <div class="row">
+  <div class="row room-creater-space">
 
     <!-- INVENTORY STARTS HERE -->
-    <app-inventory class="col-sm-2 bg-secondary d-sm-flex" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
+    <app-inventory class="col-sm-2 bg-secondary d-sm-flex position-fixed inventory-depth" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
     <!-- ESCAPE ROOMS START HERE -->
-    <div class="col-sm-10 d-lg-flex remove-padding">
+    <div class="col-sm-10 d-lg-flex remove-padding ">
       <div class="container-fluid remove-padding">
-        <div class="row">
-          <div class="col-sm-12 dropdown remove-padding">
-            <!-- SOLVE_ABILITY STARTS HERE
-            <button (click)="checkSolvable(solvability_div)">Solvable?</button> -->
+        <div class="row container-fluid remove-padding remove-margin">
+          <div class=" dropdown remove-padding dropdown-margin">
             <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
-            <ul class="dropdown-menu w-100 overflow-auto remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+            <ul class="dropdown-menu w-100 remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
               <li class="dropdown-item text-center remove-padding">
                 <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
@@ -29,12 +39,24 @@
             </ul>
           </div>
         </div>
-        <div class="row vh-100">
-          <div class="container-fluid escape-room remove-padding" id="room-plan" style="background-color: grey" #escapeRoomDiv>
+        <div class="row container-fluid vh-100 ml-4 container-fluid remove-padding remove-margin room-creater-margin-left">
+          <div class="container escape-room remove-padding" id="room-plan" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
           </div>
-
-          <div id="context_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute;" [hidden]="true" #contextMenu>
+          <!-- CONTEXT MENU HERE -->
+          <div id="context_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute; z-index: 99999999" [hidden]="true" #contextMenu>
+            <div class="row" data-close="true">
+              <div class="col" id="PUT ID HERE" style="text-align: center" data-close="true">
+                <button type="button"  class="text-start btn btn-dark remove-padding" data-close="true" style="float: left;" (click)="changeCurrentZ(-1)">
+                  <img src="/assets/svg/dash-square.svg" alt="bring backward" data-close="true">
+                </button>
+                {{_target_vertex_z_index}}
+                <button type="button"  class="text-start btn btn-dark remove-padding" data-close="true" style="float: right;" (click)="changeCurrentZ(1)">
+                  <img src="/assets/svg/plus-square.svg" alt="bring forward" data-close="true">
+                </button>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
             <div class="row">
               <div class="col">
                 <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="connectVertex()">
@@ -87,14 +109,97 @@
               </div>
             </div>
           </div>
-
+          <!-- ATTRIBUTE MENU -->
+          <div id="attribute_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute; z-index: 99999999" [hidden]="true" #attributeMenu>
+            <div class="row">
+              <div class="col">
+                <label  data-close="true" class="text-center remove-padding w-100 h-100" (click)="connectVertex()">
+                  Properties
+                </label>
+              </div>
+            </div>
+            <hr class="dropdown-divider text-white">
+            <div class="row">
+              <div class="input-group input-group-sm mb-1">
+                <span class="input-group-text bg-secondary border-secondary col-5">
+                      <small class="text-white">Type</small>
+                   </span>
+                <input class="form-control bg-dark text-white border-secondary" type="text" data-close="true"
+                       placeholder="{{vertex_type}}" readonly>
+              </div>
+            </div>
+            <form #attribute="ngForm" (ngSubmit)="updateAttribute(attribute.value)">
+              <div class="row">
+                 <div class="input-group input-group-sm mb-1">
+                   <span class="input-group-text bg-secondary border-secondary col-5" id="name_attribute">
+                      <small class="text-white">Name</small>
+                   </span>
+                   <input type="text" class="form-control bg-dark text-white border-secondary" ngModel
+                          aria-label="Sizing example input" placeholder="{{vertex_name_menu}}"
+                          aria-describedby="name_attribute" name="attribute_name" data-close="true">
+                 </div>
+              </div>
+              <div class="row">
+                 <div class="input-group input-group-sm mb-1">
+                   <span class="input-group-text bg-secondary border-secondary col-5" id="estimated_time_attribute">
+                      <small class="text-white">Time</small>
+                    </span>
+                   <input type="number" class="form-control bg-dark text-white border-secondary"
+                          placeholder="{{vertex_min_menu}}" min="0" aria-label="Sizing example input"  ngModel
+                          aria-describedby="estimated_time_attribute" name="attribute_min" data-close="true">
+                   <input type="number" class="form-control bg-dark text-white border-secondary"
+                          placeholder="{{vertex_sec_menu}}" min="0" max="59" aria-label="Sizing example input" ngModel
+                          aria-describedby="estimated_time_attribute" name="attribute_sec" data-close="true">
+                 </div>
+              </div>
+              <div [hidden]="hideClue" class="row">
+                <div class="input-group input-group-sm mb-1">
+                    <span class="input-group-text bg-secondary border-secondary col-5" id="clue_attribute">
+                     <small class="text-white">Clue</small>
+                   </span>
+                  <input type="text" class="form-control bg-dark text-white border-secondary" ngModel
+                         aria-label="Sizing example input" aria-describedby="clue_attribute" name="attribute_clue"
+                         placeholder="{{vertex_clue_menu}}" data-close="true">
+                </div>
+              </div>
+              <div [hidden]="hidePuzzle" class="row">
+                 <div class="input-group input-group-sm mb-1">
+                   <span class="input-group-text bg-secondary border-secondary col-5" id="description_attribute">
+                     <small class="text-white">Description</small>
+                    </span>
+                   <input type="text" class="form-control bg-dark text-white border-secondary" aria-label="Sizing example input"
+                           aria-describedby="description_attribute" ngModel name="attribute_description"
+                           placeholder="{{vertex_description_menu}}" data-close="true">
+                  </div>
+              </div>
+              <button type="submit" style="display:none" data-close="true">hidden submit</button>
+            </form>
+          </div>
+          <!-- END ATTRIBUTE MENU -->
+          <!-- ROOM CONTEXT MENU -->
+          <div id="room_context_menu" class="rounded-3 border border-5 border border-dark container-fluid bg-dark text-light remove-padding" style="width: 14vw;position: absolute; z-index: 99999999" [hidden]="true" #roomContextMenu>
+            <div class="row">
+              <div class="col" id="delete_button_room">
+                <button type="button"  class="text-start btn btn-dark remove-padding w-100 h-100" (click)="removeRoom()">
+                  Delete
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- END ROOM CONTEXT MENU-->
         </div>
       </div>
     </div>
   </div>
 </div>
 
-
+<div  class="container-sm position-fixed w-25 bottom-0 end-0" style="z-index: 99999">
+  <label for="customRange1" class="form-label" #zoom_label>{{zoomValue.toFixed(2)}}</label>
+  <input type="range" class="form-range" id="customRange1" min="0.2" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="scale()">
+</div>
 
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -129,7 +234,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 
