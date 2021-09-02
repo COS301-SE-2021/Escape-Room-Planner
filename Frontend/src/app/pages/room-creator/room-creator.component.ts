@@ -32,9 +32,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public hasRooms:boolean = true;
   public hideClue:boolean = true;
   public hidePuzzle:boolean = true;
-  public  zoomValue: number = 1.0;
+  public zoomValue: number = 1.0;
+  public _room_count:number = 0;
 
-  private _room_count:number = 0;
   private _target_room: any;
   private _target_vertex: any;
   private _target_start: any;
@@ -83,6 +83,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
+    //TODO: only do this if the position changed ?
     let update_lines = this.vertexService.getLineIndex(vertex_index);
 
     for (let line_index of update_lines){
@@ -476,6 +477,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
+    // TODO: check if attribute changed and only then dop the rest
+    let newP = this.renderer.createElement("p");
+    this.renderer.appendChild(newP, this.renderer.createText("test"));
+    this.renderer.setStyle(newP, "position", "absolute");
+    this.renderer.setStyle(newP, "user-select", "none");
     // * zoomValue to get the zoomed representation
     let newObject = this.renderer.createElement("img"); // create image
     if(local_id === this._target_start) {
@@ -497,7 +503,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newObject,"position", "absolute");
     this.renderer.setStyle(newObject,"user-select", "none");
     this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
+    this.renderer.setStyle(newP,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
     this.renderer.setStyle(newObject,"z-index",vertex.z_index);
+    this.renderer.setStyle(newP,"z-index",vertex.z_index);
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
@@ -505,9 +513,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setAttribute(newObject,"data-y", (vertex.pos_y*this.zoomValue).toString());
 
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
+    this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newP);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
+    this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
     this.renderer.listen(newObject,"click", (event) => this.vertexOperation(event));
+    this.renderer.listen(newObject,"mousemove", (event) => this.updateTag(newP, newObject));
     // double click to show Attribute Menu
     this.renderer.listen(newObject,"dblclick", (event) => {
       this._is_single_click = false;
@@ -519,6 +530,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.showContextMenu(event);
       return false;
     });
+  }
+
+  updateTag(tag: HTMLParagraphElement, image: HTMLImageElement){
+    let x = image.getAttribute('data-x');
+    let y = image.getAttribute('data-y');
+
+    tag.style.transform = "translate("+ x +"px,"+ y +"px)";
   }
 
   // used to create and spawn a room-image when clicking inventory image
