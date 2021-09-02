@@ -15,6 +15,7 @@ import { InventoryComponent } from './pages/inventory/inventory.component';
 import { SolvabilityComponent } from './pages/solvability/solvability.component';
 import { VerifySuccessComponent } from './pages/verify-success/verify-success.component';
 import { VerifyFailedComponent } from './pages/verify-failed/verify-failed.component';
+import { SimulationComponent } from './pages/simulation/simulation.component';
 
 const routes: Routes = [
   // { path: '', component: AppComponent },
@@ -42,7 +43,8 @@ const routes: Routes = [
     InventoryComponent,
     SolvabilityComponent,
     VerifySuccessComponent,
-    VerifyFailedComponent
+    VerifyFailedComponent,
+    SimulationComponent
   ],
     imports: [
         BrowserModule,
