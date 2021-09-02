@@ -1,5 +1,7 @@
 require 'test_helper'
-require './app/Services/notification_services'
+require './app/Services/NotificationSubsystem/notification_services'
+Dir["./app/Services/NotificationSubsystem/Request/*.rb"].sort.each {|file| require file }
+Dir["./app/Services/NotificationSubsystem/Response/*.rb"].sort.each {|file| require file }
 
 class NotificationTest < ActiveSupport::TestCase
   test 'test send verify account email' do
@@ -58,7 +60,7 @@ class NotificationTest < ActiveSupport::TestCase
 
   test 'test invalid email' do
     ns = NotificationServices.new
-    req = SendEmailNotificationRequest.new('verifyAccount','test2@gmail.com')
+    req = SendEmailNotificationRequest.new('verifyAccount','test3@gmail.com')
     resp = ns.send_email_notification(req)
 
     assert_equal(false, resp.success)

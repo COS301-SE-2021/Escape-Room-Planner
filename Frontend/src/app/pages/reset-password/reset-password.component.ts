@@ -9,6 +9,8 @@ import {ActivatedRoute, Router } from '@angular/router';
 })
 export class ResetPasswordComponent implements OnInit {
 
+  token: string | undefined;
+
   constructor(private http:HttpClient, private router:Router, private route: ActivatedRoute) { }
 
   display = 'none';
@@ -22,14 +24,13 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let token = null;
     //This fetches and stores the encoded token from the url
     this.route.queryParams.subscribe(params => {
-      token = params.token;
+      this.token = params.token;
     });
 
     let extra_data = {
-      encoded_token: token,
+      encoded_token: this.token,
       operation: 'check_expiration'
     }
 
@@ -47,7 +48,7 @@ export class ResetPasswordComponent implements OnInit {
   onSubmit(data:any) {
 
     let extra_data = {
-      username: data["username"],
+      reset_token: this.token,
       new_password: data["password_digest"],
       operation: 'reset_password'
     };

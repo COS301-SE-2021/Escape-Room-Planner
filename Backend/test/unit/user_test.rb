@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require './app/Services/user_services'
+require './app/Services/UserSubsystem/user_services'
+Dir["./app/Services/UserSubsystem/Request/*.rb"].sort.each {|file| require file }
+Dir["./app/Services/UserSubsystem/Response/*.rb"].sort.each {|file| require file }
 class UserTest < ActiveSupport::TestCase
   test 'test register user' do
     before_test = User.count
@@ -28,8 +30,16 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(false, resp.success)
   end
 
-  test 'test login with a valid user' do
+  test 'test login with an unverified user' do
     req = LoginRequest.new('testUser', 'testPass')
+    us = UserServices.new
+    resp = us.login(req)
+
+    assert_equal(false, resp.success)
+  end
+
+  test 'test login with a valid and verified user' do
+    req = LoginRequest.new('testUser2', 'testPass2')
     us = UserServices.new
     resp = us.login(req)
 
@@ -78,11 +88,20 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'test password reset' do
-    req = ResetPasswordRequest.new('testUser', '12345')
+    token = JsonWebToken.encode(id:1)
+    req = ResetPasswordRequest.new(token, '12345')
     us = UserServices.new
     resp = us.reset_password(req)
 
     assert(resp.success)
+  end
+
+  test 'test nil token ' do
+    req = ResetPasswordRequest.new(nil, '12345')
+    us = UserServices.new
+    resp = us.reset_password(req)
+
+    assert_equal(false, resp.success)
   end
 
   test 'test null request reset password' do
@@ -93,8 +112,17 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(false, resp.success)
   end
 
-  test 'test invalid username reset password' do
-    req = ResetPasswordRequest.new('rando', '12345')
+  test 'test null new password reset password' do
+    token = JsonWebToken.encode(id: 1)
+    req = ResetPasswordRequest.new(token, nil)
+    us = UserServices.new
+    resp = us.reset_password(req)
+
+    assert_equal(false, resp.success)
+  end
+
+  test 'test invalid token reset password' do
+    req = ResetPasswordRequest.new('1234', '12345')
     us = UserServices.new
     resp = us.reset_password(req)
 
@@ -109,8 +137,9 @@ class UserTest < ActiveSupport::TestCase
     assert_equal(false, resp.success)
   end
 
-  test 'test verify account with a valid username' do
-    req = VerifyAccountRequest.new('testUser')
+  test 'test verify account with a valid token' do
+    token = JsonWebToken.encode(id: 1)
+    req = VerifyAccountRequest.new(token)
     us = UserServices.new
     resp = us.verify_account(req)
 
@@ -118,7 +147,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'test verify account with an invalid username' do
-    req = VerifyAccountRequest.new('user')
+    req = VerifyAccountRequest.new('123.123')
     us = UserServices.new
     resp = us.verify_account(req)
 
