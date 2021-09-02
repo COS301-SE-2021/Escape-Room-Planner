@@ -183,7 +183,6 @@ export class InventoryComponent implements OnInit {
   }
 
   public async generateDiagram() {
-    console.log("Inventory");
     this.generate.emit();
   }
 

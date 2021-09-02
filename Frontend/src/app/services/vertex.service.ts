@@ -104,4 +104,5 @@ export class VertexService {
   public getVertexConnections(vertex_id: number){
    return this._vertices[vertex_id].getConnections();
   }
+
 }

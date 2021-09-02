@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { Vertex } from 'src/app/models/vertex.model';
 import { VertexService } from 'src/app/services/vertex.service';
 declare var mxGraph: any;
@@ -12,47 +13,41 @@ declare var mxHierarchicalLayout: any;
 
 export class DependencyDiagramComponent implements OnInit {
 
-  constructor(private vertexService: VertexService) {}
+  constructor(private vertexService: VertexService, private router: Router) {}
 
-  ngOnInit() {
-
-  }
-
-  //Get the vertex of the graph
-
+  ngOnInit() {}
 
   @ViewChild('graphContainer') graphContainer!: ElementRef;
+  // @ts-ignore
   generate() {
-    console.log("What Up What Up");
     const graph = new mxGraph(this.graphContainer.nativeElement);
     try {
       const parent = graph.getDefaultParent();
       graph.getModel().beginUpdate();
-      // if (this.vertexService.vertices == null)
-      // let vertex = this.vertexService.vertices[0];
 
+      let graphVertices = [];
+      // Create and store all the graph vertices
+      for (let vertex of this.vertexService.vertices)
+        graphVertices.push(graph.insertVertex(parent, vertex.local_id, vertex.type, 0, 0, 60, 80));
 
-        // console.log("Can we access the vertex: "+vertex.name);
-      for (let vertex of this.vertexService.vertices){
-        const vert1 = graph.insertVertex(parent, vertex.id, vertex.type, 0, 0, 80, 80);
-        for (let edge of this.vertexService.getVertexConnections(1 )) {
-          // console.log("The connectionss: "+vertex.getConnections());
-          const vert2 = graph.insertVertex(parent, edge.id, edge.type, 0, 0, 80, 80);
-          graph.insertVertex(parent, '', '', vert2, vert1);
-          console.log(edge.type+"  yyyy");
+      // Loop through all the graph vertices
+      for (let vertex1 of graphVertices) {
+        // For each graph vertex, find it's connections
+        let connections = this.vertexService.getVertexConnections((vertex1.id-2));
+        // Loop through all the connections
+        for (let index of connections) {
+          // Now loop through the graph vertices again to find a vertex that is connected
+          // the first one you found
+          for (let vertex2 of graphVertices) {
+            // Check for the vertex id and compare it with the index, (I think the id is the index) been missing this
+            if ((vertex2.id-2) == index) {
+              // Finally just connect the two vertices
+              graph.insertEdge(parent, '', '', vertex2, vertex1);
+              break;
+            }
+          }
         }
       }
-
-      // const vertex1 = graph.insertVertex(parent, '1', 'Start', 0, 0, 80, 80);
-      // const vertex2 = graph.insertVertex(parent, '2', 'Container', 0, 0, 80, 80);
-      // const vertex3 = graph.insertVertex(parent, '3', 'Puzzle', 0, 0, 80, 80);
-      // const vertex4 = graph.insertVertex(parent, '4', 'Clue', 0, 0, 80, 80);
-      // const vertex5 = graph.insertVertex(parent, '5', 'End', 0, 0, 80, 80);
-      // graph.insertEdge(parent, '', '', vertex1, vertex2);
-      // graph.insertEdge(parent, '', '', vertex1, vertex4);
-      // graph.insertEdge(parent, '', '', vertex2, vertex3);
-      // graph.insertEdge(parent, '', '', vertex4, vertex5);
-      // graph.insertEdge(parent, '', '', vertex3, vertex5);
     } finally {
       graph.getModel().endUpdate();
       new mxHierarchicalLayout(graph).execute(graph.getDefaultParent());

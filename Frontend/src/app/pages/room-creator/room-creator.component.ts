@@ -648,7 +648,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   generateDiagram(): void {
-    console.log("Room");
     this.diagramComponent?.generate();
   }
 
