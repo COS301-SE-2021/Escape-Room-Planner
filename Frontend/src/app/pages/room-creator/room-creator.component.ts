@@ -1110,6 +1110,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       update_vertex_attribute['name'] = data['attribute_name'];
       this.vertex_name_menu = data['attribute_name'];
       vertex.name = this.vertex_name_menu;
+      // @ts-ignore
+      document.getElementById('tag-'+vertex.local_id).textContent = vertex.name;
     }
     if(data['attribute_min'] !== ''){
       // @ts-ignore
