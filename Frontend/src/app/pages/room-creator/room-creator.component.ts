@@ -478,7 +478,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
-    console.log(this.showNames)
     let newP = this.renderer.createElement("p");
     let newObject = this.renderer.createElement("img"); // create image
     // * zoomValue to get the zoomed representation
@@ -508,7 +507,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newP,"z-index",vertex.z_index);
     this.renderer.setStyle(newP,"width", vertex.width*this.zoomValue+"px");
     this.renderer.setStyle(newP,"margin-top",(vertex.height/2)*this.zoomValue + "px ");
-    // this.renderer.setStyle(newP,"",);
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
@@ -516,8 +514,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setAttribute(newObject,"data-y", (vertex.pos_y*this.zoomValue).toString());
     if (!this.showNames)
       this.renderer.setAttribute(newP, 'hidden','');
-
-    this.renderer.appendChild(newP, this.renderer.createText("testtesttesttesttesttesttesttesttest"));
+    //set ids
+    this.renderer.setAttribute(newP,'id', 'tag-'+local_id); // tag-VERTEX_ID for every tag
+    //append children
+    this.renderer.appendChild(newP, this.renderer.createText(vertex.name));
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newP);
     // Event listener
@@ -932,6 +932,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
         this.removeLines(local_target_id);
         this._target_vertex.remove();
+        // @ts-ignore
+        document.getElementById('tag-'+local_target_id).remove();
       },
       error => {
         if (error.status === 401){
@@ -1134,6 +1136,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
       response => {
         if (response.success){
+          //todo: update tag name here
           this.resetAttributeMenuValue();
         }else{
           this.renderAlertError(response.message);
