@@ -34,6 +34,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public hidePuzzle:boolean = true;
   public zoomValue: number = 1.0;
   public _room_count:number = 0;
+  public showNames: boolean = false;
 
   private _target_room: any;
   private _target_vertex: any;
@@ -477,13 +478,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
-    // TODO: check if attribute changed and only then dop the rest
+    console.log(this.showNames)
     let newP = this.renderer.createElement("p");
-    this.renderer.appendChild(newP, this.renderer.createText("test"));
-    this.renderer.setStyle(newP, "position", "absolute");
-    this.renderer.setStyle(newP, "user-select", "none");
-    // * zoomValue to get the zoomed representation
     let newObject = this.renderer.createElement("img"); // create image
+    // * zoomValue to get the zoomed representation
     if(local_id === this._target_start) {
       this.renderer.addClass(newObject, "resize-drag");
       this.renderer.addClass(newObject, "border");
@@ -496,6 +494,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.renderer.addClass(newObject, "border-info");
     }else
       this.renderer.addClass(newObject, "resize-drag");
+
+    this.renderer.addClass(newP, 'vertex-tag');
     // All the styles
     let vertex = this.vertexService.vertices[local_id];
     this.renderer.setStyle(newObject,"width", vertex.width*this.zoomValue + "px");
@@ -503,15 +503,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newObject,"position", "absolute");
     this.renderer.setStyle(newObject,"user-select", "none");
     this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
-    this.renderer.setStyle(newP,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
     this.renderer.setStyle(newObject,"z-index",vertex.z_index);
+    this.renderer.setStyle(newP,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
     this.renderer.setStyle(newP,"z-index",vertex.z_index);
+    this.renderer.setStyle(newP,"width", vertex.width*this.zoomValue+"px");
+    this.renderer.setStyle(newP,"margin-top",(vertex.height/2)*this.zoomValue + "px ");
+    // this.renderer.setStyle(newP,"",);
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
     this.renderer.setAttribute(newObject,"data-x", (vertex.pos_x*this.zoomValue).toString());
     this.renderer.setAttribute(newObject,"data-y", (vertex.pos_y*this.zoomValue).toString());
+    if (!this.showNames)
+      this.renderer.setAttribute(newP, 'hidden','');
 
+    this.renderer.appendChild(newP, this.renderer.createText("testtesttesttesttesttesttesttesttest"));
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newP);
     // Event listener
@@ -532,11 +538,27 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     });
   }
 
+  //updates position of tag when vertex is dragged
   updateTag(tag: HTMLParagraphElement, image: HTMLImageElement){
     let x = image.getAttribute('data-x');
     let y = image.getAttribute('data-y');
+    let w = image.style.width;
+    // @ts-ignore
+    let h = Number.parseFloat(image.style.height.match(/\d+/)[0]);
 
     tag.style.transform = "translate("+ x +"px,"+ y +"px)";
+    tag.style.width = w;
+    tag.style.marginTop = h/2 + "px";
+  }
+
+  displayNames(): void{
+    this.showNames = !this.showNames; // toggle flag
+
+    let p_tags:any = document.getElementsByClassName('vertex-tag');
+
+    for(let p_tag of p_tags){
+      p_tag.hidden = !this.showNames;
+    }
   }
 
   // used to create and spawn a room-image when clicking inventory image
