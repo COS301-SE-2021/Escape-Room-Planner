@@ -1183,8 +1183,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         // update every line that is connected ez
 
         this.updateLine(vertex_id);
+        // @ts-ignore
+        this.updateTag(document.getElementById('tag-'+vertex_id), child);
+        console.log(document.getElementById('tag-'+vertex_id))
       }else {
-        // now, how do this???
+        // check if not a tag
+        if (child.id.includes('tag-')) continue;
         // only storing the default on db but no need to call
         // so need to store defaults on element itself, then updating defaults like with a call
         let norm_x = child.getAttribute('data-norm-x');
