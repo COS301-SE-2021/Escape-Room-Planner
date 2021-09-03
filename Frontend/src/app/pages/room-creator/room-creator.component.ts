@@ -1185,7 +1185,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.updateLine(vertex_id);
         // @ts-ignore
         this.updateTag(document.getElementById('tag-'+vertex_id), child);
-        console.log(document.getElementById('tag-'+vertex_id))
       }else {
         // check if not a tag
         if (child.id.includes('tag-')) continue;
