@@ -27,6 +27,7 @@ const routes: Routes = [
   { path: 'escape-room', component: RoomCreatorComponent},
   { path: 'verify-success', component: VerifySuccessComponent},
   { path: 'verify-failure', component: VerifyFailedComponent},
+  { path: 'simulation', component: SimulationComponent},
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
