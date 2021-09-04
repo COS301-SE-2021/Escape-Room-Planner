@@ -1,0 +1,6 @@
+/* remove padding and margin from browser */
+* {
+  padding: 0;
+  margin: 0;
+}
+
