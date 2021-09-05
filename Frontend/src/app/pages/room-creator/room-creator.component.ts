@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
+import {RoomService} from "../../services/room.service";
 import {Router} from "@angular/router";
 // Leader Line JS library imports
 import 'leader-line';
@@ -55,7 +56,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
-              private vertexService: VertexService, private router:Router)
+              private vertexService: VertexService, private roomService: RoomService,
+              private router:Router)
   {
 
     if(localStorage.getItem('token') ==  null) {
@@ -229,8 +231,16 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       // gets room images
       this.httpClient.get<any>('http://127.0.0.1:3000/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
         response =>{
+          this.roomService.resetRoom();
           for ( let room_image of response.data){
-
+            this.roomService.addRoomImage(
+              room_image.room_image.id,
+              room_image.room_image.pos_x,
+              room_image.room_image.pos_y,
+              room_image.room_image.width,
+              room_image.room_image.height,
+              room_image.src
+              );
             this.spawnRoom(
               room_image.room_image.pos_x,
               room_image.room_image.pos_y,
