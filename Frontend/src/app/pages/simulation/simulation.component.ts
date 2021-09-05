@@ -1,5 +1,6 @@
 import { OnInit, Component, ElementRef, Input, HostListener, NgZone, OnDestroy } from '@angular/core';
-import { Application, Sprite, Ticker } from 'pixi.js';
+import { Application, Sprite, Container } from 'pixi.js';
+import { RoomService } from "../../services/room.service";
 
 @Component({
   selector: 'app-simulation',
@@ -9,37 +10,28 @@ import { Application, Sprite, Ticker } from 'pixi.js';
 export class SimulationComponent implements OnInit, OnDestroy {
   private app: Application | undefined;
   private character: Sprite | undefined;
+  private rooms: Container[] | undefined;
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
   private movement = {a: false,w: false, d: false, s: false};
 
-  constructor(private elementRef: ElementRef, private ngZone: NgZone) {}
+  constructor(private elementRef: ElementRef, private ngZone: NgZone, private  roomService: RoomService) {
+    this.rooms = [];
+  }
 
   init() {
     this.ngZone.runOutsideAngular(() => {
       this.app = new Application({width: 500, height:500});
     });
     if (this.app !== undefined) {
-      this.app.renderer.backgroundColor = 0x23395D;
+      this.app.renderer.backgroundColor = 0x000000;
       //how you can resize the canvas for pixi
       this.app.renderer.resize(window.innerWidth, window.innerHeight-56);
       this.app.view.style.position = 'absolute';
       this.app.view.style.top =  '56px';
       // TODO : fix styles later to be dynamic
       this.elementRef.nativeElement.appendChild(this.app.view);
-      //create character
-      // @ts-ignore
-      this.character = new Sprite.from('/assets/sprite/character1.png');
-      if (this.character !== undefined){
-        this.character.anchor.set(0.5);
-        //spawn in middle of page
-        this.character.x = this.app.view.width/2;
-        this.character.y = this.app.view.height/2;
-        this.app.stage.addChild(this.character);
-        // @ts-ignore
-        this.app.ticker.add(delta => this.simulate(delta));
-        this.app.ticker.start();
-        console.log(this.app.ticker.deltaTime+ "ticker");
-      }
+      this.loadAssets();
+      this.app.ticker.add(delta => this.simulate(delta));
     }
   }
 
@@ -49,7 +41,11 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
 
   destroy() {
-    if(this.app !== undefined)
+    if(this.rooms !== undefined)
+      this.rooms.forEach(room => {
+        room.destroy();
+      });
+    if (this.app !== undefined)
       this.app.destroy();
   }
 
@@ -104,4 +100,77 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
   }
 
+  // TODO : fix loader to not load cached object
+  loadAssets(){
+    if(this.app !== undefined){
+      //load all room sprites from azure
+      for (let room_image of this.roomService.room_images)
+        this.app.loader.add('room'+room_image.id, room_image.src);
+      //load character sprite
+      this.app.loader.add('character', '/assets/sprite/character1.png')
+
+      this.app.loader.onProgress.add((e)=>{
+        console.log(e.progress);
+      });
+      //shows when load complete
+      this.app.loader.onComplete.add(()=>{
+        console.log('COMPLETED LOAD');
+        this.loadRoom();
+      });
+      //shows error when loading
+      this.app.loader.onError.add((e) => {
+        console.log(e.message);
+      });
+      this.app.loader.load();
+    }
+  }
+
+  loadRoom(){
+    if(this.app !== undefined){
+      //create character sprite
+      if(this.character === undefined){
+        // @ts-ignore
+        this.character = new Sprite.from(this.app.loader.resources.character.texture);
+        if(this.character !== undefined) {
+          this.character.anchor.set(0.5);
+          //spawn in middle of page
+          this.character.x = this.app.view.width / 2;
+          this.character.y = this.app.view.height / 2;
+        }
+      }
+
+      //create room containers
+      for (let room_images of this.roomService.room_images) {
+        let room = new Container();
+        //hide room containers so it is not shown straight away
+        room.visible = false;
+
+        // @ts-ignore
+        let sprite = new Sprite.from(this.app.loader.resources['room'+room_images.id].texture);
+        sprite.anchor.set(0.5);
+        sprite.x = this.app.view.width/2;
+        sprite.y = this.app.view.height/2;
+        room.addChild(sprite);
+        if(this.character)
+          room.addChild(this.character);
+        if(this.rooms)
+          this.rooms.push(room);
+      }
+      if(this.rooms){
+       this.rooms.forEach(room =>{
+         // @ts-ignore
+         this.app.stage.addChild(room);
+       });
+      }
+      this.showRoom();
+    }
+  }
+
+  showRoom(){
+    if (this.app){
+      if(this.rooms && this.rooms.length > 0){
+        this.rooms[1].visible = true;
+      }
+    }
+  }
 }
