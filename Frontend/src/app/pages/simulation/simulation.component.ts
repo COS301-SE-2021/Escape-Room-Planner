@@ -11,11 +11,13 @@ export class SimulationComponent implements OnInit, OnDestroy {
   private app: Application | undefined;
   private character: Sprite | undefined;
   private rooms: Container[] | undefined;
+  private current_room_index: number | undefined;
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
   private movement = {a: false,w: false, d: false, s: false};
 
   constructor(private elementRef: ElementRef, private ngZone: NgZone, private  roomService: RoomService) {
     this.rooms = [];
+    this.current_room_index = 0;
   }
 
   init() {
@@ -66,6 +68,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
     else if(event.code === 'KeyS'){
       this.movement.s = true;
+    }else if(event.code === 'KeyE'){
+      this.changeRoom();
     }
   }
 
@@ -115,7 +119,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
       //shows when load complete
       this.app.loader.onComplete.add(()=>{
         console.log('COMPLETED LOAD');
-        this.loadRoom();
+        this.loadRooms();
       });
       //shows error when loading
       this.app.loader.onError.add((e) => {
@@ -125,7 +129,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadRoom(){
+  loadRooms(){
     if(this.app !== undefined){
       //create character sprite
       if(this.character === undefined){
@@ -151,8 +155,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
         sprite.x = this.app.view.width/2;
         sprite.y = this.app.view.height/2;
         room.addChild(sprite);
-        if(this.character)
-          room.addChild(this.character);
         if(this.rooms)
           this.rooms.push(room);
       }
@@ -162,15 +164,34 @@ export class SimulationComponent implements OnInit, OnDestroy {
          this.app.stage.addChild(room);
        });
       }
-      this.showRoom();
+      // @ts-ignore
+      this.showRoom(this.current_room_index);
     }
   }
 
-  showRoom(){
-    if (this.app){
-      if(this.rooms && this.rooms.length > 0){
-        this.rooms[1].visible = true;
+  showRoom(room_index: number){
+    if (this.app && this.current_room_index !== undefined){
+      if(this.rooms && this.rooms.length > 0 && this.rooms.length > room_index){
+        //hide old room
+        this.rooms[this.current_room_index].visible = false;
+        //remove character from old room and place in new
+        if(this.character) {
+          this.rooms[this.current_room_index].removeChild(this.character);
+          this.rooms[room_index].addChild(this.character);
+        }
+        this.rooms[room_index].visible = true;
+        this.current_room_index = room_index;
       }
+    }
+  }
+
+  // TODO : change this function such that it works once rooms been solved
+  changeRoom(){
+    if(this.current_room_index !== undefined && this.rooms) {
+      if (this.current_room_index >= this.rooms.length-1)
+        this.showRoom(0);
+      else
+        this.showRoom(this.current_room_index + 1);
     }
   }
 }
