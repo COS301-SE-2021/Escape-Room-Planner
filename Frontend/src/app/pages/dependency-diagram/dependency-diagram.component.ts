@@ -50,7 +50,12 @@ export class DependencyDiagramComponent implements OnInit {
       }
     } finally {
       graph.getModel().endUpdate();
-      new mxHierarchicalLayout(graph).execute(graph.getDefaultParent());
+      const layout = new mxHierarchicalLayout(graph);
+      layout.horizontal = true;
+      layout.edgeStyle=4;
+      layout.intraCellSpacing=20;
+      layout.interRankCellSpacing=55;
+      layout.execute(graph.getDefaultParent());
     }
   }
 }
