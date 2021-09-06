@@ -1,6 +1,7 @@
 import { OnInit, Component, ElementRef, Input, HostListener, NgZone, OnDestroy } from '@angular/core';
 import { Application, Sprite, Container } from 'pixi.js';
 import { RoomService } from "../../services/room.service";
+import {VertexService} from "../../services/vertex.service";
 
 @Component({
   selector: 'app-simulation',
@@ -15,7 +16,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
   private movement = {a: false,w: false, d: false, s: false};
 
-  constructor(private elementRef: ElementRef, private ngZone: NgZone, private  roomService: RoomService) {
+  constructor(private elementRef: ElementRef, private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
     this.rooms = [];
     this.current_room_index = 0;
   }
@@ -110,6 +111,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
       //load all room sprites from azure
       for (let room_image of this.roomService.room_images)
         this.app.loader.add('room'+room_image.id, room_image.src);
+
+      for(let vertex_image of this.vertexService.vertices)
+        this.app.loader.add('vertex'+vertex_image.local_id, vertex_image.graphic_id);
+
       //load character sprite
       this.app.loader.add('character', '/assets/sprite/character1.png')
 
@@ -155,6 +160,24 @@ export class SimulationComponent implements OnInit, OnDestroy {
         sprite.x = this.app.view.width/2;
         sprite.y = this.app.view.height/2;
         room.addChild(sprite);
+
+
+        console.log("hello" +  room_images.getContainedObjects())
+        if(room_images.getContainedObjects() !== undefined)
+        {
+          for(let vertex_images of room_images.getContainedObjects())
+          {
+            // @ts-ignore
+            let vertex_sprite = new Sprite.from(this.app.loader.resources['vertex'+vertex_images].texture);
+            vertex_sprite.anchor.set(0.5);
+            let vertices = this.vertexService.vertices
+            vertex_sprite.x = vertices[vertex_images].pos_x;
+            vertex_sprite.y = vertices[vertex_images].pos_y;
+            room.addChild(vertex_sprite);
+          }
+        }
+
+
         if(this.rooms)
           this.rooms.push(room);
       }
