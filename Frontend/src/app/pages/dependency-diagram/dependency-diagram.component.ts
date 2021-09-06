@@ -18,6 +18,7 @@ export class DependencyDiagramComponent implements OnInit {
   ngOnInit() {}
 
   @ViewChild('graphContainer') graphContainer!: ElementRef;
+
   // @ts-ignore
   generate() {
     const graph = new mxGraph(this.graphContainer.nativeElement);
