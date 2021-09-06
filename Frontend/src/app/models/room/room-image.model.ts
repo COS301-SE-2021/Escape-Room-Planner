@@ -5,7 +5,7 @@ export class RoomImage {
   private _width: number;
   private _height: number;
   private _src: string;
-
+  private contains_objects: number[];
 
   constructor(id: number, pos_x: number, pos_y: number, width: number, height: number, src: string) {
     this._id = id;
@@ -14,6 +14,7 @@ export class RoomImage {
     this._width = width;
     this._height = height;
     this._src = src;
+    this.contains_objects = [];
   }
 
 
@@ -63,5 +64,17 @@ export class RoomImage {
 
   set src(value: string) {
     this._src = value;
+  }
+
+  addObject(vertex_id: number){
+    this.contains_objects.push(vertex_id);
+  }
+
+  getContainedObjects(){
+    return this.contains_objects;
+  }
+
+  resetContainedObjects(){
+    this.contains_objects = [];
   }
 }

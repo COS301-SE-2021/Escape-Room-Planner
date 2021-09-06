@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RoomImage } from '../models/room/room-image.model'
+import {Vertex} from "../models/vertex.model";
 @Injectable({
   providedIn: 'root'
 })
@@ -25,5 +26,28 @@ export class RoomService {
   resetRoom(){
     this._counter = 0;
     this._room_images = [];
+  }
+
+  //well set the vertex to room image
+  RoomImageContainsVertex(vertices: Vertex[]){
+    //deep copy of array
+    let vertexArray = [...vertices];
+    for(let room_image of this._room_images){
+      room_image.resetContainedObjects();
+      for(let i = 0; i < vertexArray.length; i++){
+        //check x coordinates
+        if((room_image.pos_x <= vertexArray[i].pos_x) &&
+          ((room_image.width+room_image.pos_x) >= vertexArray[i].pos_x)){
+          //check y coordinates
+          if((room_image.pos_y <= vertexArray[i].pos_y) &&
+            ((room_image.height+room_image.pos_y) >= vertexArray[i].pos_y)){
+            room_image.addObject(vertexArray[i].local_id);
+            vertexArray.splice(i,1);
+            i--;
+          }
+        }
+      }
+    }
+    //TODO: check if array is empty and if not say what needs to be placed
   }
 }
