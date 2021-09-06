@@ -37,16 +37,18 @@ export class RoomService {
       for(let i = 0; i < vertexArray.length; i++){
         //check x coordinates
         if((room_image.pos_x <= vertexArray[i].pos_x) &&
-          ((room_image.width+room_image.pos_x) >= vertexArray[i].pos_x)){
+          ((room_image.width+room_image.pos_x) >= (vertexArray[i].pos_x + vertexArray[i].width))){
           //check y coordinates
           if((room_image.pos_y <= vertexArray[i].pos_y) &&
-            ((room_image.height+room_image.pos_y) >= vertexArray[i].pos_y)){
+            ((room_image.height+room_image.pos_y) >= (vertexArray[i].pos_y+vertexArray[i].height))){
             room_image.addObject(vertexArray[i].local_id);
             vertexArray.splice(i,1);
             i--;
           }
         }
       }
+      console.log(room_image.id +" " + room_image.getContainedObjects());
+      console.log(vertexArray);
     }
     //TODO: check if array is empty and if not say what needs to be placed
   }
