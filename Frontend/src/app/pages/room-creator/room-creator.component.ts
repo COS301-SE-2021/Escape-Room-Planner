@@ -32,9 +32,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public hasRooms:boolean = true;
   public hideClue:boolean = true;
   public hidePuzzle:boolean = true;
-  public  zoomValue: number = 1.0;
+  public zoomValue: number = 1.0;
+  public _room_count:number = 0;
+  public showNames: boolean = false;
 
-  private _room_count:number = 0;
   private _target_room: any;
   private _target_vertex: any;
   private _target_start: any;
@@ -57,7 +58,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private router:Router)
   {
-
     if(localStorage.getItem('token') ==  null) {
       this.router.navigate(['login']).then(r => console.log('no jwt stored'));
     }
@@ -83,6 +83,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
+    //TODO: only do this if the position changed ?
     let update_lines = this.vertexService.getLineIndex(vertex_index);
 
     for (let line_index of update_lines){
@@ -476,8 +477,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
-    // * zoomValue to get the zoomed representation
+    let newP = this.renderer.createElement("p");
     let newObject = this.renderer.createElement("img"); // create image
+    // * zoomValue to get the zoomed representation
     if(local_id === this._target_start) {
       this.renderer.addClass(newObject, "resize-drag");
       this.renderer.addClass(newObject, "border");
@@ -490,6 +492,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.renderer.addClass(newObject, "border-info");
     }else
       this.renderer.addClass(newObject, "resize-drag");
+
+    this.renderer.addClass(newP, 'vertex-tag');
     // All the styles
     let vertex = this.vertexService.vertices[local_id];
     this.renderer.setStyle(newObject,"width", vertex.width*this.zoomValue + "px");
@@ -498,16 +502,28 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newObject,"user-select", "none");
     this.renderer.setStyle(newObject,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
     this.renderer.setStyle(newObject,"z-index",vertex.z_index);
+    this.renderer.setStyle(newP,"transform",'translate('+ vertex.pos_x*this.zoomValue +'px, '+ vertex.pos_y*this.zoomValue +'px)');
+    this.renderer.setStyle(newP,"z-index",vertex.z_index);
+    this.renderer.setStyle(newP,"width", vertex.width*this.zoomValue+"px");
+    this.renderer.setStyle(newP,"margin-top",(vertex.height/2)*this.zoomValue + "px ");
     // Setting all needed attributes
     this.renderer.setAttribute(newObject,'vertex-id', local_id.toString());
     this.renderer.setAttribute(newObject,"src", vertex.graphic_id);
     this.renderer.setAttribute(newObject,"data-x", (vertex.pos_x*this.zoomValue).toString());
     this.renderer.setAttribute(newObject,"data-y", (vertex.pos_y*this.zoomValue).toString());
-
+    if (!this.showNames)
+      this.renderer.setAttribute(newP, 'hidden','');
+    //set ids
+    this.renderer.setAttribute(newP,'id', 'tag-'+local_id); // tag-VERTEX_ID for every tag
+    //append children
+    this.renderer.appendChild(newP, this.renderer.createText(vertex.name));
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newObject);
+    this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newP);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
+    this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
     this.renderer.listen(newObject,"click", (event) => this.vertexOperation(event));
+    this.renderer.listen(newObject,"mousemove", (event) => this.updateTag(newP, newObject));
     // double click to show Attribute Menu
     this.renderer.listen(newObject,"dblclick", (event) => {
       this._is_single_click = false;
@@ -519,6 +535,29 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.showContextMenu(event);
       return false;
     });
+  }
+
+  //updates position of tag when vertex is dragged
+  updateTag(tag: HTMLParagraphElement, image: HTMLImageElement){
+    let x = image.getAttribute('data-x');
+    let y = image.getAttribute('data-y');
+    let w = image.style.width;
+    // @ts-ignore
+    let h = Number.parseFloat(image.style.height.match(/\d+/)[0]);
+
+    tag.style.transform = "translate("+ x +"px,"+ y +"px)";
+    tag.style.width = w;
+    tag.style.marginTop = h/2 + "px";
+  }
+
+  displayNames(): void{
+    this.showNames = !this.showNames; // toggle flag
+
+    let p_tags:any = document.getElementsByClassName('vertex-tag');
+
+    for(let p_tag of p_tags){
+      p_tag.hidden = !this.showNames;
+    }
   }
 
   // used to create and spawn a room-image when clicking inventory image
@@ -892,6 +931,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
         this.removeLines(local_target_id);
         this._target_vertex.remove();
+        // @ts-ignore
+        document.getElementById('tag-'+local_target_id).remove();
       },
       error => {
         if (error.status === 401){
@@ -1068,6 +1109,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       update_vertex_attribute['name'] = data['attribute_name'];
       this.vertex_name_menu = data['attribute_name'];
       vertex.name = this.vertex_name_menu;
+      // @ts-ignore
+      document.getElementById('tag-'+vertex.local_id).textContent = vertex.name;
     }
     if(data['attribute_min'] !== ''){
       // @ts-ignore
@@ -1094,6 +1137,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
       response => {
         if (response.success){
+          //todo: update tag name here
           this.resetAttributeMenuValue();
         }else{
           this.renderAlertError(response.message);
@@ -1138,8 +1182,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         // update every line that is connected ez
 
         this.updateLine(vertex_id);
+        // @ts-ignore
+        this.updateTag(document.getElementById('tag-'+vertex_id), child);
       }else {
-        // now, how do this???
+        // check if not a tag
+        if (child.id.includes('tag-')) continue;
         // only storing the default on db but no need to call
         // so need to store defaults on element itself, then updating defaults like with a call
         let norm_x = child.getAttribute('data-norm-x');
