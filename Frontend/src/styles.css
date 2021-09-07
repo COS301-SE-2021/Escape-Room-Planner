@@ -8,12 +8,28 @@ small {
   color: #ff6666;
 }
 
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #010409;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #363B42;
+  border-radius: 10px;
+}
+
 body {
-  background: var(--main-bg) !important;
+  background: #010409 !important;
   height: 100%;
   font-family: "Roboto", sans-serif;
+  overflow-x: hidden;
 }
 
 .navbar {
-  background: var(--main-bg);
+  background: #363B42;
 }
+
+

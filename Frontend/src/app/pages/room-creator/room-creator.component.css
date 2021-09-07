@@ -119,24 +119,11 @@ input::-webkit-inner-spin-button {
 
 #simulate {
   height: 35px;
-  width: 130px;
+  width: 135px;
   background: #1A73E8;
   outline: none;
   border: none;
   border-radius: 5px;
   color: white;
   text-align: center;
-}
-
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: #010409;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #363B42;
-  border-radius: 10px;
 }
