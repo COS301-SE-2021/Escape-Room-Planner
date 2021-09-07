@@ -7,9 +7,9 @@
 }
 
 /* Escape Room selection menu colour on hover */
-.dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {
-  background-color:grey;
-}
+/*.dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {*/
+/*  background-color:grey;*/
+/*}*/
 
 #delete_button > button:hover {
   background-color: #a31818;
@@ -78,6 +78,11 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-#custom{
+#escapeRoomsDropdown {
+  margin: 4px;
   background: #363B42;
+  border-radius: 5px;
+  width: 750px;
+  height: 35px;
+  color: white;
 }

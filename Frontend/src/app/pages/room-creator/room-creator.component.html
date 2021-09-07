@@ -23,10 +23,10 @@
       <div class="container-fluid remove-padding">
         <div class="row container-fluid remove-padding remove-margin">
           <div class=" dropdown remove-padding dropdown-margin">
-            <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <button class=" dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
-            <ul class="dropdown-menu w-100 remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+            <ul class="dropdown-menu remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
               <li class="dropdown-item text-center remove-padding">
                 <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
@@ -213,12 +213,12 @@
       </div>
       <div class="modal-body">
         <!-- warning for empty form input -->
-        <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="!newEscapeRoomNameValid">
+        <div class="alert alert-warning alert-dismissible fade show" style="background: #010409; border: 1px solid red;" role="alert" *ngIf="!newEscapeRoomNameValid">
           <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters
         </div>
         <form name="NewEscapeRoomForm">
           <div class="mb-3 form-group">
-            <label for="recipient-name" class="col-form-label">Room Name:</label>
+            <label for="recipient-name" class="col-form-label" style="color: #ffffff">Room Name:</label>
             <input type="text"
                    name="EscapeRoomName"
                    class="form-control"
@@ -226,7 +226,8 @@
                    placeholder="Some quirky name"
                    required
                    [(ngModel)]="newEscapeRoomName"
-                   (input)="isNewEscapeRoomNameValid()">
+                   (input)="isNewEscapeRoomNameValid()"
+                  style="background: #010409; border: 1px solid #3BA55D; outline: none">
           </div>
         </form>
       </div>
