@@ -206,9 +206,9 @@
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" style="background: #363B42; border-radius: 10px;">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Escape Room</h5>
+        <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff;">New Escape Room</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -231,7 +231,7 @@
         </form>
       </div>
 
-      <div class="modal-footer form-group" id="create">
+      <div class="modal-footer form-group">
         <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom()" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
