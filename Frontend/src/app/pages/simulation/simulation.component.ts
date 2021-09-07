@@ -11,7 +11,7 @@ import {VertexService} from "../../services/vertex.service";
 export class SimulationComponent implements OnInit, OnDestroy {
   private app: Application | undefined;
   private character: AnimatedSprite | undefined;
-  private rooms: Container[] | undefined;
+  private readonly rooms: Container[] | undefined;
   private current_room_index: number | undefined;
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
   private movement = {a: false,w: false, d: false, s: false};
@@ -95,11 +95,14 @@ export class SimulationComponent implements OnInit, OnDestroy {
       //move character
       if (this.movement.a) {
         this.character.x -= 5;
-      } else if (this.movement.w) {
+      }
+      if (this.movement.w) {
         this.character.y -= 5;
-      } else if (this.movement.d) {
+      }
+      if (this.movement.d) {
         this.character.x += 5;
-      } else if (this.movement.s) {
+      }
+      if (this.movement.s) {
         this.character.y += 5;
       }
     }
@@ -144,8 +147,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
         for(let i = 0; i < 6; i++){
           // @ts-ignore
           const textureLoad = new Texture(loader.texture);
-          const rect = new Rectangle((0+32*i),0,32,32);
-          textureLoad.frame = rect;
+          textureLoad.frame = new Rectangle((32*i),0,32,32);
           textureC.push(textureLoad);
         }
         this.character = new AnimatedSprite(textureC);
@@ -186,11 +188,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
           {
             // @ts-ignore
             let vertex_sprite = new Sprite.from(this.app.loader.resources['vertex'+vertex_images].texture);
-            vertex_sprite.anchor.set(3.5);
+            vertex_sprite.anchor.set(0);
             let vertices = this.vertexService.vertices;
             console.log(vertex_images + ": " + vertices[vertex_images].pos_x + " , " + vertices[vertex_images].pos_y);
-            vertex_sprite.x = vertices[vertex_images].pos_x - room_images.pos_x;
-            vertex_sprite.y = vertices[vertex_images].pos_y - room_images.pos_y;
+            console.log(vertex_images + ": " + room_images.pos_x + ", " + room_images.pos_y);
+            vertex_sprite.x =  vertices[vertex_images].pos_x - room_images.pos_x - room_images.width/2;
+            vertex_sprite.y = vertices[vertex_images].pos_y - room_images.pos_y  - room_images.height/2;
             vertex_sprite.width = vertices[vertex_images].width;
             vertex_sprite.height = vertices[vertex_images].height;
 
