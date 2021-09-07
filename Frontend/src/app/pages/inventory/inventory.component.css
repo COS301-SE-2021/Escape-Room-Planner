@@ -54,6 +54,8 @@ li > .btn-link:hover{
   background: #3BA55D;
   color: white;
   height: 35px;
+  margin: 4px;
+  width: 95%;
 }
 
 .overflow-auto {
