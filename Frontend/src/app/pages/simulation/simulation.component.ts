@@ -153,22 +153,29 @@ export class SimulationComponent implements OnInit, OnDestroy {
         if(this.character !== undefined) {
           this.character.anchor.set(0.5);
           //spawn in middle of page
-          this.character.x = this.app.view.width / 2;
-          this.character.y = this.app.view.height / 2;
+          this.character.x = 0;
+          this.character.y = 0;
         }
       }
 
       //create room containers
       for (let room_images of this.roomService.room_images) {
         let room = new Container();
+        room.x = this.app.view.width/2;
+        room.y = this.app.view.height/2;
         //hide room containers so it is not shown straight away
         room.visible = false;
 
+        console.log("room: "+ room_images.pos_x + " , " + room_images.pos_y);
         // @ts-ignore
         let sprite = new Sprite.from(this.app.loader.resources['room'+room_images.id].texture);
         sprite.anchor.set(0.5);
-        sprite.x = this.app.view.width/2;
-        sprite.y = this.app.view.height/2;
+        // sprite.x = this.app.view.width/2;
+        // sprite.y = this.app.view.height/2;
+        sprite.x = 0;
+        sprite.y = 0;
+        sprite.width = room_images.width;
+        sprite.height = room_images.height;
         room.addChild(sprite);
 
 
@@ -179,11 +186,18 @@ export class SimulationComponent implements OnInit, OnDestroy {
           {
             // @ts-ignore
             let vertex_sprite = new Sprite.from(this.app.loader.resources['vertex'+vertex_images].texture);
-            vertex_sprite.anchor.set(0.5);
-            let vertices = this.vertexService.vertices
-            vertex_sprite.x = vertices[vertex_images].pos_x;
-            vertex_sprite.y = vertices[vertex_images].pos_y;
+            vertex_sprite.anchor.set(3.5);
+            let vertices = this.vertexService.vertices;
+            console.log(vertex_images + ": " + vertices[vertex_images].pos_x + " , " + vertices[vertex_images].pos_y);
+            vertex_sprite.x = vertices[vertex_images].pos_x - room_images.pos_x;
+            vertex_sprite.y = vertices[vertex_images].pos_y - room_images.pos_y;
+            vertex_sprite.width = vertices[vertex_images].width;
+            vertex_sprite.height = vertices[vertex_images].height;
+
+            // vertex_sprite.x = this.app.view.width/2 - vertices[vertex_images].pos_x - room_images.pos_x;
+            // vertex_sprite.y = this.app.view.height/2 - vertices[vertex_images].pos_y - room_images.pos_y;
             room.addChild(vertex_sprite);
+
           }
         }
 
