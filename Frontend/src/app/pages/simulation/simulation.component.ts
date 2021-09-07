@@ -1,5 +1,5 @@
 import { OnInit, Component, ElementRef, Input, HostListener, NgZone, OnDestroy } from '@angular/core';
-import { Application, Sprite, Container } from 'pixi.js';
+import { Application, Sprite, Container, AnimatedSprite, Rectangle, Texture } from 'pixi.js';
 import { RoomService } from "../../services/room.service";
 import {VertexService} from "../../services/vertex.service";
 
@@ -10,7 +10,7 @@ import {VertexService} from "../../services/vertex.service";
 })
 export class SimulationComponent implements OnInit, OnDestroy {
   private app: Application | undefined;
-  private character: Sprite | undefined;
+  private character: AnimatedSprite | undefined;
   private rooms: Container[] | undefined;
   private current_room_index: number | undefined;
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
@@ -138,8 +138,18 @@ export class SimulationComponent implements OnInit, OnDestroy {
     if(this.app !== undefined){
       //create character sprite
       if(this.character === undefined){
-        // @ts-ignore
-        this.character = new Sprite.from(this.app.loader.resources.character.texture);
+        const loader = this.app.loader.resources.character;
+        let textureC: Texture[];
+        textureC = [];
+        for(let i = 0; i < 6; i++){
+          // @ts-ignore
+          const textureLoad = new Texture(loader.texture);
+          const rect = new Rectangle((0+32*i),0,32,32);
+          textureLoad.frame = rect;
+          textureC.push(textureLoad);
+        }
+        this.character = new AnimatedSprite(textureC);
+        this.character.scale.set(2,2);
         if(this.character !== undefined) {
           this.character.anchor.set(0.5);
           //spawn in middle of page
@@ -199,8 +209,11 @@ export class SimulationComponent implements OnInit, OnDestroy {
         this.rooms[this.current_room_index].visible = false;
         //remove character from old room and place in new
         if(this.character) {
+          this.character.stop();
           this.rooms[this.current_room_index].removeChild(this.character);
           this.rooms[room_index].addChild(this.character);
+          this.character.play();
+          this.character.animationSpeed = 0.1;
         }
         this.rooms[room_index].visible = true;
         this.current_room_index = room_index;
