@@ -2,6 +2,7 @@ import { OnInit, Component, ElementRef, Input, HostListener, NgZone, OnDestroy }
 import { Application, Sprite, Container, AnimatedSprite, Rectangle, Texture } from 'pixi.js';
 import { RoomService } from "../../services/room.service";
 import {VertexService} from "../../services/vertex.service";
+import {min} from "rxjs/operators";
 
 @Component({
   selector: 'app-simulation',
@@ -168,7 +169,19 @@ export class SimulationComponent implements OnInit, OnDestroy {
         //hide room containers so it is not shown straight away
         room.visible = false;
 
+        //calculate scaling value while maintaining aspect ratio
+        let changeX = this.app.view.width/room_images.width;
+        let changeY = this.app.view.height/room_images.height;
+
+        // choose the lesser of the two
+
+        let scale = Math.min(changeX, changeY)
+        console.log("scale: " + scale);
+        console.log("room size: "+ room_images.width + " , " + room_images.height)
+        console.log("room size after scale: "+ room_images.width*scale + " , " + room_images.height*scale)
+
         console.log("room: "+ room_images.pos_x + " , " + room_images.pos_y);
+
         // @ts-ignore
         let sprite = new Sprite.from(this.app.loader.resources['room'+room_images.id].texture);
         sprite.anchor.set(0.5);
@@ -176,8 +189,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
         // sprite.y = this.app.view.height/2;
         sprite.x = 0;
         sprite.y = 0;
-        sprite.width = room_images.width;
-        sprite.height = room_images.height;
+        sprite.width = room_images.width*scale;
+        sprite.height = room_images.height*scale;
         room.addChild(sprite);
 
 
@@ -192,10 +205,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
             let vertices = this.vertexService.vertices;
             console.log(vertex_images + ": " + vertices[vertex_images].pos_x + " , " + vertices[vertex_images].pos_y);
             console.log(vertex_images + ": " + room_images.pos_x + ", " + room_images.pos_y);
-            vertex_sprite.x =  vertices[vertex_images].pos_x - room_images.pos_x - room_images.width/2;
-            vertex_sprite.y = vertices[vertex_images].pos_y - room_images.pos_y  - room_images.height/2;
-            vertex_sprite.width = vertices[vertex_images].width;
-            vertex_sprite.height = vertices[vertex_images].height;
+            vertex_sprite.x =  (vertices[vertex_images].pos_x - room_images.pos_x - room_images.width/2)*scale;
+            vertex_sprite.y = (vertices[vertex_images].pos_y - room_images.pos_y  - room_images.height/2)*scale;
+            vertex_sprite.width = vertices[vertex_images].width*scale;
+            vertex_sprite.height = vertices[vertex_images].height*scale;
 
             // vertex_sprite.x = this.app.view.width/2 - vertices[vertex_images].pos_x - room_images.pos_x;
             // vertex_sprite.y = this.app.view.height/2 - vertices[vertex_images].pos_y - room_images.pos_y;
