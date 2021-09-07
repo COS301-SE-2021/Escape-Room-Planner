@@ -15,7 +15,7 @@
   <div class="row room-creater-space">
 
     <!-- INVENTORY STARTS HERE -->
-    <app-inventory class="col-sm-2 bg-secondary d-sm-flex position-fixed inventory-depth" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
+    <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="border-style: solid; background: #010409;" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
     <!-- ESCAPE ROOMS START HERE -->
@@ -231,7 +231,7 @@
         </form>
       </div>
 
-      <div class="modal-footer form-group">
+      <div class="modal-footer form-group" id="create">
         <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom()" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>

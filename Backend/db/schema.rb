@@ -69,7 +69,6 @@ ActiveRecord::Schema.define(version: 2021_08_26_124012) do
     t.string "password_digest", null: false
     t.boolean "is_admin"
     t.string "jwt_token"
-    t.string "type"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "verified"
@@ -90,7 +89,7 @@ ActiveRecord::Schema.define(version: 2021_08_26_124012) do
     t.string "graphicid"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "estimatedTime"
+    t.time "estimatedTime"
     t.string "description"
     t.string "clue"
     t.bigint "escape_room_id", default: 1, null: false
