@@ -79,10 +79,40 @@ input::-webkit-inner-spin-button {
 }
 
 #escapeRoomsDropdown {
-  margin: 4px;
+  margin: 4px 0px 4px 4px;
   background: #363B42;
-  border-radius: 5px;
-  width: 750px;
+  border-radius: 5px 0px 0px 5px;
+  width: 720px;
   height: 35px;
   color: white;
+  outline: none;
+  border: none;
+
+}
+
+#droppy {
+  width: 720px;
+}
+
+#new-room {
+  height: 35px;
+  width: 100px;
+  background: #3BA55D;
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+
+#generate {
+  /*float: right;*/
+  height: 35px;
+  background: none;
+  outline: none;
+  border-radius: 5px;
+  border: 2px solid #3BA55D;
+  margin: 4px 0px 4px 10px;
+  color: #3BA55D;
+  text-align: center;
+  width: 180px;
 }
