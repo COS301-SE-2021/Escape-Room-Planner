@@ -18,6 +18,7 @@
     <app-inventory class="col-sm-2 bg-secondary d-sm-flex position-fixed inventory-depth" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
+    <app-dependency-diagram style="position: absolute;"></app-dependency-diagram>
     <!-- ESCAPE ROOMS START HERE -->
     <div class="col-sm-10 d-lg-flex remove-padding ">
       <div class="container-fluid remove-padding">
@@ -29,13 +30,13 @@
             <button type="button" id="new-room" class="remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
               New Room
             </button>
-            <button id="generate" class="remove-padding" type="button">
+            <button (click)="generateDiagram()" id="generate" class="remove-padding" type="button">
               Generate Diagram
             </button>
             <button id="simulate" class="remove-padding" type="button">
               Simulate
             </button>
-            <ul class="dropdown-menu w-100 remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+            <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
 <!--              <li class="dropdown-item text-center remove-padding">-->
 <!--                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">-->
