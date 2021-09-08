@@ -1,4 +1,14 @@
-import { OnInit, Component, ElementRef, Input, HostListener, NgZone, OnDestroy } from '@angular/core';
+import {
+  OnInit,
+  Component,
+  ElementRef,
+  Input,
+  HostListener,
+  NgZone,
+  OnDestroy,
+  ViewChild,
+  Renderer2
+} from '@angular/core';
 import { Application, Sprite, Container, AnimatedSprite, Rectangle, Texture } from 'pixi.js';
 import { RoomService } from "../../services/room.service";
 import {VertexService} from "../../services/vertex.service";
@@ -22,7 +32,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
   //sprites of all objects on canvas except character
   private objects = {};
 
-  constructor(private elementRef: ElementRef, private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
+  @ViewChild("inventory") inventoryRef : ElementRef | undefined;
+
+  public inventory_menu: boolean = true;
+
+  constructor(private elementRef: ElementRef,  private renderer: Renderer2,
+              private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
     this.rooms = [];
     this.current_room_index = 0;
     this.character_inventory = new Inventory();
@@ -77,8 +92,13 @@ export class SimulationComponent implements OnInit, OnDestroy {
     else if(event.code === 'KeyS'){
       this.movement.s = true;
     }else if(event.code === 'KeyE'){
-     // this.changeRoom();
+     // this checks objects interacting with character
       this.checkCharacterObjectCollision();
+    }else if(event.code === 'KeyF'){
+      // this.changeRoom();
+      this.changeRoom();
+    }else if(event.code === 'KeyI'){
+      this.inventory_menu = !this.inventory_menu;
     }
   }
 
@@ -210,6 +230,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
             vertex_sprite.y = (vertices[vertex_images].pos_y - room_images.pos_y  - room_images.height/2)*scale;
             vertex_sprite.width = vertices[vertex_images].width*scale;
             vertex_sprite.height = vertices[vertex_images].height*scale;
+            vertex_sprite.name = vertex_images;
             // vertex_sprite.x = this.app.view.width/2 - vertices[vertex_images].pos_x - room_images.pos_x;
             // vertex_sprite.y = this.app.view.height/2 - vertices[vertex_images].pos_y - room_images.pos_y;
             room.addChild(vertex_sprite);
@@ -290,8 +311,32 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.character_inventory.addItem(this.objects['vertex'+vertex_id]);
       // @ts-ignore
       this.rooms[this.current_room_index].removeChild(this.objects['vertex'+vertex_id]);
+      // @ts-ignore
+      this.updateInventoryMenu(this.character_inventory.items.length-1);
     }
-    console.log(this.character_inventory?.items);
+  }
+
+  //render image in inventory menu
+  updateInventoryMenu(index: number){
+    //need to render new row once full
+    if(index%5 === 0 && index !== 0){
+      let newRow = this.renderer.createElement('div');
+      this.renderer.addClass(newRow, 'row');
+      this.renderer.addClass(newRow, 'justify-content-evenly');
+      this.renderer.addClass(newRow, 'mb-2');
+      for(let i = 0; i < 5; i++){
+        let newCol = this.renderer.createElement('div');
+        this.renderer.addClass(newCol, 'col-2');
+        this.renderer.setAttribute(newCol, 'name', 'inventory_menu')
+        this.renderer.appendChild(newRow, newCol);
+      }
+      this.renderer.appendChild(this.inventoryRef?.nativeElement, newRow);
+    }
+    //name house local id for vertex sprites
+    // @ts-ignore
+    let vertex = this.vertexService.vertices[this.character_inventory.items[index].name];
+    document.getElementsByName('inventory_menu')[index].innerHTML = '<img src="'+vertex.graphic_id
+      +'" title="'+vertex.name+'"  alt="NOT FOUND" class="img-thumbnail">';
   }
 
 }
