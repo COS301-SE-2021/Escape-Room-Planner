@@ -16,6 +16,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   private current_room_index: number | undefined;
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
   private movement = {a: false,w: false, d: false, s: false};
+  private objects = {};
 
   constructor(private elementRef: ElementRef, private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
     this.rooms = [];
@@ -71,7 +72,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
     else if(event.code === 'KeyS'){
       this.movement.s = true;
     }else if(event.code === 'KeyE'){
-      this.changeRoom();
+     // this.changeRoom();
+      this.checkCharacterObjectCollision();
     }
   }
 
@@ -176,14 +178,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
         // choose the lesser of the two
 
         let scale = Math.min(changeX, changeY)
-        console.log("scale: " + scale);
-        console.log("room size: "+ room_images.width + " , " + room_images.height)
-        console.log("room size after scale: "+ room_images.width*scale + " , " + room_images.height*scale)
-
-        console.log("room: "+ room_images.pos_x + " , " + room_images.pos_y);
-
         // @ts-ignore
         let sprite = new Sprite.from(this.app.loader.resources['room'+room_images.id].texture);
+        // @ts-ignore
+        this.objects['room'+room_images.id] = sprite;
         sprite.anchor.set(0.5);
         // sprite.x = this.app.view.width/2;
         // sprite.y = this.app.view.height/2;
@@ -193,31 +191,26 @@ export class SimulationComponent implements OnInit, OnDestroy {
         sprite.height = room_images.height*scale;
         room.addChild(sprite);
 
-
-        console.log("hello" +  room_images.getContainedObjects())
         if(room_images.getContainedObjects() !== undefined)
         {
           for(let vertex_images of room_images.getContainedObjects())
           {
             // @ts-ignore
             let vertex_sprite = new Sprite.from(this.app.loader.resources['vertex'+vertex_images].texture);
+            // @ts-ignore
+            this.objects['vertex'+vertex_images] = vertex_sprite;
             vertex_sprite.anchor.set(0);
             let vertices = this.vertexService.vertices;
-            console.log(vertex_images + ": " + vertices[vertex_images].pos_x + " , " + vertices[vertex_images].pos_y);
-            console.log(vertex_images + ": " + room_images.pos_x + ", " + room_images.pos_y);
             vertex_sprite.x =  (vertices[vertex_images].pos_x - room_images.pos_x - room_images.width/2)*scale;
             vertex_sprite.y = (vertices[vertex_images].pos_y - room_images.pos_y  - room_images.height/2)*scale;
             vertex_sprite.width = vertices[vertex_images].width*scale;
             vertex_sprite.height = vertices[vertex_images].height*scale;
-
             // vertex_sprite.x = this.app.view.width/2 - vertices[vertex_images].pos_x - room_images.pos_x;
             // vertex_sprite.y = this.app.view.height/2 - vertices[vertex_images].pos_y - room_images.pos_y;
             room.addChild(vertex_sprite);
 
           }
         }
-
-
         if(this.rooms)
           this.rooms.push(room);
       }
@@ -260,4 +253,29 @@ export class SimulationComponent implements OnInit, OnDestroy {
         this.showRoom(this.current_room_index + 1);
     }
   }
+
+  // checks objects colliding in rooms with character
+  checkCharacterObjectCollision(){
+    // @ts-ignore
+    let room = this.roomService.room_images[this.current_room_index];
+    for(let vertex_id of room.getContainedObjects()){
+      // @ts-ignore
+      if(this.checkCollision(this.character, this.objects['vertex'+vertex_id])){
+        this.changeRoom();
+      }
+    }
+
+  }
+
+  //check object 1 colliding with object 2 border
+  checkCollision(object1: any, object2: any):boolean{
+    const bounds1 = object1.getBounds();
+    const bounds2 = object2.getBounds();
+
+    return bounds1.x < bounds2.x + bounds2.width
+      && bounds1.x + bounds1.width > bounds2.x
+      && bounds1.y < bounds2.y + bounds2.height
+      && bounds1.y + bounds1.height > bounds2.y;
+  }
+
 }
