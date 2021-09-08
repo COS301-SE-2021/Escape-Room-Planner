@@ -81,16 +81,16 @@ export class SimulationComponent implements OnInit, OnDestroy {
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(event: KeyboardEvent) {
     if(event.code === 'KeyA'){
-      this.movement.a = true;
+      this.movement.a = this.checkRoomBoundaries("A");
     }
     else if(event.code === 'KeyW'){
-      this.movement.w = true;
+      this.movement.w = this.checkRoomBoundaries("W");
     }
     else if(event.code === 'KeyD'){
-      this.movement.d = true;
+      this.movement.d = this.checkRoomBoundaries("D");
     }
     else if(event.code === 'KeyS'){
-      this.movement.s = true;
+      this.movement.s = this.checkRoomBoundaries("S");
     }else if(event.code === 'KeyE'){
      // this checks objects interacting with character
       this.checkCharacterObjectCollision();
@@ -292,6 +292,53 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
 
   }
+  checkRoomBoundaries(type: String):boolean{
+    // @ts-ignore
+    let room = this.roomService.room_images[this.current_room_index];
+
+    // @ts-ignore
+    const bounds1 = this.character.getBounds();
+    // @ts-ignore
+    const bounds2 = this.objects['room' + room.id].getBounds();
+    console.log(bounds1)
+    console.log(bounds2)
+
+    if(type == "A")
+    {
+      console.log("in here 1");
+      if(bounds1.x - bounds1.width/2 <= bounds2.x)
+        return false
+      else
+        return true
+    }
+    else if (type == "W")
+    {
+      console.log("in here 2");
+      if (bounds1.y - bounds1.height/2 <= bounds2.y)
+        return false
+      else
+        return true
+    }
+    else if (type == "D")
+    {
+      console.log("in here 3");
+      if ( bounds1.x + bounds1.width*1.5 >= bounds2.x + bounds2.width)
+        return false
+      else
+        return true
+
+    }
+    else
+    {
+      console.log("in here 4");
+      if (bounds1.y + bounds1.height*1.5 >= bounds2.y + bounds2.height)
+        return false
+      else
+        return true
+    }
+  }
+
+
 
   //check object 1 colliding with object 2 border
   checkCollision(object1: any, object2: any):boolean{
