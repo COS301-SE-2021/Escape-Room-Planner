@@ -2,6 +2,7 @@ import { OnInit, Component, ElementRef, Input, HostListener, NgZone, OnDestroy }
 import { Application, Sprite, Container, AnimatedSprite, Rectangle, Texture } from 'pixi.js';
 import { RoomService } from "../../services/room.service";
 import {VertexService} from "../../services/vertex.service";
+import { Inventory } from "../../models/simulation/inventory.model";
 import {min} from "rxjs/operators";
 
 @Component({
@@ -9,18 +10,22 @@ import {min} from "rxjs/operators";
   templateUrl: './simulation.component.html',
   styleUrls: ['./simulation.component.css']
 })
+
 export class SimulationComponent implements OnInit, OnDestroy {
   private app: Application | undefined;
   private character: AnimatedSprite | undefined;
   private readonly rooms: Container[] | undefined;
   private current_room_index: number | undefined;
+  private character_inventory: Inventory | undefined;
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
   private movement = {a: false,w: false, d: false, s: false};
+  //sprites of all objects on canvas except character
   private objects = {};
 
   constructor(private elementRef: ElementRef, private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
     this.rooms = [];
     this.current_room_index = 0;
+    this.character_inventory = new Inventory();
   }
 
   init() {
@@ -261,7 +266,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     for(let vertex_id of room.getContainedObjects()){
       // @ts-ignore
       if(this.checkCollision(this.character, this.objects['vertex'+vertex_id])){
-        this.changeRoom();
+        this.characterObjectInteraction(vertex_id);
       }
     }
 
@@ -276,6 +281,17 @@ export class SimulationComponent implements OnInit, OnDestroy {
       && bounds1.x + bounds1.width > bounds2.x
       && bounds1.y < bounds2.y + bounds2.height
       && bounds1.y + bounds1.height > bounds2.y;
+  }
+
+  characterObjectInteraction(vertex_id: number){
+    let vertex_type = this.vertexService.vertices[vertex_id].type;
+    if(vertex_type === 'Key' || vertex_type === 'Clue') {
+      // @ts-ignore
+      this.character_inventory.addItem(this.objects['vertex'+vertex_id]);
+      // @ts-ignore
+      this.rooms[this.current_room_index].removeChild(this.objects['vertex'+vertex_id]);
+    }
+    console.log(this.character_inventory?.items);
   }
 
 }
