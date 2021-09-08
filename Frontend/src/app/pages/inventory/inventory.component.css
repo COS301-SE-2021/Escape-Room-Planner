@@ -58,6 +58,8 @@ li > .btn-link:hover{
   height: 35px;
   margin: 4px;
   width: 95%;
+  font-family: "UniSansThin";
+  font-weight: bold;
 }
 
 .overflow-auto {

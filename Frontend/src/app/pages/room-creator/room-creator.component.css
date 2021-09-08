@@ -111,6 +111,8 @@ input::-webkit-inner-spin-button {
   outline: none;
   border: none;
   border-radius: 5px;
+  font-family: "UniSansThin";
+  font-weight: bold;
 }
 
 #generate {
@@ -124,6 +126,8 @@ input::-webkit-inner-spin-button {
   color: #3BA55D;
   text-align: center;
   width: 180px;
+  font-family: "UniSansThin";
+  font-weight: bold;
 }
 
 #simulate {
@@ -135,4 +139,6 @@ input::-webkit-inner-spin-button {
   border-radius: 5px;
   color: white;
   text-align: center;
+  font-family: "UniSansThin";
+  font-weight: bold;
 }
