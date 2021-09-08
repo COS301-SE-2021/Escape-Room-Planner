@@ -91,7 +91,8 @@ input::-webkit-inner-spin-button {
   color: white;
   outline: none;
   border: none;
-
+  font-family: "UniSansThin";
+  font-weight: bold;
 }
 
 #droppy {
