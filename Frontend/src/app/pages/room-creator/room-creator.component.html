@@ -15,7 +15,7 @@
   <div class="row room-creater-space">
 
     <!-- INVENTORY STARTS HERE -->
-    <app-inventory class="col-sm-2 bg-secondary d-sm-flex position-fixed inventory-depth" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
+    <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="background: #010409; margin-left: 3px" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
     <app-dependency-diagram style="position: absolute;"></app-dependency-diagram>
@@ -36,7 +36,7 @@
             <button id="simulate" class="remove-padding" type="button">
               Simulate
             </button>
-            <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+            <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 55vh;" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
 <!--              <li class="dropdown-item text-center remove-padding">-->
 <!--                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">-->
@@ -45,7 +45,6 @@
 <!--                  </svg>-->
 <!--                </button>-->
 <!--              </li>-->
-<!--              <li><hr class="dropdown-divider text-white"></li>-->
             </ul>
           </div>
         </div>

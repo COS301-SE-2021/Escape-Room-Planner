@@ -7,9 +7,10 @@
 }
 
 /* Escape Room selection menu colour on hover */
-/*.dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {*/
-/*  background-color:grey;*/
-/*}*/
+.dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {
+  background-color:grey;
+  width: 100%;
+}
 
 #delete_button > button:hover {
   background-color: #a31818;
@@ -21,7 +22,8 @@
   /*background-blend-mode: darken;*/
   background-image: url("../../../assets/images/grid.png");
   background-repeat: repeat;
-  background-color: #7f7f7f;
+  background-color: #363B42;
+  background-size: 20px;
 }
 
 #room-plan > img{
@@ -48,11 +50,12 @@
 .room-creater-margin-top
 {
   margin-top: 4.2%;
+  border-radius: 10px;
 }
 
 .room-creater-margin-left
 {
-  margin-left: 20%;
+  margin-left: 18.5%;
 }
 
 .dropdown-margin
@@ -80,7 +83,7 @@ input::-webkit-inner-spin-button {
 }
 
 #escapeRoomsDropdown {
-  margin: 4px 0px 4px 4px;
+  margin: 4px 0px 6px 0px;
   background: #363B42;
   border-radius: 5px 0px 0px 5px;
   width: 720px;
@@ -94,6 +97,11 @@ input::-webkit-inner-spin-button {
 #droppy {
   width: 720px;
 }
+
+/*.dropdown-menu:hover {*/
+/*  color: #3BA55D;*/
+/*  ba*/
+/*}*/
 
 #new-room {
   height: 35px;
@@ -112,7 +120,7 @@ input::-webkit-inner-spin-button {
   outline: none;
   border-radius: 5px;
   border: 2px solid #3BA55D;
-  margin: 4px 8px 4px 8px;
+  margin: 4px 8px 6px 8px;
   color: #3BA55D;
   text-align: center;
   width: 180px;
