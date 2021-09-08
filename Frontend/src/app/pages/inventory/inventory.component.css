@@ -32,8 +32,10 @@ li > .btn-link:hover{
 }
 
 #app-inv {
-  background-color: black;
+  background-color: yellow;
   border-radius: 10px;
+  border: none;
+  width: 350px;
 }
 
 ::-webkit-scrollbar {

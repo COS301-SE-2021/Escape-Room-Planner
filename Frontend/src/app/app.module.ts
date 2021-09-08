@@ -19,7 +19,7 @@ import { VerifyFailedComponent } from './pages/verify-failed/verify-failed.compo
 const routes: Routes = [
   // { path: '', component: AppComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'login', component: RoomCreatorComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'verify', component: VerifyComponent },
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'reset-not', component: ResetPasswordNotComponent },
@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'verify-success', component: VerifySuccessComponent},
   { path: 'verify-failure', component: VerifyFailedComponent},
   // otherwise redirect to login
-  { path: '**', redirectTo: 'escape-room' }
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
