@@ -23,19 +23,28 @@
       <div class="container-fluid remove-padding">
         <div class="row container-fluid remove-padding remove-margin">
           <div class=" dropdown remove-padding dropdown-margin">
-            <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <button class=" dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
+            </button>
+            <button type="button" id="new-room" class="remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
+              New Room
+            </button>
+            <button id="generate" class="remove-padding" type="button">
+              Generate Diagram
+            </button>
+            <button id="simulate" class="remove-padding" type="button">
+              Simulate
             </button>
             <ul class="dropdown-menu w-100 remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
-              <li class="dropdown-item text-center remove-padding">
-                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                  </svg>
-                </button>
-              </li>
-              <li><hr class="dropdown-divider text-white"></li>
+<!--              <li class="dropdown-item text-center remove-padding">-->
+<!--                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">-->
+<!--                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">-->
+<!--                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>-->
+<!--                  </svg>-->
+<!--                </button>-->
+<!--              </li>-->
+<!--              <li><hr class="dropdown-divider text-white"></li>-->
             </ul>
           </div>
         </div>

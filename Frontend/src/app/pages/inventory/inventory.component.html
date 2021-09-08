@@ -1,15 +1,17 @@
- <div class="overflow-auto" style="height: 94vh; width: 315px;">
-   <!-- SOLVE-ABILITY STARTS HERE -->
-    <button (click)="checkSolve()" class="border border-dark w-100">Solvable</button>
-    <!-- INVENTORY STARTS HERE -->
-    <ul class="nav flex-column">
-      <li class="border border-dark w-100" style=" background-color: grey; float: left;">Room
+<div class="overflow-auto" style="height: 94vh; width: 315px; border: none;">
+  <!-- SOLVE-ABILITY STARTS HERE -->
+  <button (click)="checkSolve()" id="solvable-button" class="border border-dark">Solvable</button>
+  <!-- INVENTORY STARTS HERE -->
+
+  <ul class="nav flex-column">
+    <div class="container-card">
+      <li class="border border-dark w-100" style="text-align: center; color: #ffffff; border: none; width: 100%; height: 100%;">Room
         <input type="file" accept="image/*" name="idk" #add_room [hidden]="true" (input)="addImage(add_room,'room')">
-        <button type="submit" (click)="add_room.click()" style="float: right;" class="btn btn-link remove-padding">
-          <img src="./assets/svg/plus.svg" alt="add container image"/>
+        <button type="submit" (click)="add_room.click()" style="float: right; background: #1A73E8; border-radius: 20px; width: 15%; height: 90%;" class="btn btn-link remove-padding">
+          <img src="./assets/svg/upload.svg" alt="add container image"/>
         </button>
       </li>
-      <li id="roomInventory" class="bg-secondary text-white" style="width: 100%;">
+      <li id="roomInventory" class="text-white" style="width: 100%; height: 100%;">
         <div class="container-fluid">
           <div class="row" #room_div style="padding-top: 20px;">
             <div class="col">
@@ -19,14 +21,17 @@
           </div>
         </div>
       </li>
-      <!-- Container -->
-      <li class="border border-dark w-100" style=" background-color: grey; float: left;">Container
+    </div>
+
+    <!-- Container -->
+    <div class="container-card">
+      <li class="border border-dark w-100" style="text-align: center; color: #ffffff; border: none; width: 100%; height: 100%;">Container
         <input type="file" accept="image/*" name="idk" #add_container [hidden]="true" (input)="addImage(add_container,'container')">
-        <button type="submit" (click)="add_container.click()" style="float: right;" class="btn btn-link remove-padding">
-          <img src="./assets/svg/plus.svg" alt="add container image"/>
+        <button type="submit" (click)="add_container.click()" style="float: right; background: #1A73E8; border-radius: 20px; width: 15%; height: 90%;" class="btn btn-link remove-padding">
+          <img src="./assets/svg/upload.svg" alt="add container image"/>
         </button>
       </li>
-      <li id="containerInventory" class="bg-secondary text-white" style="width: 100%;">
+      <li id="containerInventory" class="text-white" style="width: 100%; border-radius: 10px; background-color: #363B42;">
         <div class="container-fluid">
           <div class="row" #container_div style="padding-top: 20px;">
             <div class="col">
@@ -36,13 +41,16 @@
           </div>
         </div>
       </li>
-      <li class="border border-dark w-100" style=" background-color: grey">Puzzle
+    </div>
+
+    <div class="container-card">
+      <li class="border border-dark w-100" style="text-align: center; color: #ffffff; border: none; width: 100%; height: 100%;" >Puzzle
         <input type="file" accept="image/*" name="idk" #add_puzzle [hidden]="true" (input)="addImage(add_puzzle,'puzzle')">
-        <button type="submit" (click)="add_puzzle.click()" style="float: right;" class="btn btn-link remove-padding">
-          <img src="./assets/svg/plus.svg" alt="add container image"/>
+        <button type="submit" (click)="add_puzzle.click()" style="float: right; background: #1A73E8; border-radius: 20px; width: 15%; height: 90%;" class="btn btn-link remove-padding">
+          <img src="./assets/svg/upload.svg" alt="add container image"/>
         </button>
       </li>
-      <li id="PuzzleInventory" class="bg-secondary text-white" style="width: 100%;">
+      <li id="PuzzleInventory" style="width: 100%; border-radius: 10px; background-color: #363B42;">
         <div class="container-fluid">
           <div class="row" #puzzle_div style="padding-top: 20px;">
             <div class="col">
@@ -52,13 +60,16 @@
           </div>
         </div>
       </li>
-      <li class="border border-dark w-100" style=" background-color: grey">Key
+    </div>
+
+    <div class="container-card">
+      <li class="border border-dark w-100" style="text-align: center; color: #ffffff; border: none; width: 100%; height: 100%;">Key
         <input type="file" accept="image/*" name="idk" #add_key [hidden]="true" (input)="addImage(add_key,'key')">
-        <button type="submit" (click)="add_key.click()" style="float: right;" class="btn btn-link remove-padding">
-          <img src="./assets/svg/plus.svg" alt="add container image"/>
+        <button type="submit" (click)="add_key.click()" style="float: right; background: #1A73E8; border-radius: 20px; width: 15%; height: 90%;" class="btn btn-link remove-padding">
+          <img src="./assets/svg/upload.svg" alt="add container image"/>
         </button>
       </li>
-      <li id="KeyInventory" class="bg-secondary text-white" style="width: 100%;">
+      <li id="KeyInventory" style="width: 100%; border-radius: 10px;  background-color: #363B42;">
         <div class="container-fluid">
           <div class="row" #key_div style="padding-top: 20px;">
             <div class="col">
@@ -68,13 +79,15 @@
           </div>
         </div>
       </li>
-      <li class="border border-dark w-100" style=" background-color: grey">Clue
+    </div>
+    <div class="container-card" >
+      <li class="border border-dark w-100" style="text-align: center; color: #ffffff; border: none; width: 100%; height: 100%;">Clue
         <input type="file" accept="image/*" name="idk" #add_clue [hidden]="true" (input)="addImage(add_clue,'clue')">
-        <button type="submit" (click)="add_clue.click()" style="float: right;" class="btn btn-link remove-padding">
-          <img src="./assets/svg/plus.svg" alt="add container image"/>
+        <button type="submit" (click)="add_clue.click()" style="float: right; background: #1A73E8; border-radius: 20px; width: 15%;height: 90%;" class="btn btn-link remove-padding">
+          <img src="./assets/svg/upload.svg" alt="add container image"/>
         </button>
       </li>
-      <li id="ClueInventory" class="bg-secondary text-white" style="width: 100%;">
+      <li id="ClueInventory" style="width: 100%; border-radius: 10px; background-color: #363B42;">
         <div class="container-fluid">
           <div class="row" #clue_div style="padding-top: 20px;">
             <div class="col">
@@ -84,5 +97,6 @@
           </div>
         </div>
       </li>
-    </ul>
-  </div>
+    </div>
+  </ul>
+</div>
