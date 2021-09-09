@@ -1,6 +1,7 @@
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-solvability',
@@ -32,7 +33,7 @@ export class SolvabilityComponent implements OnInit {
 
   getInitialVertices():void{
     if(this._current_room_id !== -1) {
-      this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/" + this._current_room_id, {"headers": this.headers}).subscribe(
+      this.httpClient.get<any>(environment.api + "/api/v1/room/" + this._current_room_id, {"headers": this.headers}).subscribe(
         response => {
 
           // @ts-ignore
@@ -75,7 +76,7 @@ export class SolvabilityComponent implements OnInit {
     // @ts-ignore
     this.solve_div?.nativeElement.hidden = false;
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
         this.setSolvability(response.data.solvable);
@@ -118,7 +119,7 @@ export class SolvabilityComponent implements OnInit {
 
   display(Paramaters : any, reason :any){
     let final=''
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", Paramaters, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", Paramaters, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
         if (reason=="Paths"){
@@ -227,7 +228,7 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
         console.log(response)
@@ -248,7 +249,7 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
       resp => {
         console.log(resp)
       //  let order =[]
@@ -260,7 +261,7 @@ export class SolvabilityComponent implements OnInit {
           document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
           /* resp.data.order.forEach(
              (value: any) => {
-              this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/"+value).subscribe(
+              this.httpClient.get<any>(environment.api + "/api/v1/vertex/"+value).subscribe(
                  resp => {
                    console.log(resp)
                  }
