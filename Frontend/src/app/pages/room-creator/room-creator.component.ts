@@ -280,8 +280,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             // @ts-ignore
             for (let vertex_connection of vertex_connections)
               this.vertexService.addVertexConnection(current_id, vertex_connection);
-            // TODO: change this to be called when simulate button is clicked
-            this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
             this.spawnObjects(current_id);
           }
           // converts real connection to local connection
@@ -1200,6 +1198,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         }
       }
     );
+  }
+
+  simulate(){
+    // TODO: change this to be called when simulate button is clicked
+    this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
+    this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
   }
 }
 
