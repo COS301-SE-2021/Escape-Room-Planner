@@ -354,21 +354,38 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.solvePuzzle(vertex);
     }else if((vertex_type === 'Container')){
         // make items visible
-        for (let connections of vertex.getConnections()) {
-          // @ts-ignore
-          this.objects['vertex' + connections].visible = true
-          // @ts-ignore
-        }
+       if(vertex.getPreviousConnections().length > 0)
+       {
+         for (let previous_connections of vertex.getPreviousConnections())
+         {
 
-        // // check character has solved the puzzle before it
-        // if(puzzle.solved)
-        // {
-        //   //then open container and make the items visible
-        // }
-        // else
-        // {
-        //   // container cannot be opened
-        // }
+           // @ts-ignore
+           let previous_vertex = this.vertexService.vertices[previous_connections];
+           if(previous_vertex.isCompleted())
+           {
+             console.log("puzzles completed")
+             for (let connections of vertex.getConnections()) {
+               // @ts-ignore
+               this.objects['vertex' + connections].visible = true
+               // @ts-ignore
+             }
+           }
+           else
+           {
+             console.log("Not all puzzles completed you may not access this container")
+           //  tell the user they cannot access this object yet
+           }
+
+         }
+       }
+       else
+       {
+         for (let connections of vertex.getConnections()) {
+           // @ts-ignore
+           this.objects['vertex' + connections].visible = true
+           // @ts-ignore
+         }
+       }
     }
   }
 
