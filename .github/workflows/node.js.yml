@@ -32,3 +32,12 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run test:prod
+
+    - name: Deploy to heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        working-directory: Backend
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_NODE }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        appdir: "Frontend"
