@@ -248,6 +248,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
             this.objects['vertex'+vertex_images] = vertex_sprite;
             vertex_sprite.anchor.set(0);
             let vertices = this.vertexService.vertices;
+            if(vertices[vertex_images].type === "Key" || vertices[vertex_images].type ==="Clue")
+            {
+              vertex_sprite.visible = false
+            }
             vertex_sprite.x =  (vertices[vertex_images].pos_x - room_images.pos_x - room_images.width/2)*scale;
             vertex_sprite.y = (vertices[vertex_images].pos_y - room_images.pos_y  - room_images.height/2)*scale;
             vertex_sprite.width = vertices[vertex_images].width*scale;
