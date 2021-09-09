@@ -11,10 +11,14 @@ import {Puzzle} from "../models/puzzle.model";
 export class VertexService {
   private _local_id_count: number;
   private _vertices : Vertex[];
+  private _start_vertex_id: number;
+  private _end_vertex_id: number;
 
   constructor() {
     this._vertices = [];
     this._local_id_count = 0;
+    this._start_vertex_id = -1;
+    this._end_vertex_id = -1;
   }
 
   addVertex(inId:number, inType: string, inName: string, inGraphicID: string,
@@ -51,6 +55,22 @@ export class VertexService {
 
   get vertices(): Vertex[] {
     return this._vertices;
+  }
+
+  get start_vertex_id(): number {
+    return this._start_vertex_id;
+  }
+
+  set start_vertex_id(value: number) {
+    this._start_vertex_id = value;
+  }
+
+  get end_vertex_id(): number {
+    return this._end_vertex_id;
+  }
+
+  set end_vertex_id(value: number) {
+    this._end_vertex_id = value;
   }
 
   public reset_array(){

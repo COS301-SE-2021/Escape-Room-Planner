@@ -939,6 +939,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
         // updates the local array here only after storing on db
         this._target_start = local_id;
+        this.vertexService.start_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-primary')
       },
       error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
@@ -959,6 +960,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
         // updates the local array here only after storing on db
         this._target_end = local_id;
+        this.vertexService.end_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-info');
       },
       error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
