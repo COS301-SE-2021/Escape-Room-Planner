@@ -63,6 +63,11 @@ export class VertexService {
     this._vertices[from_vertex_id].addConnection(to_vertex_id);
   }
 
+  //adds connection to from vertex
+  public addVertexPreviousConnection(to_vertex_id: number, from_vertex_id: number){
+    this._vertices[to_vertex_id].addPreviousConnection(from_vertex_id);
+  }
+
   //adds connected line to from vertex
   public addVertexConnectedLine(vertex_id:number, line_index: number){
     this._vertices[vertex_id].addConnectedLine(line_index);
@@ -95,6 +100,13 @@ export class VertexService {
   public removeVertexResponsibleLine(vertex_id: number, line_index: number){
     let index = this._vertices[vertex_id].getResponsibleLines().indexOf(line_index);
     if (index !== -1) this._vertices[vertex_id].removeResponsibleLine(index);
+  }
+
+  //removes previous connection from index in vertex previous connection array
+  public removeVertexPreviousConnection(vertex_id: number, previous_vertex_id: number){
+    let index = this._vertices[vertex_id].getPreviousConnections().indexOf(previous_vertex_id);
+    if (index !== -1) this._vertices[vertex_id].removePreviousConnection(index);
+    console.log(this._vertices[vertex_id].getPreviousConnections());
   }
 
   //returns what lines need to be updated in an array

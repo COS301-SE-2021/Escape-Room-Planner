@@ -661,6 +661,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
     let real_from_id = this.vertexService.vertices[from_vertex].id;
+    this.vertexService.removeVertexPreviousConnection(to_vertex, from_vertex);
     let remove_connection = {
       operation: "disconnect_vertex",
       from_vertex_id: real_from_id,
@@ -747,6 +748,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
 
     this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+    this.vertexService.addVertexPreviousConnection(to_vertex_id, from_vertex_id);
     this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
     this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
     //add event to listen to mouse event of only connected vertices
