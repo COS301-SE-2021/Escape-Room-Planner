@@ -285,6 +285,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
           this.rooms[room_index].addChild(this.character);
           this.character.play();
           this.character.animationSpeed = 0.1;
+          this.character.x = 0;
+          this.character.y = 0;
         }
         this.rooms[room_index].visible = true;
         this.current_room_index = room_index;
