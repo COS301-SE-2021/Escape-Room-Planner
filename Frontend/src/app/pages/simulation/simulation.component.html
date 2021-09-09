@@ -1,3 +1,16 @@
+<div class="status_menu" [hidden]="status_menu_show">
+  <div class="container-fluid bg-dark border border-3 border-secondary rounded">
+    <div class="row">
+      <div class="col-2">
+        <div class="spinner-grow text-info mt-2 mb-1 ms-1" style="width: 1rem; height: 1rem;" role="status">
+        </div>
+      </div>
+      <div class="col-10 text-white mt-2 mb-1">
+        <h6>{{status_menu_text}}</h6>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="inventory" [hidden]="inventory_menu" >
   <div class="container-fluid bg-dark border border-3 border-secondary rounded text-white text-center">
     <h2 class=" border-bottom border-secondary">Inventory</h2>

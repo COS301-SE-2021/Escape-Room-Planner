@@ -213,7 +213,7 @@ export class Vertex {
   }
 
   public toggleCompleted(){
-    this._completed = !this._completed;
+    this._completed = true;
   }
 
 }

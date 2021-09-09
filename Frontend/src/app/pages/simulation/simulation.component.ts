@@ -13,6 +13,7 @@ import { Application, Sprite, Container, AnimatedSprite, Rectangle, Texture } fr
 import { RoomService } from "../../services/room.service";
 import {VertexService} from "../../services/vertex.service";
 import { Inventory } from "../../models/simulation/inventory.model";
+import { Vertex } from "../../models/vertex.model";
 import {min} from "rxjs/operators";
 
 @Component({
@@ -27,6 +28,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
   private readonly rooms: Container[] | undefined;
   private current_room_index: number | undefined;
   private character_inventory: Inventory | undefined;
+  //locks character movement
+  private character_lock: boolean = false;
   //movement represent array of key [a,w,d,s] that's boolean to toggle between
   private movement = {a: false,w: false, d: false, s: false};
   //sprites of all objects on canvas except character
@@ -35,6 +38,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
   @ViewChild("inventory") inventoryRef : ElementRef | undefined;
 
   public inventory_menu: boolean = true;
+  public status_menu_show: boolean = true;
+  public status_menu_text: string = "Preforming operation";
 
   constructor(private elementRef: ElementRef,  private renderer: Renderer2,
               private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
@@ -119,7 +124,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   }
 
   simulate(delta: any){
-    if(this.character !== undefined) {
+    if(this.character !== undefined && !this.character_lock) {
       // @ts-ignore
       let room = this.roomService.room_images[this.current_room_index];
 
@@ -337,8 +342,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     let vertex = this.vertexService.vertices[vertex_id]
     if(vertex_type === 'Key' || vertex_type === 'Clue') {
       // @ts-ignore
-      if(this.objects['vertex' + vertex_id].visible)
-      {
+      if(this.objects['vertex' + vertex_id].visible) {
         // @ts-ignore
         this.character_inventory.addItem(this.objects['vertex'+vertex_id]);
         // @ts-ignore
@@ -346,26 +350,25 @@ export class SimulationComponent implements OnInit, OnDestroy {
         // @ts-ignore
         this.updateInventoryMenu(this.character_inventory.items.length-1);
       }
-    }
+    }else if(vertex_type === 'Puzzle'){
+      this.solvePuzzle(vertex);
+    }else if((vertex_type === 'Container')){
+        // make items visible
+        for (let connections of vertex.getConnections()) {
+          // @ts-ignore
+          this.objects['vertex' + connections].visible = true
+          // @ts-ignore
+        }
 
-    if (vertex_type === 'Container') {
-      // make items visible
-      for (let connections of vertex.getConnections()) {
-        // @ts-ignore
-        this.objects['vertex' + connections].visible = true
-        // @ts-ignore
-      }
-
-      // // check character has solved the puzzle before it
-      // if(puzzle.solved)
-      // {
-      //   //then open container and make the items visible
-      // }
-      // else
-      // {
-      //   // container cannot be opened
-      // }
-
+        // // check character has solved the puzzle before it
+        // if(puzzle.solved)
+        // {
+        //   //then open container and make the items visible
+        // }
+        // else
+        // {
+        //   // container cannot be opened
+        // }
     }
   }
 
@@ -390,6 +393,19 @@ export class SimulationComponent implements OnInit, OnDestroy {
     let vertex = this.vertexService.vertices[this.character_inventory.items[index].name];
     document.getElementsByName('inventory_menu')[index].innerHTML = '<img src="'+vertex.graphic_id
       +'" title="'+vertex.name+'"  alt="NOT FOUND" class="img-thumbnail">';
+  }
+
+  solvePuzzle(vertex: Vertex){
+    if(!vertex.isCompleted()) {
+      this.status_menu_show = false;
+      this.character_lock = true;
+      this.status_menu_text = 'Solving: ' + vertex.name;
+      setTimeout(() => {
+        this.status_menu_show = true;
+        this.character_lock = false;
+        vertex.toggleCompleted();
+      }, (vertex.estimated_time / 60) * 1000);
+    }
   }
 
 }

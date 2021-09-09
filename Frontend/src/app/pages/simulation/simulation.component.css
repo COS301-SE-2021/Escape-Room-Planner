@@ -13,3 +13,12 @@
   opacity: 0.7;
 }
 
+.status_menu{
+  z-index: 10000;
+  position: absolute;
+  float: left;
+  top: 56px;
+  width: 200px;
+  opacity: 0.7;
+}
+
