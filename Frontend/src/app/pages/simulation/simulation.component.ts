@@ -336,6 +336,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     let vertex_type = this.vertexService.vertices[vertex_id].type;
     let vertex = this.vertexService.vertices[vertex_id]
     if(vertex_type === 'Key' || vertex_type === 'Clue') {
+      // @ts-ignore
       if(this.objects['vertex' + vertex_id].visible)
       {
         // @ts-ignore
