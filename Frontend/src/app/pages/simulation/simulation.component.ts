@@ -336,22 +336,23 @@ export class SimulationComponent implements OnInit, OnDestroy {
     let vertex_type = this.vertexService.vertices[vertex_id].type;
     let vertex = this.vertexService.vertices[vertex_id]
     if(vertex_type === 'Key' || vertex_type === 'Clue') {
-      // @ts-ignore
-      this.character_inventory.addItem(this.objects['vertex'+vertex_id]);
-      // @ts-ignore
-      this.rooms[this.current_room_index].removeChild(this.objects['vertex'+vertex_id]);
-      // @ts-ignore
-      this.updateInventoryMenu(this.character_inventory.items.length-1);
+      if(this.objects['vertex' + vertex_id].visible)
+      {
+        // @ts-ignore
+        this.character_inventory.addItem(this.objects['vertex'+vertex_id]);
+        // @ts-ignore
+        this.rooms[this.current_room_index].removeChild(this.objects['vertex'+vertex_id]);
+        // @ts-ignore
+        this.updateInventoryMenu(this.character_inventory.items.length-1);
+      }
     }
 
     if (vertex_type === 'Container') {
-      console.log("I booped the container!")
       // make items visible
       for (let connections of vertex.getConnections()) {
         // @ts-ignore
         this.objects['vertex' + connections].visible = true
         // @ts-ignore
-        console.log(this.objects['vertex' + connections]);
       }
 
       // // check character has solved the puzzle before it
