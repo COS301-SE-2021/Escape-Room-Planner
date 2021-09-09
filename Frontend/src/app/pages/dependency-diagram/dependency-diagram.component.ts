@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angula
 import { Router } from '@angular/router';
 import { Vertex } from 'src/app/models/vertex.model';
 import { VertexService } from 'src/app/services/vertex.service';
+// import { mxGraph} from 'mxgraph';
 declare var mxGraph: any;
 declare var mxHierarchicalLayout: any;
 
@@ -13,6 +14,8 @@ declare var mxHierarchicalLayout: any;
 
 export class DependencyDiagramComponent implements OnInit {
 
+  public showDependency = true;
+
   constructor(private vertexService: VertexService, private router: Router) {}
 
   ngOnInit() {}
@@ -21,6 +24,8 @@ export class DependencyDiagramComponent implements OnInit {
 
   // @ts-ignore
   generate() {
+    console.log('In Generate');
+    this.showDependency = false;
     const graph = new mxGraph(this.graphContainer.nativeElement);
     try {
       const parent = graph.getDefaultParent();

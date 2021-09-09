@@ -36,7 +36,7 @@
             <button id="simulate" class="remove-padding" type="button">
               Simulate
             </button>
-            <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 55vh;" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+            <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 60vh; overflow: auto;" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
 <!--              <li class="dropdown-item text-center remove-padding">-->
 <!--                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">-->
@@ -208,8 +208,8 @@
 <div  class="container-sm position-fixed w-25 bottom-0 end-0" style="z-index: 99999" [hidden]="_room_count === 0">
   <label for="customRange1" class="form-label" style="color: #ffffff;" #zoom_label>Scale: {{zoomValue.toFixed(2)}}</label>
   <input type="range" class="form-range" id="customRange1" min="0.2" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="scale()">
-  <label for="show-names" class="form-label" style="color: #ffffff;">Show names</label>
-  <input type="checkbox" id="show-names" (change)="displayNames()">
+  <label for="show-names" class="form-label" style="color: #ffffff; padding-bottom: 5px;">Show names</label>
+  <input type="checkbox" id="show-names" (change)="displayNames()" style="margin-left: 5px;">
 </div>
 
 <!-- modal view popout here-->

@@ -60,6 +60,7 @@ li > .btn-link:hover{
   width: 95%;
   font-family: "UniSansThin";
   font-weight: bold;
+  font-size: 18px;
 }
 
 .overflow-auto {
