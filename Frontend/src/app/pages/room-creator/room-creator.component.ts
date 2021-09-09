@@ -1201,9 +1201,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   simulate(){
+    for (let line of this.lines) {
+      if (line !== null)
+        line.remove();
+    }
     // TODO: change this to be called when simulate button is clicked
     this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
     this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
+
   }
 }
 
