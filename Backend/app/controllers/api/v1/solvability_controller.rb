@@ -6,6 +6,10 @@ require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_set_up
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_set_up_order_response'
 require './app/Services/SolvabilitySubsystem/ResponseSolvability/file_all_paths_response'
 require './app/Services/SolvabilitySubsystem/RequestSolvability/find_all_paths_request'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/return_unnecessary_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/return_unnescessary_response'
+require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_estimated_time_request'
+require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_estimated_time_response'
 
 
 # rubocop:disable Metrics/ClassLength
@@ -46,6 +50,13 @@ module Api
           set_up_order(start_vert, end_vert, vertices)
         end
 
+        if operation == 'FindUnnecessary'
+          find_unnecessary(start_vert, end_vert, room_id)
+        end
+
+        if operation == 'EstimatedTime'
+          estimated_time(start_vert, end_vert)
+        end
 
 
       #  else
@@ -91,6 +102,34 @@ module Api
         req = FindAllPathsRequest.new(start_vert, end_vert)
         serv = SolvabilityService.new
         resp = serv.find_all_paths_service(req)
+
+        render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+      end
+
+      def find_unnecessary(start_vert, end_vert, room_id)
+        if start_vert.nil? || end_vert.nil? || room_id.nil?
+          render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+          return
+        end
+
+        req = ReturnUnnecessaryRequest.new(start_vert, end_vert, room_id)
+        serv = SolvabilityService.new
+        resp = serv.return_unnecessary_vertices(req)
+
+        render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+      end
+
+      def estimated_time(start_vert, end_vert)
+
+        if start_vert.nil? || end_vert.nil?
+          render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
+          return
+        end
+
+        req = CalculateEstimatedTimeRequest.new(start_vert, end_vert)
+        serv = SolvabilityService.new
+        resp = serv.calculate_estimated_time(req)
+
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       end

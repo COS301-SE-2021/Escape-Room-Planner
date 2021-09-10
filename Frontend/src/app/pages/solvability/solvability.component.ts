@@ -1,6 +1,7 @@
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-solvability',
@@ -23,7 +24,7 @@ export class SolvabilityComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this._current_room_id = -1;
   }
 
   setRoom(room_id: number){
@@ -31,20 +32,22 @@ export class SolvabilityComponent implements OnInit {
   }
 
   getInitialVertices():void{
-    this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/room/"+this._current_room_id, {"headers": this.headers}).subscribe(
-      response => {
+    if(this._current_room_id !== -1) {
+      this.httpClient.get<any>(environment.api + "/api/v1/room/" + this._current_room_id, {"headers": this.headers}).subscribe(
+        response => {
 
-        // @ts-ignore
-        document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: "+ response.data.startVertex;
-        this._target_start=response.data.startVertex;
+          // @ts-ignore
+          document.getElementById("Start-Vertex-label").innerHTML = "Start Vertex: " + response.data.startVertex;
+          this._target_start = response.data.startVertex;
 
-        // @ts-ignore
-        document.getElementById("End-Vertex-label").innerHTML = "End Vertex: "+response.data.endVertex;
-        this._target_end=response.data.endVertex
-      },
-      //Render error if bad request
-      error => alert('There was an error retrieving the start vertices')
-    );
+          // @ts-ignore
+          document.getElementById("End-Vertex-label").innerHTML = "End Vertex: " + response.data.endVertex;
+          this._target_end = response.data.endVertex
+        },
+        //Render error if bad request
+        error => alert('There was an error retrieving the start vertices')
+      );
+    }
   }
 
   checkSolvable(target_start: HTMLElement, target_end: HTMLElement, current_room_id: Number){
@@ -73,7 +76,7 @@ export class SolvabilityComponent implements OnInit {
     // @ts-ignore
     this.solve_div?.nativeElement.hidden = false;
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
         this.setSolvability(response.data.solvable);
@@ -91,6 +94,8 @@ export class SolvabilityComponent implements OnInit {
 
   setSolvability(input: any): void{
     this.checkPaths()
+    this.checkUnnecessary()
+    this.checkEstimatedTime()
     if(input){
       // @ts-ignore
       this.solve_div?.nativeElement.setAttribute('class', 'modal-body rounded border border-4 border-success bg-dark');
@@ -112,6 +117,76 @@ export class SolvabilityComponent implements OnInit {
     }
   }
 
+  display(Paramaters : any, reason :any){
+    let final=''
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", Paramaters, {"headers": this.headers}).subscribe(
+      response => {
+        //rendering <li> elements by using render function
+        if (reason=="Paths"){
+        response.data.vertices.forEach(
+          (value: any) => {
+            if (reason=="Paths"){
+              // @ts-ignore
+             final=final+value+"<br>"
+            }
+          }
+        )
+          // @ts-ignore
+          document.getElementById("PossbilePaths").innerHTML="Possible Paths: <br>"+ final;
+        }
+
+        if(reason=="Time"){
+          // @ts-ignore
+          document.getElementById("EstimatedTime").innerHTML="Estimated Time: <br>"+ (response.data.time/60);
+        }
+      },
+      error => console.error('', error)
+    );
+  }
+
+  checkUnnecessary(){
+    if(this._target_start==null){
+      this.setSolvability(false);
+      window.alert('set a start vertex first');
+      return;
+    }
+
+    if(this._target_end==null){
+      this.setSolvability(false);
+      window.alert('set an end vertex first');
+      return;
+    }
+
+    let FindUnnecessary = {
+      operation: "FindUnnecessary",
+      roomid: this._current_room_id
+    };
+
+    this.display(FindUnnecessary,"Unnecessary")
+
+  }
+
+  checkEstimatedTime(){
+    if(this._target_start==null){
+      this.setSolvability(false);
+      window.alert('set a start vertex first');
+      return;
+    }
+
+    if(this._target_end==null){
+      this.setSolvability(false);
+      window.alert('set an end vertex first');
+      return;
+    }
+
+    let PathsCheck = {
+      operation: "EstimatedTime",
+      roomid: this._current_room_id
+    };
+
+    this.display(PathsCheck,"Time")
+  }
+
   checkPaths(){
     if(this._target_start==null){
       this.setSolvability(false);
@@ -130,18 +205,8 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", PathsCheck, {"headers": this.headers}).subscribe(
-      response => {
-        //rendering <li> elements by using render function
-        response.data.vertices.forEach(
-          (value: any) => {
-            window.alert(value)
-          }
-        )
-      },
-      error => console.error('', error)
-    );
-
+    this.display(PathsCheck,"Paths")
+    // document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
 
   }
 
@@ -163,7 +228,7 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
         console.log(response)
@@ -184,7 +249,7 @@ export class SolvabilityComponent implements OnInit {
       roomid: this._current_room_id
     };
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/solvability/", setUpOrderCheck, {"headers": this.headers}).subscribe(
       resp => {
         console.log(resp)
       //  let order =[]
@@ -196,7 +261,7 @@ export class SolvabilityComponent implements OnInit {
           document.getElementById("SetupOrder").innerHTML="Set up order: "+resp.data.order;
           /* resp.data.order.forEach(
              (value: any) => {
-              this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/"+value).subscribe(
+              this.httpClient.get<any>(environment.api + "/api/v1/vertex/"+value).subscribe(
                  resp => {
                    console.log(resp)
                  }

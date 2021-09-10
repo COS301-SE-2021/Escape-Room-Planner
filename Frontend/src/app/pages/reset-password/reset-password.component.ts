@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router } from '@angular/router';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-reset-password',
@@ -8,6 +9,8 @@ import {ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./reset-password.component.css']
 })
 export class ResetPasswordComponent implements OnInit {
+
+  token: string | undefined;
 
   constructor(private http:HttpClient, private router:Router, private route: ActivatedRoute) { }
 
@@ -22,19 +25,18 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let token = null;
     //This fetches and stores the encoded token from the url
     this.route.queryParams.subscribe(params => {
-      token = params.token;
+      this.token = params.token;
     });
 
     let extra_data = {
-      encoded_token: token,
+      encoded_token: this.token,
       operation: 'check_expiration'
     }
 
     //This sends the encoded token to a controller in notification that checks if the token is expired
-    this.http.post<any>(' http://127.0.0.1:3000/api/v1/notification', extra_data)
+    this.http.post<any>(environment.api + '/api/v1/notification', extra_data)
       .subscribe((response) => {
         console.log("token not expired")
       //  basically allow reset password to continue if the token has not expired
@@ -47,12 +49,12 @@ export class ResetPasswordComponent implements OnInit {
   onSubmit(data:any) {
 
     let extra_data = {
-      username: data["username"],
+      reset_token: this.token,
       new_password: data["password_digest"],
       operation: 'reset_password'
     };
 
-    this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
+    this.http.post<any>(environment.api + '/api/v1/user', extra_data)
       .subscribe((response) => {
           this.router.navigate(['/login']).then(r => alert("Success"));
         },

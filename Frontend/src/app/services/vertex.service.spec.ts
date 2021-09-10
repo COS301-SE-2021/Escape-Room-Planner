@@ -29,9 +29,10 @@ describe('VertexService', () => {
       0,
       0,
       0,
-      new Date(),
+      10,
       'description',
-      'clue')).toBe(0, 'returns wrong local_id on add');
+      'clue',
+      5)).toBe(0, 'returns wrong local_id on add');
   });
 
   it('#reset_array should reset an array', () => {
@@ -41,9 +42,9 @@ describe('VertexService', () => {
 
   it('#addVertexConnection should create the connection', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.vertices.push(new Vertex(1, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.addVertexConnection(0,1);
 
     expect(service.vertices[0].getConnections().length).toBe(1, 'didn\'t add the  connection')
@@ -51,7 +52,7 @@ describe('VertexService', () => {
 
   it('#addVertexConnectedLines should create the connection', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.addVertexConnectedLine(0,1);
 
     expect(service.vertices[0].getConnectedLines().length).toBe(1, 'didn\'t add the  connection')
@@ -59,7 +60,7 @@ describe('VertexService', () => {
 
   it('#addVertexResponsibleLines should create the connection', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.addVertexResponsibleLine(0,1);
 
     expect(service.vertices[0].getResponsibleLines().length).toBe(1, 'didn\'t add the  connection')
@@ -67,7 +68,7 @@ describe('VertexService', () => {
 
   it('#getVertexConnections should create the connection', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.vertices[0].addConnection(1);
 
     expect(service.getVertexConnections(0).length).toBe(1, 'didn\'t add the  connection')
@@ -75,7 +76,7 @@ describe('VertexService', () => {
 
   it('#removeVertexConnectedLines should delete the connected line when it exists', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.vertices[0].addConnectedLine(1);
     // it does
     service.removeVertexConnectedLine(0,1);
@@ -85,7 +86,7 @@ describe('VertexService', () => {
 
   it('#removeVertexConnectedLines should delete the connected line when it does not exists', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.vertices[0].addConnectedLine(1);
     // it does
     service.removeVertexConnectedLine(0,2);
@@ -95,7 +96,7 @@ describe('VertexService', () => {
 
   it('#removeVertexResponsibleLine should delete the connected line when it exists', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.vertices[0].addResponsibleLine(1);
     // it does
     service.removeVertexResponsibleLine(0,1);
@@ -105,7 +106,7 @@ describe('VertexService', () => {
 
   it('#removeVertexResponsibleLine should delete the connected line when it does not exists', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.vertices[0].addResponsibleLine(1);
     // it does
     service.removeVertexResponsibleLine(0,2);
@@ -115,7 +116,7 @@ describe('VertexService', () => {
 
   it('#getVertexConnections should return correct number of connections', () => {
     service.vertices.push(new Vertex(0, 0, "name",
-      'inType', 0, 0, 0, 0, "inGraphicID"));
+      'inType', 0, 0, 0, 0, "inGraphicID",10,5));
     service.vertices[0].addConnection(1);
     // it checks
     expect(service.getVertexConnections(0).length).toBeGreaterThan(0, 'does not return correct connections');

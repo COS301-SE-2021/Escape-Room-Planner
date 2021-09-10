@@ -42,6 +42,10 @@ class UserServices
     # check password is correct
     return LoginResponse.new(false, 'Password is incorrect', nil, request.username) unless @user.authenticate(request.password)
 
+
+    # check the user is verified
+    return LoginResponse.new(false, 'User is not verified', nil, request.username) unless @user.verified
+
     # raise 'Incorrect Password' unless @user.authenticate(request.password)
 
     # generate JWT token
@@ -70,8 +74,11 @@ class UserServices
   def reset_password(request)
     return ResetPasswordResponse.new(false, 'Reset Password request null') if request.nil?
 
-    @user = User.find_by_username(request.username)
-    return ResetPasswordResponse.new(false, 'Username does not exist') if @user.nil?
+    @decoded_token = JsonWebToken.decode(request.reset_token)
+    @user = User.find_by_id(@decoded_token['id'])
+    return ResetPasswordResponse.new(false, 'User does not exist') if @user.nil?
+
+    return ResetPasswordResponse.new(false, 'No new password received') if request.new_password.nil?
 
     @user.update(password: request.new_password)
 
@@ -80,6 +87,10 @@ class UserServices
                 else
                   ResetPasswordResponse.new(false, 'Password Not Reset')
                 end
+  rescue JWT::ExpiredSignature
+    ResetPasswordResponse.new(false, 'Expired token')
+  rescue StandardError
+    ResetPasswordResponse.new(false, 'Invalid Token')
   end
 
   def get_user_details(request)
@@ -124,9 +135,11 @@ class UserServices
   def verify_account(request)
     return VerifyAccountResponse.new(false, 'Request is null') if request.nil?
 
-    return VerifyAccountResponse.new(false, 'Username does not exist') unless User.find_by_username(request.username)
+    @decoded_token = JsonWebToken.decode(request.verify_token)
 
-    @user = User.find_by_username(request.username)
+    return VerifyAccountResponse.new(false, 'User does not exist') unless User.find_by_id(@decoded_token['id'])
+
+    @user = User.find_by_id(@decoded_token['id'])
 
     @user.verified = true
 
@@ -135,6 +148,10 @@ class UserServices
                 else
                   VerifyAccountResponse.new(false, 'Account verification unsuccessful')
                 end
+  rescue JWT::ExpiredSignature
+    VerifyAccountResponse.new(false, 'Expired token')
+  rescue StandardError
+    VerifyAccountResponse.new(false, 'Invalid Token')
   end
 
   # def setAdmin(request)
