@@ -32,7 +32,6 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run test:prod
-    - run: echo "web  npm build" > Procfile
 
     - name: Deploy to heroku
       uses: akhileshns/heroku-deploy@v3.12.12
@@ -42,3 +41,4 @@ jobs:
         heroku_app_name: ${{ secrets.HEROKU_APP_NAME_NODE }}
         heroku_email: ${{ secrets.HEROKU_EMAIL }}
         appdir: "Frontend"
+      if: contains(github.ref, 'master') && github.event_name == 'push'
