@@ -27,6 +27,7 @@ export class DependencyDiagramComponent implements OnInit {
     console.log('In Generate');
     this.showDependency = false;
     const graph = new mxGraph(this.graphContainer.nativeElement);
+    console.log('In Generate dddddd');
     try {
       const parent = graph.getDefaultParent();
       graph.getModel().beginUpdate();
