@@ -963,10 +963,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.diagramComponent?.generate();
   }
 
-  generateDiagram(): void {
-    this.diagramComponent?.generate();
-  }
-
   setStart() :void{
     if(this._target_start !== undefined)
       document.querySelectorAll('[vertex-id="' + this._target_start + '"]')[0]
