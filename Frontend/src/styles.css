@@ -9,7 +9,7 @@ small {
 }
 
 body {
-  background: var(--main-bg) !important;
+  background: #010409 !important;
   height: 100%;
   font-family: "Roboto", sans-serif;
 }
