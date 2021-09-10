@@ -167,6 +167,7 @@ class RoomServices
                 end
   end
 
+  # updates a Vertex transformation attributes
   # @param [UpdateVertexRequest] request
   # @return [UpdateVertexResponse]
   def update_vertex(request)
@@ -179,11 +180,12 @@ class RoomServices
     vertex.posy = request.pos_y
     vertex.width = request.width
     vertex.height = request.height
+    vertex.z_index = request.z_index
 
     @response = if vertex.save
                   UpdateVertexResponse.new(true, 'Vertex Updated')
                 else
-                  UpdateVertexResponse.new(false, 'Vertex Update parameters not working')
+                  UpdateVertexResponse.new(false, 'Incorrect Update Parameters')
                 end
   end
 
@@ -201,19 +203,30 @@ class RoomServices
       :width,
       :height,
       :graphicid,
-      :blob_id
+      :clue,
+      :description,
+      :estimatedTime,
+      :blob_id,
+      :z_index
     ).where(escape_room_id: request.id)
     return GetVerticesResponse.new(true, 'Room has no vertices', nil) if vertices.nil?
 
+    escape_room = EscapeRoom.find_by_id(request.id)
+    start_vertex_id = escape_room.startVertex
+    end_vertex_id = escape_room.endVertex
     user = User.find_by_id(EscapeRoom.find_by_id(request.id).user_id)
     data = vertices.map do |k|
+      pos = 'none'
+      pos = 'start' if k.id == start_vertex_id
+      pos = 'end' if k.id == end_vertex_id
       if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
         blob = user.graphic.blobs.find_by_id(k.blob_id)
         k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
       end
       { vertex: k,
         connections: k.vertices.ids,
-        type: k.type }
+        type: k.type,
+        position: pos }
     end
     # TODO: Fix to be more Efficient
     GetVerticesResponse.new(true, 'Vertices Obtained', data)
@@ -236,5 +249,46 @@ class RoomServices
   rescue StandardError => e
     puts e
     GetRoomsResponse.new(false, 'Error occurred while getting Rooms', nil)
+  end
+
+  # updates vertex attributes
+  # must have either name, clue, time, description of correct type to update
+  # @param request of type UpdateAttributeRequest
+  # @return UpdateVertexResponse object
+  def update_attribute(request)
+    flag = false
+
+    vertex = Vertex.find_by_id(request.id)
+    return UpdateAttributeResponse.new(false, 'Vertex id not valid') if vertex.nil?
+
+    unless request.name.nil?
+      vertex.name = request.name
+      flag = true
+    end
+    unless request.time.nil?
+      vertex.estimatedTime = request.time
+      flag = true
+    end
+
+    unless request.clue.nil?
+      vertex.clue = request.clue
+      flag = true
+    end
+    unless request.description.nil?
+      vertex.description = request.description
+      flag = true
+    end
+    @response = if flag
+                  if vertex.save
+                    UpdateAttributeResponse.new(true, 'Vertex attributes updated')
+                  else
+                    UpdateAttributeResponse.new(false, 'Could not update vertex attribute')
+                  end
+                else
+                  UpdateAttributeResponse.new(false, 'Incorrect vertex attributes given')
+                end
+  rescue StandardError => error
+    puts error
+    UpdateAttributeResponse.new(false, 'Error occurred while updating vertex attributes')
   end
 end

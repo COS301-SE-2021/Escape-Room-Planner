@@ -13,10 +13,10 @@ export class AppComponent {
   private headers: HttpHeaders = new HttpHeaders();
   private is_valid_user = false;
 
-  //todo
+  public username: string|null = '';
 
   constructor(private httpClient: HttpClient, private router: Router, private cdr: ChangeDetectorRef) {
-
+    this.username = localStorage.getItem('username');
   }
 
   ngOnInit(){
@@ -46,14 +46,16 @@ export class AppComponent {
         this.cdr.detectChanges();
         // response so go to escape room planner
         this.is_valid_user = true;
-        // this.router.navigate(['escape-room']).then(r => console.log('already logged in'));
+        this.router.navigate(['escape-room']).then(r => console.log('already logged in'));
       },
       error => {
         if (error.status === 401){
           this.is_valid_user = false;
           if (this.router.routerState.snapshot.url !== '/login' &&
             this.router.routerState.snapshot.url !=='/reset-not' &&
-            this.router.routerState.snapshot.url !=='/escape' &&
+            !this.router.routerState.snapshot.url.includes('/reset?') &&
+            !this.router.routerState.snapshot.url.includes('/verify-success') &&
+            this.router.routerState.snapshot.url !=='/verify-failure' &&
             this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
         }else alert("Something went wrong");
       }

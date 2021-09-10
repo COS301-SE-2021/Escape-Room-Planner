@@ -1,6 +1,13 @@
-require './app/Services/login_request'
-require './app/Services/register_user_request'
 require './app/Services/services_helper'
+require './app/Services/UserSubsystem/Request/login_request'
+require './app/Services/UserSubsystem/Response/login_response'
+require './app/Services/UserSubsystem/Request/register_user_request'
+require './app/Services/UserSubsystem/Response/register_user_response'
+require './app/Services/UserSubsystem/Request/reset_password_request'
+require './app/Services/UserSubsystem/Response/reset_password_response'
+require './app/Services/UserSubsystem/Request/verify_account_request'
+require './app/Services/UserSubsystem/Response/verify_account_response'
+require './app/Services/UserSubsystem/user_services'
 
 module Api
   module V1
@@ -59,6 +66,18 @@ module Api
             render json: { status: 'FAILED', message: res.message }, status: 401
             return
           end
+
+        when 'reset_password'
+          if params[:reset_token].nil?
+            render json: { status: 'FAILED', message: 'No reset_token received' }, status: 400
+            return
+          else
+            req = ResetPasswordRequest.new(params[:reset_token], new_password)
+            resp = serv.reset_password(req)
+            render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+            return
+          end
+
         when 'Verify'
           if authorise(request)
             render json: { status: 'SUCCESS' }, status: :ok
@@ -67,10 +86,25 @@ module Api
             render json: { status: 'FAILED' }, status: :unauthorized
             return
           end
+
+        when 'verify_account'
+          if params[:verify_token].nil?
+            render json: { status: 'FAILED', message: 'No verify_token received' }, status: 400
+            return
+          else
+            req = VerifyAccountRequest.new(params[:verify_token])
+            resp = serv.verify_account(req)
+            render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+            return
+          end
+
         else
           render json: { status: 'FAILED', message: 'Ensure type is correct with correct parameters' }, status: :not_found
           return
         end
+
+
+
 
         # when 'Verify'
 
@@ -106,7 +140,8 @@ module Api
         render json: { status: 'SUCCESS', message: 'User:', data: "Created: #{res.success}" }, status: :ok
       # rescue StandardError
       #   render json: { status: 'FAILED', message: 'Unspecified error' }, status: :not_found
+        #
+        end
       end
     end
   end
-end

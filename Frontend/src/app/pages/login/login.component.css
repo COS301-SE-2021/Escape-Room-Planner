@@ -94,6 +94,8 @@ login-form {
 
 form {
   font-size: 14px;
+  font-family: "UniSansThin";
+  font-weight: bold;
 }
 
 a {

@@ -29,8 +29,8 @@ Team:Five Stack <br>
 SRS Document: https://www.overleaf.com/read/wkfykfynsmzm <br>
 Architectural Design Document: https://www.overleaf.com/read/ctwwpzfmfpng <br>
 Installation guide: https://www.overleaf.com/read/kccmqpkpxmgd <br>
-User Manual: <br>
-Coding Standards: <br> 
+User Manual: https://www.overleaf.com/read/xzvcgxtrxxhb <br>
+Coding Standards: https://www.overleaf.com/9221754327dhkbvtkktwhm <br> 
 Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1
 
 

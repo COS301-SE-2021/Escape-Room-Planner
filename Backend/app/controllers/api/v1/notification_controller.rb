@@ -1,13 +1,13 @@
 require './app/Services/services_helper'
-require './app/Services/reset_password_notification_request'
-require './app/Services/reset_password_notification_response'
-require './app/Services/user_services'
+require './app/Services/NotificationSubsystem/notification_services'
+require './app/Services/NotificationSubsystem/Request/send_email_notification_request'
+require './app/Services/NotificationSubsystem/Response/send_email_notification_response'
 
 module Api
   module V1
     class NotificationController < ApplicationController
-      # protect_from_forgery with: :null_session
-      skip_before_action :verify_authenticity_token
+      protect_from_forgery with: :null_session
+      # skip_before_action :verify_authenticity_token
       rescue_from JWT::ExpiredSignature, with: :forbidden
       rescue_from JWT::DecodeError, with: :forbidden
 
@@ -21,7 +21,7 @@ module Api
               return
             else
               resp = reset_password(params[:email])
-              render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+              render json: { status: 'Response received', message: resp.message}, status: :ok
             end
 
           end
@@ -33,7 +33,7 @@ module Api
 
             else
               resp = verify_account(params[:email])
-              render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
+              render json: { status: 'Response received',  message: resp.message }, status: :ok
             end
 
           end

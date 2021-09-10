@@ -6,6 +6,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {VertexService} from "../../services/vertex.service";
 import 'leader-line';
 import {By} from "@angular/platform-browser";
+import {FormsModule} from "@angular/forms";
 
 describe('RoomCreatorComponent', () => {
   let component: RoomCreatorComponent;
@@ -24,6 +25,7 @@ describe('RoomCreatorComponent', () => {
 
     await TestBed.configureTestingModule({
       imports:[
+        FormsModule,
         HttpClientTestingModule,
         RouterTestingModule
       ],
@@ -117,12 +119,12 @@ describe('RoomCreatorComponent', () => {
     expect(fixture.debugElement.nativeElement.querySelector('#context_menu').hidden).toBe(true);
   });
 
-  it('#hideContextMenu should not hide a context  when clicked inside the menu', function () {
+  it('#hideContextMenu should hide a context  when clicked inside the menu', function () {
     fixture.debugElement.nativeElement.querySelector('#context_menu').hidden = false;
 
     fixture.debugElement.nativeElement.querySelector('#context_menu').click()
 
-    expect(fixture.debugElement.nativeElement.querySelector('#context_menu').hidden).toBe(false);
+    expect(fixture.debugElement.nativeElement.querySelector('#context_menu').hidden).toBe(true);
   });
 
   it('#showContextMenu should show a context menu at vertex position', function () {

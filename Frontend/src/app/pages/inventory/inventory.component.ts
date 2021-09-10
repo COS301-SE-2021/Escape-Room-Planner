@@ -20,6 +20,7 @@ export class InventoryComponent implements OnInit {
   @ViewChild('puzzle_div') puzzle_div: ElementRef | undefined;
   @ViewChild('key_div') key_div: ElementRef | undefined;
   @ViewChild('clue_div') clue_div: ElementRef | undefined;
+  @ViewChild('room_div') room_div: ElementRef | undefined;
 
   constructor(private httpClient: HttpClient, private renderer: Renderer2) {
     this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
@@ -108,6 +109,11 @@ export class InventoryComponent implements OnInit {
         this.renderer.appendChild(this.clue_div?.nativeElement, new_div);
         break;
       }
+      case 'room':{
+        this.renderer.listen(new_img, 'click', (event) => this.onClick('Room', new_img.src,Number.parseInt(blob_id), 10));
+        this.renderer.appendChild(this.room_div?.nativeElement, new_div);
+        break;
+      }
     }
   }
 
@@ -115,6 +121,7 @@ export class InventoryComponent implements OnInit {
     let src = null;
 
     if (blob_id) src = this.inventory[blob_id.toString()];
+    if (blob_id === -1) src = loc;
 
     let data: inventoryObject = {
       type: type,
@@ -127,7 +134,8 @@ export class InventoryComponent implements OnInit {
     this.afterClick.emit(data);
   }
 
-  public async addImage(input: HTMLInputElement | null, type: 'container' | 'puzzle' | 'key' | 'clue'): Promise<void> {
+  public async addImage(input: HTMLInputElement | null, type: 'container' | 'puzzle' | 'key' | 'clue' | 'room'): Promise<void> {
+    // todo Room image
     let file = input?.files?.item(0);
 
 
@@ -177,6 +185,12 @@ export class InventoryComponent implements OnInit {
     }
   }
 
+  public onClickRoom(): void{
+    // todo, implement this function
+    // <img class="resize-only" src="./assets/images/room.jpg" alt="room background" id="room" draggable="false">
+    console.log('clicked room reeee');
+    return;
+  }
   //calls rooms creator check solvable
   public async checkSolve(){
     this.checkSolvable.emit();

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-dark sticky-top">
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top">
   <div class="container-fluid d-lg-flex">
     <a class="navbar-brand" routerLink="**" (click)="verifyJWT()">Escape Room Planner</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,7 +29,7 @@
           <ng-template #logged_in>
             <ul class="dropdown-menu  dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li>
-                <p class="dropdown-item">Hi, [user's name]</p>
+                <p class="dropdown-item">Hi, {{username}}</p>
               </li>
               <li><hr class="dropdown-divider"></li>
               <li>
