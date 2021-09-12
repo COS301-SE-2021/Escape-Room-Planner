@@ -349,6 +349,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
         this.rooms[this.current_room_index].removeChild(this.objects['vertex'+vertex_id]);
         // @ts-ignore
         this.updateInventoryMenu(this.character_inventory.items.length-1);
+        this.vertexStatus(vertex, 'Obtaining:');
       }
     }else if(vertex_type === 'Puzzle'){
       //if has previous connections at least one must be completed
@@ -357,43 +358,26 @@ export class SimulationComponent implements OnInit, OnDestroy {
           // @ts-ignore
           let previous_vertex = this.vertexService.vertices[local_id];
           if(previous_vertex.isCompleted())
-            this.vertexStatus(vertex);
+            this.vertexStatus(vertex, 'Solving:');
         }
       }else
-        this.vertexStatus(vertex);
+        this.vertexStatus(vertex, 'Solving:');
     }else if((vertex_type === 'Container')){
         // make items visible
-       if(vertex.getPreviousConnections().length > 0)
-       {
-         for (let previous_connections of vertex.getPreviousConnections())
-         {
-
+       if(vertex.getPreviousConnections().length > 0) {
+         for (let previous_connections of vertex.getPreviousConnections()) {
            // @ts-ignore
            let previous_vertex = this.vertexService.vertices[previous_connections];
-           if(previous_vertex.isCompleted())
-           {
+           if(previous_vertex.isCompleted()) {
+             this.vertexStatus(vertex, 'Opening:');
              console.log("puzzles completed")
-             for (let connections of vertex.getConnections()) {
-               // @ts-ignore
-               this.objects['vertex' + connections].visible = true
-               // @ts-ignore
-             }
-           }
-           else
-           {
+           } else {
              console.log("Not all puzzles completed you may not access this container")
            //  tell the user they cannot access this object yet
            }
-
          }
-       }
-       else
-       {
-         for (let connections of vertex.getConnections()) {
-           // @ts-ignore
-           this.objects['vertex' + connections].visible = true
-           // @ts-ignore
-         }
+       } else {
+         this.vertexStatus(vertex, 'Opening:');
        }
     }
   }
@@ -421,14 +405,20 @@ export class SimulationComponent implements OnInit, OnDestroy {
       +'" title="'+vertex.name+'"  alt="NOT FOUND" class="img-thumbnail">';
   }
 
-  vertexStatus(vertex: Vertex){
+  vertexStatus(vertex: Vertex, pre_message: String){
     if(!vertex.isCompleted() && !this.character_lock) {
       this.status_menu_show = false;
       this.character_lock = true;
-      this.status_menu_text = 'Solving: ' + vertex.name;
+      this.status_menu_text =  pre_message + ' ' + vertex.name;
       setTimeout(() => {
         this.status_menu_show = true;
         this.character_lock = false;
+        if(vertex.type === 'Container') {
+          for (let connections of vertex.getConnections()) {
+            // @ts-ignore
+            this.objects['vertex' + connections].visible = true
+          }
+        }
         vertex.toggleCompleted();
       }, (vertex.estimated_time / 60) * 1000);
     }
