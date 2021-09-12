@@ -59,7 +59,7 @@ export class DependencyDiagramComponent implements OnInit {
       layout.horizontal = true;
       layout.edgeStyle=4;
       layout.intraCellSpacing=20;
-      layout.interRankCellSpacing=60;
+      layout.interRankCellSpacing=65;
       layout.execute(graph.getDefaultParent());
     }
   }
