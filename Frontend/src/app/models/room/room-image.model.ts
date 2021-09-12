@@ -5,6 +5,7 @@ export class RoomImage {
   private _width: number;
   private _height: number;
   private _src: string;
+  private _unlocked: Boolean;
   private contains_objects: number[];
 
   constructor(id: number, pos_x: number, pos_y: number, width: number, height: number, src: string) {
@@ -15,6 +16,7 @@ export class RoomImage {
     this._height = height;
     this._src = src;
     this.contains_objects = [];
+    this._unlocked = false;
   }
 
 
@@ -64,6 +66,14 @@ export class RoomImage {
 
   set src(value: string) {
     this._src = value;
+  }
+
+  get unlocked(): Boolean {
+    return this._unlocked;
+  }
+
+  set unlocked(value: Boolean) {
+    this._unlocked = value;
   }
 
   addObject(vertex_id: number){

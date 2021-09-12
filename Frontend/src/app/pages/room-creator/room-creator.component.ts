@@ -273,10 +273,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
               vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
               vertex.description, vertex.clue, vertex.z_index);
-            if(vertex_t.position === "start")
+            if(vertex_t.position === "start") {
               this._target_start = current_id;
-            else if (vertex_t.position === "end")
+              this.vertexService.start_vertex_id = current_id;
+            }
+            else if (vertex_t.position === "end") {
               this._target_end = current_id;
+              this.vertexService.end_vertex_id = current_id;
+            }
             // @ts-ignore
             for (let vertex_connection of vertex_connections)
               this.vertexService.addVertexConnection(current_id, vertex_connection);

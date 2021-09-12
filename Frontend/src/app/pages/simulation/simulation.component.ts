@@ -215,6 +215,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
         }
       }
 
+      let i = 0;
       //create room containers
       for (let room_images of this.roomService.room_images) {
         let room = new Container();
@@ -243,16 +244,20 @@ export class SimulationComponent implements OnInit, OnDestroy {
         sprite.height = room_images.height*scale;
         room.addChild(sprite);
 
-        if(room_images.getContainedObjects() !== undefined)
-        {
-          for(let vertex_images of room_images.getContainedObjects())
-          {
+        if(room_images.getContainedObjects() !== undefined) {
+          for(let vertex_images of room_images.getContainedObjects()){
             // @ts-ignore
             let vertex_sprite = new Sprite.from(this.app.loader.resources['vertex'+vertex_images].texture);
             // @ts-ignore
             this.objects['vertex'+vertex_images] = vertex_sprite;
             vertex_sprite.anchor.set(0);
             let vertices = this.vertexService.vertices;
+
+            //set start room here
+            if(parseInt(String(vertex_images)) === parseInt(String(this.vertexService.start_vertex_id))){
+              this.current_room_index = i;
+            }
+
             if(vertices[vertex_images].type === "Key" || vertices[vertex_images].type ==="Clue")
             {
               vertex_sprite.visible = false
@@ -270,6 +275,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
         }
         if(this.rooms)
           this.rooms.push(room);
+        i++;
       }
       if(this.rooms){
        this.rooms.forEach(room =>{
@@ -279,6 +285,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       }
       // @ts-ignore
       this.showRoom(this.current_room_index);
+      // @ts-ignore
+      this.roomService.room_images[this.current_room_index].unlocked = true;
     }
   }
 
@@ -311,6 +319,21 @@ export class SimulationComponent implements OnInit, OnDestroy {
       else
         this.showRoom(this.current_room_index + 1);
     }
+  }
+
+  //unlocks new room if next connection in new room
+  checkUnlockRoom(vertices: number[]){
+    for(let local_id of vertices){
+      for(let i = 0; i < this.roomService.room_images.length; i++){
+        for(let vertex of this.roomService.room_images[i].getContainedObjects()){
+          if(vertex === local_id && this.current_room_index !== i){
+            this.roomService.room_images[i].unlocked = true;
+            console.log('room unlocked');
+          }
+        }
+      }
+    }
+    console.log(this.roomService.room_images);
   }
 
   // checks objects colliding in rooms with character
@@ -420,6 +443,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
           }
         }
         vertex.toggleCompleted();
+        this.checkUnlockRoom(vertex.getConnections());
       }, (vertex.estimated_time / 60) * 1000);
     }
   }
