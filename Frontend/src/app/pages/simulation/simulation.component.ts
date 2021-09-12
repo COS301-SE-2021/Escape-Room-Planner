@@ -41,6 +41,11 @@ export class SimulationComponent implements OnInit, OnDestroy {
   private min = 0;
   private hour = 0;
 
+  // used by simulation algorithm
+  private path_choice: number = 0;
+  private current_path_index: number = 0;
+  private simulate_toggle: boolean = false;
+
   @ViewChild("inventory") inventoryRef : ElementRef | undefined;
 
   public inventory_menu: boolean = true;
@@ -73,7 +78,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
       // TODO : fix styles later to be dynamic
       this.elementRef.nativeElement.appendChild(this.app.view);
       this.loadAssets();
-      this.app.ticker.add(delta => this.simulate(delta));
     }
   }
 
@@ -118,6 +122,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.changeRoom();
     }else if(event.code === 'KeyI'){
       this.inventory_menu = !this.inventory_menu;
+    }else if(event.code === 'KeyQ'){
+      this.movement.a = false;
+      this.movement.d = false;
+      this.movement.w = false;
+      this.movement.s = false;
+      this.simulate_toggle = !this.simulate_toggle;
     }
   }
 
@@ -137,7 +147,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
   }
 
-  simulate(delta: any){
+  moveCharacter(delta: any){
     if(this.character !== undefined && !this.character_lock) {
       // @ts-ignore
       let room = this.roomService.room_images[this.current_room_index];
@@ -173,6 +183,55 @@ export class SimulationComponent implements OnInit, OnDestroy {
         else
           this.character.y += 5;
 
+      }
+    }
+   if(this.simulate_toggle)
+    this.simulate();
+  }
+
+  simulate(){
+    let vertex_id = this.vertexService.possible_paths[this.path_choice][this.current_path_index];
+    let room_index = this.findRoomHoldsVertex(vertex_id);
+    // @ts-ignore
+    if(room_index !== this.current_room_index && this.roomService.room_images[room_index].unlocked){
+        // @ts-ignore
+        this.showRoom(room_index);
+    }
+    if(this.character !== undefined && !this.character_lock && vertex_id !== undefined) {
+      let character_bounds = this.character.getBounds();
+      let flag = {x: false, y: false};
+      // @ts-ignore
+      let object_bounds = this.objects['vertex'+vertex_id].getBounds();
+
+      // move on x axis
+      if((Math.abs(character_bounds.x-object_bounds.x) <= 5 )) {
+        flag.x = true;
+        this.movement.a = false;
+        this.movement.d = false;
+      }else if(object_bounds.x > character_bounds.x){
+        this.movement.a = false;
+        this.movement.d = true;
+      }else if(object_bounds.x < character_bounds.x){
+        this.movement.d = false;
+        this.movement.a = true;
+      }
+
+      // move on y axis
+      if((Math.abs(character_bounds.y-object_bounds.y) <= 5 )) {
+        flag.y = true;
+        this.movement.w = false;
+        this.movement.s = false;
+      }else if(object_bounds.y > character_bounds.y){
+        this.movement.w = false;
+        this.movement.s = true;
+      }else if(object_bounds.y < character_bounds.y){
+        this.movement.s = false;
+        this.movement.w = true;
+      }
+
+      // at object position
+      if(flag.x && flag.y) {
+        this.checkCharacterObjectCollision();
       }
     }
   }
@@ -303,6 +362,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.roomService.room_images[this.current_room_index].unlocked = true;
       // start timer for simulation
       this.timer(1000);
+      this.app.ticker.add(delta => this.moveCharacter(delta));
     }
   }
 
@@ -359,17 +419,30 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
   }
 
+  // unlocks new room if next connection in new room
+  findRoomHoldsVertex(vertex_id: number){
+    for(let i = 0; i < this.roomService.room_images.length; i++){
+      for(let vertices_id of this.roomService.room_images[i].getContainedObjects()){
+        if(vertices_id === vertex_id && this.current_room_index !== i) {
+          return i;
+        }
+      }
+    }
+    return this.current_room_index;
+  }
+
   // checks objects colliding in rooms with character
-  checkCharacterObjectCollision(){
+  checkCharacterObjectCollision(): boolean{
     // @ts-ignore
     let room = this.roomService.room_images[this.current_room_index];
     for(let vertex_id of room.getContainedObjects()){
       // @ts-ignore
       if(this.checkCollision(this.character, this.objects['vertex'+vertex_id])){
         this.characterObjectInteraction(vertex_id);
+        return true;
       }
     }
-
+    return false;
   }
 
   //check object 1 colliding with object 2 border
@@ -475,6 +548,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
             this.objects['vertex' + connections].visible = true
           }
         }
+        if(this.vertexService.possible_paths[this.path_choice][this.current_path_index] === vertex.local_id)
+          this.current_path_index++;
         vertex.toggleCompleted();
         this.checkUnlockRoom(vertex.getConnections());
         if(vertex.local_id === this.vertexService.end_vertex_id){

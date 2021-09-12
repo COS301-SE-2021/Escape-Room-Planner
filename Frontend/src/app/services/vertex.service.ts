@@ -156,7 +156,6 @@ export class VertexService {
     for(let i = 0; i < vertices.length; i++){
       for(let vertex of this.vertices){
         if(parseInt(String(vertex.id)) == parseInt(String(vertices[i]))){
-          console.log('ran');
           new_vertices.push(vertex.local_id);
           break;
         }
