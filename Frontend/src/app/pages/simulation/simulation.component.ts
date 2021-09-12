@@ -314,10 +314,16 @@ export class SimulationComponent implements OnInit, OnDestroy {
   // TODO : change this function such that it works once rooms been solved
   changeRoom(){
     if(this.current_room_index !== undefined && this.rooms) {
-      if (this.current_room_index >= this.rooms.length-1)
-        this.showRoom(0);
-      else
-        this.showRoom(this.current_room_index + 1);
+      let i = this.current_room_index;
+      while(true){
+        i++;
+        if(i > this.rooms.length-1)
+          i = 0;
+        if(this.roomService.room_images[i].unlocked){
+          this.showRoom(i);
+          return;
+        }
+      }
     }
   }
 
@@ -333,7 +339,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
         }
       }
     }
-    console.log(this.roomService.room_images);
   }
 
   // checks objects colliding in rooms with character
