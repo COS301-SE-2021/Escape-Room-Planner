@@ -51,6 +51,10 @@ li > .btn-link:hover{
   border-radius: 10px;
 }
 
+#solvable-button:hover {
+  padding-left: 5px;
+}
+
 #solvable-button {
   border-radius: 5px;
   background: #3BA55D;
@@ -60,9 +64,16 @@ li > .btn-link:hover{
   width: 95%;
   font-family: "UniSansThin";
   font-weight: bold;
-  font-size: 18px;
+  font-size: 17px;
   position: -webkit-sticky;
   position: sticky;
+}
+
+.button_icons {
+  height: 26px;
+  width: 26px;
+  justify-content: center;
+  padding-bottom: 5px;
 }
 
 .overflow-auto {

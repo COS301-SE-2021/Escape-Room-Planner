@@ -94,8 +94,7 @@ login-form {
 
 form {
   font-size: 14px;
-  font-family: "UniSansThin";
-  font-weight: bold;
+  font-family: "Roboto", sans-serif;
 }
 
 a {

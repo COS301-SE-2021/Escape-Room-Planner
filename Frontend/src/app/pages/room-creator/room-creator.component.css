@@ -141,5 +141,12 @@ input::-webkit-inner-spin-button {
   color: white;
   text-align: center;
   font-family: "UniSansThin";
-  font-weight: bold;
+  font-weight: bolder;
+}
+
+.button_icons {
+  height: 22px;
+  width: 22px;
+  justify-content: center;
+  padding-bottom: 5px;
 }
