@@ -457,11 +457,15 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.status_menu_show = false;
       this.character_lock = true;
       this.status_menu_text =  pre_message + ' ' + vertex.name;
+      // speed up clock for simulation
       if(vertex.estimated_time != 0) {
         clearInterval(this.timer_id);
-        this.timer((1000/60));
+        this.timer(Math.ceil(1000/60));
       }
       setTimeout(() => {
+        // slow down clock for simulation
+        clearInterval(this.timer_id);
+        this.timer(1000);
         this.messageMenu('Completed Task');
         this.status_menu_show = true;
         this.character_lock = false;
@@ -473,9 +477,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
         }
         vertex.toggleCompleted();
         this.checkUnlockRoom(vertex.getConnections());
+        if(vertex.local_id === this.vertexService.end_vertex_id){
+          clearInterval(this.timer_id);
+          this.messageMenu("Escaped Escape Room!");
+          this.character_lock = true;
+        }
         //update time values
-        clearInterval(this.timer_id);
-        this.timer(1000);
       }, (vertex.estimated_time / 60) * 1000);
     }
   }
@@ -485,13 +492,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.message_menu_text =  message;
       setTimeout(() => {
         this.message_menu_show = true;
-      }, 1000);
+      }, 1500);
   }
 
   // timer for how long simulation takes
   timer(interval: number){
     this.timer_id = setInterval( () =>{
-      console.log(this.sec);
       this.sec++;
       if(this.sec >= 60){
         this.min++;
