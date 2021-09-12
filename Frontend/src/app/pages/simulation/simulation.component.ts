@@ -35,6 +35,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
   //sprites of all objects on canvas except character
   private objects = {};
 
+  //timer variable used to calc current time
+  private timer_id: any;
+  private sec = 0;
+  private min = 0;
+  private hour = 0;
+
   @ViewChild("inventory") inventoryRef : ElementRef | undefined;
 
   public inventory_menu: boolean = true;
@@ -42,6 +48,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
   public status_menu_text: string = "Preforming operation";
   public message_menu_show: boolean = true;
   public message_menu_text: string = "Need";
+  //timer text to show end user
+  public time_hour: string = '00';
+  public time_min: string = '00';
+  public time_sec: string = '00';
 
   constructor(private elementRef: ElementRef,  private renderer: Renderer2,
               private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
@@ -79,6 +89,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       });
     if (this.app !== undefined)
       this.app.destroy();
+    if(this.timer_id)
+      clearInterval(this.timer_id);
   }
 
   ngOnDestroy(): void {
@@ -289,9 +301,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.showRoom(this.current_room_index);
       // @ts-ignore
       this.roomService.room_images[this.current_room_index].unlocked = true;
+      // start timer for simulation
+      this.timer(1000);
     }
   }
 
+  // shows new room
   showRoom(room_index: number){
     if (this.app && this.current_room_index !== undefined){
       if(this.rooms && this.rooms.length > 0 && this.rooms.length > room_index){
@@ -330,7 +345,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
   }
 
-  //unlocks new room if next connection in new room
+  // unlocks new room if next connection in new room
   checkUnlockRoom(vertices: number[]){
     for(let local_id of vertices){
       for(let i = 0; i < this.roomService.room_images.length; i++){
@@ -442,6 +457,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.status_menu_show = false;
       this.character_lock = true;
       this.status_menu_text =  pre_message + ' ' + vertex.name;
+      if(vertex.estimated_time != 0) {
+        clearInterval(this.timer_id);
+        this.timer((1000/60));
+      }
       setTimeout(() => {
         this.messageMenu('Completed Task');
         this.status_menu_show = true;
@@ -454,6 +473,9 @@ export class SimulationComponent implements OnInit, OnDestroy {
         }
         vertex.toggleCompleted();
         this.checkUnlockRoom(vertex.getConnections());
+        //update time values
+        clearInterval(this.timer_id);
+        this.timer(1000);
       }, (vertex.estimated_time / 60) * 1000);
     }
   }
@@ -464,6 +486,35 @@ export class SimulationComponent implements OnInit, OnDestroy {
       setTimeout(() => {
         this.message_menu_show = true;
       }, 1000);
+  }
+
+  // timer for how long simulation takes
+  timer(interval: number){
+    this.timer_id = setInterval( () =>{
+      console.log(this.sec);
+      this.sec++;
+      if(this.sec >= 60){
+        this.min++;
+        this.sec = 0;
+      }
+      if(this.min >= 60){
+        this.hour++;
+        this.min = 0;
+      }
+      let string_sec = String(this.sec);
+      let string_min = String(this.min);
+      let string_hour = String(this.hour);
+      if(string_sec.length === 1)
+        string_sec = "0"+string_sec;
+      if(string_min.length === 1)
+        string_min = "0"+string_min;
+      if(string_hour.length === 1)
+        string_hour = "0"+string_hour;
+
+      this.time_sec = string_sec;
+      this.time_min = string_min;
+      this.time_hour = string_hour;
+    }, interval);
   }
 
 }
