@@ -40,6 +40,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
   public inventory_menu: boolean = true;
   public status_menu_show: boolean = true;
   public status_menu_text: string = "Preforming operation";
+  public message_menu_show: boolean = true;
+  public message_menu_text: string = "Need";
 
   constructor(private elementRef: ElementRef,  private renderer: Renderer2,
               private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
@@ -181,7 +183,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
       });
       //shows when load complete
       this.app.loader.onComplete.add(()=>{
-        console.log('COMPLETED LOAD');
+      //  this.messageMenu("Room loaded");
         this.loadRooms();
       });
       //shows error when loading
@@ -305,6 +307,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
           this.character.x = 0;
           this.character.y = 0;
         }
+        this.messageMenu('Room '+(room_index+1));
         this.rooms[room_index].visible = true;
         this.current_room_index = room_index;
       }
@@ -334,7 +337,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
         for(let vertex of this.roomService.room_images[i].getContainedObjects()){
           if(vertex === local_id && this.current_room_index !== i){
             this.roomService.room_images[i].unlocked = true;
-            console.log('room unlocked');
+            this.messageMenu("Room unlocked");
           }
         }
       }
@@ -382,12 +385,15 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }else if(vertex_type === 'Puzzle'){
       //if has previous connections at least one must be completed
       if(vertex.getPreviousConnections().length > 0){
-        for(let local_id of vertex.getPreviousConnections()){
+        for(let local_id of vertex.getPreviousConnections()) {
           // @ts-ignore
           let previous_vertex = this.vertexService.vertices[local_id];
-          if(previous_vertex.isCompleted())
+          if (previous_vertex.isCompleted()) {
             this.vertexStatus(vertex, 'Solving:');
+            return;
+          }
         }
+        this.messageMenu('Need item first');
       }else
         this.vertexStatus(vertex, 'Solving:');
     }else if((vertex_type === 'Container')){
@@ -398,10 +404,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
            let previous_vertex = this.vertexService.vertices[previous_connections];
            if(previous_vertex.isCompleted()) {
              this.vertexStatus(vertex, 'Opening:');
-             console.log("puzzles completed")
            } else {
-             console.log("Not all puzzles completed you may not access this container")
-           //  tell the user they cannot access this object yet
+             this.messageMenu('Need To Solve puzzle');
            }
          }
        } else {
@@ -439,6 +443,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.character_lock = true;
       this.status_menu_text =  pre_message + ' ' + vertex.name;
       setTimeout(() => {
+        this.messageMenu('Completed Task');
         this.status_menu_show = true;
         this.character_lock = false;
         if(vertex.type === 'Container') {
@@ -451,6 +456,14 @@ export class SimulationComponent implements OnInit, OnDestroy {
         this.checkUnlockRoom(vertex.getConnections());
       }, (vertex.estimated_time / 60) * 1000);
     }
+  }
+
+  messageMenu(message: string){
+      this.message_menu_show = false;
+      this.message_menu_text =  message;
+      setTimeout(() => {
+        this.message_menu_show = true;
+      }, 1000);
   }
 
 }
