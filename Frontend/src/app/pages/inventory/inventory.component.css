@@ -61,6 +61,8 @@ li > .btn-link:hover{
   font-family: "UniSansThin";
   font-weight: bold;
   font-size: 18px;
+  position: -webkit-sticky;
+  position: sticky;
 }
 
 .overflow-auto {
