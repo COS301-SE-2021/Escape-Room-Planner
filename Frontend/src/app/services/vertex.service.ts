@@ -13,12 +13,14 @@ export class VertexService {
   private _vertices : Vertex[];
   private _start_vertex_id: number;
   private _end_vertex_id: number;
+  private _possible_paths: number[][];
 
   constructor() {
     this._vertices = [];
     this._local_id_count = 0;
     this._start_vertex_id = -1;
     this._end_vertex_id = -1;
+    this._possible_paths = [];
   }
 
   addVertex(inId:number, inType: string, inName: string, inGraphicID: string,
@@ -73,7 +75,16 @@ export class VertexService {
     this._end_vertex_id = value;
   }
 
+  get possible_paths(): number[][] {
+    return this._possible_paths;
+  }
+
+  set possible_paths(value: number[][]) {
+    this._possible_paths = value;
+  }
+
   public reset_array(){
+    this._possible_paths = [];
     this._vertices = [];
     this._local_id_count = 0;
   }
@@ -137,5 +148,20 @@ export class VertexService {
   //returns what connections a vertex has in an array
   public getVertexConnections(vertex_id: number){
    return this._vertices[vertex_id].getConnections();
+  }
+
+  //convert array from actual id to local id
+  public convertToLocalID(vertices: number[]){
+    let new_vertices: number[] = [];
+    for(let i = 0; i < vertices.length; i++){
+      for(let vertex of this.vertices){
+        if(parseInt(String(vertex.id)) == parseInt(String(vertices[i]))){
+          console.log('ran');
+          new_vertices.push(vertex.local_id);
+          break;
+        }
+      }
+    }
+    return new_vertices;
   }
 }

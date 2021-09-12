@@ -47,8 +47,6 @@ export class RoomService {
           }
         }
       }
-      console.log(room_image.id +" " + room_image.getContainedObjects());
-      console.log(vertexArray);
     }
     //TODO: check if array is empty and if not say what needs to be placed
   }
