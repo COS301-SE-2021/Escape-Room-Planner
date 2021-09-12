@@ -1,3 +1,13 @@
-  <div #graphContainer [hidden]="showDependency" class="modal-body rounded border border-4 border-success bg-dark"
-       style="top: 50%; left: 30%; width: 50%; z-index: 1; max-height: 99vh; overflow: auto;">
+  <div #graphContainer [hidden]="showDependency" class="modal-body rounded border border-radius-10 border-2 border-success bg-dark"
+       style="top: 50%; left: 30%; width: 50%; z-index: 1; max-height: 99vh; overflow: auto; border-radius: 10px;">
+    <div class="container text-white">
+      <div class="row">
+        <div class="col-11"></div>
+        <div class="col-1" id="delete_but">
+          <button (click)="showDependency=true"class="text-end btn btn-dark remove-padding">
+            <img src="/assets/svg/x.svg" alt="NOT FOUND">
+          </button>
+        </div>
+      </div>
+  </div>
   </div>

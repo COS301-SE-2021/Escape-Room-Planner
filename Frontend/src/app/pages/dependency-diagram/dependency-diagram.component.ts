@@ -24,10 +24,8 @@ export class DependencyDiagramComponent implements OnInit {
 
   // @ts-ignore
   generate() {
-    console.log('In Generate');
     this.showDependency = false;
     const graph = new mxGraph(this.graphContainer.nativeElement);
-    console.log('In Generate dddddd');
     try {
       const parent = graph.getDefaultParent();
       graph.getModel().beginUpdate();
@@ -61,7 +59,7 @@ export class DependencyDiagramComponent implements OnInit {
       layout.horizontal = true;
       layout.edgeStyle=4;
       layout.intraCellSpacing=20;
-      layout.interRankCellSpacing=55;
+      layout.interRankCellSpacing=60;
       layout.execute(graph.getDefaultParent());
     }
   }

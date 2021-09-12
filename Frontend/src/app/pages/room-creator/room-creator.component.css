@@ -131,6 +131,11 @@ input::-webkit-inner-spin-button {
   font-weight: bold;
 }
 
+.modal-body {
+  border-radius: 10px;
+  /*animation: f;*/
+}
+
 #simulate {
   height: 35px;
   width: 135px;
