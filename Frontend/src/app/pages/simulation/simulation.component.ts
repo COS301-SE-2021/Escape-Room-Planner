@@ -351,7 +351,16 @@ export class SimulationComponent implements OnInit, OnDestroy {
         this.updateInventoryMenu(this.character_inventory.items.length-1);
       }
     }else if(vertex_type === 'Puzzle'){
-      this.solvePuzzle(vertex);
+      //if has previous connections at least one must be completed
+      if(vertex.getPreviousConnections().length > 0){
+        for(let local_id of vertex.getPreviousConnections()){
+          // @ts-ignore
+          let previous_vertex = this.vertexService.vertices[local_id];
+          if(previous_vertex.isCompleted())
+            this.vertexStatus(vertex);
+        }
+      }else
+        this.vertexStatus(vertex);
     }else if((vertex_type === 'Container')){
         // make items visible
        if(vertex.getPreviousConnections().length > 0)
@@ -412,8 +421,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       +'" title="'+vertex.name+'"  alt="NOT FOUND" class="img-thumbnail">';
   }
 
-  solvePuzzle(vertex: Vertex){
-    if(!vertex.isCompleted()) {
+  vertexStatus(vertex: Vertex){
+    if(!vertex.isCompleted() && !this.character_lock) {
       this.status_menu_show = false;
       this.character_lock = true;
       this.status_menu_text = 'Solving: ' + vertex.name;
