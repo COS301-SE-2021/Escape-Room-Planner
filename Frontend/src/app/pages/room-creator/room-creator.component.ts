@@ -1208,15 +1208,38 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
-  simulate(){
-    for (let line of this.lines) {
-      if (line !== null)
-        line.remove();
-    }
+  simulate() {
     // TODO: change this to be called when simulate button is clicked
-    this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
-    this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
+    if (this.vertexService.start_vertex_id === -1) {
+      this.renderAlertError("Set start vertex");
+    } else if (this.vertexService.end_vertex_id === -1) {
+      this.renderAlertError("Set end vertex");
+    } else {
+      let parameters = {
+        operation: "Solvable",
+        startVertex: this.vertexService.vertices[this.vertexService.start_vertex_id].id,
+        endVertex: this.vertexService.vertices[this.vertexService.end_vertex_id].id,
+        roomid: this.currentRoomId
+      };
 
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", parameters, {"headers": this.headers}).subscribe(
+        response => {
+          if (response.data.solvable){
+            // swap to simulation
+            for (let line of this.lines) {
+              if (line !== null)
+                line.remove();
+            }
+            this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
+            this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
+          }else
+            this.renderAlertError("Room needs to be solvable");
+        },
+        error => {console.error('', error)
+          this.renderAlertError("Make sure room is solvable");
+        }
+      );
+    }
   }
 }
 
