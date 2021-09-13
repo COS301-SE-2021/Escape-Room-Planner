@@ -9,12 +9,15 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   timeout: 5000
 
+production:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
 
 development:
   adapter: postgresql
   database: EscapeRoomPlanner
   username: postgres
-  password: 
+  password: P@ss
   encoding: UTF8
 
 test:

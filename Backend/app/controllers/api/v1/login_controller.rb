@@ -1,6 +1,3 @@
-
-require './app/Services/login_request'
-
 module Api
   module V1
     class LoginController < ApplicationController

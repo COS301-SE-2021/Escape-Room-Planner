@@ -15,27 +15,29 @@
   <div class="row room-creater-space">
 
     <!-- INVENTORY STARTS HERE -->
-    <app-inventory class="col-sm-2 bg-secondary d-sm-flex position-fixed inventory-depth" style="border-style: solid" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
+    <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="background: #010409; margin-left: 3px" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
+    <app-dependency-diagram style="position: absolute;"></app-dependency-diagram>
     <!-- ESCAPE ROOMS START HERE -->
     <div class="col-sm-10 d-lg-flex remove-padding ">
       <div class="container-fluid remove-padding">
         <div class="row container-fluid remove-padding remove-margin">
           <div class=" dropdown remove-padding dropdown-margin">
-            <button class=" btn-secondary dropdown-toggle w-100 remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <button class=" dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
-            <ul class="dropdown-menu w-100 remove-padding bg-dark" style="max-height: 600%" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
+            <button type="button" id="new-room" class="remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
+              New Room
+            </button>
+            <button (click)="generateDiagram()" id="generate" class="remove-padding" type="button">
+              <img class="button_icons" src="./assets/images/structure.png" alt=""> Generate Diagram
+            </button>
+            <button id="simulate" class="remove-padding" type="button">
+              <img class="button_icons" src="./assets/images/simulate.png" alt=""> Simulate
+            </button>
+            <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 60vh; overflow: auto; font-weight: bold" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
-              <li class="dropdown-item text-center remove-padding">
-                <button type="button"  class="btn btn-dark remove-padding w-100 h-100" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
-                  </svg>
-                </button>
-              </li>
-              <li><hr class="dropdown-divider text-white"></li>
             </ul>
           </div>
         </div>
@@ -205,9 +207,11 @@
   </div>
 </div>
 
-<div  class="container-sm position-fixed w-25 bottom-0 end-0" style="z-index: 99999">
-  <label for="customRange1" class="form-label" #zoom_label>{{zoomValue.toFixed(2)}}</label>
+<div  class="container-sm position-fixed w-25 bottom-0 end-0" style="z-index: 99999" [hidden]="_room_count === 0">
+  <label for="customRange1" class="form-label" style="color: #ffffff;" #zoom_label>Scale: {{zoomValue.toFixed(2)}}</label>
   <input type="range" class="form-range" id="customRange1" min="0.2" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="scale()">
+  <label for="show-names" class="form-label" style="color: #ffffff; padding-bottom: 5px;">Show names</label>
+  <input type="checkbox" id="show-names" (change)="displayNames()" style="margin-left: 5px;">
 </div>
 
 <!-- modal view popout here-->

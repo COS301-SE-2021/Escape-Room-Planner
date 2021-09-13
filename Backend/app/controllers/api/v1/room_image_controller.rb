@@ -32,7 +32,7 @@ module Api
             data = room_images.map do |k|
               blob_url = if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
                            Rails.application.routes.url_helpers.polymorphic_url(
-                             user.graphic.blobs.find_by_id(k.blob_id), host: 'localhost:3000'
+                             user.graphic.blobs.find_by_id(k.blob_id), host: ENV.fetch('BLOB_HOST', 'localhost:3000')
                            )
                          else
                            './assets/images/room1.png'

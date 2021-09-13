@@ -1,7 +1,8 @@
-import {Component, ElementRef, EventEmitter, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, isDevMode, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {toBase64String} from "@angular/compiler/src/output/source_map";
 import {File} from "@angular/compiler-cli/src/ngtsc/file_system/testing/src/mock_file_system";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-inventory',
@@ -15,6 +16,7 @@ export class InventoryComponent implements OnInit {
   @Output() public afterClick: EventEmitter<inventoryObject> = new EventEmitter();
   @Output() public error: EventEmitter<inventoryObject> = new EventEmitter();
   @Output() public checkSolvable: EventEmitter<inventoryObject> = new EventEmitter();
+  @Output() public generate: EventEmitter<inventoryObject> = new EventEmitter();
   @ViewChild('container_div') container_div: ElementRef | undefined;
   @ViewChild('puzzle_div') puzzle_div: ElementRef | undefined;
   @ViewChild('key_div') key_div: ElementRef | undefined;
@@ -27,8 +29,7 @@ export class InventoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.httpClient.get<any>('http://127.0.0.1:3000/api/v1/inventory/',{"headers": this.headers}).subscribe(
+    this.httpClient.get<any>(environment.api + '/api/v1/inventory/',{"headers": this.headers}).subscribe(
       response =>{
         this.loadInventory(response.image);
       },
@@ -141,7 +142,7 @@ export class InventoryComponent implements OnInit {
     if (file != null && file.size < 1000000 && file.type.includes('image')) {
       // send request ot back end render piece on front
       let image = (await this.toBase64(file) as string).replace('base64,', '');
-      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/inventory/", {image: image, type: type}
+      this.httpClient.post<any>(environment.api + "/api/v1/inventory/", {image: image, type: type}
         , {"headers": this.headers}).subscribe(
         response => {
           let blob_id = response.data.blob_id.toString();
@@ -171,7 +172,7 @@ export class InventoryComponent implements OnInit {
     let blob_id = element?.getAttribute('blob-id');
 
     if (blob_id != null){
-      this.httpClient.delete('http://127.0.0.1:3000/api/v1/inventory/'+blob_id, {"headers": this.headers})
+      this.httpClient.delete(environment.api + '/api/v1/inventory/'+blob_id, {"headers": this.headers})
         .subscribe(
         response =>{
           element?.remove();
@@ -194,6 +195,11 @@ export class InventoryComponent implements OnInit {
   public async checkSolve(){
     this.checkSolvable.emit();
   }
+
+  public async generateDiagram() {
+    this.generate.emit();
+  }
+
 }
 
 interface inventoryObject{
