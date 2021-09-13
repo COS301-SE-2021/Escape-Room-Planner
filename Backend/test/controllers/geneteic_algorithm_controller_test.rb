@@ -7,7 +7,11 @@ class GeneticAlgorithmControllerTest < ActionDispatch::IntegrationTest
     response = authed_post_call(api_v1_genetic_algorithm_index_path, {
                                                                         linear: "med",
                                                                         dead_nodes: "med",
-                                                                        room_id: 5
+                                                                        room_id: 5,
+                                                                        num_containers: 4,
+                                                                        num_clues: 4,
+                                                                        num_keys: 4,
+                                                                        num_puzzles: 4
     })
 
     assert_response :success
