@@ -756,7 +756,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let connection = {
       room_id: this.currentRoomId,
       linear: "med",
-      dead_nodes: "med"
+      dead_nodes: "med",
+      num_containers : 4,
+      num_clues : 4,
+      num_keys : 4,
+      num_puzzles : 4
     };
     this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/genetic_algorithm/", connection , {"headers": this.headers}).subscribe(
       resp => {
