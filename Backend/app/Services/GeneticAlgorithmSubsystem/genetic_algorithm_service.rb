@@ -85,21 +85,20 @@ class GeneticAlgorithmService
 
     #Run N number of times
     i_count = 0
-    selection
     while i_count < @number_of_runs
 
 
       # Selection
-
+      selection(request.vertices)
       # Crossover
 
       # Mutation
 
       # Calculate fitness
-      i_run_through_pop=0
+      i_run_through_pop = 0
       while i_run_through_pop < @initial_population_size
         calculate_fitness(@initial_population[i_run_through_pop], i_run_through_pop , request.room_id, request.vertices)
-        i_run_through_pop+=1
+        i_run_through_pop += 1
       end
       i_count += 1
     end
@@ -293,20 +292,61 @@ class GeneticAlgorithmService
   end
 
 
-  def selection
-    # First sort the array
-    @top_position = []
-    i_count=0
-    while i_count<5
+  def selection(vertices)
+    best = 0
+    second = 0
+    i_count = 0
+    secondHighest = @fitness_of_population[0]
+    highest = @fitness_of_population[0]
+    while i_count < @initial_population_size
+      if highest < @fitness_of_population[i_count]
+        best = i_count
+        highest = @fitness_of_population[i_count]
 
-      i_count+=1
+        else if highest > @fitness_of_population[i_count] && secondHighest < @fitness_of_population[i_count]
+               second = i_count
+               secondHighest = @fitness_of_population[i_count]
+             end
+      end
+      i_count += 1
     end
 
-    @fitness_of_population.each do |pos|
-
+    i_count = 0
+    while i_count < 6
+      if i_count != best && i_count != second
+        if i_count.even?
+          @initial_population[i_count] = @initial_population[best]
+        else
+          @initial_population[i_count] = @initial_population[second]
+        end
+      end
+      i_count += 1
     end
 
+    max_edges = vertices.count + ((vertices.count) / 2).round
 
+    # Min edges = n-1
+    min_edges = ((vertices.count - 1) * @min_edge_initial_factor).round
+
+    num_edges = rand(min_edges..max_edges)
+
+
+    i_loop = i_count
+    while i_loop < @initial_population_size
+      i_count = 0
+      @chromosome = Array.new(num_edges){Array.new(2){}}
+      while i_count < num_edges
+        @i_stop = 0
+        return_vertices(vertices, i_count)
+        @chromosome[i_count][0] = @vertex1
+        @chromosome[i_count][1] = @vertex2
+        i_count += 1
+      end
+      @initial_population[i_loop] = @chromosome
+      i_loop += 1
+    end
+    puts best
+    puts second
   end
   
   # def sort
