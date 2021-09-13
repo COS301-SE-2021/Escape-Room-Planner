@@ -221,7 +221,8 @@ class RoomServices
       pos = 'end' if k.id == end_vertex_id
       if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
         blob = user.graphic.blobs.find_by_id(k.blob_id)
-        k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000')
+        k.graphicid = Rails.application.routes.url_helpers.polymorphic_url(blob, host: ENV.fetch('BLOB_HOST',
+                                                                                                 'localhost:3000'))
       end
       { vertex: k,
         connections: k.vertices.ids,

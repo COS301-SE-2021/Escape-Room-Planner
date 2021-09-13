@@ -25,7 +25,9 @@ class InventoryService
                   blob.save!
                   data =
                     { blob_id: blob.id,
-                      src: Rails.application.routes.url_helpers.rails_blob_url(blob, host: 'localhost:3000') }
+                      src: Rails.application.routes.url_helpers.rails_blob_url(blob,
+                                                                               host: ENV.fetch('BLOB_HOST',
+                                                                                               'localhost:3000')) }
                   # TODO: change metadata before upload
                   AddGraphicResponse.new(true, 'Graphic been added', data)
                 end
@@ -45,7 +47,9 @@ class InventoryService
                   image = image.map do |blob|
                     {
                       blob_id: blob.id,
-                      src: Rails.application.routes.url_helpers.polymorphic_url(blob, host: 'localhost:3000'),
+                      src: Rails.application.routes.url_helpers.polymorphic_url(blob, host:
+                        ENV.fetch('BLOB_HOST',
+                                  'localhost:3000')),
                       type: blob.metadata['type']
                     }
                   end

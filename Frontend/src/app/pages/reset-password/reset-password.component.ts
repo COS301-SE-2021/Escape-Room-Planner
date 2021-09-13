@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, Router } from '@angular/router';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-reset-password',
@@ -35,7 +36,7 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     //This sends the encoded token to a controller in notification that checks if the token is expired
-    this.http.post<any>(' http://127.0.0.1:3000/api/v1/notification', extra_data)
+    this.http.post<any>(environment.api + '/api/v1/notification', extra_data)
       .subscribe((response) => {
         console.log("token not expired")
       //  basically allow reset password to continue if the token has not expired
@@ -53,7 +54,7 @@ export class ResetPasswordComponent implements OnInit {
       operation: 'reset_password'
     };
 
-    this.http.post<any>(' http://127.0.0.1:3000/api/v1/user', extra_data)
+    this.http.post<any>(environment.api + '/api/v1/user', extra_data)
       .subscribe((response) => {
           this.router.navigate(['/login']).then(r => alert("Success"));
         },
