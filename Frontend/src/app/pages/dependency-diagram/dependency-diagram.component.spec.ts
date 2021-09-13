@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DependencyDiagramComponent } from './dependency-diagram.component';
+import {RouterModule} from "@angular/router";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('DependencyDiagramComponent', () => {
   let component: DependencyDiagramComponent;
@@ -8,7 +10,12 @@ describe('DependencyDiagramComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DependencyDiagramComponent ]
+      imports: [
+        RouterTestingModule
+      ],
+      declarations: [
+        DependencyDiagramComponent
+      ]
     })
     .compileComponents();
   });

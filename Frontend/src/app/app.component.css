@@ -1,5 +1,5 @@
 .navbar-collapse {
   background: #363B42;
-  font-family: "UniSansThin";
+  font-family: "UniSansThin", monospace;
   font-weight: bold;
 }

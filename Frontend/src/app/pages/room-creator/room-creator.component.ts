@@ -8,6 +8,7 @@ import 'leader-line';
 import {InventoryComponent} from "../inventory/inventory.component";
 import {SolvabilityComponent} from "../solvability/solvability.component"
 import { DependencyDiagramComponent } from '../dependency-diagram/dependency-diagram.component';
+import {environment} from "../../../environments/environment";
 declare let LeaderLine: any;
 
 @Component({
@@ -131,7 +132,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   //use get to get all the rooms stored in db
   getEscapeRooms(): void{
     //http request to rails api
-    this.httpClient.get<EscapeRoomArray>("http://127.0.0.1:3000/api/v1/room/", {"headers": this.headers}).subscribe(
+    this.httpClient.get<EscapeRoomArray>(environment.api + "/api/v1/room/", {"headers": this.headers}).subscribe(
       response => {
           //rendering <li> elements by using response
           this.escapeRooms = response;
@@ -167,7 +168,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let confirmation = confirm("Are you sure you want to delete this room?");
     let room_id = event.target.getAttribute("escape-room-id");
     if(confirmation){
-      this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/room/"+room_id,
+      this.httpClient.delete<any>(environment.api + "/api/v1/room/"+room_id,
         {"headers": this.headers}).subscribe(
         response => {
           //remove Room From screen here
@@ -230,7 +231,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.lines = [];
 
       // gets room images
-      this.httpClient.get<any>('http://127.0.0.1:3000/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
+      this.httpClient.get<any>(environment.api + '/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
         response =>{
           for ( let room_image of response.data){
 
@@ -255,7 +256,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       );
 
       //http request to rails api
-      this.httpClient.get<any>("http://127.0.0.1:3000/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
+      this.httpClient.get<any>(environment.api + "/api/v1/vertex/" + this.currentRoomId, {"headers": this.headers}).subscribe(
         response => {
           //render all the vertices
           for (let vertex_t of response.data) {
@@ -326,7 +327,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }else {
       let createRoomBody = {name: regexResult[0]};
       //http request to rails api
-      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room/", createRoomBody, {"headers": this.headers}).subscribe(
+      this.httpClient.post<any>(environment.api + "/api/v1/room/", createRoomBody, {"headers": this.headers}).subscribe(
         response => {
           //rendering <li> elements by using render function
           this.renderNewRoom(response.data.id, response.data.name);
@@ -445,7 +446,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
 
     //make post request for new vertex
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/vertex/", createVertexBody, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/vertex/", createVertexBody, {"headers": this.headers}).subscribe(
       response => {
         //get the latest local id for a vertex
         let current_id;
@@ -574,7 +575,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       blob_id: blob_id
     }
 
-    this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/room_image/", createRoomImageBody, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api + "/api/v1/room_image/", createRoomImageBody, {"headers": this.headers}).subscribe(
       response => {
         this.spawnRoom(x, y, width, height, response.data.id, src);
       },
@@ -638,7 +639,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       width: new_width
     }
 
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room_image/"+roomImage.getAttribute('room-image-id'), updateRoomImageBody, {"headers": this.headers}).subscribe(
+    this.httpClient.put<any>(environment.api + "/api/v1/room_image/"+roomImage.getAttribute('room-image-id'), updateRoomImageBody, {"headers": this.headers}).subscribe(
       response => {
         // update the norm attributes
         roomImage.setAttribute('data-norm-x', new_pos_x);
@@ -700,7 +701,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       to_vertex_id: this.vertexService.vertices[to_vertex].id
     };
 
-    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_from_id,
+    this.httpClient.delete<any>(environment.api + "/api/v1/vertex/"+real_from_id,
       {"headers": this.headers, "params": remove_connection}).subscribe(
       response => {
         if (response.status == "SUCCESS") {
@@ -742,7 +743,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         from_vertex_id: this.vertexService.vertices[from_vertex_id].id, //convert local to real id
         to_vertex_id: this.vertexService.vertices[to_vertex_id].id
       };
-      this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+this.vertexService.vertices[from_vertex_id].id, connection, {"headers": this.headers}).subscribe(
+      this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+this.vertexService.vertices[from_vertex_id].id, connection, {"headers": this.headers}).subscribe(
         response => {
           // updates the local array here only after storing on db
           if(response.status == "FAILED"){
@@ -895,7 +896,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       z_index: this.vertexService.vertices[local_target_id].z_index
     };
     // updates all the data of vertex
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, updateVertexBody, {"headers": this.headers}).subscribe(
+    this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+real_target_id, updateVertexBody, {"headers": this.headers}).subscribe(
       response => {
         // updates the local array here only after storing on db
         this.vertexService.vertices[local_target_id].pos_x = new_x_pos;
@@ -927,7 +928,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       id: real_target_id
     };
 
-    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/vertex/"+real_target_id, {"headers": this.headers, "params": remove_vertex}).subscribe(
+    this.httpClient.delete<any>(environment.api + "/api/v1/vertex/"+real_target_id, {"headers": this.headers, "params": remove_vertex}).subscribe(
       response => {
         //remove vertex from screen here
         this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
@@ -972,7 +973,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       operation: 'setStart',
       startVertex: this.vertexService.vertices[local_id].id, //convert local to real id
     };
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
+    this.httpClient.put<any>(environment.api + "/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
       response => {
         // updates the local array here only after storing on db
         this._target_start = local_id;
@@ -992,7 +993,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       operation: 'setEnd',
       endVertex: this.vertexService.vertices[local_id].id, //convert local to real id
     };
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
+    this.httpClient.put<any>(environment.api + "/api/v1/room/"+this.currentRoomId, connection, {"headers": this.headers}).subscribe(
       response => {
         // updates the local array here only after storing on db
         this._target_end = local_id;
@@ -1086,7 +1087,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       z_index: this._target_vertex_z_index
     };
 
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, updateVertexZ, {"headers": this.headers}).subscribe(
+    this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+vertex.id, updateVertexZ, {"headers": this.headers}).subscribe(
       response => {
         this.vertexService.vertices[local_id].z_index = this._target_vertex_z_index; // saves in service
         this._target_vertex.style.zIndex = this._target_vertex_z_index; // update view
@@ -1140,10 +1141,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       vertex.description = this.vertex_description_menu;
     }
 
-    this.httpClient.put<any>("http://127.0.0.1:3000/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
+    this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
       response => {
         if (response.success){
-          //todo: update tag name here
           this.resetAttributeMenuValue();
         }else{
           this.renderAlertError(response.message);
@@ -1229,7 +1229,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   removeRoom(){
     let room_target_id = this._target_room.getAttribute('room-image-id');
-    this.httpClient.delete<any>("http://127.0.0.1:3000/api/v1/room_image/"+room_target_id, {"headers": this.headers}).subscribe(
+    this.httpClient.delete<any>(environment.api + "/api/v1/room_image/"+room_target_id, {"headers": this.headers}).subscribe(
       response => {
         //remove room image from canvas
         this._target_room.remove();

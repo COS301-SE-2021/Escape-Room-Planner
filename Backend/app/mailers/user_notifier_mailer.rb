@@ -9,7 +9,7 @@ class UserNotifierMailer < ApplicationMailer
       @token = JsonWebToken.encode(id: @user.id)
       @message = 'reset your password'
       @button_type = 'Reset Password'
-      @url = "http://localhost:4200/reset?token=#{@token}"
+      @url = "#{ENV.fetch('FRONT_END_URL', 'http://localhost:4200')}/reset?token=#{@token}"
       mail(to: email,
            subject: 'Confirm Reset Password')
            # body: @url)
@@ -20,7 +20,7 @@ class UserNotifierMailer < ApplicationMailer
     @token = JsonWebToken.encode(id: @user.id)
     @message = 'verify your account'
     @button_type = 'Verify Account'
-    @url = "http://localhost:4200/verify-success?token=#{@token}"
+    @url = "#{ENV.fetch('FRONT_END_URL', 'http://localhost:4200')}/verify-success?token=#{@token}"
     mail(to: email,
          subject: 'Account Registered')
          # body: 'Your account has been verified. add a verify account link that the user can select to verify account')
