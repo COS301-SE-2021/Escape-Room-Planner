@@ -332,7 +332,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
             }
 
             //if an object is inside a container. Hide it
-            if((vertices[vertex_images].type === "Key" && vertex_images != this.vertexService.start_vertex_id) || (vertices[vertex_images].type ==="Clue" && vertex_images != this.vertexService.start_vertex_id))
+            if(vertices[vertex_images].getPreviousConnections())
             {
               for(let current_previous_vertices of vertices[vertex_images].getPreviousConnections())
               {
