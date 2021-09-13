@@ -37,6 +37,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public zoomValue: number = 1.0;
   public _room_count:number = 0;
   public showNames: boolean = false;
+  public number_of_containers:number = 1;
+  public number_of_puzzles:number = 1;
+  public number_of_keys:number = 1;
+  public number_of_clues:number = 1;
+  public linearity_value:string = "low";
+  public complexity_value:string = "low";
 
   private _target_room: any;
   private _target_vertex: any;
@@ -316,7 +322,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // todo
   // POST to create new room for a user
-  createEscapeRoom(): void{
+  createEscapeRoom(ai_enabled:boolean): void{
+    if (ai_enabled){
+      this.createEscapeRoomWithAI();
+      return;
+    }
     // regex to extract valid strings, removes all the spaces and allows any character
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -351,6 +361,26 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     this.newEscapeRoomNameValid = false;
     this.newEscapeRoomName = ""; // resets the input box text
+  }
+
+  // this will create a room using AI
+  public createEscapeRoomWithAI():void{
+    //Patric use these values for the form stuff, also environment.api/path/to/resource for api calls
+    console.log('linearity', this.linearity_value);
+    console.log('complexity', this.complexity_value);
+    console.log('num containers', this.number_of_containers);
+    console.log('num puzzles', this.number_of_puzzles);
+    console.log('num keys', this.number_of_keys);
+    console.log('num clues', this.number_of_clues);
+
+    //TODO: make a room like in function above
+    // todo: then make api call
+    // todo: then switch to that room
+    // todo: if you want to, you can reset the default values of the create room modal
+    // make sure that the number values  are not null
+    // defaults:
+    // check box is unchecked
+    // all the values are 1 or low
   }
 
   // todo
@@ -1243,6 +1273,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         }
       }
     );
+  }
+
+  // used to change value of linearity for AI
+  public changeLinearityValue(elem:HTMLInputElement):void{
+    if (elem.checked)
+      this.linearity_value = elem.value;
+  }
+
+  // used to change value of complexity for AI
+  public changeComplexityValue(elem:HTMLInputElement):void{
+    if (elem.checked)
+      this.complexity_value = elem.value;
   }
 }
 
