@@ -15,6 +15,11 @@ module Api
         room_id = params[:room_id]
         linear = params[:linear]
         dead_nodes = params[:dead_nodes]
+        num_containers = params[:num_containers]
+        num_puzzles = params[:num_puzzles]
+        num_clues = params[:num_clues]
+        num_keys = params[:num_keys]
+
         all = Vertex.all.where(escape_room_id: room_id)
         icount = 0
         vertices = []
