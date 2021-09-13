@@ -331,9 +331,17 @@ export class SimulationComponent implements OnInit, OnDestroy {
               this.current_room_index = i;
             }
 
+            //if an object is inside a container. Hide it
             if((vertices[vertex_images].type === "Key" && vertex_images != this.vertexService.start_vertex_id) || (vertices[vertex_images].type ==="Clue" && vertex_images != this.vertexService.start_vertex_id))
             {
-              vertex_sprite.visible = false
+              for(let current_previous_vertices of vertices[vertex_images].getPreviousConnections())
+              {
+                let previous_vertex = vertices[current_previous_vertices]
+                if(previous_vertex.type === "Container")
+                {
+                  vertex_sprite.visible = false
+                }
+              }
             }
             vertex_sprite.x =  (vertices[vertex_images].pos_x - room_images.pos_x - room_images.width/2)*scale;
             vertex_sprite.y = (vertices[vertex_images].pos_y - room_images.pos_y  - room_images.height/2)*scale;
