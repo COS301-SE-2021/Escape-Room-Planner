@@ -19,13 +19,6 @@ require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 class GeneticAlgorithmService
 
   def genetic_algorithm(request)
-    puts ''
-    puts '======================================================================================'
-    puts '====================================GA Starts========================================='
-    puts '======================================================================================'
-
-
-
     if request.vertices.nil? || request.linear.nil? || request.dead_nodes.nil? || request.vertices.nil?
       GeneticAlgorithmResponse.new('False', 'Parameters required')
     end
@@ -33,7 +26,7 @@ class GeneticAlgorithmService
     # Manipulate this if you want to mess with the initial edges for accuracy
     @max_edge_initial_factor = 0.15 - (request.vertices.count / 100)
     @min_edge_initial_factor = 0.5
-    @number_of_runs = 100
+    @number_of_runs = 10
 
 
 
@@ -61,10 +54,6 @@ class GeneticAlgorithmService
     # initial pop
     initial_population_creation(request.vertices)
 
-
-    puts '======================================================================================'
-    puts '==================================Fitness Scores======================================'
-    puts '======================================================================================'
     # init fitness
     i_init = 0
     while i_init < @initial_population_size
@@ -76,20 +65,16 @@ class GeneticAlgorithmService
     i_count = 0
     while i_count < @initial_population_size
       calculate_fitness(@initial_population[i_count], i_count , request.room_id, request.vertices)
-      puts "Fitness of #{(i_count + 1).to_s} :#{@fitness_of_population[i_count].to_s}"
+      #puts "Fitness of #{(i_count + 1).to_s} :#{@fitness_of_population[i_count].to_s}"
       i_count += 1
     end
 
-
-    puts '======================================================================================'
-    puts '==================================Final Room=========================================='
-    puts '======================================================================================'
     #Final room setup
     i_count = 0
     final_pos = 0
     highest = @fitness_of_population[i_count]
     while i_count < @initial_population_size
-      puts highest.to_s + " < " + @fitness_of_population[i_count].to_s
+      #puts highest.to_s + " < " + @fitness_of_population[i_count].to_s
       if highest < @fitness_of_population[i_count]
         final_pos = i_count
 
@@ -102,6 +87,8 @@ class GeneticAlgorithmService
     i_count = 0
     selection
     while i_count < @number_of_runs
+
+
       # Selection
 
       # Crossover
@@ -109,27 +96,25 @@ class GeneticAlgorithmService
       # Mutation
 
       # Calculate fitness
-
+      i_run_through_pop=0
+      while i_run_through_pop < @initial_population_size
+        calculate_fitness(@initial_population[i_run_through_pop], i_run_through_pop , request.room_id, request.vertices)
+        i_run_through_pop+=1
+      end
       i_count += 1
     end
 
     final(@initial_population[final_pos], request.room_id, request.vertices)
-    puts "Room number: " + final_pos.to_s
   end
 
   def initial_population_creation(vertices)
-    puts '======================================================================================'
-    puts '==================================Initial Pop========================================='
-    puts '======================================================================================'
 
     # Max edges = n(n-1)
     # initial calc: ((vertices.count) * (vertices.count - 1) * @max_edge_initial_factor).round
     max_edges = vertices.count + ((vertices.count) / 2).round
-    puts "Max edges: #{max_edges}"
 
     # Min edges = n-1
     min_edges = ((vertices.count - 1) * @min_edge_initial_factor).round
-    puts "Min edges: #{min_edges}"
 
     # Single Chromosome
     # Array of 2D arrays for initial population
@@ -159,12 +144,9 @@ class GeneticAlgorithmService
     end
 
     @initial_population.push(@chromosome)
-    puts '             =========================================================================='
-    puts "             ===================Chromosome number:#{(@chromosome_count + 1).to_s}===================================="
-    puts '             =========================================================================='
     i_count = 0
     while i_count < num_edges
-      puts "#{Vertex.find_by_id(@chromosome[i_count][0]).type}:#{@chromosome[i_count][0].to_s},#{Vertex.find_by_id(@chromosome[i_count][1]).type}:#{@chromosome[i_count][1].to_s}"
+      # puts "#{Vertex.find_by_id(@chromosome[i_count][0]).type}:#{@chromosome[i_count][0].to_s},#{Vertex.find_by_id(@chromosome[i_count][1]).type}:#{@chromosome[i_count][1].to_s}"
       i_count += 1
     end
     @initial_population[@chromosome_count] = @chromosome
@@ -229,9 +211,6 @@ class GeneticAlgorithmService
 
 
   def calculate_fitness(chromosone, i_count, room_id, vertices)
-    puts '             =========================================================================='
-    puts "             ===================Chromosome number:#{(i_count + 1).to_s}===================================="
-    puts '             =========================================================================='
     # Fitness score out of 100
     set_up_room(chromosone, room_id, vertices)
 
@@ -316,26 +295,36 @@ class GeneticAlgorithmService
 
   def selection
     # First sort the array
-    sort
-    puts @initial_population
-  end
-  
-  def sort
-    i = 0
-    while i < @initial_population_size - 1
-      j = 0
-      while j < @initial_population_size - i - 1
-        if(@fitness_of_population[j] < @fitness_of_population[j + 1])
-           temp = @initial_population[j]
-           @initial_population[j] = @initial_population[j + 1]
-           @initial_population[j + 1] = temp
-        end
-        j += 1
-        end
-      i += 1
+    @top_position = []
+    i_count=0
+    while i_count<5
+
+      i_count+=1
     end
 
+    @fitness_of_population.each do |pos|
+
+    end
+
+
   end
+  
+  # def sort
+  #   i = 0
+  #   while i < @initial_population_size - 1
+  #     j = 0
+  #     while j < @initial_population_size - i - 1
+  #       if(@fitness_of_population[j] < @fitness_of_population[j + 1])
+  #          temp = @initial_population[j]
+  #          @initial_population[j] = @initial_population[j + 1]
+  #          @initial_population[j + 1] = temp
+  #       end
+  #       j += 1
+  #       end
+  #     i += 1
+  #   end
+  #
+  # end
 
   def crossover; end
 
@@ -397,7 +386,6 @@ class GeneticAlgorithmService
       end
     end
 
-    puts "start_node: #{start.to_s}"
     start
   end
 
@@ -422,7 +410,6 @@ class GeneticAlgorithmService
       end
     end
 
-    puts "end_node: #{end_node}"
     end_node
   end
 
