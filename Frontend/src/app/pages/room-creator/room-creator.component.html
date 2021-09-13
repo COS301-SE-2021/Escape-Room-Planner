@@ -242,7 +242,7 @@
       <div class="modal-body">
         <form name="AI_details" [hidden]="!AI_checkbox.checked">
 <!--          number of vertices here-->
-          <fieldset class="mb-3 form-group">
+          <div class="mb-3 form-group">
             <div class="mb-3">
               <label for="number_of_containers" class="col-form-label">Containers:</label>
               <input type="number" name="containers" class="form-control" id="number_of_containers" value="1" [(ngModel)]="number_of_containers">
@@ -259,7 +259,7 @@
               <label for="number_of_clues" class="col-form-label">Clues:</label>
               <input type="number" name="containers" class="form-control" id="number_of_clues" value="1" [(ngModel)]="number_of_clues">
             </div>
-          </fieldset>
+          </div>
 <!--          the linearity of graph settings-->
           <fieldset class="mb-3 form-group">
             <legend class="col-form-label col-sm-2 pt-0">Linearity:</legend>
