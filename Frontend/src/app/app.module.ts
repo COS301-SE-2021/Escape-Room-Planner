@@ -15,6 +15,7 @@ import { InventoryComponent } from './pages/inventory/inventory.component';
 import { SolvabilityComponent } from './pages/solvability/solvability.component';
 import { VerifySuccessComponent } from './pages/verify-success/verify-success.component';
 import { VerifyFailedComponent } from './pages/verify-failed/verify-failed.component';
+import { DependencyDiagramComponent } from './pages/dependency-diagram/dependency-diagram.component';
 
 const routes: Routes = [
   // { path: '', component: AppComponent },
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'reset', component: ResetPasswordComponent },
   { path: 'reset-not', component: ResetPasswordNotComponent },
   { path: 'escape-room', component: RoomCreatorComponent},
+  { path: 'diagram', component: DependencyDiagramComponent },
   { path: 'verify-success', component: VerifySuccessComponent},
   { path: 'verify-failure', component: VerifyFailedComponent},
   // otherwise redirect to login
@@ -42,7 +44,8 @@ const routes: Routes = [
     InventoryComponent,
     SolvabilityComponent,
     VerifySuccessComponent,
-    VerifyFailedComponent
+    VerifyFailedComponent,
+    DependencyDiagramComponent
   ],
     imports: [
         BrowserModule,

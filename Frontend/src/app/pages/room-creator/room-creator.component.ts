@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import 'leader-line';
 import {InventoryComponent} from "../inventory/inventory.component";
 import {SolvabilityComponent} from "../solvability/solvability.component"
+import { DependencyDiagramComponent } from '../dependency-diagram/dependency-diagram.component';
 import {environment} from "../../../environments/environment";
 declare let LeaderLine: any;
 
@@ -55,6 +56,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("roomContextMenu") roomContextMenuRef : ElementRef | undefined;
   @ViewChild("attributeMenu") attributeMenuRef : ElementRef | undefined;
   @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
+  @ViewChild(DependencyDiagramComponent) diagramComponent: DependencyDiagramComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private router:Router)
@@ -956,6 +958,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }else{
       this.renderAlertError("Please set start and end vertex");
     }
+  }
+
+  generateDiagram(): void {
+    this.diagramComponent?.generate();
   }
 
   setStart() :void{
