@@ -376,6 +376,9 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   // shows new room
   showRoom(room_index: number){
+
+    // @ts-ignore
+    this.app.ticker.stop();
     if (this.app && this.current_room_index !== undefined){
       if(this.rooms && this.rooms.length > 0 && this.rooms.length > room_index){
         //hide old room
@@ -395,6 +398,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
         this.current_room_index = room_index;
       }
     }
+    // @ts-ignore
+    this.app.ticker.start();
   }
 
   // TODO : change this function such that it works once rooms been solved
