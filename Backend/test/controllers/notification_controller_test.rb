@@ -4,15 +4,22 @@ require 'concurrent'
 class NotificationControllerTest < ActionDispatch::IntegrationTest
 
   test "can call reset password" do
-      response = authed_post_call(api_v1_notification_index_path, { operation: 'Reset Password',
-                                                                    email: "Patrice02052@gmail.com"})
+    post api_v1_notification_index_path.to_s, params: {
+      operation: 'Reset Password',
+      email: 'test@gmail.com'
+    }, as: :as_json
 
-      assert_response :success
+    response = JSON.parse(@response.body)
+    assert_response :ok
+    assert_equal 'Email sent successfully', response['message']
   end
 
   test "call reset password with no email" do
-    response = authed_post_call(api_v1_notification_index_path, { operation: 'Reset Password'})
+    post api_v1_notification_index_path.to_s, params: {
+      operation: 'Reset Password'
+    }, as: :as_json
 
+    response = JSON.parse(@response.body)
     assert_response :bad_request
   end
 

@@ -11,6 +11,8 @@ export class Vertex {
   private _width: number;
   private _height: number;
   private _graphic_id: string;
+  private _estimated_time: number;
+  private _z_index: number;
   private _deleted: boolean; // a flag to see if the vertex was deleted in the current session
   private _connections: any[] = [];
   private _connected_lines: any[] = [];
@@ -24,7 +26,9 @@ export class Vertex {
               pos_y: number,
               width: number,
               height: number,
-              graphic_id: string) {
+              graphic_id: string,
+              estimated_time: number,
+              z_index: number) {
       this._local_id = local_id;
       this._id = id;
       this._name = name;
@@ -34,7 +38,9 @@ export class Vertex {
       this._width = width;
       this._height = height;
       this._graphic_id = graphic_id;
+      this._estimated_time = estimated_time;
       this._deleted = false; // default is false since user would need to create the vertex or it comes from db
+      this._z_index = z_index;
   }
 
 
@@ -108,6 +114,21 @@ export class Vertex {
 
   set graphic_id(value: string) {
     this._graphic_id = value;
+  }
+
+  get estimated_time(): number {
+    return this._estimated_time;
+  }
+
+  set estimated_time(value: number) {
+    this._estimated_time = value;
+  }
+
+  set z_index(value: number) {
+    this._z_index = value;
+  }
+  get z_index(): number {
+    return this._z_index;
   }
 
   /*

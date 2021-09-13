@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+<!--  <link href="//db.onlinewebfonts.com/c/4f6fb2fa3c231278167b36e966718cbb?family=Uni+Sans+Thin" rel="stylesheet" type="text/css"/>-->
+  <link href="//db.onlinewebfonts.com/c/e3805dcdb7b09e2e3a60cb837d9ce9af?family=UniSansThin" rel="stylesheet" type="text/css"/>
 </head>
 <body>
   <app-root></app-root>
@@ -18,6 +20,56 @@
       .resizable({
         // resize from all edges and corners
         edges: { left: true, right: true, bottom: true, top: true },
+
+        listeners: {
+          move (event) {
+            var target = event.target
+            var x = (parseFloat(target.getAttribute('data-x')) || 0)
+            var y = (parseFloat(target.getAttribute('data-y')) || 0)
+
+            // update the element's style
+            target.style.width = event.rect.width + 'px'
+            target.style.height = event.rect.height + 'px'
+
+            // translate when resizing from top or left edges
+            x += event.deltaRect.left
+            y += event.deltaRect.top
+
+            target.style.transform = 'translate(' + x + 'px,' + y + 'px)'
+
+            target.setAttribute('data-x', x)
+            target.setAttribute('data-y', y)
+            // target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height)
+          }
+        },
+        modifiers: [
+          // keep the edges inside the parent
+          interact.modifiers.restrictEdges({
+            outer: 'parent'
+          }),
+
+          // minimum size
+          interact.modifiers.restrictSize({
+            min: { width: 0.1, height: 0.1}
+          })
+        ],
+        inertia: false
+      })
+      .draggable({
+        listeners: { move: window.dragMoveListener },
+        inertia: false,
+        modifiers: [
+          interact.modifiers.restrictRect({
+            restriction: 'parent',
+            endOnly: true
+          })
+        ]
+      })
+
+    interact('.resize-only')
+      .resizable({
+        // resize from all edges and corners
+        edges: { left: false, right: true, bottom: true, top: false },
 
         listeners: {
           move (event) {
@@ -53,17 +105,6 @@
         ],
         inertia: false
       })
-      .draggable({
-        listeners: { move: window.dragMoveListener },
-        inertia: false,
-        modifiers: [
-          interact.modifiers.restrictRect({
-            restriction: 'parent',
-            endOnly: true
-          })
-        ]
-      })
-
     // target elements with the "draggable" class
 
     function dragMoveListener (event) {

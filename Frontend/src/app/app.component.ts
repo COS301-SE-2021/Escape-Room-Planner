@@ -1,6 +1,7 @@
 import {ChangeDetectorRef, Component, ElementRef, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {NavigationEnd, Router} from "@angular/router";
+import {environment} from "../environments/environment";
 
 // TODO: just render the list at this point, idk how else to fix this, need to time reload to happen exactly once after login, at least quit is working
 
@@ -13,10 +14,10 @@ export class AppComponent {
   private headers: HttpHeaders = new HttpHeaders();
   private is_valid_user = false;
 
-  //todo
+  public username: string|null = '';
 
   constructor(private httpClient: HttpClient, private router: Router, private cdr: ChangeDetectorRef) {
-
+    this.username = localStorage.getItem('username');
   }
 
   ngOnInit(){
@@ -41,7 +42,7 @@ export class AppComponent {
       operation: 'Verify'
     };
 
-    this.httpClient.post<any>('http://127.0.0.1:3000/api/v1/user', request_body, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api+'/api/v1/user', request_body, {"headers": this.headers}).subscribe(
       response => {
         this.cdr.detectChanges();
         // response so go to escape room planner
@@ -53,6 +54,9 @@ export class AppComponent {
           this.is_valid_user = false;
           if (this.router.routerState.snapshot.url !== '/login' &&
             this.router.routerState.snapshot.url !=='/reset-not' &&
+            !this.router.routerState.snapshot.url.includes('/reset?') &&
+            !this.router.routerState.snapshot.url.includes('/verify-success') &&
+            this.router.routerState.snapshot.url !=='/verify-failure' &&
             this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
         }else alert("Something went wrong");
       }

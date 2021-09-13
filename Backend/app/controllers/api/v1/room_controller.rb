@@ -26,7 +26,6 @@ module Api
 
       # GET api/v1/room/id , returns a room by id
       def show
-        # TODO: this should be a user_id or jwt token that will be decoded
         if authorise(request)
           room = EscapeRoom.select(:id, :name, :startVertex, :endVertex).find(params[:id])
           render json: { status: 'SUCCESS', message: 'Escape Rooms', data: room }, status: :ok

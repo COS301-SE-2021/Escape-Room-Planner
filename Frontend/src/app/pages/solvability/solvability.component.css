@@ -2,3 +2,7 @@
   background-color: #a31818;
   color: black;
 }
+
+.modal-body {
+  border-radius: 8px;
+}
