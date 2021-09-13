@@ -331,7 +331,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
               this.current_room_index = i;
             }
 
-            if(vertices[vertex_images].type === "Key" || vertices[vertex_images].type ==="Clue")
+            if((vertices[vertex_images].type === "Key" && vertex_images != this.vertexService.start_vertex_id) || (vertices[vertex_images].type ==="Clue" && vertex_images != this.vertexService.start_vertex_id))
             {
               vertex_sprite.visible = false
             }
