@@ -381,6 +381,23 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // defaults:
     // check box is unchecked
     // all the values are 1 or low
+
+    let AIReq= {
+      room_id: this.currentRoomId,
+      linear: this.linearity_value,
+      dead_nodes: this.complexity_value,
+      num_containers:this.number_of_containers,
+      num_puzzles: this.number_of_puzzles,
+      num_keys: this.number_of_keys,
+      num_clues: this.number_of_clues
+    };
+
+    this.httpClient.post<any>(environment.api + "/api/v1/genetic_algorithm/", AIReq, {"headers": this.headers}).subscribe(
+      response => {
+        console.log(response)
+      }
+      );
+
   }
 
   // todo
