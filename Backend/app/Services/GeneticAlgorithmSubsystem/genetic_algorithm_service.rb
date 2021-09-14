@@ -278,7 +278,7 @@ class GeneticAlgorithmService
 
     # favour graphs with longer paths
     resp = serv.longest_path(start_vert,end_vert)
-    if resp < (vertices.count / 4).round
+    if resp < (vertices.count / 2).round
       @fitness_of_population[i_count] += 20
     end
 
@@ -388,6 +388,7 @@ class GeneticAlgorithmService
   def mutation; end
 
   def final(chromosone, room_id, vertices)
+
     room = EscapeRoom.find_by_id(room_id)
     if room.startVertex == room.endVertex
       genetic_algorithm(request)
