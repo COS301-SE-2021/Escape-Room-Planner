@@ -27,3 +27,10 @@ GATestRoom:
   endVertex: 912
   name: two
   user_id: 1
+
+TestRoom:
+  id: 6
+  startVertex: 901
+  endVertex: 912
+  name: two
+  user_id: 1

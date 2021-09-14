@@ -23,10 +23,11 @@ class GeneticAlgorithmService
       GeneticAlgorithmResponse.new('False', 'Parameters required')
     end
 
+
     # Manipulate this if you want to mess with the initial edges for accuracy
     @max_edge_initial_factor = 0.15 - (request.vertices.count / 100)
     @min_edge_initial_factor = 0.5
-    @number_of_runs = 10
+    @number_of_runs = 1
 
 
 
@@ -63,25 +64,14 @@ class GeneticAlgorithmService
 
     # Calculate fitness
     i_count = 0
+
+
     while i_count < @initial_population_size
       calculate_fitness(@initial_population[i_count], i_count , request.room_id, request.vertices)
       #puts "Fitness of #{(i_count + 1).to_s} :#{@fitness_of_population[i_count].to_s}"
       i_count += 1
     end
 
-    #Final room setup
-    i_count = 0
-    final_pos = 0
-    highest = @fitness_of_population[i_count]
-    while i_count < @initial_population_size
-      #puts highest.to_s + " < " + @fitness_of_population[i_count].to_s
-      if highest < @fitness_of_population[i_count]
-        final_pos = i_count
-
-        highest = @fitness_of_population[i_count]
-      end
-      i_count += 1
-    end
 
     #Run N number of times
     i_count = 0
@@ -103,7 +93,24 @@ class GeneticAlgorithmService
       i_count += 1
     end
 
+    #Final room setup
+    i_count = 0
+    final_pos = 0
+    highest = @fitness_of_population[i_count]
+    while i_count < @initial_population_size
+      #puts highest.to_s + " < " + @fitness_of_population[i_count].to_s
+      if highest < @fitness_of_population[i_count]
+        final_pos = i_count
+
+        highest = @fitness_of_population[i_count]
+      end
+      i_count += 1
+    end
+
     final(@initial_population[final_pos], request.room_id, request.vertices)
+
+
+
   end
 
   def initial_population_creation(vertices)
@@ -210,7 +217,7 @@ class GeneticAlgorithmService
 
 
   def calculate_fitness(chromosone, i_count, room_id, vertices)
-    # Fitness score out of 100
+
     set_up_room(chromosone, room_id, vertices)
 
     #defaults
@@ -239,7 +246,16 @@ class GeneticAlgorithmService
     req = FindAllPathsRequest.new(start_vert, end_vert)
     serv = SolvabilityService.new
     resp = serv.find_all_paths_service(req)
-    num_paths = resp.vertices.count
+
+    puts "here2222"
+    if !resp.nil?
+      num_paths = resp.vertices.count
+    else
+      num_paths=0
+    end
+
+
+
     case @path_weight
     when 4
       if num_paths > 3
@@ -382,6 +398,7 @@ class GeneticAlgorithmService
 
   # helper functions
   def set_up_room(chromosone, room_id, vertices)
+
     start_node = find_start(chromosone)
     end_node = find_end(chromosone)
     room = EscapeRoom.find_by_id(room_id)

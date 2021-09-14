@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 require 'concurrent'
 require './app/Services/GeneticAlgorithmSubsystem/Response/genetic_algorithm_response'
@@ -8,10 +10,10 @@ class GeneticAlgorithmControllerTest < ActionDispatch::IntegrationTest
                                                                         linear: "med",
                                                                         dead_nodes: "med",
                                                                         room_id: 6,
-                                                                        num_containers: 4,
-                                                                        num_clues: 4,
-                                                                        num_keys: 4,
-                                                                        num_puzzles: 4
+                                                                        num_containers: 2,
+                                                                        num_clues: 2,
+                                                                        num_keys: 2,
+                                                                        num_puzzles: 2
     })
 
     assert_response :success
