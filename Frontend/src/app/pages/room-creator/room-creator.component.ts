@@ -181,11 +181,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         response => {
           //remove Room From screen here
           if(response.status == "SUCCESS"){
+            document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
             //checks if no more rooms
             this._room_count--;
-            if(this._room_count === 0)
+            if(this._room_count === 0) {
               this.hasRooms = false;
-            document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
+            }else{
+              this.currentRoomId = this.escapeRoomListRef?.nativeElement.children[0].children[0].children[0]
+                                        .getAttribute('escape-room-id');
+              // @ts-ignore
+              this.escapeRoomDivRef?.nativeElement.textContent = "";
+              this.getVertexFromRoom();
+              this.solveComponent?.getInitialVertices();
+            }
           }else
             this.renderAlertError("Unable To Delete Room");
         },
@@ -356,11 +364,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           //rendering <li> elements by using render function
           this.renderNewRoom(response.data.id, response.data.name);
           this.hasRooms = true;
-          this.vertexService.reset_array();
           // @ts-ignore
           this.escapeRoomDivRef?.nativeElement.textContent = "";
           this._room_count++;
           this.currentRoomId = response.data.id;
+          this.getVertexFromRoom();
+          this.solveComponent?.getInitialVertices();
         },
         error => {
           if (error.status === 401){
