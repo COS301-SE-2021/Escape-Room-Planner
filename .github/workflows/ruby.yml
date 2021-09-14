@@ -41,6 +41,11 @@ jobs:
         sudo rm Gemfile.lock
         sudo apt-get -yqq install libpq-dev
     
+    - name: Remove  Gemfile.lock
+      run: |
+        sudo rm Gemfile.lock
+      if: contains(github.ref, 'master') && github.event_name == 'push'
+    
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
