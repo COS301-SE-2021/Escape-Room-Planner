@@ -7,6 +7,7 @@ import {
   NgZone,
   OnDestroy,
   ViewChild,
+  ViewEncapsulation,
   Renderer2
 } from '@angular/core';
 import { Application, Sprite, Container, AnimatedSprite, Rectangle, Texture } from 'pixi.js';
@@ -14,11 +15,14 @@ import { RoomService } from "../../services/room.service";
 import {VertexService} from "../../services/vertex.service";
 import { Inventory } from "../../models/simulation/inventory.model";
 import { Vertex } from "../../models/vertex.model";
-import {min} from "rxjs/operators";
+import {delay, min} from "rxjs/operators";
+import {NgbModal, ModalDismissReasons, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-simulation',
   templateUrl: './simulation.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./simulation.component.css']
 })
 
@@ -58,8 +62,14 @@ export class SimulationComponent implements OnInit, OnDestroy {
   public time_min: string = '00';
   public time_sec: string = '00';
 
+  //select path variables
+  closeResult = '';
+  @ViewChild("path") pathRef: NgbModal | undefined;
+  @ViewChild("escapeRoomCompleted") escapeRoomCompletedRef: NgbModal | undefined;
+
+
   constructor(private elementRef: ElementRef,  private renderer: Renderer2,
-              private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService ) {
+              private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService, private modalService: NgbModal, private router:Router) {
     this.rooms = [];
     this.current_room_index = 0;
     this.character_inventory = new Inventory();
@@ -127,8 +137,17 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.movement.d = false;
       this.movement.w = false;
       this.movement.s = false;
+      this.selectPath(this.pathRef);
+    }
+    else if(event.code === 'KeyT')
+    {
+      this.movement.a = false;
+      this.movement.d = false;
+      this.movement.w = false;
+      this.movement.s = false;
       this.simulate_toggle = !this.simulate_toggle;
     }
+
   }
 
   @HostListener('window:keyup', ['$event'])
@@ -478,7 +497,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
         // @ts-ignore
         this.character_inventory.addItem(this.objects['vertex'+vertex_id]);
         // @ts-ignore
-        this.rooms[this.current_room_index].removeChild(this.objects['vertex'+vertex_id]);
+        this.objects['vertex'+vertex_id].visible = false;
+        // this.rooms[this.current_room_index].removeChild(this.objects['vertex'+vertex_id]);
         // @ts-ignore
         this.updateInventoryMenu(this.character_inventory.items.length-1);
         this.vertexStatus(vertex, 'Obtaining:');
@@ -569,6 +589,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
           clearInterval(this.timer_id);
           this.messageMenu("Escaped Escape Room!");
           this.character_lock = true;
+          this.simulate_toggle = false;
+          this.escapeRoomCompleted(this.escapeRoomCompletedRef);
         }
         //update time values
       }, (vertex.estimated_time / 60) * 1000);
@@ -611,4 +633,109 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }, interval);
   }
 
+  // All Modal stuff
+
+  setPath(path: number)
+  {
+    this.path_choice = path;
+    this.current_path_index = 0;
+    console.log("PATH CHANGED!!!" + this.path_choice)
+
+    this.modalService.dismissAll('path selected')
+
+    this.simulate_toggle = true;
+  }
+
+  selectPath(content: any) {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', centered: true, windowClass: 'dark-modal',size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+    this.renderPathModal();
+  }
+
+  escapeRoomCompleted(content: any)
+  {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', centered: true, windowClass: 'dark-modal',size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  selectNewPath()
+  {
+    this.modalService.dismissAll('New Path selected');
+    this.vertexService.resetCompletedVertices();
+    this.character_lock =  false;
+    this.min = 0;
+    this.sec = 0;
+    this.hour = 0;
+
+    this.timer(1000);
+
+    this.resetHiddenVertices();
+
+    this.selectPath(this.pathRef);
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  private resetHiddenVertices()
+  {
+    for(let vertices of this.vertexService.vertices) {
+
+      // @ts-ignore
+      if(this.objects['vertex' + vertices.id] !== undefined )
+      {
+        // @ts-ignore
+        console.log(vertices.id + this.objects['vertex' + vertices.id].visible)
+        // @ts-ignore
+        if(vertices.type === "Key" || vertices.type === "Clue")
+        {
+          if(vertices.id === this.vertexService.start_vertex_id)
+          {
+            // @ts-ignore
+            this.objects['vertex' + vertices.id].visible = true;
+          }
+          else
+          {
+            // @ts-ignore
+            this.objects['vertex' + vertices.id].visible = false;
+          }
+        }
+
+      }
+    }
+
+  }
+
+  private renderPathModal()
+  {
+    let row = this.renderer.createElement('div')
+    for(let i = 0; i < this.vertexService.possible_paths.length; i++)
+    {
+      let path = i + 1;
+      let newButton = this.renderer.createElement('button');
+      this.renderer.addClass(newButton,'btn');
+      this.renderer.addClass(newButton,'custom-btn');
+      this.renderer.addClass(newButton,'btn-outline-dark');
+      this.renderer.listen(newButton,'click',() => this.setPath(i))
+      let text = this.renderer.createText('Path' + path);
+
+      this.renderer.appendChild(newButton,text);
+      this.renderer.appendChild(row, newButton);
+      // @ts-ignore
+      document.getElementById('pathBody').appendChild(row);
+    }
+  }
 }
