@@ -216,4 +216,8 @@ export class Vertex {
     this._completed = true;
   }
 
+  public  resetCompleted(){
+    this._completed = false;
+  }
+
 }
