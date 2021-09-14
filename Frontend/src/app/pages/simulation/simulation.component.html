@@ -1,3 +1,35 @@
+<div  class="container">
+  <ng-template #path let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Select Path</h4>
+    </div>
+    <div  class="modal-body">
+      <div id="pathBody">
+<!--        <button class="btn btn-dark" (click)="setPath(0)">Path 1</button>-->
+<!--        <button class="btn btn-dark" (click)="setPath(1)">Path 2</button>-->
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark custom-btn" (click)="modal.close('Save click')">exit</button>
+    </div>
+  </ng-template>
+</div>
+<div  class="container">
+  <ng-template #escapeRoomCompleted let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Congratulations you have escaped the room!</h4>
+    </div>
+    <div  class="modal-body">
+      <div #pathBody>
+        Would you like to select a new path?
+        <button type="button" class="btn btn-outline-dark custom-btn" (click)="selectNewPath()">Select New Path</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark custom-btn" (click)="modal.close('Save click')">exit</button>
+    </div>
+  </ng-template>
+</div>
 <div class="timer">
   <div class="container-fluid bg-dark border border-3 border-secondary rounded">
     <div class="row justify-content-evenly text-white text-center mt-2 mb-2">
@@ -51,3 +83,5 @@
     </div>
   </div>
 </div>
+
+
