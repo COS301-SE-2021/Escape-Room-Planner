@@ -163,4 +163,12 @@ export class VertexService {
     }
     return new_vertices;
   }
+
+  public resetCompletedVertices()
+  {
+    for(let vertex of this.vertices)
+    {
+      vertex.resetCompleted();
+    }
+  }
 }
