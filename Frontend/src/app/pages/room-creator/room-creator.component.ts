@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
@@ -9,6 +9,7 @@ import {InventoryComponent} from "../inventory/inventory.component";
 import {SolvabilityComponent} from "../solvability/solvability.component"
 import { DependencyDiagramComponent } from '../dependency-diagram/dependency-diagram.component';
 import {environment} from "../../../environments/environment";
+import {getLocaleFirstDayOfWeek} from "@angular/common";
 declare let LeaderLine: any;
 
 @Component({
@@ -85,6 +86,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //use for testing new functionality
     this.solveComponent?.setRoom(this.currentRoomId);
     this.solveComponent?.getInitialVertices();
+    this.test();
   }
 
 
@@ -1285,6 +1287,27 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public changeComplexityValue(elem:HTMLInputElement):void{
     if (elem.checked)
       this.complexity_value = elem.value;
+  }
+
+  //todo: add host listener here
+  public test():void{
+    console.log('reere')
+    let x = window.innerWidth;
+    let y = window.innerHeight;
+    let inv_elem = document.getElementById('app-inv');
+    let room_list = document.getElementById('escape-room-list');
+
+    console.log(this.escapeRoomDivRef?.nativeElement);
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.marginLeft = inv_elem.clientWidth + 'px';
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.width = x - inv_elem.clientWidth + 'px';
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.height = x - inv_elem.clientHeight + 'px';
+    // @ts-ignore
+    room_list.style.marginLeft = inv_elem.clientWidth + 'px';
+    // @ts-ignore
+    room_list.style.width = x - inv_elem.clientWidth + 'px';
   }
 }
 
