@@ -9,8 +9,15 @@
     <button data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm" class="btn btn-outline-success btn-block" style="color: white">Create Room</button>
   </div>
 
+
+
 </div>
-<div  [hidden]="!backdrop_div.hidden"  class="container-fluid remove-padding room-creater-margin-top" (click)="hideMenus($event)">
+
+<div [hidden]="!gaLoading" class="ga_loading" style="text-align: center;"  >
+  <img src="./assets/svg/GALoadingSvg.svg" width="400px" height="400px" alt="loading..." style="vertical-align: center; horiz-align: center; top: 400px">
+</div>
+
+<div  [hidden]="!backdrop_div.hidden || gaLoading"  class="container-fluid remove-padding room-creater-margin-top" (click)="hideMenus($event)">
   <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
   <div class="row room-creater-space">
 
