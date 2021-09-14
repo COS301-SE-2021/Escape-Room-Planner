@@ -38,7 +38,6 @@ jobs:
     
     - name: Prepare for Backend Tests
       run: |
-        sudo rm Gemfile.lock
         sudo apt-get -yqq install libpq-dev
     
     - name: Remove  Gemfile.lock
