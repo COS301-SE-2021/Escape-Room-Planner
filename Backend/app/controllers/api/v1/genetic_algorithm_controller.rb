@@ -28,9 +28,9 @@ module Api
           icount += 1
         end
         resp = GeneticAlgorithmResponse.new("True")
-        # req = GeneticAlgorithmRequest.new(vertices, linear, dead_nodes, room_id)
-        # serv = GeneticAlgorithmService.new
-        # resp = serv.genetic_algorithm(req)
+         req = GeneticAlgorithmRequest.new(vertices, linear, dead_nodes, room_id)
+         serv = GeneticAlgorithmService.new
+         resp = serv.genetic_algorithm(req)
 
         render json: { status: 'Response received', message: 'Data:', data: resp }, status: :ok
       rescue StandardError
@@ -52,8 +52,11 @@ module Api
           @clue.graphicid = "./assets/images/clue1.png"
           @clue.clue = "GAClue"
           @clue.escape_room_id = room_id
+          @clue.save
+          i_count += 1
         end
 
+        i_count = 0
         while i_count < num_puzzles
           puts "creating puzzle"
           @puzzle = Puzzle.new
@@ -69,6 +72,35 @@ module Api
           @puzzle.save
           i_count += 1
         end
+
+        i_count = 0
+        while i_count < num_keys
+          @key = Keys.new
+          @key.name = "GAKeys"
+          @key.posx = rand(0..1000)
+          @key.posy = rand(0..1000)
+          @key.width = 100.0
+          @key.height = 100.0
+          @key.graphicid = "./assets/images/key1.png"
+          @key.escape_room_id = room_id
+          @key.save
+          i_count += 1
+        end
+
+
+        i_count = 0
+        while i_count < num_containers
+          @container = Container.new
+          @container.posx = rand(0..1000)
+          @container.posy = rand(0..1000)
+          @container.width = 100.0
+          @container.height = 100.0
+          @container.name = "GAContainer"
+          @container.graphicid = "./assets/images/con1.png"
+          @container.escape_room_id = room_id
+          i_count += 1
+        end
+
 
         room.save!
       end

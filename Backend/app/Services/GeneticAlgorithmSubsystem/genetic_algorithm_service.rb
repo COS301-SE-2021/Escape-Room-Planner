@@ -110,7 +110,7 @@ class GeneticAlgorithmService
 
     # Max edges = n(n-1)
     # initial calc: ((vertices.count) * (vertices.count - 1) * @max_edge_initial_factor).round
-    max_edges = vertices.count + ((vertices.count) / 2).round
+    max_edges = vertices.count + ((vertices.count) / 4).round
 
     # Min edges = n-1
     min_edges = ((vertices.count - 1) * @min_edge_initial_factor).round
@@ -230,7 +230,7 @@ class GeneticAlgorithmService
     resp = serv.calculate_solvability(req)
 
     if !resp.solvable
-      @fitness_of_population[i_count] -= 10
+      @fitness_of_population[i_count] -= 100
     else
       @fitness_of_population[i_count] += 40
     end
@@ -287,7 +287,7 @@ class GeneticAlgorithmService
     end
     # If start == end disgard this vertex
     if (EscapeRoom.find_by_id(room_id).startVertex == EscapeRoom.find_by_id(room_id).endVertex)
-      @fitness_of_population[i_count] = -40
+      @fitness_of_population[i_count] = -100
     end
   end
 
@@ -323,7 +323,7 @@ class GeneticAlgorithmService
       i_count += 1
     end
 
-    max_edges = vertices.count + ((vertices.count) / 2).round
+    max_edges = vertices.count + ((vertices.count) / 4).round
 
     # Min edges = n-1
     min_edges = ((vertices.count - 1) * @min_edge_initial_factor).round
@@ -371,6 +371,11 @@ class GeneticAlgorithmService
   def mutation; end
 
   def final(chromosone, room_id, vertices)
+    room = EscapeRoom.find_by_id(room_id)
+    if room.startVertex == room.endVertex
+      genetic_algorithm(request)
+      return
+    end
     set_up_room(chromosone, room_id, vertices)
   end
 
