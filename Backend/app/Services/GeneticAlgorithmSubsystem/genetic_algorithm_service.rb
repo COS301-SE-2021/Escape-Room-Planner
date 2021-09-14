@@ -27,7 +27,7 @@ class GeneticAlgorithmService
     # Manipulate this if you want to mess with the initial edges for accuracy
     @max_edge_initial_factor = 0.15 - (request.vertices.count / 100)
     @min_edge_initial_factor = 0.5
-    @number_of_runs = 1
+    @number_of_runs = 5
 
 
 
@@ -247,7 +247,8 @@ class GeneticAlgorithmService
     serv = SolvabilityService.new
     resp = serv.find_all_paths_service(req)
 
-    puts "here2222"
+
+
     if !resp.nil?
       num_paths = resp.vertices.count
     else
