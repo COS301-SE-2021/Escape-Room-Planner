@@ -1,7 +1,7 @@
 <div  class="container">
   <ng-template #path let-modal>
     <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Select Path</h4>
+      <h4 class="modal-title">Select Path</h4>
     </div>
     <div  class="modal-body">
       <div id="pathBody">
@@ -17,16 +17,23 @@
 <div  class="container">
   <ng-template #escapeRoomCompleted let-modal>
     <div class="modal-header">
-      <h4 class="modal-title">Congratulations you have escaped the room!</h4>
+      <h4 class="modal-title" id="modal-basic-title">Congratulations you have escaped the room!</h4>
+      <button type="button" class="btn-close-white" aria-label="Close" (click)="resetRoom()">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
     <div  class="modal-body">
-      <div #pathBody>
+      <div class="align-content-center">
+        <h5>Estimated Time:</h5>
+        <h6>{{time_hour}}:{{time_min}}:{{time_sec}}</h6>
+      </div>
+      <div>
         Would you like to select a new path?
         <button type="button" class="btn btn-outline-dark custom-btn" (click)="selectNewPath()">Select New Path</button>
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark custom-btn" (click)="modal.close('Save click')">exit</button>
+      <button type="button" class="btn btn-outline-dark custom-btn" (click)="exitSimulation()">Exit Simulation</button>
     </div>
   </ng-template>
 </div>

@@ -666,6 +666,13 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   selectNewPath()
   {
+    this.resetRoom()
+
+    this.selectPath(this.pathRef);
+  }
+
+   resetRoom()
+  {
     this.modalService.dismissAll('New Path selected');
     this.vertexService.resetCompletedVertices();
     this.character_lock =  false;
@@ -676,8 +683,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this.timer(1000);
 
     this.resetHiddenVertices();
-
-    this.selectPath(this.pathRef);
   }
 
   private getDismissReason(reason: any): string {
@@ -737,5 +742,12 @@ export class SimulationComponent implements OnInit, OnDestroy {
       // @ts-ignore
       document.getElementById('pathBody').appendChild(row);
     }
+  }
+
+  exitSimulation()
+  {
+    this.modalService.dismissAll();
+    delay(5000);
+    this.router.navigate(['/escape-room']).then(() => location.reload());
   }
 }
