@@ -421,6 +421,14 @@ class GeneticAlgorithmService
     room.startVertex = saveStart
     room.endVertex = saveEnd
     room.save!
+
+
+      from_vertex = Vertex.find_by_id(saveEnd)
+      to_vertex = from_vertex.vertices.find_by_id(saveStart)
+      unless to_vertex.nil?
+        from_vertex.vertices.delete(to_vertex)
+      end
+
   end
 
 
