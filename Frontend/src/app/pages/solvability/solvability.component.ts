@@ -52,10 +52,10 @@ export class SolvabilityComponent implements OnInit {
   }
 
   checkSolvable(target_start: HTMLElement, target_end: HTMLElement, current_room_id: Number) {
+    this._current_room_id = current_room_id
     this.getInitialVertices();
     this._target_start = target_start;
     this._target_end = target_end;
-    this._current_room_id = current_room_id
     this.checkStartEndVertex();
 
 
