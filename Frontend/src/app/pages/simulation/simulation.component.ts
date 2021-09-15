@@ -666,6 +666,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   selectNewPath()
   {
+
     this.resetRoom()
 
     this.selectPath(this.pathRef);
@@ -697,25 +698,49 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   private resetHiddenVertices()
   {
+    console.log("in reset vertices")
     for(let vertices of this.vertexService.vertices) {
+      console.log("in reset vertices for oop")
 
       // @ts-ignore
-      if(this.objects['vertex' + vertices.id] !== undefined )
+      console.log(this.objects['vertex' + vertices.local_id])
+
+      // @ts-ignore
+      if(this.objects['vertex' + vertices.local_id] !== undefined )
       {
         // @ts-ignore
-        console.log(vertices.id + this.objects['vertex' + vertices.id].visible)
-        // @ts-ignore
-        if(vertices.type === "Key" || vertices.type === "Clue")
+        if(vertices.type === "Key" || vertices.type === "Clue" || vertices.type === "Container")
         {
-          if(vertices.id === this.vertexService.start_vertex_id)
+          if(vertices.type === "Container")
           {
-            // @ts-ignore
-            this.objects['vertex' + vertices.id].visible = true;
+
+            if(vertices.getPreviousConnections())
+            {
+              for(let previous_connections of vertices.getPreviousConnections())
+              {
+                let previous_vertex = this.vertexService.vertices[previous_connections];
+                console.log("Previous type: " + previous_vertex.type)
+                if(previous_vertex.type === "Container")
+                {
+                  // @ts-ignore
+                  this.objects['vertex' + vertices.local_id].visible = false;
+                }
+
+              }
+            }
           }
           else
           {
-            // @ts-ignore
-            this.objects['vertex' + vertices.id].visible = false;
+            if(vertices.local_id === this.vertexService.start_vertex_id)
+            {
+              // @ts-ignore
+              this.objects['vertex' + vertices.local_id].visible = true;
+            }
+            else
+            {
+              // @ts-ignore
+              this.objects['vertex' + vertices.local_id].visible = false;
+            }
           }
         }
 
