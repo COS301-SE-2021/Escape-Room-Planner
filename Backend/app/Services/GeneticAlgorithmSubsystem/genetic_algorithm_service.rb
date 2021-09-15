@@ -408,16 +408,19 @@ class GeneticAlgorithmService
 
           serv = SolvabilityService.new
           resp = serv.longest_path(s , e)
+
           if resp > longest
             saveStart = s
             saveEnd = e
             longest = resp
+            puts longest
           end
           end
         end
     end
     room.startVertex = saveStart
     room.endVertex = saveEnd
+    room.save!
   end
 
 
