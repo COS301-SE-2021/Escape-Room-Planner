@@ -40,6 +40,11 @@ jobs:
       run: |
         sudo apt-get -yqq install libpq-dev
     
+    - name: Delete Gemfile.lock
+      run: |
+        sudo rm Gemfile.lock
+      if: contains(github.ref, 'master') && github.event_name == 'push'
+    
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -61,11 +66,6 @@ jobs:
         bundle exec rake db:create
         bundle exec rake db:migrate
         bundle exec rake test
-        
-    - name: Add  Gemfile.lock
-      run: |
-        sudo touch Gemfile.lock
-      if: contains(github.ref, 'master') && github.event_name == 'push'
         
     - name: Deploy to heroku
       uses: akhileshns/heroku-deploy@v3.12.12
