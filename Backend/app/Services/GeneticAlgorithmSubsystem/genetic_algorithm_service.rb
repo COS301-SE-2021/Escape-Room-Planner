@@ -252,7 +252,7 @@ class GeneticAlgorithmService
     if !resp.nil?
       num_paths = resp.vertices.count
     else
-      num_paths=0
+      num_paths = 0
     end
 
 
@@ -362,10 +362,8 @@ class GeneticAlgorithmService
       @initial_population[i_loop] = @chromosome
       i_loop += 1
     end
-    puts best
-    puts second
   end
-  
+
   # def sort
   #   i = 0
   #   while i < @initial_population_size - 1
@@ -394,7 +392,37 @@ class GeneticAlgorithmService
       genetic_algorithm(request)
       return
     end
+
     set_up_room(chromosone, room_id, vertices)
+    deleted = delete_unnecessary(chromosone, vertices)
+    longest = 0
+    saveStart = room.startVertex
+    saveEnd = room.endVertex
+
+    deleted.each do |d|
+      vertices.delete(d)
+    end
+
+    vertices.each do |s|
+      unless deleted.include? s
+        room.startVertex = s
+      end
+      vertices.each do |e|
+        unless deleted.include? e
+          room.endVertex = e
+
+          serv = SolvabilityService.new
+          resp = serv.longest_path(s , e)
+          if resp > longest
+            saveStart = s
+            saveEnd = e
+            longest = resp
+          end
+          end
+        end
+    end
+    room.startVertex = saveStart
+    room.endVertex = saveEnd
   end
 
 
@@ -475,6 +503,23 @@ class GeneticAlgorithmService
     end
 
     end_node
+  end
+
+  def delete_unnecessary(chromosone, vertices)
+    inGraph = []
+    chromosone.each do |row|
+      inGraph.push(row[0])
+      inGraph.push(row[1])
+    end
+    deleted = []
+    vertices.each do |v|
+      unless inGraph.include? v
+        Vertex.delete(v)
+        deleted.push (v)
+      end
+    end
+
+    deleted
   end
 
 end
