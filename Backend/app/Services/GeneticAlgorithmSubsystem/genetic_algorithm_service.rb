@@ -80,10 +80,9 @@ class GeneticAlgorithmService
 
       # Selection
       selection(request.vertices)
+
       # Crossover
-
-      # Mutation
-
+      #crossover
       # Calculate fitness
       i_run_through_pop = 0
       while i_run_through_pop < @initial_population_size
@@ -364,26 +363,22 @@ class GeneticAlgorithmService
     end
   end
 
-  # def sort
-  #   i = 0
-  #   while i < @initial_population_size - 1
-  #     j = 0
-  #     while j < @initial_population_size - i - 1
-  #       if(@fitness_of_population[j] < @fitness_of_population[j + 1])
-  #          temp = @initial_population[j]
-  #          @initial_population[j] = @initial_population[j + 1]
-  #          @initial_population[j + 1] = temp
-  #       end
-  #       j += 1
-  #       end
-  #     i += 1
-  #   end
-  #
-  # end
+  def crossover
+    i_popcount=3
+    while i_popcount<@initial_population_size-3
+      chromosome=@initial_population[i_popcount]
+      i_count_chromosone=0
+      while i_count_chromosone < chromosome.size
+        if rand(8)==1
+          chromosome[i_count_chromosone]= @initial_population[i_popcount-1][rand(@initial_population[i_popcount-1].size)]
+        end
+        i_count_chromosone+=1
+      end
 
-  def crossover; end
+      i_popcount+=1
+    end
 
-  def mutation; end
+  end
 
   def final(chromosone, room_id, vertices)
 
