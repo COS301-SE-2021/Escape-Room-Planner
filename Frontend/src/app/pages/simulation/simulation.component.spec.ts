@@ -4,6 +4,7 @@ import { SimulationComponent } from './simulation.component';
 import {VertexService} from "../../services/vertex.service";
 import {RoomService} from "../../services/room.service";
 import {Inventory} from "../../models/simulation/inventory.model";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('SimulationComponent', () => {
   let component: SimulationComponent;
@@ -14,6 +15,9 @@ describe('SimulationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports:[
+        RouterTestingModule
+      ],
       declarations: [ SimulationComponent ]
     })
     .compileComponents();
