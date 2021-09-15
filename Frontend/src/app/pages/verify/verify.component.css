@@ -114,7 +114,7 @@ a:hover {
 
 .resendEmail
 {
-  color: green;
+  color: #3BA55D;
   background-color: #010409;
   border: none
 }
@@ -122,5 +122,5 @@ a:hover {
 .resendEmail:hover
 {
   text-decoration: underline;
-  text-underline: green;
+  text-underline: #3BA55D;
 }
