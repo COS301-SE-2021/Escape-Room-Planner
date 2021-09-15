@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {RouterModule, Routes} from "@angular/router";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RoomCreatorComponent } from './pages/room-creator/room-creator.component';
 import { SignupComponent } from './pages/signup/signup.component';
-import {HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
+import { HttpClientModule} from "@angular/common/http";
+import { FormsModule} from "@angular/forms";
 import { VerifyComponent } from './pages/verify/verify.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { ResetPasswordNotComponent } from './pages/reset-password-not/reset-password-not.component';
@@ -16,6 +17,7 @@ import { SolvabilityComponent } from './pages/solvability/solvability.component'
 import { VerifySuccessComponent } from './pages/verify-success/verify-success.component';
 import { VerifyFailedComponent } from './pages/verify-failed/verify-failed.component';
 import { DependencyDiagramComponent } from './pages/dependency-diagram/dependency-diagram.component';
+import { SimulationComponent } from './pages/simulation/simulation.component';
 
 const routes: Routes = [
   // { path: '', component: AppComponent },
@@ -28,6 +30,7 @@ const routes: Routes = [
   { path: 'diagram', component: DependencyDiagramComponent },
   { path: 'verify-success', component: VerifySuccessComponent},
   { path: 'verify-failure', component: VerifyFailedComponent},
+  { path: 'simulation', component: SimulationComponent},
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
@@ -45,13 +48,15 @@ const routes: Routes = [
     SolvabilityComponent,
     VerifySuccessComponent,
     VerifyFailedComponent,
-    DependencyDiagramComponent
+    DependencyDiagramComponent,
+    SimulationComponent
   ],
     imports: [
         BrowserModule,
         RouterModule.forRoot(routes),
         HttpClientModule,
-        FormsModule
+        FormsModule,
+        NgbModule
     ],
   providers: [],
   bootstrap: [AppComponent]

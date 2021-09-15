@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
+import {RoomService} from "../../services/room.service";
 import {Router} from "@angular/router";
 // Leader Line JS library imports
 import 'leader-line';
@@ -66,7 +67,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild(DependencyDiagramComponent) diagramComponent: DependencyDiagramComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
-              private vertexService: VertexService, private router:Router)
+              private vertexService: VertexService, private roomService: RoomService,
+              private router:Router)
   {
     if(localStorage.getItem('token') ==  null) {
       this.router.navigate(['login']).then(r => console.log('no jwt stored'));
@@ -180,11 +182,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         response => {
           //remove Room From screen here
           if(response.status == "SUCCESS"){
+            document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
             //checks if no more rooms
             this._room_count--;
-            if(this._room_count === 0)
+            if(this._room_count === 0) {
               this.hasRooms = false;
-            document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
+            }else{
+              this.currentRoomId = this.escapeRoomListRef?.nativeElement.children[0].children[0].children[0]
+                                        .getAttribute('escape-room-id');
+              // @ts-ignore
+              this.escapeRoomDivRef?.nativeElement.textContent = "";
+              this.getVertexFromRoom();
+              this.solveComponent?.getInitialVertices();
+            }
           }else
             this.renderAlertError("Unable To Delete Room");
         },
@@ -240,8 +250,16 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       // gets room images
       this.httpClient.get<any>(environment.api + '/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
         response =>{
+          this.roomService.resetRoom();
           for ( let room_image of response.data){
-
+            this.roomService.addRoomImage(
+              room_image.room_image.id,
+              room_image.room_image.pos_x,
+              room_image.room_image.pos_y,
+              room_image.room_image.width,
+              room_image.room_image.height,
+              room_image.src
+              );
             this.spawnRoom(
               room_image.room_image.pos_x,
               room_image.room_image.pos_y,
@@ -274,10 +292,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
               vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
               vertex.description, vertex.clue, vertex.z_index);
-            if(vertex_t.position === "start")
+            if(vertex_t.position === "start") {
               this._target_start = current_id;
-            else if (vertex_t.position === "end")
+              this.vertexService.start_vertex_id = current_id;
+            }
+            else if (vertex_t.position === "end") {
               this._target_end = current_id;
+              this.vertexService.end_vertex_id = current_id;
+            }
             // @ts-ignore
             for (let vertex_connection of vertex_connections)
               this.vertexService.addVertexConnection(current_id, vertex_connection);
@@ -340,17 +362,18 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           //rendering <li> elements by using render function
           this.renderNewRoom(response.data.id, response.data.name);
           this.hasRooms = true;
-          this.vertexService.reset_array();
           // @ts-ignore
           this.escapeRoomDivRef?.nativeElement.textContent = "";
           this._room_count++;
           this.currentRoomId = response.data.id;
+          this.getVertexFromRoom();
+          this.solveComponent?.getInitialVertices();
+
           if (ai_enabled){
             this.gaLoading=true;
             this.createEscapeRoomWithAI();
             return;
           }
-
         },
         error => {
           if (error.status === 401){
@@ -748,6 +771,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
     let real_from_id = this.vertexService.vertices[from_vertex].id;
+    this.vertexService.removeVertexPreviousConnection(to_vertex, from_vertex);
     let remove_connection = {
       operation: "disconnect_vertex",
       from_vertex_id: real_from_id,
@@ -834,6 +858,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
 
     this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+    this.vertexService.addVertexPreviousConnection(to_vertex_id, from_vertex_id);
     this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
     this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
     //add event to listen to mouse event of only connected vertices
@@ -1030,6 +1055,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
         // updates the local array here only after storing on db
         this._target_start = local_id;
+        this.vertexService.start_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-primary')
       },
       error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
@@ -1050,6 +1076,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       response => {
         // updates the local array here only after storing on db
         this._target_end = local_id;
+        this.vertexService.end_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-info');
       },
       error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
@@ -1308,6 +1335,61 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public changeComplexityValue(elem:HTMLInputElement):void{
     if (elem.checked)
       this.complexity_value = elem.value;
+  }
+
+  simulate() {
+    // TODO: change this to be called when simulate button is clicked
+    if (this.vertexService.start_vertex_id === -1) {
+      this.renderAlertError("Set start vertex");
+    } else if (this.vertexService.end_vertex_id === -1) {
+      this.renderAlertError("Set end vertex");
+    } else {
+      //check if room solvable
+      let parameters = {
+        operation: "Solvable",
+        startVertex: this.vertexService.vertices[this.vertexService.start_vertex_id].id,
+        endVertex: this.vertexService.vertices[this.vertexService.end_vertex_id].id,
+        roomid: this.currentRoomId
+      };
+      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", parameters, {"headers": this.headers}).subscribe(
+        response => {
+          if (response.data.solvable) {
+            // get paths api call
+            let paths = {
+              operation: "ReturnPaths",
+              roomid: this.currentRoomId
+            };
+            this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
+              response => {
+                let string_array = response.data.vertices;
+                let int_array = [];
+                //convert to local id
+                for (let i = 0; i < string_array.length; i++) {
+                  int_array[i] = this.vertexService.convertToLocalID(string_array[i].split(","));
+                }
+                this.vertexService.possible_paths = int_array;
+                // swap to simulation
+                for (let line of this.lines) {
+                  if (line !== null)
+                    line.remove();
+                }
+                this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
+                this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
+              },
+              error => {
+                console.error('', error)
+                this.renderAlertError("Error occurred: Getting solvable paths");
+              }
+            );
+          } else
+            this.renderAlertError("Room needs to be solvable");
+        },
+        error => {
+          console.error('', error)
+          this.renderAlertError("Make sure room is solvable");
+        }
+      );
+    }
   }
 }
 
