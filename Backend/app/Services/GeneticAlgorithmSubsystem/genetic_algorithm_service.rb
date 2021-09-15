@@ -80,10 +80,9 @@ class GeneticAlgorithmService
 
       # Selection
       selection(request.vertices)
+
       # Crossover
-
-      # Mutation
-
+      #crossover
       # Calculate fitness
       i_run_through_pop = 0
       while i_run_through_pop < @initial_population_size
@@ -252,7 +251,7 @@ class GeneticAlgorithmService
     if !resp.nil?
       num_paths = resp.vertices.count
     else
-      num_paths=0
+      num_paths = 0
     end
 
 
@@ -278,7 +277,7 @@ class GeneticAlgorithmService
 
     # favour graphs with longer paths
     resp = serv.longest_path(start_vert,end_vert)
-    if resp < (vertices.count / 4).round
+    if resp < (vertices.count / 2).round
       @fitness_of_population[i_count] += 20
     end
 
@@ -362,38 +361,66 @@ class GeneticAlgorithmService
       @initial_population[i_loop] = @chromosome
       i_loop += 1
     end
-    puts best
-    puts second
   end
-  
-  # def sort
-  #   i = 0
-  #   while i < @initial_population_size - 1
-  #     j = 0
-  #     while j < @initial_population_size - i - 1
-  #       if(@fitness_of_population[j] < @fitness_of_population[j + 1])
-  #          temp = @initial_population[j]
-  #          @initial_population[j] = @initial_population[j + 1]
-  #          @initial_population[j + 1] = temp
-  #       end
-  #       j += 1
-  #       end
-  #     i += 1
-  #   end
-  #
-  # end
 
-  def crossover; end
+  def crossover
+    i_popcount=3
+    while i_popcount<@initial_population_size-3
+      chromosome=@initial_population[i_popcount]
+      i_count_chromosone=0
+      while i_count_chromosone < chromosome.size
+        if rand(8)==1
+          chromosome[i_count_chromosone]= @initial_population[i_popcount-1][rand(@initial_population[i_popcount-1].size)]
+        end
+        i_count_chromosone+=1
+      end
 
-  def mutation; end
+      i_popcount+=1
+    end
+
+  end
 
   def final(chromosone, room_id, vertices)
+
     room = EscapeRoom.find_by_id(room_id)
     if room.startVertex == room.endVertex
       genetic_algorithm(request)
       return
     end
+
     set_up_room(chromosone, room_id, vertices)
+    deleted = delete_unnecessary(chromosone, vertices)
+    longest = 0
+    saveStart = room.startVertex
+    saveEnd = room.endVertex
+
+    deleted.each do |d|
+      vertices.delete(d)
+    end
+
+    vertices.each do |s|
+      unless deleted.include? s
+        room.startVertex = s
+      end
+      vertices.each do |e|
+        unless deleted.include? e
+          room.endVertex = e
+
+          serv = SolvabilityService.new
+          resp = serv.longest_path(s , e)
+
+          if resp > longest
+            saveStart = s
+            saveEnd = e
+            longest = resp
+            puts longest
+          end
+          end
+        end
+    end
+    room.startVertex = saveStart
+    room.endVertex = saveEnd
+    room.save!
   end
 
 
@@ -474,6 +501,23 @@ class GeneticAlgorithmService
     end
 
     end_node
+  end
+
+  def delete_unnecessary(chromosone, vertices)
+    inGraph = []
+    chromosone.each do |row|
+      inGraph.push(row[0])
+      inGraph.push(row[1])
+    end
+    deleted = []
+    vertices.each do |v|
+      unless inGraph.include? v
+        Vertex.delete(v)
+        deleted.push (v)
+      end
+    end
+
+    deleted
   end
 
 end
