@@ -24,3 +24,71 @@ li > .btn-link:hover{
 .col{
   position: relative;
 }
+
+#roomInventory {
+  background-color: #363B42;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+#app-inv {
+  background-color: yellow;
+  border-radius: 10px;
+  border: none;
+  width: 350px;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #010409;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #363B42;
+  border-radius: 10px;
+}
+
+#solvable-button:hover {
+  padding-left: 5px;
+}
+
+#solvable-button {
+  border-radius: 5px;
+  background: #3BA55D;
+  color: white;
+  height: 35px;
+  margin: 4px;
+  width: 95%;
+  font-family: "UniSansThin", monospace;
+  font-weight: bold;
+  font-size: 17px;
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.button_icons {
+  height: 26px;
+  width: 26px;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+.overflow-auto {
+  background: #010409;
+}
+
+.container-card {
+  margin: 5px;
+  border-radius: 8px;
+  background: #363B42;
+  outline: none;
+  border: none;
+}
+
+#create {
+  background: #363B42;
+
+}

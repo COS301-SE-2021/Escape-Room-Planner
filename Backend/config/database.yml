@@ -17,7 +17,7 @@ development:
   adapter: postgresql
   database: EscapeRoomPlanner
   username: postgres
-  password: root
+  password:
   encoding: UTF8
 
 test:

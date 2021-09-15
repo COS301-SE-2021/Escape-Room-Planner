@@ -9,6 +9,7 @@
 /* Escape Room selection menu colour on hover */
 .dropdown-menu > li > div:hover, .dropdown-menu > li > div:focus {
   background-color:grey;
+  width: 100%;
 }
 
 #delete_button > button:hover {
@@ -21,7 +22,8 @@
   /*background-blend-mode: darken;*/
   background-image: url("../../../assets/images/grid.png");
   background-repeat: repeat;
-  background-color: #7f7f7f;
+  background-color: #363B42;
+  background-size: 20px;
 }
 
 #room-plan > img{
@@ -31,6 +33,7 @@
 #room{
   z-index: 0;
   position: absolute;
+  overflow-y: hidden;
 }
 
 .fade {
@@ -46,12 +49,13 @@
 
 .room-creater-margin-top
 {
-  margin-top: 3%;
+  margin-top: 4.2%;
+  border-radius: 10px;
 }
 
 .room-creater-margin-left
 {
-  margin-left: 20%;
+  margin-left: 18.5%;
 }
 
 .dropdown-margin
@@ -76,4 +80,82 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
+
+#escapeRoomsDropdown {
+  margin: 4px 0px 6px 0px;
+  background: #363B42;
+  border-radius: 5px 0px 0px 5px;
+  width: 720px;
+  height: 35px;
+  color: white;
+  outline: none;
+  border: none;
+  font-family: "UniSansThin", monospace;
+  font-weight: bold;
+}
+
+#droppy {
+  width: 720px;
+}
+
+/*.dropdown-menu:hover {*/
+/*  color: #3BA55D;*/
+/*  ba*/
+/*}*/
+
+#new-room {
+  height: 35px;
+  width: 100px;
+  background: #3BA55D;
+  color: white;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  font-family: "UniSansThin", monospace;
+  font-weight: bold;
+}
+
+#generate {
+  /*float: right;*/
+  height: 35px;
+  background: none;
+  outline: none;
+  border-radius: 5px;
+  border: 2px solid #3BA55D;
+  margin: 4px 8px 6px 8px;
+  color: #3BA55D;
+  text-align: center;
+  width: 180px;
+  font-family: "UniSansThin", monospace;
+  font-weight: bold;
+}
+
+#simulate {
+  height: 35px;
+  width: 135px;
+  background: #1A73E8;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  text-align: center;
+  font-family: "UniSansThin", monospace;
+  font-weight: bolder;
+}
+
+.button_icons {
+  height: 22px;
+  width: 22px;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+.ga_loading{
+  position: absolute;
+  margin:0px;
+  background-color: #010409;
+  height: 100%;
+  width: 100%;
+  z-index: 1000000000000000;
 }
