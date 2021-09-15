@@ -347,6 +347,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // POST to create new room for a user
   createEscapeRoom(ai_enabled:boolean): void{
 
+    if (ai_enabled){
+      if(this.number_of_keys<1 || this.number_of_clues<1 || this.number_of_containers<1 || this.number_of_puzzles<1 || this.number_of_puzzles>4 || this.number_of_containers>4 || this.number_of_keys>4 || this.number_of_clues>4 ){
+        this.renderAlertError('Components selected for AI need to in range of 1-4');
+        this.gaLoading=false;
+        return ;
+      }
+    }
+
     // regex to extract valid strings, removes all the spaces and allows any character
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -400,6 +408,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     console.log('num keys', this.number_of_keys);
     console.log('num clues', this.number_of_clues);
 
+
+
+    this.linearity_value='med'
+    this.complexity_value='med'
     //TODO: make a room like in function above
     // todo: then make api call
     // todo: then switch to that room
@@ -424,7 +436,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.getVertexFromRoom();
         this.solveComponent?.getInitialVertices();
         this.gaLoading=false;
+      },error =>{
+        this.getVertexFromRoom();
+        this.solveComponent?.getInitialVertices();
+        this.gaLoading=false;
       }
+
       );
 
   }
