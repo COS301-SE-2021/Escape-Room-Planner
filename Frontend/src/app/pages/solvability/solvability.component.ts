@@ -2,6 +2,7 @@ import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment";
+import {DependencyDiagramComponent} from "../dependency-diagram/dependency-diagram.component";
 
 @Component({
   selector: 'app-solvability',
@@ -17,6 +18,7 @@ export class SolvabilityComponent implements OnInit {
   private _current_room_id: any;
 
   @ViewChild("solve_div") solve_div: ElementRef | undefined;
+  @ViewChild(DependencyDiagramComponent) diagramComponent: DependencyDiagramComponent | undefined;
 
   constructor(private el : ElementRef, private httpClient: HttpClient) {
     this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
@@ -275,6 +277,10 @@ export class SolvabilityComponent implements OnInit {
     );
 
 
+  }
+
+  generateDiagram(): void {
+    this.diagramComponent?.generate();
   }
 
 }

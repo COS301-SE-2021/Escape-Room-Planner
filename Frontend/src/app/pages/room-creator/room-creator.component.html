@@ -25,7 +25,7 @@
     <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="background: #010409; margin-left: 3px" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
     <app-solvability style="position: absolute;"></app-solvability>
-    <app-dependency-diagram style="position: absolute;"></app-dependency-diagram>
+
     <!-- ESCAPE ROOMS START HERE -->
     <div class="col-sm-10 d-lg-flex remove-padding ">
       <div class="container-fluid remove-padding">
@@ -36,9 +36,6 @@
             </button>
             <button type="button" id="new-room" class="remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
               New Room
-            </button>
-            <button (click)="generateDiagram()" id="generate" class="remove-padding" type="button">
-              <img class="button_icons" src="./assets/images/structure.png" alt=""> Generate Diagram
             </button>
             <button (click)="simulate()" id="simulate" class="remove-padding" type="button">
               <img class="button_icons" src="./assets/images/simulate.png" alt=""> Simulate

@@ -64,7 +64,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("roomContextMenu") roomContextMenuRef : ElementRef | undefined;
   @ViewChild("attributeMenu") attributeMenuRef : ElementRef | undefined;
   @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
-  @ViewChild(DependencyDiagramComponent) diagramComponent: DependencyDiagramComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private roomService: RoomService,
@@ -1036,10 +1035,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }else{
       this.renderAlertError("Please set start and end vertex");
     }
-  }
-
-  generateDiagram(): void {
-    this.diagramComponent?.generate();
   }
 
   setStart() :void{

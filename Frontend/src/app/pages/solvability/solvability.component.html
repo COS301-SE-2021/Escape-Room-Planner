@@ -1,4 +1,4 @@
-<div #solve_div [hidden]="true" class="modal-body rounded border border-1 border-success bg-dark" style=" top: 50%; left: 30%; width: 50%; z-index: 10000">
+<div #solve_div [hidden]="true" class="modal-body rounded border border-1 border-success bg-dark" style=" top: 50%; left: 30%; width: 50%; z-index: 100000">
     <div class="container text-white">
       <div class="row">
         <div class="col-11"></div>
@@ -18,10 +18,10 @@
         <div class="12" id="SetupOrder" class="SetupOrder"></div>
         <div class="12" id="PossbilePaths" class="Paths to end:"></div>
         <div class="12" id="EstimatedTime" class="Estimated Time:"></div>
-        <div class="col-12">
-          <button (click)="checkSetupOrder()" class="w-100 btn btn-secondary">Setup order</button>
-        </div>
-
+        <button (click)="generateDiagram()" id="generate" class="remove-padding" type="button">
+          <img class="button_icons" src="./assets/images/structure.png" alt=""> Generate Diagram
+        </button>
+        <app-dependency-diagram class="remove-padding remove-margin"></app-dependency-diagram>
       </div>
     </div>
 </div>
