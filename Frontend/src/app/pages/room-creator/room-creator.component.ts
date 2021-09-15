@@ -33,6 +33,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public vertex_description_menu:string = "";
   public room_context_menu:boolean = true;
   public hasRooms:boolean = true;
+  public gaLoading: boolean=false;
   public hideClue:boolean = true;
   public hidePuzzle:boolean = true;
   public zoomValue: number = 1.0;
@@ -345,10 +346,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   // POST to create new room for a user
   createEscapeRoom(ai_enabled:boolean): void{
-    if (ai_enabled){
-      this.createEscapeRoomWithAI();
-      return;
-    }
+
     // regex to extract valid strings, removes all the spaces and allows any character
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -370,6 +368,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.currentRoomId = response.data.id;
           this.getVertexFromRoom();
           this.solveComponent?.getInitialVertices();
+
+          if (ai_enabled){
+            this.gaLoading=true;
+            this.createEscapeRoomWithAI();
+            return;
+          }
         },
         error => {
           if (error.status === 401){
@@ -404,6 +408,25 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     // defaults:
     // check box is unchecked
     // all the values are 1 or low
+
+    let AIReq= {
+      room_id: this.currentRoomId,
+      linear: this.linearity_value,
+      dead_nodes: this.complexity_value,
+      num_containers:this.number_of_containers,
+      num_puzzles: this.number_of_puzzles,
+      num_keys: this.number_of_keys,
+      num_clues: this.number_of_clues
+    };
+
+    this.httpClient.post<any>(environment.api + "/api/v1/genetic_algorithm/", AIReq, {"headers": this.headers}).subscribe(
+      response => {
+        this.getVertexFromRoom();
+        this.solveComponent?.getInitialVertices();
+        this.gaLoading=false;
+      }
+      );
+
   }
 
   // todo

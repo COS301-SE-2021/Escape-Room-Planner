@@ -116,3 +116,23 @@ k9_to_k12:
   to_vertex_id: 912
 
 
+#GA graph edges
+G1:
+  from_vertex_id: 201
+  to_vertex_id: 202
+
+G2:
+  from_vertex_id: 201
+  to_vertex_id: 203
+
+G3:
+  from_vertex_id: 203
+  to_vertex_id: 205
+
+G4:
+  from_vertex_id: 205
+  to_vertex_id: 204
+
+G5:
+  from_vertex_id: 204
+  to_vertex_id: 206
