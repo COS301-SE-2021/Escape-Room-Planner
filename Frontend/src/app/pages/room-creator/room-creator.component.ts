@@ -45,6 +45,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public linearity_value:string = "low";
   public complexity_value:string = "low";
 
+  private _canvas_x: number = 0; // stores width of canvas
+  private _canvas_y: number = 0; // stores height of cannvas
   private _target_room: any;
   private _target_vertex: any;
   private _target_start: any;
@@ -1201,6 +1203,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // TODO: remove from prod
   scale(): void{
     let children = this.escapeRoomDivRef?.nativeElement.childNodes;
+    //resize the main  block
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.width = this._canvas_x * this.zoomValue + 'px';
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.height = this._canvas_y * this.zoomValue + 'px';
     //  go through every html element inside canvas
     for(let child of children){
       // child.getAttribute('')
@@ -1291,7 +1298,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize')
   public test():void{
-    console.log('reere')
+    if(this.zoomValue !== 1.0)
+      return;
+
     let x = window.innerWidth;
     let y = window.innerHeight;
     let inv_elem = document.getElementById('app-inv');
@@ -1299,17 +1308,19 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let nav_elem = document.getElementsByClassName('navbar')[0];
     let extra_margin_top_element = document.getElementsByClassName('room-creator-margin-top')[0];
 
-    console.log(extra_margin_top_element)
-
     // @ts-ignore
     // moves a canvas to the left of inventory
     this.escapeRoomDivRef?.nativeElement.style.marginLeft = inv_elem.clientWidth + 'px';
     // @ts-ignore
+    this._canvas_x = x - inv_elem.clientWidth;
+    // @ts-ignore
     // makes canvas width fill the rest of the page
-    this.escapeRoomDivRef?.nativeElement.style.width = x - inv_elem.clientWidth + 'px';
+    this.escapeRoomDivRef?.nativeElement.style.width = this._canvas_x + 'px';
+    // @ts-ignore
+    this._canvas_y = y - nav_elem.clientHeight - room_list.clientHeight - 1;
     // @ts-ignore
     // makes canvas height to fill the browser window
-    this.escapeRoomDivRef?.nativeElement.style.height = y - nav_elem.clientHeight - room_list.clientHeight - 1 + 'px';
+    this.escapeRoomDivRef?.nativeElement.style.height = this._canvas_y + 'px';
 
     // @ts-ignore
     //fixing top margin
