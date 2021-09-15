@@ -43,19 +43,9 @@
   -o-transition: opacity 0.215s linear;
   transition: opacity 0.25s linear;
 }
+
 .fade.show {
   opacity: 1;
-}
-
-.room-creater-margin-top
-{
-  margin-top: 4.2%;
-  border-radius: 10px;
-}
-
-.room-creater-margin-left
-{
-  margin-left: 18.5%;
 }
 
 .dropdown-margin

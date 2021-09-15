@@ -1289,25 +1289,39 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.complexity_value = elem.value;
   }
 
-  //todo: add host listener here
+  @HostListener('window:resize')
   public test():void{
     console.log('reere')
     let x = window.innerWidth;
     let y = window.innerHeight;
     let inv_elem = document.getElementById('app-inv');
     let room_list = document.getElementById('escape-room-list');
+    let nav_elem = document.getElementsByClassName('navbar')[0];
+    let extra_margin_top_element = document.getElementsByClassName('room-creator-margin-top')[0];
 
-    console.log(this.escapeRoomDivRef?.nativeElement);
+    console.log(extra_margin_top_element)
+
     // @ts-ignore
+    // moves a canvas to the left of inventory
     this.escapeRoomDivRef?.nativeElement.style.marginLeft = inv_elem.clientWidth + 'px';
     // @ts-ignore
+    // makes canvas width fill the rest of the page
     this.escapeRoomDivRef?.nativeElement.style.width = x - inv_elem.clientWidth + 'px';
     // @ts-ignore
-    this.escapeRoomDivRef?.nativeElement.style.height = x - inv_elem.clientHeight + 'px';
+    // makes canvas height to fill the browser window
+    this.escapeRoomDivRef?.nativeElement.style.height = y - nav_elem.clientHeight - room_list.clientHeight - 1 + 'px';
+
     // @ts-ignore
+    //fixing top margin
+    extra_margin_top_element.style.marginTop = nav_elem.clientHeight + 'px';
+
+    // @ts-ignore
+    // room list positioned to the left of inventory
     room_list.style.marginLeft = inv_elem.clientWidth + 'px';
     // @ts-ignore
+    // room list width fills the browser window
     room_list.style.width = x - inv_elem.clientWidth + 'px';
+    // keep room list height the same
   }
 }
 

@@ -77,8 +77,7 @@
               "browserTarget": "NewEscapeRoomPlanner:build:production"
             },
             "development": {
-              "browserTarget": "NewEscapeRoomPlanner:build",
-              "proxyConfig": "src/proxy.conf.json"
+              "browserTarget": "NewEscapeRoomPlanner:build"
             }
           },
           "defaultConfiguration": "development"
