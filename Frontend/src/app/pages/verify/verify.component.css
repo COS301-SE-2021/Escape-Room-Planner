@@ -111,3 +111,16 @@ a:hover {
   color: var(--green);
   border-color: var(--green);
 }
+
+.resendEmail
+{
+  color: green;
+  background-color: #010409;
+  border: none
+}
+
+.resendEmail:hover
+{
+  text-decoration: underline;
+  text-underline: green;
+}
