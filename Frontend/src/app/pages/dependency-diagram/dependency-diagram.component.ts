@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, Renderer2 } fr
 import { Router } from '@angular/router';
 import { Vertex } from 'src/app/models/vertex.model';
 import { VertexService } from 'src/app/services/vertex.service';
-// import { mxGraph} from 'mxgraph';
+
 declare var mxGraph: any;
 declare var mxHierarchicalLayout: any;
 

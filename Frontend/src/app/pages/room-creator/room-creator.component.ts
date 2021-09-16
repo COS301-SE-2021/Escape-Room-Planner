@@ -404,26 +404,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // this will create a room using AI
   public createEscapeRoomWithAI():void{
-    //Patric use these values for the form stuff, also environment.api/path/to/resource for api calls
-    console.log('linearity', this.linearity_value);
-    console.log('complexity', this.complexity_value);
-    console.log('num containers', this.number_of_containers);
-    console.log('num puzzles', this.number_of_puzzles);
-    console.log('num keys', this.number_of_keys);
-    console.log('num clues', this.number_of_clues);
-
-
-
-    this.linearity_value='med'
-    this.complexity_value='med'
-    //TODO: make a room like in function above
-    // todo: then make api call
-    // todo: then switch to that room
-    // todo: if you want to, you can reset the default values of the create room modal
-    // make sure that the number values  are not null
-    // defaults:
-    // check box is unchecked
-    // all the values are 1 or low
+    this.linearity_value='med';
+    this.complexity_value='med';
 
     let AIReq= {
       room_id: this.currentRoomId,
@@ -441,6 +423,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.solveComponent?.getInitialVertices();
         this.gaLoading=false;
       },error =>{
+        console.error('no optimal graph was found');
         this.getVertexFromRoom();
         this.solveComponent?.getInitialVertices();
         this.gaLoading=false;
@@ -847,16 +830,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           if(response.status == "FAILED"){
             this.renderAlertError(response.message);
           }else {
-            // this.lines.push(new LeaderLine(this._target_vertex, to_vertex, {dash: {animation: true}}));
-            // this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
-            //
-            // this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
-            // this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
-            // this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
-            // //add event to listen to mouse event of only connected vertices
-            // to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-            // this._target_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
-            // // store on array
             this.renderLines(from_vertex_id, this._target_vertex, +to_vertex_id, to_vertex);
           }
         },
@@ -865,7 +838,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             if (this.router.routerState.snapshot.url !== '/login' &&
               this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
           }else {
-            this.renderAlertError("There was an Error Updating Vertex Position");
+            this.renderAlertError("There was an Error Updating Vertex Connections");
           }
         }
       );
@@ -1008,10 +981,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           if (this.router.routerState.snapshot.url !== '/login' &&
             this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
         }else {
-          this.renderAlertError("There was an Error Updating Vertex Position"); // todo also try to reset the old position
+          this.renderAlertError("There was an Error Updating Vertex Position");
         }
       }
-      //console.error('There was an error while updating the vertex', error)
     );
   }
 
@@ -1425,8 +1397,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
               roomid: this.currentRoomId
             };
             this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
-              response => {
-                let string_array = response.data.vertices;
+              response2 => {
+                let string_array = response2.data.vertices;
                 let int_array = [];
                 //convert to local id
                 for (let i = 0; i < string_array.length; i++) {
