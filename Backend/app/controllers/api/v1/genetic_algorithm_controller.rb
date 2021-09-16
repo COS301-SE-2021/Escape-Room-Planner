@@ -61,7 +61,7 @@ module Api
           @clue.clue = "GAClue"
           @clue.escape_room_id = room_id
           @clue.blob_id = 0
-          @clue.z_index=6
+          @clue.z_index = 6
 
           @clue.save
           i_count += 1
@@ -80,8 +80,8 @@ module Api
           @puzzle.estimatedTime = "13:03:37.726000"
           @puzzle.description = "GAPuzzle"
           @puzzle.escape_room_id = room_id
-          @puzzle.blob_id=0
-          @puzzle.z_index=6
+          @puzzle.blob_id = 0
+          @puzzle.z_index = 6
           @puzzle.save
           i_count += 1
         end
@@ -96,8 +96,8 @@ module Api
           @key.height = 60.0
           @key.graphicid = "./assets/images/key1.png"
           @key.escape_room_id = room_id
-          @key.blob_id=0
-          @key.z_index=6
+          @key.blob_id = 0
+          @key.z_index = 6
           @key.save
           i_count += 1
         end
@@ -113,8 +113,8 @@ module Api
           @container.name = "GAContainer"
           @container.graphicid = "./assets/images/con1.png"
           @container.escape_room_id = room_id
-          @container.blob_id=0
-          @container.z_index=6
+          @container.blob_id = 0
+          @container.z_index = 6
           @container.save
 
           i_count += 1
