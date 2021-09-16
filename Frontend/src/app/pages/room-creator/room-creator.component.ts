@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
@@ -10,6 +10,7 @@ import {InventoryComponent} from "../inventory/inventory.component";
 import {SolvabilityComponent} from "../solvability/solvability.component"
 import { DependencyDiagramComponent } from '../dependency-diagram/dependency-diagram.component';
 import {environment} from "../../../environments/environment";
+import {getLocaleFirstDayOfWeek} from "@angular/common";
 declare let LeaderLine: any;
 
 @Component({
@@ -46,6 +47,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public linearity_value:string = "low";
   public complexity_value:string = "low";
 
+  private _canvas_x: number = 0; // stores width of canvas
+  private _canvas_y: number = 0; // stores height of cannvas
   private _target_room: any;
   private _target_vertex: any;
   private _target_start: any;
@@ -87,6 +90,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //use for testing new functionality
     this.solveComponent?.setRoom(this.currentRoomId);
     this.solveComponent?.getInitialVertices();
+    this.test();
   }
 
 
@@ -346,6 +350,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // POST to create new room for a user
   createEscapeRoom(ai_enabled:boolean): void{
 
+    if (ai_enabled){
+      if(this.number_of_keys<1 || this.number_of_clues<1 || this.number_of_containers<1 || this.number_of_puzzles<1 || this.number_of_puzzles>4 || this.number_of_containers>4 || this.number_of_keys>4 || this.number_of_clues>4 ){
+        this.renderAlertError('Components selected for AI need to in range of 1-4');
+        this.gaLoading=false;
+        return ;
+      }
+    }
+
     // regex to extract valid strings, removes all the spaces and allows any character
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -399,6 +411,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     console.log('num keys', this.number_of_keys);
     console.log('num clues', this.number_of_clues);
 
+
+
+    this.linearity_value='med'
+    this.complexity_value='med'
     //TODO: make a room like in function above
     // todo: then make api call
     // todo: then switch to that room
@@ -423,7 +439,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.getVertexFromRoom();
         this.solveComponent?.getInitialVertices();
         this.gaLoading=false;
+      },error =>{
+        this.getVertexFromRoom();
+        this.solveComponent?.getInitialVertices();
+        this.gaLoading=false;
       }
+
       );
 
   }
@@ -1244,6 +1265,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // TODO: remove from prod
   scale(): void{
     let children = this.escapeRoomDivRef?.nativeElement.childNodes;
+    //resize the main  block
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.width = this._canvas_x * this.zoomValue + 'px';
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.height = this._canvas_y * this.zoomValue + 'px';
     //  go through every html element inside canvas
     for(let child of children){
       // child.getAttribute('')
@@ -1332,7 +1358,46 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.complexity_value = elem.value;
   }
 
-  simulate() {
+  @HostListener('window:resize')
+  public test():void{
+    if(this.zoomValue !== 1.0)
+      return;
+
+    let x = window.innerWidth;
+    let y = window.innerHeight;
+    let inv_elem = document.getElementById('app-inv');
+    let room_list = document.getElementById('escape-room-list');
+    let nav_elem = document.getElementsByClassName('navbar')[0];
+    let extra_margin_top_element = document.getElementsByClassName('room-creator-margin-top')[0];
+
+    // @ts-ignore
+    // moves a canvas to the left of inventory
+    this.escapeRoomDivRef?.nativeElement.style.marginLeft = inv_elem.clientWidth + 'px';
+    // @ts-ignore
+    this._canvas_x = x - inv_elem.clientWidth;
+    // @ts-ignore
+    // makes canvas width fill the rest of the page
+    this.escapeRoomDivRef?.nativeElement.style.width = this._canvas_x + 'px';
+    // @ts-ignore
+    this._canvas_y = y - nav_elem.clientHeight - room_list.clientHeight - 1;
+    // @ts-ignore
+    // makes canvas height to fill the browser window
+    this.escapeRoomDivRef?.nativeElement.style.height = this._canvas_y + 'px';
+
+    // @ts-ignore
+    //fixing top margin
+    extra_margin_top_element.style.marginTop = nav_elem.clientHeight + 'px';
+
+    // @ts-ignore
+    // room list positioned to the left of inventory
+    room_list.style.marginLeft = inv_elem.clientWidth + 'px';
+    // @ts-ignore
+    // room list width fills the browser window
+    room_list.style.width = x - inv_elem.clientWidth + 'px';
+    // keep room list height the same
+  }
+
+  simulate(): void {
     // TODO: change this to be called when simulate button is clicked
     if (this.vertexService.start_vertex_id === -1) {
       this.renderAlertError("Set start vertex");

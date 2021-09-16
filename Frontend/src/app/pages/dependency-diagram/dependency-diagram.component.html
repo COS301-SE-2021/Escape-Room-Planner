@@ -1,7 +1,7 @@
-  <div #graphContainer [hidden]="showDependency" class="rounded border border-3 mt-2 border-secondary">
-    <div class="container text-white"> <h2 style="text-align: center;">Dependency Diagram</h2>
+  <div id="graph" [hidden]="showDependency" class="rounded border border-3 mt-2 border-secondary">
+    <div class="container text-white">
       <div class="row">
-        <div class="col-11"></div>
+        <div class="col-11"> <h2 style="text-align: center;">Dependency Diagram</h2></div>
         <div class="col-1" id="delete_but">
           <button (click)="showDependency=true"class="text-end btn btn-dark remove-padding">
             <img src="/assets/svg/x.svg" alt="NOT FOUND">
@@ -9,4 +9,5 @@
         </div>
       </div>
   </div>
-  </div>
+  <div #graphContainer></div>
+</div>
