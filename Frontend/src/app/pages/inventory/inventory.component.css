@@ -8,9 +8,9 @@ li > .btn-link:hover{
 }
 
 .delete-button{
-  position: absolute;
-  top: 0;
-  right: 10%;
+  position: relative;
+  bottom: 80%;
+  left: 30px;
   opacity: 0.2;
   border: none;
   z-index: 2;

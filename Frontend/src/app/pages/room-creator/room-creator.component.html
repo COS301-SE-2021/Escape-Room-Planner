@@ -19,25 +19,22 @@
   <div class=" room-creator-space">
 
     <!-- INVENTORY STARTS HERE -->
-    <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="background: #010409; margin-left: 3px" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
+    <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="background: #010409; margin-left: 3px; z-index: 999999" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
     <!-- SOLVE-ABILITY STARTS HERE -->
-    <app-solvability style="position: absolute;"></app-solvability>
-    <app-dependency-diagram style="position: absolute;"></app-dependency-diagram>
+    <app-solvability style="position: absolute; left: 25%; max-height: 90vh; overflow: auto; width: 50%; z-index: 100000;"></app-solvability>
+
     <!-- ESCAPE ROOMS START HERE -->
     <div class="d-lg-flex remove-padding ">
       <div class=" remove-padding">
         <div class="row container-fluid remove-padding remove-margin">
           <div id="escape-room-list" class=" dropdown remove-padding">
-            <button class=" dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+            <button class="col-sm-8 dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
-            <button type="button" id="new-room" class="remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
+            <button type="button" id="new-room" class="col-sm-1 remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
               New Room
             </button>
-            <button (click)="generateDiagram()" id="generate" class="remove-padding" type="button">
-              <img class="button_icons" src="./assets/images/structure.png" alt=""> Generate Diagram
-            </button>
-            <button (click)="simulate()" id="simulate" class="remove-padding" type="button">
+            <button (click)="simulate()" id="simulate" class="col-sm-3 remove-padding" type="button">
               <img class="button_icons" src="./assets/images/simulate.png" alt=""> Simulate
             </button>
             <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 60vh; overflow: auto; font-weight: bold" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
@@ -212,19 +209,19 @@
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content">
+    <div class="modal-content" style="background: #363B42">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">New Escape Room</h5>
+        <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff; font-weight: bold">New Escape Room</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- warning for empty form input -->
-        <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="!newEscapeRoomNameValid">
-          <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters
-        </div>
+<!--        <div class="alert alert-warning alert-dismissible fade show" role="alert" *ngIf="!newEscapeRoomNameValid">-->
+<!--          <strong>Oof!</strong> Please give the new room a name consisting of alphanumeric characters-->
+<!--        </div>-->
         <form name="NewEscapeRoomForm">
           <div class="mb-3 form-group">
-            <label for="recipient-name" class="col-form-label">Room Name:</label>
+            <label for="recipient-name" class="col-form-label" style="color: #ffffff; font-weight: bold">Room Name:</label>
             <input type="text"
                    name="EscapeRoomName"
                    class="form-control"
@@ -232,7 +229,8 @@
                    placeholder="Some quirky name"
                    required
                    [(ngModel)]="newEscapeRoomName"
-                   (input)="isNewEscapeRoomNameValid()">
+                   (input)="isNewEscapeRoomNameValid()"
+                   style="color: #ffffff; background: #010409; font-weight: bold">
           </div>
 
           <div class="form-check form-switch">
@@ -300,7 +298,7 @@
       </div>
 
       <div class="modal-footer form-group">
-        <button class="btn btn-primary" data-bs-dismiss="modal" (click)="createEscapeRoom(AI_checkbox.checked)" [disabled]="!newEscapeRoomNameValid">Create</button>
+        <button class="btn btn-primary" data-bs-dismiss="modal"  style="background: #3BA55D" (click)="createEscapeRoom(AI_checkbox.checked)" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>
