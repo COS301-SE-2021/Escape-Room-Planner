@@ -8,18 +8,15 @@
   <div class="text-center" style="margin-top: 20rem;">
     <button data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm" class="btn btn-outline-success btn-block" style="color: white">Create Room</button>
   </div>
-
-
-
 </div>
 
 <div [hidden]="!gaLoading" class="ga_loading" style="text-align: center;"  >
   <img src="./assets/svg/GALoadingSvg.svg" width="400px" height="400px" alt="loading..." style="vertical-align: center; top: 400px">
 </div>
 
-<div  [hidden]="!backdrop_div.hidden || gaLoading"  class="container-fluid remove-padding room-creater-margin-top" (click)="hideMenus($event)">
+<div  [hidden]="!backdrop_div.hidden || gaLoading"  class="container-fluid remove-padding room-creator-margin-top" (click)="hideMenus($event)">
   <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
-  <div class="row room-creater-space">
+  <div class=" room-creator-space">
 
     <!-- INVENTORY STARTS HERE -->
     <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="background: #010409; margin-left: 3px" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
@@ -27,10 +24,10 @@
     <app-solvability style="position: absolute;"></app-solvability>
     <app-dependency-diagram style="position: absolute;"></app-dependency-diagram>
     <!-- ESCAPE ROOMS START HERE -->
-    <div class="col-sm-10 d-lg-flex remove-padding ">
-      <div class="container-fluid remove-padding">
+    <div class="d-lg-flex remove-padding ">
+      <div class=" remove-padding">
         <div class="row container-fluid remove-padding remove-margin">
-          <div class=" dropdown remove-padding dropdown-margin">
+          <div id="escape-room-list" class=" dropdown remove-padding">
             <button class=" dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
               Select Escape Room
             </button>
@@ -48,7 +45,7 @@
             </ul>
           </div>
         </div>
-        <div class="row container-fluid vh-100 ml-4 container-fluid remove-padding remove-margin room-creater-margin-left">
+        <div class="row container-fluid ml-4 remove-padding remove-margin">
           <div class="container escape-room remove-padding" id="room-plan" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
           </div>
