@@ -22,10 +22,11 @@ class SolvabilityService
   end
 
   def calculate_solvability(request)
+    return CalculateSolvableResponse.new(false, 'Parameters in request object cannot be null') if request.nil?
 
-    raise 'Solvability Request cant be null' if request.nil?
-
-    raise 'Parameters in request object cannot be null' if request.startVert.nil? || request.endVert.nil?
+    if request.startVert.nil? || request.endVert.nil?
+      return CalculateSolvableResponse.new(false, 'Parameters in request object cannot be null')
+    end
 
     @reason = 'No reason given'
     CalculateSolvableResponse.new(detect_cycle(request), @reason)
@@ -69,6 +70,17 @@ class SolvabilityService
 
   end
 
+  def longest_path(start_vert,dest_vert)
+    longest = 0
+    find_all_paths(start_vert, dest_vert)
+    return longest if (@possible_paths.nil?)
+    @possible_paths.each do |path|
+      len = (path.length / 2).round
+      longest = len if longest < len
+    end
+    longest
+  end
+
   def calculate_estimated_time(request)
 
     raise 'Solvability Request cant be null' if request.nil?
@@ -81,7 +93,7 @@ class SolvabilityService
 
     @possible_paths.each do |path|
 
-     @path_count+=1
+     @path_count += 1
      while path.index(',')
        addVertexTime(path[0, path.index(',')])
        path = path[path.index(',') + 1, path.length]
@@ -89,7 +101,7 @@ class SolvabilityService
      addVertexTime(path)
     end
 
-    CalculateEstimatedTimeResponse.new((@total_time/@path_count).round.to_s, 'success')
+    CalculateEstimatedTimeResponse.new((@total_time / @path_count).round.to_s, 'success')
   end
 
   def addVertexTime(id)

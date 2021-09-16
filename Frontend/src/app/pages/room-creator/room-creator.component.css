@@ -140,3 +140,12 @@ input::-webkit-inner-spin-button {
   justify-content: center;
   padding-bottom: 5px;
 }
+
+.ga_loading{
+  position: absolute;
+  margin:0px;
+  background-color: #010409;
+  height: 100%;
+  width: 100%;
+  z-index: 1000000000000000;
+}
