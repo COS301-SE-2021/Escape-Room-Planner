@@ -1,9 +1,6 @@
 #graph {
   top: 50%;
   left: 30%;
-  width: 50%;
-  z-index: 10000;
-  max-height: 75vh;
   overflow: auto;
   border-radius: 10px;
 }
