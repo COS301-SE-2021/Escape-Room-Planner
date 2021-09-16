@@ -53,8 +53,8 @@ module Api
 
           @clue = Clue.new
           @clue.name = "GAClue"
-          @clue.posx = rand(50..800)
-          @clue.posy = rand(50..800)
+          @clue.posx = rand(50..700)
+          @clue.posy = rand(50..700)
           @clue.width = 60.0
           @clue.height = 60.0
           @clue.graphicid = "./assets/images/clue1.png"
