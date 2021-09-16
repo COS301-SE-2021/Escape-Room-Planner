@@ -45,7 +45,7 @@ module Api
       def generateVertices(num_containers, num_puzzles, num_clues, num_keys , room_id)
         room = EscapeRoom.find_by_id(room_id)
 
-        RoomImage.create(pos_x: 0, pos_y: 0, width: 900, height: 900, blob_id: -1,
+        RoomImage.create(pos_x: 0, pos_y: 0, width: 1000, height: 1000, blob_id: -1,
                          escape_room_id: room_id)
 
         i_count = 0
