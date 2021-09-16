@@ -45,23 +45,18 @@ module Api
       def generateVertices(num_containers, num_puzzles, num_clues, num_keys , room_id)
         room = EscapeRoom.find_by_id(room_id)
 
-        @room_image = RoomImage.new
-        @room_image.pos_x = 0
-        @room_image.pos_y =0
-        @room_image.blod_id=-1
-        @room_image.width=1000
-        @room_image.height=1000
-        @room_image.save
+        RoomImage.create(pos_x: 0, pos_y: 0, width: 900, height: 900, blob_id: -1,
+                         escape_room_id: room_id)
 
         i_count = 0
         while i_count < num_clues.to_i
 
           @clue = Clue.new
           @clue.name = "GAClue"
-          @clue.posx = rand(0..1000)
-          @clue.posy = rand(0..1000)
-          @clue.width = 100.0
-          @clue.height = 100.0
+          @clue.posx = rand(50..800)
+          @clue.posy = rand(50..800)
+          @clue.width = 60.0
+          @clue.height = 60.0
           @clue.graphicid = "./assets/images/clue1.png"
           @clue.clue = "GAClue"
           @clue.escape_room_id = room_id
