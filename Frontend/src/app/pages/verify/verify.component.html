@@ -19,6 +19,13 @@
       <div class="card-text">
         <h2>We have sent you an email. Check your email for a verification link.</h2>
       </div>
+      <button routerLink="/login" class="btn btn-outline-success btn-block">Sign in</button>
     </div>
   </div>
 </div>
+
+<footer class="text-center">
+  <div class="text-center p-2" style="color: white;">Email failed to send?
+    <button (click)="resendVerifyEmail()" class="resendEmail">Resend email</button>
+  </div>
+</footer>
