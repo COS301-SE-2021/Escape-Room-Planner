@@ -1,4 +1,4 @@
-  <div id="graph" [hidden]="showDependency" class="rounded border border-3 mt-2 border-secondary">
+  <div [hidden]="showDependency" class="rounded w-100 border  border-3 mt-2 border-secondary">
     <div class="container text-white">
       <div class="row">
         <div class="col-11"> <h2 style="text-align: center;">Dependency Diagram</h2></div>
@@ -9,5 +9,6 @@
         </div>
       </div>
   </div>
-  <div #graphContainer></div>
+    <div id="graph"><div  class="container"#graphContainer></div></div>
+
 </div>
