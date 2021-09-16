@@ -75,8 +75,8 @@ input::-webkit-inner-spin-button {
 #escapeRoomsDropdown {
   margin: 4px 0px 6px 0px;
   background: #363B42;
-  border-radius: 5px 0px 0px 5px;
-  width: 720px;
+  border-radius: 5px;
+  /*width: 720px;*/
   height: 35px;
   color: white;
   outline: none;
@@ -96,7 +96,7 @@ input::-webkit-inner-spin-button {
 
 #new-room {
   height: 35px;
-  width: 100px;
+  /*width: 100px;*/
   background: #3BA55D;
   color: white;
   outline: none;
@@ -104,26 +104,28 @@ input::-webkit-inner-spin-button {
   border-radius: 5px;
   font-family: "UniSansThin", monospace;
   font-weight: bold;
+  /*margin-right: 4px;*/
 }
 
-#generate {
-  /*float: right;*/
-  height: 35px;
-  background: none;
-  outline: none;
-  border-radius: 5px;
-  border: 2px solid #3BA55D;
-  margin: 4px 8px 6px 8px;
-  color: #3BA55D;
-  text-align: center;
-  width: 180px;
-  font-family: "UniSansThin", monospace;
-  font-weight: bold;
-}
+/*#generate {*/
+/*  !*float: right;*!*/
+/*  height: 35px;*/
+/*  background: none;*/
+/*  outline: none;*/
+/*  border-radius: 5px;*/
+/*  border: 2px solid #3BA55D;*/
+/*  margin: 4px 8px 6px 8px;*/
+/*  color: #3BA55D;*/
+/*  text-align: center;*/
+/*  width: 180px;*/
+/*  font-family: "UniSansThin", monospace;*/
+/*  font-weight: bold;*/
+/*}*/
 
 #simulate {
   height: 35px;
-  width: 135px;
+  /*width: 135px;*/
+  /*margin-left: 8px;*/
   background: #1A73E8;
   outline: none;
   border: none;
@@ -139,6 +141,10 @@ input::-webkit-inner-spin-button {
   width: 22px;
   justify-content: center;
   padding-bottom: 5px;
+}
+
+.description {
+  height: 20px;
 }
 
 .ga_loading{
