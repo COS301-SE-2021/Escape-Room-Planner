@@ -153,7 +153,7 @@ export class VertexService {
   //convert array from actual id to local id
   public convertToLocalID(vertices: number[]){
     let new_vertices: number[] = [];
-    for(let i = 0; i < vertices.length; i++){
+    for(let i of vertices){
       for(let vertex of this.vertices){
         if(parseInt(String(vertex.id)) == parseInt(String(vertices[i]))){
           new_vertices.push(vertex.local_id);

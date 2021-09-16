@@ -2,7 +2,6 @@ import {
   OnInit,
   Component,
   ElementRef,
-  Input,
   HostListener,
   NgZone,
   OnDestroy,
@@ -15,8 +14,8 @@ import { RoomService } from "../../services/room.service";
 import {VertexService} from "../../services/vertex.service";
 import { Inventory } from "../../models/simulation/inventory.model";
 import { Vertex } from "../../models/vertex.model";
-import {delay, min} from "rxjs/operators";
-import {NgbModal, ModalDismissReasons, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {delay} from "rxjs/operators";
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from "@angular/router";
 
 @Component({
@@ -558,7 +557,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
       +'" title="'+vertex.name+'"  alt="NOT FOUND" class="img-thumbnail">';
   }
 
-  vertexStatus(vertex: Vertex, pre_message: String){
+  vertexStatus(vertex: Vertex, pre_message: string){
     if(!vertex.isCompleted() && !this.character_lock) {
       this.status_menu_show = false;
       this.character_lock = true;

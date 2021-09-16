@@ -1,16 +1,13 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {VertexService} from "../../services/vertex.service";
 import {RoomService} from "../../services/room.service";
 import {Router} from "@angular/router";
 // Leader Line JS library imports
 import 'leader-line';
-import {InventoryComponent} from "../inventory/inventory.component";
 import {SolvabilityComponent} from "../solvability/solvability.component"
 import { DependencyDiagramComponent } from '../dependency-diagram/dependency-diagram.component';
 import {environment} from "../../../environments/environment";
-import {getLocaleFirstDayOfWeek} from "@angular/common";
 declare let LeaderLine: any;
 
 @Component({
@@ -53,7 +50,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   private _target_vertex: any;
   private _target_start: any;
   private _target_end: any;
-  private _is_single_click: Boolean = true;
+  private _is_single_click: boolean = true;
   private isConnection = false;
   private is_disconnect = false;
   private lines:any = []; // to store lines for update and deletion
@@ -384,7 +381,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           if (ai_enabled){
             this.gaLoading=true;
             this.createEscapeRoomWithAI();
-            return;
           }
         },
         error => {

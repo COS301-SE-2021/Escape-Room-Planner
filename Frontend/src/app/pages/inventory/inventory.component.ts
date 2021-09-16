@@ -1,7 +1,5 @@
-import {Component, ElementRef, EventEmitter, isDevMode, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {toBase64String} from "@angular/compiler/src/output/source_map";
-import {File} from "@angular/compiler-cli/src/ngtsc/file_system/testing/src/mock_file_system";
 import {environment} from "../../../environments/environment";
 
 @Component({
@@ -11,12 +9,12 @@ import {environment} from "../../../environments/environment";
 })
 export class InventoryComponent implements OnInit {
   private headers: HttpHeaders = new HttpHeaders();
-  private inventory: inventory_images = [] as any;
+  private inventory: InventoryImages = [] as any;
 
-  @Output() public afterClick: EventEmitter<inventoryObject> = new EventEmitter();
-  @Output() public error: EventEmitter<inventoryObject> = new EventEmitter();
-  @Output() public checkSolvable: EventEmitter<inventoryObject> = new EventEmitter();
-  @Output() public generate: EventEmitter<inventoryObject> = new EventEmitter();
+  @Output() public afterClick: EventEmitter<InventoryObject> = new EventEmitter();
+  @Output() public error: EventEmitter<InventoryObject> = new EventEmitter();
+  @Output() public checkSolvable: EventEmitter<InventoryObject> = new EventEmitter();
+  @Output() public generate: EventEmitter<InventoryObject> = new EventEmitter();
   @ViewChild('container_div') container_div: ElementRef | undefined;
   @ViewChild('puzzle_div') puzzle_div: ElementRef | undefined;
   @ViewChild('key_div') key_div: ElementRef | undefined;
@@ -40,7 +38,7 @@ export class InventoryComponent implements OnInit {
     );
   }
 
-  public loadInventory(images: Array<image_object>): void{
+  public loadInventory(images: Array<ImageObjects>): void{
     for (let image of images){
       let blob_id = image.blob_id.toString();
       this.inventory[blob_id] = image.src;
@@ -123,7 +121,7 @@ export class InventoryComponent implements OnInit {
     if (blob_id) src = this.inventory[blob_id.toString()];
     if (blob_id === -1) src = loc;
 
-    let data: inventoryObject = {
+    let data: InventoryObject = {
       type: type,
       loc: loc,
       blob_id: blob_id,
@@ -185,12 +183,6 @@ export class InventoryComponent implements OnInit {
     }
   }
 
-  public onClickRoom(): void{
-    // todo, implement this function
-    // <img class="resize-only" src="./assets/images/room.jpg" alt="room background" id="room" draggable="false">
-    console.log('clicked room reeee');
-    return;
-  }
   //calls rooms creator check solvable
   public async checkSolve(){
     this.checkSolvable.emit();
@@ -202,7 +194,7 @@ export class InventoryComponent implements OnInit {
 
 }
 
-interface inventoryObject{
+interface InventoryObject{
   type: string,
   loc: string,
   blob_id: number | null,
@@ -210,12 +202,12 @@ interface inventoryObject{
   src: string | null
 }
 
-interface image_object{
+interface ImageObjects{
   blob_id: number,
   src: string,
   type: string
 }
 
-interface inventory_images{
+interface InventoryImages{
   [key: string]: string
 }

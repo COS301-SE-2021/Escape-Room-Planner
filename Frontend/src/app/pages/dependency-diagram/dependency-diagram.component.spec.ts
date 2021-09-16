@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DependencyDiagramComponent } from './dependency-diagram.component';
-import {RouterModule} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
 
 describe('DependencyDiagramComponent', () => {

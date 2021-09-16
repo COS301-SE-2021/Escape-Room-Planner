@@ -1,6 +1,5 @@
 import {Component, OnInit, ElementRef, ViewChild} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {environment} from "../../../environments/environment";
 
 @Component({
@@ -50,7 +49,7 @@ export class SolvabilityComponent implements OnInit {
     }
   }
 
-  checkSolvable(target_start: HTMLElement, target_end: HTMLElement, current_room_id: Number){
+  checkSolvable(target_start: HTMLElement, target_end: HTMLElement, current_room_id: number){
     this._target_start = target_start;
     this._target_end = target_end;
     this._current_room_id = current_room_id
@@ -81,7 +80,7 @@ export class SolvabilityComponent implements OnInit {
         //rendering <li> elements by using render function
         this.setSolvability(response.data.solvable);
 
-        if(response.data.solvable==false){
+        if(!response.data.solvable){
          if(response.data.reason === "No reason given"){
            window.alert('Could not find connection between objects');
          }else {
@@ -232,8 +231,7 @@ export class SolvabilityComponent implements OnInit {
     this.httpClient.post<any>(environment.api + "/api/v1/solvability/", SolvableCheck, {"headers": this.headers}).subscribe(
       response => {
         //rendering <li> elements by using render function
-        console.log(response)
-        if (response.data.solvable==true){
+        if (response.data.solvable){
         }else {
           this.setSolvability(false);
         }

@@ -1,6 +1,5 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
-import { Vertex } from 'src/app/models/vertex.model';
 import { VertexService } from 'src/app/services/vertex.service';
 
 declare var mxGraph: any;

@@ -1,7 +1,6 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {delay} from "rxjs/operators";
 import {environment} from "../../../environments/environment";
 
 @Component({

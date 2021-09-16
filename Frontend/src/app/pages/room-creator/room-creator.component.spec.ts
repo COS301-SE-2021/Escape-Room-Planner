@@ -5,7 +5,6 @@ import {HttpClientTestingModule} from "@angular/common/http/testing";
 import {RouterTestingModule} from "@angular/router/testing";
 import {VertexService} from "../../services/vertex.service";
 import 'leader-line';
-import {By} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 
 describe('RoomCreatorComponent', () => {
