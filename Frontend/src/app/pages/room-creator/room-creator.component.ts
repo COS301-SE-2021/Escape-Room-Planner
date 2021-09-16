@@ -1401,8 +1401,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     room_list.style.width = x - inv_elem.clientWidth + 'px';
     // keep room list height the same
   }
-  
-  simulate() {
+
+  simulate(): void {
     // TODO: change this to be called when simulate button is clicked
     if (this.vertexService.start_vertex_id === -1) {
       this.renderAlertError("Set start vertex");
