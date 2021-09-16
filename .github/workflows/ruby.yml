@@ -39,6 +39,7 @@ jobs:
     - name: Prepare for Backend Tests
       run: |
         sudo apt-get -yqq install libpq-dev
+        bundle lock --add-platform x86_64-linux
     
     - name: Remove  Gemfile.lock
       run: |
