@@ -36,6 +36,7 @@ export class SignupComponent implements OnInit {
 
     this.http.post<any>(environment.api + '/api/v1/user', extra_data)
       .subscribe((response)=> {
+          sessionStorage.setItem("email", data["email"]);
           this.router.navigate(['/verify']).then(r => {
             console.log("Success");
           });

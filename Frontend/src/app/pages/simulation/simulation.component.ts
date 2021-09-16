@@ -639,7 +639,6 @@ export class SimulationComponent implements OnInit, OnDestroy {
   {
     this.path_choice = path;
     this.current_path_index = 0;
-    console.log("PATH CHANGED!!!" + this.path_choice)
 
     this.modalService.dismissAll('path selected')
 
@@ -666,6 +665,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   selectNewPath()
   {
+
     this.resetRoom()
 
     this.selectPath(this.pathRef);
@@ -682,6 +682,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
     this.timer(1000);
 
+    this.resetInventory();
+
     this.resetHiddenVertices();
   }
 
@@ -695,27 +697,74 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }
   }
 
+  private resetInventory()
+  {
+    let inventory = Array.from(this.inventoryRef?.nativeElement.children)
+    for(let i = 0; i < inventory.length; i++)
+    {
+      if(i != 0)
+      {
+        // @ts-ignore
+        inventory[i].remove();
+      }
+      else
+      {
+        // @ts-ignore
+        let cols = Array.from(inventory[0].children)
+        for(let c = 0; c < cols.length; c++)
+        {
+          // @ts-ignore
+          let child = Array.from(cols[c].children)
+          if(child.length > 0)
+          {
+            // @ts-ignore
+            child[0].remove();
+          }
+        }
+      }
+    }
+    // @ts-ignore
+    this.character_inventory.items.length = 0;
+  }
+
   private resetHiddenVertices()
   {
     for(let vertices of this.vertexService.vertices) {
-
       // @ts-ignore
-      if(this.objects['vertex' + vertices.id] !== undefined )
+      if(this.objects['vertex' + vertices.local_id] !== undefined )
       {
         // @ts-ignore
-        console.log(vertices.id + this.objects['vertex' + vertices.id].visible)
-        // @ts-ignore
-        if(vertices.type === "Key" || vertices.type === "Clue")
+        if(vertices.type === "Key" || vertices.type === "Clue" || vertices.type === "Container")
         {
-          if(vertices.id === this.vertexService.start_vertex_id)
+          if(vertices.type === "Container")
           {
-            // @ts-ignore
-            this.objects['vertex' + vertices.id].visible = true;
+
+            if(vertices.getPreviousConnections())
+            {
+              for(let previous_connections of vertices.getPreviousConnections())
+              {
+                let previous_vertex = this.vertexService.vertices[previous_connections];
+                if(previous_vertex.type === "Container")
+                {
+                  // @ts-ignore
+                  this.objects['vertex' + vertices.local_id].visible = false;
+                }
+
+              }
+            }
           }
           else
           {
-            // @ts-ignore
-            this.objects['vertex' + vertices.id].visible = false;
+            if(vertices.local_id === this.vertexService.start_vertex_id)
+            {
+              // @ts-ignore
+              this.objects['vertex' + vertices.local_id].visible = true;
+            }
+            else
+            {
+              // @ts-ignore
+              this.objects['vertex' + vertices.local_id].visible = false;
+            }
           }
         }
 
