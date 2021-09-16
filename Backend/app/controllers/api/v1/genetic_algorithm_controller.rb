@@ -45,7 +45,7 @@ module Api
       def generateVertices(num_containers, num_puzzles, num_clues, num_keys , room_id)
         room = EscapeRoom.find_by_id(room_id)
 
-        RoomImage.create(pos_x: 0, pos_y: 0, width: 1100, height: 1100, blob_id: -1,
+        RoomImage.create(pos_x: 0, pos_y: 0, width: 900, height: 900, blob_id: -1,
                          escape_room_id: room_id)
 
         i_count = 0
@@ -72,10 +72,10 @@ module Api
           puts "creating puzzle"
           @puzzle = Puzzle.new
           @puzzle.name = "GAPuzzle"
-          @puzzle.posx = rand(0..1000)
-          @puzzle.posy = rand(0..1000)
-          @puzzle.width = 100.0
-          @puzzle.height = 100.0
+          @puzzle.posx = rand(50..700)
+          @puzzle.posy = rand(50..700)
+          @puzzle.width = 60.0
+          @puzzle.height = 60.0
           @puzzle.graphicid = "./assets/images/puzzle1.png"
           @puzzle.estimatedTime = "13:03:37.726000"
           @puzzle.description = "GAPuzzle"
@@ -90,10 +90,10 @@ module Api
         while i_count < num_keys.to_i
           @key = Keys.new
           @key.name = "GAKeys"
-          @key.posx = rand(0..1000)
-          @key.posy = rand(0..1000)
-          @key.width = 100.0
-          @key.height = 100.0
+          @key.posx = rand(50..700)
+          @key.posy = rand(50..700)
+          @key.width = 60.0
+          @key.height = 60.0
           @key.graphicid = "./assets/images/key1.png"
           @key.escape_room_id = room_id
           @key.blob_id=0
@@ -106,10 +106,10 @@ module Api
         i_count = 0
         while i_count < num_containers.to_i
           @container = Container.new
-          @container.posx = rand(0..1000)
-          @container.posy = rand(0..1000)
-          @container.width = 100.0
-          @container.height = 100.0
+          @container.posx = rand(50..700)
+          @container.posy = rand(50..700)
+          @container.width = 60.0
+          @container.height = 60.0
           @container.name = "GAContainer"
           @container.graphicid = "./assets/images/con1.png"
           @container.escape_room_id = room_id
