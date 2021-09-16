@@ -107,6 +107,70 @@ describe('InventoryComponent', () => {
       .toBe(image_room.blob_id.toString());
   });
 
+  it('#onClick method with blob_id emits data', () => {
+    let data = {
+      type: image_room.type,
+      loc: '',
+      blob_id: image_room.blob_id,
+      pos: 10,
+      src: undefined
+    }
+    spyOn(component.afterClick, 'emit');
+    component.onClick(image_room.type, '', image_room.blob_id, 10);
+    expect(component.afterClick.emit).toHaveBeenCalledWith(data);
+  });
+
+  it('#onClick method with default blob-id emits data', () => {
+    let data = {
+      type: image_room.type,
+      loc: image_room.src,
+      blob_id: -1,
+      pos: 10,
+      src: image_room.src
+    }
+    spyOn(component.afterClick, 'emit');
+    component.onClick(image_room.type, image_room.src, -1, 10);
+    expect(component.afterClick.emit).toHaveBeenCalledWith(data);
+  });
+
+  it('#deleteImage method removes element', () => {
+    //create html element
+    let html: HTMLElement = document.createElement('div');
+    html.setAttribute('blob-id', '1');
+    //spy on html element
+    spyOn(html, 'remove');
+    component.deleteImage(html);
+    //constructor api call
+    const get = httpTestingController.expectOne(URl);
+    //delete api call
+    const req = httpTestingController.expectOne(URl+'1');
+    expect(req.request.method).toEqual('DELETE');
+    req.flush('success');
+    //expect removed html element
+    expect(html.remove).toHaveBeenCalled();
+    httpTestingController.verify();
+  });
+
+  it('#deleteImage method has network error should emit error', () => {
+    //create html element
+    let html: HTMLElement = document.createElement('div');
+    html.setAttribute('blob-id', '1');
+    //spy on error Event Emitter
+    spyOn(component.error, 'emit');
+    component.deleteImage(html);
+    const req = httpTestingController.expectOne(URl+'1');
+    req.error(new ErrorEvent('network error'));
+    //check if error event been emited
+    expect(component.error.emit).toHaveBeenCalled();
+  });
+
+  it('#deleteImage method has network error should emit error', () => {
+    spyOn(component.checkSolvable, 'emit');
+    component.checkSolve();
+    expect(component.checkSolvable.emit).toHaveBeenCalled();
+  });
+
+
 });
 
 interface image_object {
