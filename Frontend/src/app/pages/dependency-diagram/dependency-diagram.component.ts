@@ -18,7 +18,9 @@ export class DependencyDiagramComponent implements OnInit {
 
   constructor(private vertexService: VertexService, private router: Router, private renderer: Renderer2) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // intentionally empty
+  }
 
   @ViewChild('graphContainer') graphContainer!: ElementRef;
 

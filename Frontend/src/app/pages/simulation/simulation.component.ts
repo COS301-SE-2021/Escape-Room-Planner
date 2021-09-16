@@ -180,7 +180,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
         if(bounds1.x - bounds1.width/2 <= bounds2.x)
           this.character.x -= 0;
         else
-        this.character.x -= 5;
+          this.character.x -= 5;
 
       }
       if (this.movement.w) {

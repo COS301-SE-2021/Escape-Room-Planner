@@ -13,6 +13,7 @@ export class LoginComponent implements OnInit {
   constructor(private http:HttpClient, private router:Router) { }
 
   ngOnInit() {
+    // intentionally empty
   }
 
   display = 'none';

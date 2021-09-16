@@ -12,7 +12,10 @@ import {environment} from "../../../environments/environment";
 export class SignupComponent implements OnInit {
 
   constructor(private http:HttpClient, private router:Router) { }
-  ngOnInit(): void {}
+  ngOnInit(): void {
+   // intentionally empty
+  }
+
   display = 'none';
   errorMessage = "";
 

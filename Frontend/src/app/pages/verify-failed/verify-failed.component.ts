@@ -13,6 +13,7 @@ export class VerifyFailedComponent implements OnInit {
   constructor(private http:HttpClient, private router:Router) { }
 
   ngOnInit(): void {
+    // empty intentionally
   }
 
   onSubmit(data:any) {

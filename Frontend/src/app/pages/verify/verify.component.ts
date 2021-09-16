@@ -15,6 +15,7 @@ export class VerifyComponent implements OnInit {
   display = 'none';
 
   ngOnInit(): void {
+    // It is empty because we dont need to use it
   }
 
   onSubmit(data:any) {
