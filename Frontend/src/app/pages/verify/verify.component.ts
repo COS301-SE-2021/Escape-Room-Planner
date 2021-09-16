@@ -33,4 +33,20 @@ export class VerifyComponent implements OnInit {
           this.display = 'block';
         })
   }
+
+  resendVerifyEmail()
+  {
+    let extra_data = {
+      email: sessionStorage.getItem("email"),
+      operation: 'Verify Account'
+    };
+
+    this.http.post<any>(environment.api + '/api/v1/notification', extra_data)
+      .subscribe((response) => {
+          console.log("successful");
+        },
+        error => {
+          alert("Error sending the email please try again")
+        })
+  }
 }

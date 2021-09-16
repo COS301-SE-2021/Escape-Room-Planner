@@ -11,10 +11,16 @@ import {Puzzle} from "../models/puzzle.model";
 export class VertexService {
   private _local_id_count: number;
   private _vertices : Vertex[];
+  private _start_vertex_id: number;
+  private _end_vertex_id: number;
+  private _possible_paths: number[][];
 
   constructor() {
     this._vertices = [];
     this._local_id_count = 0;
+    this._start_vertex_id = -1;
+    this._end_vertex_id = -1;
+    this._possible_paths = [];
   }
 
   addVertex(inId:number, inType: string, inName: string, inGraphicID: string,
@@ -53,7 +59,32 @@ export class VertexService {
     return this._vertices;
   }
 
+  get start_vertex_id(): number {
+    return this._start_vertex_id;
+  }
+
+  set start_vertex_id(value: number) {
+    this._start_vertex_id = value;
+  }
+
+  get end_vertex_id(): number {
+    return this._end_vertex_id;
+  }
+
+  set end_vertex_id(value: number) {
+    this._end_vertex_id = value;
+  }
+
+  get possible_paths(): number[][] {
+    return this._possible_paths;
+  }
+
+  set possible_paths(value: number[][]) {
+    this._possible_paths = value;
+  }
+
   public reset_array(){
+    this._possible_paths = [];
     this._vertices = [];
     this._local_id_count = 0;
   }
@@ -61,6 +92,11 @@ export class VertexService {
   //adds connection to from vertex
   public addVertexConnection(from_vertex_id: number, to_vertex_id: number){
     this._vertices[from_vertex_id].addConnection(to_vertex_id);
+  }
+
+  //adds connection to from vertex
+  public addVertexPreviousConnection(to_vertex_id: number, from_vertex_id: number){
+    this._vertices[to_vertex_id].addPreviousConnection(from_vertex_id);
   }
 
   //adds connected line to from vertex
@@ -97,6 +133,13 @@ export class VertexService {
     if (index !== -1) this._vertices[vertex_id].removeResponsibleLine(index);
   }
 
+  //removes previous connection from index in vertex previous connection array
+  public removeVertexPreviousConnection(vertex_id: number, previous_vertex_id: number){
+    let index = this._vertices[vertex_id].getPreviousConnections().indexOf(previous_vertex_id);
+    if (index !== -1) this._vertices[vertex_id].removePreviousConnection(index);
+    console.log(this._vertices[vertex_id].getPreviousConnections());
+  }
+
   //returns what lines need to be updated in an array
   public getLineIndex(vertex_id: number){
     return this._vertices[vertex_id].getConnectedLines().concat(this._vertices[vertex_id].getResponsibleLines());
@@ -107,4 +150,25 @@ export class VertexService {
    return this._vertices[vertex_id].getConnections();
   }
 
+  //convert array from actual id to local id
+  public convertToLocalID(vertices: number[]){
+    let new_vertices: number[] = [];
+    for(let i = 0; i < vertices.length; i++){
+      for(let vertex of this.vertices){
+        if(parseInt(String(vertex.id)) == parseInt(String(vertices[i]))){
+          new_vertices.push(vertex.local_id);
+          break;
+        }
+      }
+    }
+    return new_vertices;
+  }
+
+  public resetCompletedVertices()
+  {
+    for(let vertex of this.vertices)
+    {
+      vertex.resetCompleted();
+    }
+  }
 }

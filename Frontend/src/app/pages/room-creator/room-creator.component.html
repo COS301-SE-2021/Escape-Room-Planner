@@ -1,4 +1,4 @@
-<div #backdrop_div [hidden]="hasRooms" class="container-fluid remove-padding border-top border-secondary">
+<div #backdrop_div [hidden]="hasRooms" class="container-fluid remove-padding border-top border-secondary" style="margin-top: 5%">
   <div class="text-center">
     <img src="./assets/svg/key_logo.svg" draggable="false" alt="NOT FOUND">
   </div>
@@ -6,13 +6,17 @@
     <h1>Begin Your Experience</h1>
   </div>
   <div class="text-center" style="margin-top: 20rem;">
-    <button data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm" class="btn btn-outline-success btn-block">Create Room</button>
+    <button data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm" class="btn btn-outline-success btn-block" style="color: white">Create Room</button>
   </div>
-
 </div>
-<div  [hidden]="!backdrop_div.hidden"  class="container-fluid remove-padding room-creater-margin-top" (click)="hideMenus($event)">
+
+<div [hidden]="!gaLoading" class="ga_loading" style="text-align: center;"  >
+  <img src="./assets/svg/GALoadingSvg.svg" width="400px" height="400px" alt="loading..." style="vertical-align: center; top: 400px">
+</div>
+
+<div  [hidden]="!backdrop_div.hidden || gaLoading"  class="container-fluid remove-padding room-creator-margin-top" (click)="hideMenus($event)">
   <div class="container-fluid remove-padding" #alertElementError></div>   <!-- ERROR ALERT MESSAGE -->
-  <div class="row room-creater-space">
+  <div class=" room-creator-space">
 
     <!-- INVENTORY STARTS HERE -->
     <app-inventory id="app-inv" class="col-sm-2 d-sm-flex position-fixed inventory-depth" style="background: #010409; margin-left: 3px" (afterClick)="addObjects($event)" (error)="renderAlertError('Can\'t load the inventory')" (checkSolvable)="checkSolvable()"></app-inventory>
@@ -20,25 +24,28 @@
     <app-solvability style="position: absolute;"></app-solvability>
     <app-dependency-diagram style="position: absolute;"></app-dependency-diagram>
     <!-- ESCAPE ROOMS START HERE -->
-    <div class="col-sm-10 d-lg-flex remove-padding ">
-      <div class="container-fluid remove-padding">
+    <div class="d-lg-flex remove-padding ">
+      <div class=" remove-padding">
         <div class="row container-fluid remove-padding remove-margin">
-          <div class="dropdown remove-padding dropdown-margin">
-              <button class="col-sm-8  dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-                Select Escape Room
-              </button>
-              <button type="button" id="new-room" class="col-sm-1 remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
-                New Room
-              </button>
-              <button id="simulate" class="col-sm-3  remove-padding" type="button">
-                <img class="button_icons" src="./assets/images/simulate.png" alt=""> Simulate
-              </button>
+          <div id="escape-room-list" class=" dropdown remove-padding">
+            <button class="col-sm-8 dropdown-toggle remove-padding" type="button" id="escapeRoomsDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+              Select Escape Room
+            </button>
+            <button type="button" id="new-room" class="col-sm-1 remove-padding" data-bs-toggle="modal" data-bs-target="#newEscapeRoomForm">
+              New Room
+            </button>
+            <button (click)="generateDiagram()" id="generate" class="remove-padding" type="button">
+              <img class="button_icons" src="./assets/images/structure.png" alt=""> Generate Diagram
+            </button>
+            <button (click)="simulate()" id="simulate" class="col-sm-3 remove-padding" type="button">
+              <img class="button_icons" src="./assets/images/simulate.png" alt=""> Simulate
+            </button>
             <ul id="droppy" class="dropdown-menu remove-padding bg-dark" style="max-height: 60vh; overflow: auto; font-weight: bold" aria-labelledby="escapeRoomsDropdown" #EscapeRoomList>
               <!-- INSERTS CREATED ROOMS HERE -->
             </ul>
           </div>
         </div>
-        <div class="row container-fluid vh-100 ml-4 container-fluid remove-padding remove-margin room-creater-margin-left">
+        <div class="row container-fluid ml-4 remove-padding remove-margin">
           <div class="container escape-room remove-padding" id="room-plan" #escapeRoomDiv>
             <!--  INSERTS DRAGGABLE OBJECTS HERE  -->
           </div>
@@ -197,7 +204,7 @@
 
 <div  class="container-sm position-fixed w-25 bottom-0 end-0" style="z-index: 99999" [hidden]="_room_count === 0">
   <label for="customRange1" class="form-label" style="color: #ffffff;" #zoom_label>Scale: {{zoomValue.toFixed(2)}}</label>
-  <input type="range" class="form-range" id="customRange1" min="0.2" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="scale()">
+  <input type="range" class="form-range" id="customRange1" min="1.0" max="5.0" step="0.1" [defaultValue]="1" #zoom (input)="updateZoomValue(zoom.value, zoom_label)" (change)="scale()">
   <label for="show-names" class="form-label" style="color: #ffffff; padding-bottom: 5px;">Show names</label>
   <input type="checkbox" id="show-names" (change)="displayNames()" style="margin-left: 5px;">
 </div>
@@ -228,11 +235,73 @@
                    (input)="isNewEscapeRoomNameValid()"
                    style="color: #ffffff; background: #010409; font-weight: bold">
           </div>
+
+          <div class="form-check form-switch">
+<!--            i don't know why, but i need this (click) right where it is-->
+            <input #AI_checkbox class="form-check-input" type="checkbox" id="AI_checkbox" (click)="AI_checkbox">
+            <label class="form-check-label" for="AI_checkbox">Generate using AI</label>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-body">
+        <form name="AI_details" [hidden]="!AI_checkbox.checked">
+<!--          number of vertices here-->
+          <div class="mb-3 form-group">
+            <div class="mb-3">
+              <label for="number_of_containers" class="col-form-label">Containers:</label>
+              <input type="number" name="containers" class="form-control" id="number_of_containers" value="1" [(ngModel)]="number_of_containers">
+            </div>
+            <div class="mb-3">
+              <label for="number_of_puzzles" class="col-form-label">Puzzles:</label>
+              <input type="number" name="containers" class="form-control" id="number_of_puzzles" value="1" [(ngModel)]="number_of_puzzles">
+            </div>
+            <div class="mb-3">
+              <label for="number_of_keys" class="col-form-label">Keys:</label>
+              <input type="number" name="containers" class="form-control" id="number_of_keys" value="1" [(ngModel)]="number_of_keys">
+            </div>
+            <div class="mb-3">
+              <label for="number_of_clues" class="col-form-label">Clues:</label>
+              <input type="number" name="containers" class="form-control" id="number_of_clues" value="1" [(ngModel)]="number_of_clues">
+            </div>
+          </div>
+<!--          the linearity of graph settings-->
+          <fieldset class="mb-3 form-group">
+            <legend class="col-form-label col-sm-2 pt-0">Linearity:</legend>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="linearity" id="linearity_low" value="low" [checked]="true" #lin_1 (change)="changeLinearityValue(lin_1)">
+              <label class="form-check-label" for="linearity_low">low</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="linearity" id="linearity_medium" value="medium" #lin_2 (change)="changeLinearityValue(lin_2)">
+              <label class="form-check-label" for="linearity_medium">medium</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="linearity" id="linearity_high" value="high" #lin_3 (change)="changeLinearityValue(lin_3)">
+              <label class="form-check-label" for="linearity_high">high</label>
+            </div>
+          </fieldset>
+<!--          dead ends for ai graph-->
+          <fieldset class="mb-3 form-group">
+            <legend class="col-form-label col-sm-2 pt-0">Complexity:</legend>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="dead_ends" id="dead_ends_low" value="low" [checked]="true" #comp_1 (change)="changeComplexityValue(comp_1)">
+              <label class="form-check-label" for="dead_ends_low">low</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="dead_ends" id="dead_ends_medium" value="medium" #comp_2 (change)="changeComplexityValue(comp_2)">
+              <label class="form-check-label" for="dead_ends_medium">medium</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="dead_ends" id="dead_ends_high" value="high" #comp_3 (change)="changeComplexityValue(comp_3)">
+              <label class="form-check-label" for="dead_ends_high">high</label>
+            </div>
+          </fieldset>
         </form>
       </div>
 
       <div class="modal-footer form-group">
-        <button class="btn btn-primary"  style="background: #3BA55D" data-bs-dismiss="modal" (click)="createEscapeRoom()" [disabled]="!newEscapeRoomNameValid">Create</button>
+        <button class="btn btn-primary" data-bs-dismiss="modal"  style="background: #3BA55D" (click)="createEscapeRoom(AI_checkbox.checked)" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>
