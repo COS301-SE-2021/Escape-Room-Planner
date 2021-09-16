@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Vertex } from 'src/app/models/vertex.model';
 import { VertexService } from 'src/app/services/vertex.service';
@@ -16,7 +16,7 @@ export class DependencyDiagramComponent implements OnInit {
 
   public showDependency = true;
 
-  constructor(private vertexService: VertexService, private router: Router) {}
+  constructor(private vertexService: VertexService, private router: Router, private renderer: Renderer2) {}
 
   ngOnInit() {}
 
@@ -25,6 +25,7 @@ export class DependencyDiagramComponent implements OnInit {
   // @ts-ignore
   generate() {
     this.showDependency = false;
+    this.graphContainer.nativeElement.innerHTML = "";
     const graph = new mxGraph(this.graphContainer.nativeElement);
     try {
       const parent = graph.getDefaultParent();
@@ -32,8 +33,10 @@ export class DependencyDiagramComponent implements OnInit {
 
       let graphVertices = [];
       // Create and store all the graph vertices
-      for (let vertex of this.vertexService.vertices)
-        graphVertices.push(graph.insertVertex(parent, vertex.local_id, vertex.type, 0, 0, 60, 80));
+      for (let vertex of this.vertexService.vertices) {
+        if (vertex.exists())
+          graphVertices.push(graph.insertVertex(parent, vertex.local_id, vertex.type, 0, 0, 60, 80));
+      }
 
       // Loop through all the graph vertices
       for (let vertex1 of graphVertices) {
@@ -61,6 +64,7 @@ export class DependencyDiagramComponent implements OnInit {
       layout.intraCellSpacing=20;
       layout.interRankCellSpacing=65;
       layout.execute(graph.getDefaultParent());
+      graph.setEnabled(false);
     }
   }
 }
