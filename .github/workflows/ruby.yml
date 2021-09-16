@@ -43,7 +43,7 @@ jobs:
     - name: Remove  Gemfile.lock
       run: |
         sudo rm Gemfile.lock
-      if: contains(github.ref, 'master') && github.event_name == 'push'
+      if: contains(github.ref, 'master')
     
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
