@@ -581,7 +581,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
-    let newP = this.renderer.createElement("p");
+    let newP = this.renderer.createElement("p"); // create the name tag
     let newObject = this.renderer.createElement("img"); // create image
     // * zoomValue to get the zoomed representation
     if(local_id === this._target_start) {
@@ -705,6 +705,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newRoomImage,"user-select", "none");
     this.renderer.setStyle(newRoomImage,"transform",'translate('+ x +'px, '+ y +'px)');
     this.renderer.setStyle(newRoomImage,"z-index",0);
+    this.renderer.setStyle(newRoomImage,"opacity",0.6);
     // Setting all needed attributes
     this.renderer.setAttribute(newRoomImage,'room-image-id', id.toString());
     this.renderer.setAttribute(newRoomImage,"src", src);
@@ -1202,6 +1203,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+vertex.id, updateVertexZ, {"headers": this.headers}).subscribe(
       response => {
         this.vertexService.vertices[local_id].z_index = this._target_vertex_z_index; // saves in service
+        // @ts-ignore
+        document.getElementById('tag-'+local_id).style.zIndex = String(this._target_vertex_z_index);
         this._target_vertex.style.zIndex = this._target_vertex_z_index; // update view
       },
       error => {
@@ -1213,7 +1216,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.renderAlertError("There was an Error Updating Vertex Z position");
         }
       }
-      //console.error('There was an error while updating the vertex', error)
     );
   }
 
