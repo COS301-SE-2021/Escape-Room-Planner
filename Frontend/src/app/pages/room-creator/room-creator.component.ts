@@ -1439,7 +1439,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
                     line.remove();
                 }
                 this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
-                this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
+                if(this.roomService.outOfBounds.length === 0)
+                  this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
+                else
+                  this.renderAlertError("Cannot simulate when objects are outside rooms");
+
               },
               error => {
                 console.error('', error)
