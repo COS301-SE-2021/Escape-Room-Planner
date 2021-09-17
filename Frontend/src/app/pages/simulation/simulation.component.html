@@ -1,4 +1,64 @@
 <div  class="container">
+  <ng-template #help let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Help</h4>
+    </div>
+    <div  class="modal-body">
+      <div>
+        <h4>Manual:</h4>
+        <div class="m-2">
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">A</span>
+            <span class=" col-6">Move left</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">W</span>
+            <span class=" col-6">Move up</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">S</span>
+            <span class=" col-6">Move down</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">D</span>
+            <span class=" col-6">Move right</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">E</span>
+            <span class=" col-6">Interact with object</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">I</span>
+            <span class=" col-6">Open Invetory</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">F</span>
+            <span class=" col-6">Change between unlocked rooms</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">H</span>
+            <span class=" col-6">Open Help Menu</span>
+          </div>
+        </div>
+        <h4>Auto Sim:</h4>
+        <div class="m-2">
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">Q</span>
+            <span class=" col-6">Open auto-simulation menu</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">T</span>
+            <span class=" col-6">Stop auto-simulation menu</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark custom-btn" (click)="modal.close('Save click')">exit</button>
+    </div>
+  </ng-template>
+</div>
+<div  class="container">
   <ng-template #path let-modal>
     <div class="modal-header">
       <h4 class="modal-title">Select Path</h4>

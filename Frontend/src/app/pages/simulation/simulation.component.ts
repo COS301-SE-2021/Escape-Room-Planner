@@ -65,6 +65,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   //select path variables
   closeResult = '';
   @ViewChild("path") pathRef: NgbModal | undefined;
+  @ViewChild("help") helpRef: NgbModal | undefined;
   @ViewChild("escapeRoomCompleted") escapeRoomCompletedRef: NgbModal | undefined;
 
 
@@ -146,6 +147,14 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.movement.w = false;
       this.movement.s = false;
       this.simulate_toggle = !this.simulate_toggle;
+    }
+    else if(event.code === 'KeyH')
+    {
+      this.movement.a = false;
+      this.movement.d = false;
+      this.movement.w = false;
+      this.movement.s = false;
+      this.selectPath(this.helpRef);
     }
 
   }
@@ -275,12 +284,15 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.app.loader.onComplete.add(()=>{
       //  this.messageMenu("Room loaded");
         this.loadRooms();
+
+        this.help(this.helpRef);
       });
       //shows error when loading
       this.app.loader.onError.add((e) => {
         console.log(e.message);
       });
       this.app.loader.load();
+
     }
   }
 
@@ -653,6 +665,15 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
     this.renderPathModal();
+  }
+
+  help(content: any)
+  {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', centered: true, windowClass: 'dark-modal',size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   escapeRoomCompleted(content: any)
