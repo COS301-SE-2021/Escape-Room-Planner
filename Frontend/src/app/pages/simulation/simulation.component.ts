@@ -637,6 +637,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   setPath(path: number)
   {
+    this.resetRoom();
     this.path_choice = path;
     this.current_path_index = 0;
 
@@ -671,6 +672,17 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this.selectPath(this.pathRef);
   }
 
+  resetManualRoom()
+  {
+    this.resetRoom();
+    let room_index = this.findRoomHoldsVertex(this.vertexService.start_vertex_id);
+    // @ts-ignore
+    if(room_index !== this.current_room_index && this.roomService.room_images[room_index].unlocked){
+      // @ts-ignore
+      this.showRoom(room_index);
+    }
+  }
+
    resetRoom()
   {
     this.modalService.dismissAll('New Path selected');
@@ -685,6 +697,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this.resetInventory();
 
     this.resetHiddenVertices();
+    this.resetUnlockedRooms();
   }
 
   private getDismissReason(reason: any): string {
@@ -771,6 +784,20 @@ export class SimulationComponent implements OnInit, OnDestroy {
       }
     }
 
+  }
+
+  private resetUnlockedRooms()
+  {
+
+    let curr_rooms = this.roomService.room_images;
+
+    for(let i = 0; i < this.roomService.room_images.length; i++)
+    {
+      if(i !== this.findRoomHoldsVertex(this.vertexService.start_vertex_id))
+      {
+        curr_rooms[i].unlocked = false;
+      }
+    }
   }
 
   private renderPathModal()
