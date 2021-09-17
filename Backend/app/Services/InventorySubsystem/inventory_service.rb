@@ -22,7 +22,7 @@ class InventoryService
                   blob = user.graphic.blobs.last
                   inventory_type = InventoryType.new
                   inventory_type.image_type = request.type
-                  inventory_type.active_storage_blobs_id = blob.id
+                  inventory_type.blob_id = blob.id
                   inventory_type.save
                   data =
                     { blob_id: blob.id,
@@ -45,7 +45,7 @@ class InventoryService
                 else
                   image = user.graphic.blobs
                   image = image.map do |blob|
-                    inventory_type = InventoryType.find_by_active_storage_blobs_id(blob.id)
+                    inventory_type = InventoryType.find_by_blob_id(blob.id)
                     {
                       blob_id: blob.id,
                       src: Rails.application.routes.url_helpers.polymorphic_url(blob, host:
@@ -70,7 +70,7 @@ class InventoryService
     @response = if user.nil?
                   DeleteGraphicResponse.new(false, 'User can not be found')
                 else
-                  inventory_type = InventoryType.find_by_active_storage_blobs_id(request.blob_id)
+                  inventory_type = InventoryType.find_by_blob_id(request.blob_id)
                   user.graphic.where(blob_id: request.blob_id).purge
                   inventory_type.destroy unless inventory_type.nil?
                   DeleteGraphicResponse.new(true, 'Graphic been deleted')

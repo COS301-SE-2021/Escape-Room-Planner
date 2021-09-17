@@ -7,11 +7,11 @@
 one:
   id: 1
   image_type: 'container'
-  active_storage_blobs_id: 1
+  blob_id: 0
 # column: value
 #
 two:
   id: 2
   image_type: 'container'
-  active_storage_blobs_id: 1
+  blob_id: 1
 # column: value
