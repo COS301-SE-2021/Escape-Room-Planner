@@ -4,11 +4,6 @@ module Api
       protect_from_forgery with: :null_session
       skip_before_action :verify_authenticity_token
 
-      def index
-        users = User.all
-        render json: {status: 'SUCCESS', message: 'Users', data: users}, status: :ok
-      end
-
       def create
         username = params[:username]
         password = params[:password_digest]

@@ -189,21 +189,10 @@ export class InventoryComponent implements OnInit {
     }
   }
 
-  public onClickRoom(): void{
-    // todo, implement this function
-    // <img class="resize-only" src="./assets/images/room.jpg" alt="room background" id="room" draggable="false">
-    console.log('clicked room reeee');
-    return;
-  }
   //calls rooms creator check solvable
   public async checkSolve(){
     this.checkSolvable.emit();
   }
-
-  public async generateDiagram() {
-    this.generate.emit();
-  }
-
 }
 
 interface inventoryObject{
@@ -211,7 +200,7 @@ interface inventoryObject{
   loc: string,
   blob_id: number | null,
   pos: number,
-  src: string | null
+  src: string | null | undefined
 }
 
 interface image_object{
