@@ -936,7 +936,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let x_pos = this._target_vertex.width + Number(this._target_vertex.getAttribute("data-x"));
     let y_pos = this._target_vertex.getAttribute("data-y");
 
-    this.resetAttributeMenuValue();
+    this.resetAttributeMenuValue(null);
     this.vertex_name_menu = vertex.name;
     let min = ~~(vertex.estimated_time/60);
     let sec = vertex.estimated_time%60;
@@ -1258,7 +1258,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
       response => {
         if (response.success){
-          this.resetAttributeMenuValue();
+          this.resetAttributeMenuValue(data);
         }else{
           this.renderAlertError(response.message);
         }
@@ -1333,7 +1333,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  resetAttributeMenuValue(){
+  resetAttributeMenuValue(data: any){
     // @ts-ignore
     document.getElementsByName("attribute_name")[0].value = "";
     // @ts-ignore
@@ -1344,6 +1344,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     document.getElementsByName("attribute_clue")[0].value = "";
     // @ts-ignore
     document.getElementsByName("attribute_description")[0].value = "";
+
+    if (data != null){
+      data['attribute_name'] = '';
+      data['attribute_min'] = '';
+      data['attribute_sec'] = '';
+      data['attribute_clue'] = '';
+      data['attribute_description'] = '';
+    }
   }
 
   removeRoom(){
