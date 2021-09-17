@@ -93,8 +93,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.test();
   }
 
-
-
   // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
@@ -234,8 +232,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.getVertexFromRoom();
     this.solveComponent?.getInitialVertices();
   }
-
-
 
   // todo
   //Get to get all vertex for room
@@ -407,26 +403,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // this will create a room using AI
   public createEscapeRoomWithAI():void{
-    //Patric use these values for the form stuff, also environment.api/path/to/resource for api calls
-    console.log('linearity', this.linearity_value);
-    console.log('complexity', this.complexity_value);
-    console.log('num containers', this.number_of_containers);
-    console.log('num puzzles', this.number_of_puzzles);
-    console.log('num keys', this.number_of_keys);
-    console.log('num clues', this.number_of_clues);
-
-
-
     this.linearity_value='med'
     this.complexity_value='med'
-    //TODO: make a room like in function above
-    // todo: then make api call
-    // todo: then switch to that room
-    // todo: if you want to, you can reset the default values of the create room modal
-    // make sure that the number values  are not null
-    // defaults:
-    // check box is unchecked
-    // all the values are 1 or low
 
     let AIReq= {
       room_id: this.currentRoomId,
@@ -438,7 +416,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       num_clues: this.number_of_clues
     };
 
-    this.httpClient.post<any>(environment.api + "/api/v1/genetic_algorithm/", AIReq, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api_ga + "/api/v1/genetic_algorithm/", AIReq, {"headers": this.headers}).subscribe(
       response => {
         // @ts-ignore
         this.escapeRoomDivRef?.nativeElement.textContent = "";
@@ -484,7 +462,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.addClass(newButton, 'btn');
     this.renderer.addClass(newButton, 'btn-dark');
     this.renderer.appendChild(newButton, newImage);
-    this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event))
+    this.renderer.setAttribute(newButton,'escape-room-id',id.toString());
+    this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event));
 
     //add bootstrap class to <div col2>
     this.renderer.addClass(newDivCol2, 'col-1');
@@ -584,7 +563,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
-    let newP = this.renderer.createElement("p");
+    let newP = this.renderer.createElement("p"); // create the name tag
     let newObject = this.renderer.createElement("img"); // create image
     // * zoomValue to get the zoomed representation
     if(local_id === this._target_start) {
@@ -708,6 +687,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setStyle(newRoomImage,"user-select", "none");
     this.renderer.setStyle(newRoomImage,"transform",'translate('+ x +'px, '+ y +'px)');
     this.renderer.setStyle(newRoomImage,"z-index",0);
+    this.renderer.setStyle(newRoomImage,"opacity",0.6);
     // Setting all needed attributes
     this.renderer.setAttribute(newRoomImage,'room-image-id', id.toString());
     this.renderer.setAttribute(newRoomImage,"src", src);
@@ -880,7 +860,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   }
 
-  // todo, test by rendering a function and clicking on a make connections
+  // todo
   private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
     this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
@@ -938,7 +918,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let x_pos = this._target_vertex.width + Number(this._target_vertex.getAttribute("data-x"));
     let y_pos = this._target_vertex.getAttribute("data-y");
 
-    this.resetAttributeMenuValue();
+    this.resetAttributeMenuValue(null);
     this.vertex_name_menu = vertex.name;
     let min = ~~(vertex.estimated_time/60);
     let sec = vertex.estimated_time%60;
@@ -1205,6 +1185,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+vertex.id, updateVertexZ, {"headers": this.headers}).subscribe(
       response => {
         this.vertexService.vertices[local_id].z_index = this._target_vertex_z_index; // saves in service
+        // @ts-ignore
+        document.getElementById('tag-'+local_id).style.zIndex = String(this._target_vertex_z_index);
         this._target_vertex.style.zIndex = this._target_vertex_z_index; // update view
       },
       error => {
@@ -1216,7 +1198,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           this.renderAlertError("There was an Error Updating Vertex Z position");
         }
       }
-      //console.error('There was an error while updating the vertex', error)
     );
   }
 
@@ -1259,7 +1240,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.httpClient.put<any>(environment.api + "/api/v1/vertex/"+vertex.id, update_vertex_attribute, {"headers": this.headers}).subscribe(
       response => {
         if (response.success){
-          this.resetAttributeMenuValue();
+          this.resetAttributeMenuValue(data);
         }else{
           this.renderAlertError(response.message);
         }
@@ -1334,7 +1315,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  resetAttributeMenuValue(){
+  resetAttributeMenuValue(data: any){
     // @ts-ignore
     document.getElementsByName("attribute_name")[0].value = "";
     // @ts-ignore
@@ -1345,6 +1326,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     document.getElementsByName("attribute_clue")[0].value = "";
     // @ts-ignore
     document.getElementsByName("attribute_description")[0].value = "";
+
+    if (data != null){
+      data['attribute_name'] = '';
+      data['attribute_min'] = '';
+      data['attribute_sec'] = '';
+      data['attribute_clue'] = '';
+      data['attribute_description'] = '';
+    }
   }
 
   removeRoom(){
