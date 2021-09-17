@@ -209,10 +209,10 @@
 <!-- modal view popout here-->
 <div class="modal fade" id="newEscapeRoomForm" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <div class="modal-content" style="background: #363B42">
+    <div class="modal-content" style="background: #161b22; max-height: 75vh; overflow: auto">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel" style="color: #ffffff; font-weight: bold">New Escape Room</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="color: #ffffff"></button>
       </div>
       <div class="modal-body">
         <!-- warning for empty form input -->
@@ -224,19 +224,18 @@
             <label for="recipient-name" class="col-form-label" style="color: #ffffff; font-weight: bold">Room Name:</label>
             <input type="text"
                    name="EscapeRoomName"
-                   class="form-control"
+                   class="form-control fixes"
                    id="recipient-name"
                    placeholder="Some quirky name"
                    required
                    [(ngModel)]="newEscapeRoomName"
-                   (input)="isNewEscapeRoomNameValid()"
-                   style="color: #ffffff; background: #010409; font-weight: bold">
+                   (input)="isNewEscapeRoomNameValid()">
           </div>
 
           <div class="form-check form-switch">
 <!--            i don't know why, but i need this (click) right where it is-->
             <input #AI_checkbox class="form-check-input" type="checkbox" id="AI_checkbox" (click)="AI_checkbox">
-            <label class="form-check-label" for="AI_checkbox">Generate using AI</label>
+            <label class="form-check-label" for="AI_checkbox" style="color: #3BA55D;">Generate using AI</label>
           </div>
         </form>
       </div>
@@ -246,59 +245,59 @@
 <!--          number of vertices here-->
           <div class="mb-3 form-group">
             <div class="mb-3">
-              <label for="number_of_containers" class="col-form-label">Containers:</label>
-              <input type="number" name="containers" class="form-control" id="number_of_containers" value="1" [(ngModel)]="number_of_containers">
+              <label for="number_of_containers" class="col-form-label" style="color: #ffffff;">Containers:</label>
+              <input type="number" name="containers" class="form-control fixes" id="number_of_containers" value="1" [(ngModel)]="number_of_containers">
             </div>
             <div class="mb-3">
-              <label for="number_of_puzzles" class="col-form-label">Puzzles:</label>
-              <input type="number" name="containers" class="form-control" id="number_of_puzzles" value="1" [(ngModel)]="number_of_puzzles">
+              <label for="number_of_puzzles" class="col-form-label" style="color: #ffffff;">Puzzles:</label>
+              <input type="number" name="containers" class="form-control fixes" id="number_of_puzzles" value="1" [(ngModel)]="number_of_puzzles" style="background: #010409; color: #ffffff;">
             </div>
             <div class="mb-3">
-              <label for="number_of_keys" class="col-form-label">Keys:</label>
-              <input type="number" name="containers" class="form-control" id="number_of_keys" value="1" [(ngModel)]="number_of_keys">
+              <label for="number_of_keys" class="col-form-label" style="color: #ffffff;">Keys:</label>
+              <input type="number" name="containers" class="form-control fixes" id="number_of_keys" value="1" [(ngModel)]="number_of_keys" style="background: #010409; color: #ffffff;">
             </div>
             <div class="mb-3">
-              <label for="number_of_clues" class="col-form-label">Clues:</label>
-              <input type="number" name="containers" class="form-control" id="number_of_clues" value="1" [(ngModel)]="number_of_clues">
+              <label for="number_of_clues" class="col-form-label" style="color: #ffffff;">Clues:</label>
+              <input type="number" name="containers" class="form-control fixes" id="number_of_clues" value="1" [(ngModel)]="number_of_clues" style="background: #010409; color: #ffffff;">
             </div>
           </div>
 <!--          the linearity of graph settings-->
           <fieldset class="mb-3 form-group">
-            <legend class="col-form-label col-sm-2 pt-0">Linearity:</legend>
+            <legend class="col-form-label col-sm-2 pt-0" style="color: #3BA55D;">Linearity:</legend>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="linearity" id="linearity_low" value="low" [checked]="true" #lin_1 (change)="changeLinearityValue(lin_1)">
-              <label class="form-check-label" for="linearity_low">low</label>
+              <label class="form-check-label" for="linearity_low" style="color: #ffffff;">low</label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="linearity" id="linearity_medium" value="medium" #lin_2 (change)="changeLinearityValue(lin_2)">
-              <label class="form-check-label" for="linearity_medium">medium</label>
+              <label class="form-check-label" for="linearity_medium" style="color: #ffffff;">medium</label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="linearity" id="linearity_high" value="high" #lin_3 (change)="changeLinearityValue(lin_3)">
-              <label class="form-check-label" for="linearity_high">high</label>
+              <label class="form-check-label" for="linearity_high" style="color: #ffffff;">high</label>
             </div>
           </fieldset>
 <!--          dead ends for ai graph-->
           <fieldset class="mb-3 form-group">
-            <legend class="col-form-label col-sm-2 pt-0">Complexity:</legend>
+            <legend class="col-form-label col-sm-2 pt-0" style="color: #3BA55D;">Complexity:</legend>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="dead_ends" id="dead_ends_low" value="low" [checked]="true" #comp_1 (change)="changeComplexityValue(comp_1)">
-              <label class="form-check-label" for="dead_ends_low">low</label>
+              <label class="form-check-label" for="dead_ends_low" style="color: #ffffff;">low</label>
             </div>
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="dead_ends" id="dead_ends_medium" value="medium" #comp_2 (change)="changeComplexityValue(comp_2)">
-              <label class="form-check-label" for="dead_ends_medium">medium</label>
+              <label class="form-check-label" for="dead_ends_medium" style="color: #ffffff;">medium</label>
             </div>
-            <div class="form-check form-check-inline">
+            <div class="form-check form-check-inline ">
               <input class="form-check-input" type="radio" name="dead_ends" id="dead_ends_high" value="high" #comp_3 (change)="changeComplexityValue(comp_3)">
-              <label class="form-check-label" for="dead_ends_high">high</label>
+              <label class="form-check-label" for="dead_ends_high" style="color: #ffffff;">high</label>
             </div>
           </fieldset>
         </form>
       </div>
 
       <div class="modal-footer form-group">
-        <button class="btn btn-primary" data-bs-dismiss="modal"  style="background: #3BA55D" (click)="createEscapeRoom(AI_checkbox.checked)" [disabled]="!newEscapeRoomNameValid">Create</button>
+        <button class="btn btn-success btn-block" data-bs-dismiss="modal" (click)="createEscapeRoom(AI_checkbox.checked)" [disabled]="!newEscapeRoomNameValid">Create</button>
       </div>
     </div>
   </div>
