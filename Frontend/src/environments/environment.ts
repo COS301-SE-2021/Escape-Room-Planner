@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api: 'http://127.0.0.1:3000',
-  api_ga: 'http://127.0.0.1:300'
+  api_ga: 'http://127.0.0.1:3000'
 };
 
 /*
