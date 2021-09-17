@@ -2,18 +2,6 @@
 
 require 'test_helper'
 class VertexControllerTest < ActionDispatch::IntegrationTest
-  test 'can get index' do
-    # us = UserServices.new
-    # req_l = LoginRequest.new('testUser', 'testPass')
-    # res_l = us.login(req_l)
-    # get api_v1_vertex_index_path,
-    #     headers: { "Authorization": "\"Bearer #{res_l.token}\"" }
-
-    authed_get_call(api_v1_vertex_index_path)
-
-    assert_response :success
-  end
-
   test 'can get vertices based on escape room id' do
     # us = UserServices.new
     # req_l = LoginRequest.new('testUser', 'testPass')
