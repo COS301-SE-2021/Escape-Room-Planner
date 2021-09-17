@@ -240,6 +240,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   getVertexFromRoom(): void{
     this._target_start = undefined;
     this._target_end = undefined;
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.textContent = "";
     if(this.currentRoomId !== -1) {
       // resets the vertices on room switch
       this.vertexService.reset_array();
@@ -1028,6 +1030,17 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     this.httpClient.delete<any>(environment.api + "/api/v1/vertex/"+real_target_id, {"headers": this.headers, "params": remove_vertex}).subscribe(
       response => {
+        //delete start or end vertex reference
+        if(parseInt(String(local_target_id))  == parseInt(String(this.vertexService.start_vertex_id))){
+          this._target_start = undefined;
+          this.vertexService.start_vertex_id = -1;
+        }
+
+        if(parseInt(String(local_target_id))  == parseInt(String(this.vertexService.end_vertex_id))){
+          this._target_end = undefined;
+          this.vertexService.end_vertex_id = -1;
+        }
+
         //remove vertex from screen here
         this.vertexService.vertices[local_target_id].toggle_delete(); // marks a vertex as deleted
         this.removeLines(local_target_id);
@@ -1411,7 +1424,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         endVertex: this.vertexService.vertices[this.vertexService.end_vertex_id].id,
         roomid: this.currentRoomId
       };
-      this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", parameters, {"headers": this.headers}).subscribe(
+      this.httpClient.post<any>(environment.api +"/api/v1/solvability/", parameters, {"headers": this.headers}).subscribe(
         response => {
           if (response.data.solvable) {
             // get paths api call
@@ -1419,7 +1432,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
               operation: "ReturnPaths",
               roomid: this.currentRoomId
             };
-            this.httpClient.post<any>("http://127.0.0.1:3000/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
+            this.httpClient.post<any>(environment.api+"/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
               response => {
                 let string_array = response.data.vertices;
                 let int_array = [];
