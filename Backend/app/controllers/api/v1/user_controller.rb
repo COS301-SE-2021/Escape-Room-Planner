@@ -16,8 +16,7 @@ module Api
       skip_before_action :verify_authenticity_token
 
       def index
-        users = User.all
-        render json: { status: 'SUCCESS', message: 'Users', data: users }, status: :ok
+        render json: { status: 'SUCCESS', message: 'This page is used for uptime only' }, status: :ok
       end
 
       def create
