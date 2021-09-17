@@ -93,8 +93,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.test();
   }
 
-
-
   // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
@@ -234,8 +232,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.getVertexFromRoom();
     this.solveComponent?.getInitialVertices();
   }
-
-
 
   // todo
   //Get to get all vertex for room
@@ -484,7 +480,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.addClass(newButton, 'btn');
     this.renderer.addClass(newButton, 'btn-dark');
     this.renderer.appendChild(newButton, newImage);
-    this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event))
+    this.renderer.setAttribute(newButton,'escape-room-id',id.toString());
+    this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event));
 
     //add bootstrap class to <div col2>
     this.renderer.addClass(newDivCol2, 'col-1');
@@ -880,7 +877,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   }
 
-  // todo, test by rendering a function and clicking on a make connections
+  // todo
   private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
     this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
