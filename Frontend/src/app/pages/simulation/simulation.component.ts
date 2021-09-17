@@ -54,7 +54,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   public inventory_menu: boolean = true;
   public status_menu_show: boolean = true;
-  public status_menu_text: string = "Preforming operation";
+  public status_menu_text: string = "Loading Assets";
   public message_menu_show: boolean = true;
   public message_menu_text: string = "Need";
   //timer text to show end user
@@ -73,6 +73,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this.rooms = [];
     this.current_room_index = 0;
     this.character_inventory = new Inventory();
+    this.status_menu_show = false;
   }
 
   init() {
@@ -269,11 +270,11 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.app.loader.add('character', '/assets/sprite/character1.png')
 
       this.app.loader.onProgress.add((e)=>{
-        console.log(e.progress);
+        this.status_menu_text = 'Loading '+Math.round(e.progress)+'%';
       });
       //shows when load complete
       this.app.loader.onComplete.add(()=>{
-      //  this.messageMenu("Room loaded");
+        setTimeout(()=>{this.status_menu_show = true},1000);
         this.loadRooms();
       });
       //shows error when loading
