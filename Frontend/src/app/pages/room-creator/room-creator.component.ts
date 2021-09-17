@@ -403,26 +403,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   // this will create a room using AI
   public createEscapeRoomWithAI():void{
-    //Patric use these values for the form stuff, also environment.api/path/to/resource for api calls
-    console.log('linearity', this.linearity_value);
-    console.log('complexity', this.complexity_value);
-    console.log('num containers', this.number_of_containers);
-    console.log('num puzzles', this.number_of_puzzles);
-    console.log('num keys', this.number_of_keys);
-    console.log('num clues', this.number_of_clues);
-
-
-
     this.linearity_value='med'
     this.complexity_value='med'
-    //TODO: make a room like in function above
-    // todo: then make api call
-    // todo: then switch to that room
-    // todo: if you want to, you can reset the default values of the create room modal
-    // make sure that the number values  are not null
-    // defaults:
-    // check box is unchecked
-    // all the values are 1 or low
 
     let AIReq= {
       room_id: this.currentRoomId,
@@ -434,7 +416,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       num_clues: this.number_of_clues
     };
 
-    this.httpClient.post<any>(environment.api + "/api/v1/genetic_algorithm/", AIReq, {"headers": this.headers}).subscribe(
+    this.httpClient.post<any>(environment.api_ga + "/api/v1/genetic_algorithm/", AIReq, {"headers": this.headers}).subscribe(
       response => {
         // @ts-ignore
         this.escapeRoomDivRef?.nativeElement.textContent = "";
