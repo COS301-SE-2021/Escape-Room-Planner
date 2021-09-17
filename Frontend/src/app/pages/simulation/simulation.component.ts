@@ -138,7 +138,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.movement.d = false;
       this.movement.w = false;
       this.movement.s = false;
-      this.selectPath(this.pathRef);
+      if(!this.modalService.hasOpenModals())
+        this.selectPath(this.pathRef);
     }
     else if(event.code === 'KeyT')
     {
@@ -154,7 +155,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.movement.d = false;
       this.movement.w = false;
       this.movement.s = false;
-      this.selectPath(this.helpRef);
+      if(!this.modalService.hasOpenModals())
+        this.selectPath(this.helpRef);
     }
 
   }
