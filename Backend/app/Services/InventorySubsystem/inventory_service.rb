@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "base64"
+require 'base64'
 
 # Inventory Service class
 class InventoryService
@@ -11,7 +11,7 @@ class InventoryService
     return AddGraphicResponse.new(false, 'Please send Type', nil) if request.type.nil?
 
     # get decoded image
-    image = decode_base64Image(request.image)
+    image = decode_base_64_image(request.image)
 
     decoded_token = JsonWebToken.decode(request.token)
     user = User.find_by_id(decoded_token['id'])
@@ -20,15 +20,15 @@ class InventoryService
                 else
                   user.graphic.attach(io: StringIO.new(image[:io]), filename: image[:filename])
                   blob = user.graphic.blobs.last
-                  blob.metadata['type'] = request.type
-                  blob.metadata
-                  blob.save!
+                  inventory_type = InventoryType.new
+                  inventory_type.image_type = request.type
+                  inventory_type.active_storage_blobs_id = blob.id
+                  inventory_type.save
                   data =
                     { blob_id: blob.id,
                       src: Rails.application.routes.url_helpers.rails_blob_url(blob,
                                                                                host: ENV.fetch('BLOB_HOST',
                                                                                                'localhost:3000')) }
-                  # TODO: change metadata before upload
                   AddGraphicResponse.new(true, 'Graphic been added', data)
                 end
   rescue StandardError
@@ -45,12 +45,13 @@ class InventoryService
                 else
                   image = user.graphic.blobs
                   image = image.map do |blob|
+                    inventory_type = InventoryType.find_by_active_storage_blobs_id(blob.id)
                     {
                       blob_id: blob.id,
                       src: Rails.application.routes.url_helpers.polymorphic_url(blob, host:
                         ENV.fetch('BLOB_HOST',
                                   'localhost:3000')),
-                      type: blob.metadata['type']
+                      type: inventory_type.image_type
                     }
                   end
                   GetGraphicsResponse.new(true, 'User Inventory Graphics Obtained', image)
@@ -76,13 +77,13 @@ class InventoryService
     DeleteGraphicResponse.new(false, 'Error has occurred, unable to delete graphic')
   end
 
-  def decode_base64Image(base64_image)
+  def decode_base_64_image(base64_image)
     img = base64_image.split(';').last
     filetype = base64_image.split(';').first
     filetype = /(png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF)/.match(filetype)
     img_from_base64 = Base64.decode64(img)
-    file = { io: img_from_base64,
-             content_type: "image/#{filetype}",
-             filename: "inventory-#{Time.current.to_i}.#{filetype}" }
+    { io: img_from_base64,
+      content_type: "image/#{filetype}",
+      filename: "inventory-#{Time.current.to_i}.#{filetype}" }
   end
 end

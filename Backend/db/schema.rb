@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_26_124012) do
+ActiveRecord::Schema.define(version: 2021_09_17_193650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,14 @@ ActiveRecord::Schema.define(version: 2021_08_26_124012) do
     t.index ["user_id"], name: "index_escape_rooms_on_user_id"
   end
 
+  create_table "inventory_types", force: :cascade do |t|
+    t.string "image_type", default: "container"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "active_storage_blobs_id", null: false
+    t.index ["active_storage_blobs_id"], name: "index_inventory_types_on_active_storage_blobs_id"
+  end
+
   create_table "room_images", force: :cascade do |t|
     t.float "pos_x"
     t.float "pos_y"
@@ -61,11 +69,6 @@ ActiveRecord::Schema.define(version: 2021_08_26_124012) do
     t.bigint "blob_id"
     t.bigint "escape_room_id", null: false
     t.index ["escape_room_id"], name: "index_room_images_on_escape_room_id"
-  end
-
-  create_table "rooms", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -107,6 +110,7 @@ ActiveRecord::Schema.define(version: 2021_08_26_124012) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "escape_rooms", "users"
+  add_foreign_key "inventory_types", "active_storage_blobs", column: "active_storage_blobs_id"
   add_foreign_key "room_images", "escape_rooms"
   add_foreign_key "vertices", "escape_rooms"
 end
