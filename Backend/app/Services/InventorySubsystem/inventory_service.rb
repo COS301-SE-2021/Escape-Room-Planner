@@ -70,7 +70,9 @@ class InventoryService
     @response = if user.nil?
                   DeleteGraphicResponse.new(false, 'User can not be found')
                 else
+                  inventory_type = InventoryType.find_by_active_storage_blobs_id(request.blob_id)
                   user.graphic.where(blob_id: request.blob_id).purge
+                  inventory_type.destroy unless inventory_type.nil?
                   DeleteGraphicResponse.new(true, 'Graphic been deleted')
                 end
   rescue StandardError
