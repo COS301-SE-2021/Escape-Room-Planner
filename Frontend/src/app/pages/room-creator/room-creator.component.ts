@@ -235,6 +235,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.solveComponent?.getInitialVertices();
   }
 
+
+
   // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
@@ -438,10 +440,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
     this.httpClient.post<any>(environment.api + "/api/v1/genetic_algorithm/", AIReq, {"headers": this.headers}).subscribe(
       response => {
+        // @ts-ignore
+        this.escapeRoomDivRef?.nativeElement.textContent = "";
         this.getVertexFromRoom();
         this.solveComponent?.getInitialVertices();
         this.gaLoading=false;
       },error =>{
+        // @ts-ignore
+        this.escapeRoomDivRef?.nativeElement.textContent = "";
         this.getVertexFromRoom();
         this.solveComponent?.getInitialVertices();
         this.gaLoading=false;
