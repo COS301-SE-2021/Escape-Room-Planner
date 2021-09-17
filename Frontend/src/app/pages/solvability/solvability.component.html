@@ -1,27 +1,39 @@
-<div #solve_div [hidden]="true" class="modal-body rounded border border-1 border-success bg-dark" style=" top: 50%; left: 30%; width: 50%; z-index: 10000">
-    <div class="container text-white">
-      <div class="row">
-        <div class="col-11"></div>
-        <div class="col-1" id="delete_but">
-          <button (click)="solve_div.hidden=true"class="text-end btn btn-dark remove-padding">
-            <img src="/assets/svg/x.svg" alt="NOT FOUND">
-          </button>
-        </div>
-      </div>
-      <div class="row" id="container">
-        <div class="col-12" id="Start-Vertex-label">Start Vertex:</div>
-        <hr class="dropdown-divider text-white">
-        <div class="col-12" id="End-Vertex-label">End Vertex:</div>
-        <hr class="dropdown-divider text-white">
-        <div class="col-12" id="Solvable">Solvable:</div>
-        <hr class="dropdown-divider text-white">
-        <div class="12" id="SetupOrder" class="SetupOrder"></div>
-        <div class="12" id="PossbilePaths" class="Paths to end:"></div>
-        <div class="12" id="EstimatedTime" class="Estimated Time:"></div>
-        <div class="col-12">
-          <button (click)="checkSetupOrder()" class="w-100 btn btn-secondary">Setup order</button>
-        </div>
-
+<div #solve_div [hidden]="true" class="modal-body rounded border border-1 border-success bg-dark">
+  <div class="container text-white">
+    <div class="row">
+      <div class="col-11"></div>
+      <div class="col-1" id="delete_but">
+        <button (click)="solve_div.hidden=true" class="text-end btn btn-dark remove-padding">
+          <img src="/assets/svg/x.svg" alt="NOT FOUND">
+        </button>
       </div>
     </div>
+    <div class="row" id="container">
+      <div class="row text-center">
+        <div class='col-6'>
+          <div id="Solvable">Solvable:</div>
+        </div>
+        <div class='col-6'>
+          <div id="EstimatedTime" class="Estimated Time:">Estimated Time: {{estimated_time}}</div>
+        </div>
+      </div>
+      <hr class="dropdown-divider text-white">
+      <div class="row text-center">
+        <div class="col-6">
+          <div class="col-12">Start Vertex: {{start_vertex_name}}</div>
+        </div>
+        <div class="col-6">
+          <div class="col-12">End Vertex: {{end_vertex_name}}</div>
+        </div>
+      </div>
+      <hr class="dropdown-divider text-white">
+      <div id="possible_paths" class="Paths to end:"></div>
+      <hr class="dropdown-divider text-white">
+      <div class="text-center mb-1" id="error_message">{{error_message}}</div>
+      <button (click)="generateDiagram()" id="generate" class="remove-padding" type="button">
+        <img class="button_icons" src="./assets/images/structure.png" alt=""> Generate Diagram
+      </button>
+      <app-dependency-diagram class="remove-padding remove-margin"></app-dependency-diagram>
+    </div>
+  </div>
 </div>

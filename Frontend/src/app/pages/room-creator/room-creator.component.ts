@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
@@ -10,6 +10,7 @@ import {InventoryComponent} from "../inventory/inventory.component";
 import {SolvabilityComponent} from "../solvability/solvability.component"
 import { DependencyDiagramComponent } from '../dependency-diagram/dependency-diagram.component';
 import {environment} from "../../../environments/environment";
+import {getLocaleFirstDayOfWeek} from "@angular/common";
 declare let LeaderLine: any;
 
 @Component({
@@ -46,6 +47,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   public linearity_value:string = "low";
   public complexity_value:string = "low";
 
+  private _canvas_x: number = 0; // stores width of canvas
+  private _canvas_y: number = 0; // stores height of cannvas
   private _target_room: any;
   private _target_vertex: any;
   private _target_start: any;
@@ -64,7 +67,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   @ViewChild("roomContextMenu") roomContextMenuRef : ElementRef | undefined;
   @ViewChild("attributeMenu") attributeMenuRef : ElementRef | undefined;
   @ViewChild(SolvabilityComponent) solveComponent: SolvabilityComponent | undefined;
-  @ViewChild(DependencyDiagramComponent) diagramComponent: DependencyDiagramComponent | undefined;
 
   constructor(private el : ElementRef, private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private roomService: RoomService,
@@ -88,6 +90,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //use for testing new functionality
     this.solveComponent?.setRoom(this.currentRoomId);
     this.solveComponent?.getInitialVertices();
+    this.test();
   }
 
 
@@ -1061,10 +1064,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  generateDiagram(): void {
-    this.diagramComponent?.generate();
-  }
-
   setStart() :void{
     if(this._target_start !== undefined)
       document.querySelectorAll('[vertex-id="' + this._target_start + '"]')[0]
@@ -1272,6 +1271,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   // TODO: remove from prod
   scale(): void{
     let children = this.escapeRoomDivRef?.nativeElement.childNodes;
+    //resize the main  block
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.width = this._canvas_x * this.zoomValue + 'px';
+    // @ts-ignore
+    this.escapeRoomDivRef?.nativeElement.style.height = this._canvas_y * this.zoomValue + 'px';
     //  go through every html element inside canvas
     for(let child of children){
       // child.getAttribute('')
@@ -1360,7 +1364,46 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.complexity_value = elem.value;
   }
 
-  simulate() {
+  @HostListener('window:resize')
+  public test():void{
+    if(this.zoomValue !== 1.0)
+      return;
+
+    let x = window.innerWidth;
+    let y = window.innerHeight;
+    let inv_elem = document.getElementById('app-inv');
+    let room_list = document.getElementById('escape-room-list');
+    let nav_elem = document.getElementsByClassName('navbar')[0];
+    let extra_margin_top_element = document.getElementsByClassName('room-creator-margin-top')[0];
+
+    // @ts-ignore
+    // moves a canvas to the left of inventory
+    this.escapeRoomDivRef?.nativeElement.style.marginLeft = inv_elem.clientWidth + 'px';
+    // @ts-ignore
+    this._canvas_x = x - inv_elem.clientWidth;
+    // @ts-ignore
+    // makes canvas width fill the rest of the page
+    this.escapeRoomDivRef?.nativeElement.style.width = this._canvas_x + 'px';
+    // @ts-ignore
+    this._canvas_y = y - nav_elem.clientHeight - room_list.clientHeight - 1;
+    // @ts-ignore
+    // makes canvas height to fill the browser window
+    this.escapeRoomDivRef?.nativeElement.style.height = this._canvas_y + 'px';
+
+    // @ts-ignore
+    //fixing top margin
+    extra_margin_top_element.style.marginTop = nav_elem.clientHeight + 'px';
+
+    // @ts-ignore
+    // room list positioned to the left of inventory
+    room_list.style.marginLeft = inv_elem.clientWidth + 'px';
+    // @ts-ignore
+    // room list width fills the browser window
+    room_list.style.width = x - inv_elem.clientWidth + 'px';
+    // keep room list height the same
+  }
+
+  simulate(): void {
     // TODO: change this to be called when simulate button is clicked
     if (this.vertexService.start_vertex_id === -1) {
       this.renderAlertError("Set start vertex");

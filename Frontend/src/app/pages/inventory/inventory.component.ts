@@ -62,13 +62,16 @@ export class InventoryComponent implements OnInit {
     let new_button = this.renderer.createElement('button');
     let new_button_img = this.renderer.createElement('img');
     // setting classes
-    this.renderer.addClass(new_div,'col');
+    this.renderer.addClass(new_div,'col-6');
     this.renderer.addClass(new_img, 'img-thumbnail');
+  //  this.renderer.addClass(new_img, 'remove-padding');
     this.renderer.addClass(new_p, 'text-center');
     this.renderer.addClass(new_p, 'text-black-5');
     // setting text, change later todo
     // new_p.textContent = type;
     // setting src
+    this.renderer.setStyle(new_img, 'height', '60px');
+    this.renderer.setStyle(new_img, 'width', '60px');
     this.renderer.setAttribute(new_img,'src', this.inventory[blob_id]);
     this.renderer.setAttribute(new_div,'blob-id', blob_id); //sets blob-id attr to follow the array id
     this.renderer.setAttribute(new_img, 'alt', type + 'inventory object');
@@ -83,10 +86,11 @@ export class InventoryComponent implements OnInit {
     this.renderer.addClass(new_button, 'remove-padding');
     this.renderer.addClass(new_button, 'delete-button');
     this.renderer.listen(new_button,'click',(event) =>  this.deleteImage(new_div));
-    this.renderer.appendChild(new_div, new_button);
+
     //CHILDREN
     this.renderer.appendChild(new_div, new_img);
     this.renderer.appendChild(new_div, new_p);
+    this.renderer.appendChild(new_div, new_button);
     // RENDER
     switch (type){
       case 'container':{

@@ -423,6 +423,14 @@ class GeneticAlgorithmService
     room.save!
 
 
+    vertices.each do |v|
+      from_vertex = Vertex.find_by_id(v)
+      to_vertex = from_vertex.vertices.find_by_id(saveStart)
+      unless to_vertex.nil?
+        from_vertex.vertices.delete(to_vertex)
+      end
+    end
+
       from_vertex = Vertex.find_by_id(saveEnd)
       to_vertex = from_vertex.vertices.find_by_id(saveStart)
       unless to_vertex.nil?
