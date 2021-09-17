@@ -55,10 +55,9 @@ ActiveRecord::Schema.define(version: 2021_09_17_193650) do
 
   create_table "inventory_types", force: :cascade do |t|
     t.string "image_type", default: "container"
+    t.bigint "blob_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.bigint "active_storage_blobs_id", null: false
-    t.index ["active_storage_blobs_id"], name: "index_inventory_types_on_active_storage_blobs_id"
   end
 
   create_table "room_images", force: :cascade do |t|
@@ -110,7 +109,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_193650) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "escape_rooms", "users"
-  add_foreign_key "inventory_types", "active_storage_blobs", column: "active_storage_blobs_id"
   add_foreign_key "room_images", "escape_rooms"
   add_foreign_key "vertices", "escape_rooms"
 end
