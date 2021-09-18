@@ -42,3 +42,8 @@
   color: white;
   margin-right: 2%;
 }
+
+.custom-row{
+  border: 1px solid;
+  border-color: rgba(255,255,255, 0.5);
+}
