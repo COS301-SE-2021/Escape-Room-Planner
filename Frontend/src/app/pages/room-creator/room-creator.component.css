@@ -155,3 +155,10 @@ input::-webkit-inner-spin-button {
   width: 100%;
   z-index: 1000000000000000;
 }
+
+.fixes {
+  color: #ffffff;
+  border: none;
+  background: #010409;
+  font-weight: bold;
+}
