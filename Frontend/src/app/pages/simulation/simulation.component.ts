@@ -54,7 +54,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   public inventory_menu: boolean = true;
   public status_menu_show: boolean = true;
-  public status_menu_text: string = "Preforming operation";
+  public status_menu_text: string = "Loading Assets";
   public message_menu_show: boolean = true;
   public message_menu_text: string = "Need";
   //timer text to show end user
@@ -65,6 +65,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
   //select path variables
   closeResult = '';
   @ViewChild("path") pathRef: NgbModal | undefined;
+  @ViewChild("help") helpRef: NgbModal | undefined;
   @ViewChild("escapeRoomCompleted") escapeRoomCompletedRef: NgbModal | undefined;
 
 
@@ -73,6 +74,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this.rooms = [];
     this.current_room_index = 0;
     this.character_inventory = new Inventory();
+    this.status_menu_show = false;
   }
 
   init() {
@@ -137,7 +139,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.movement.d = false;
       this.movement.w = false;
       this.movement.s = false;
-      this.selectPath(this.pathRef);
+      if(!this.modalService.hasOpenModals())
+        this.selectPath(this.pathRef);
     }
     else if(event.code === 'KeyT')
     {
@@ -146,6 +149,15 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.movement.w = false;
       this.movement.s = false;
       this.simulate_toggle = !this.simulate_toggle;
+    }
+    else if(event.code === 'KeyH')
+    {
+      this.movement.a = false;
+      this.movement.d = false;
+      this.movement.w = false;
+      this.movement.s = false;
+      if(!this.modalService.hasOpenModals())
+        this.selectPath(this.helpRef);
     }
 
   }
@@ -269,18 +281,21 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.app.loader.add('character', '/assets/sprite/character1.png')
 
       this.app.loader.onProgress.add((e)=>{
-        console.log(e.progress);
+        this.status_menu_text = 'Loading '+Math.round(e.progress)+'%';
       });
       //shows when load complete
       this.app.loader.onComplete.add(()=>{
-      //  this.messageMenu("Room loaded");
+        setTimeout(()=>{this.status_menu_show = true},1000);
         this.loadRooms();
+
+        this.help(this.helpRef);
       });
       //shows error when loading
       this.app.loader.onError.add((e) => {
         console.log(e.message);
       });
       this.app.loader.load();
+
     }
   }
 
@@ -637,6 +652,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   setPath(path: number)
   {
+    this.resetRoom();
     this.path_choice = path;
     this.current_path_index = 0;
 
@@ -652,6 +668,15 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
     this.renderPathModal();
+  }
+
+  help(content: any)
+  {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', centered: true, windowClass: 'dark-modal',size: 'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
   escapeRoomCompleted(content: any)
@@ -671,6 +696,17 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this.selectPath(this.pathRef);
   }
 
+  resetManualRoom()
+  {
+    this.resetRoom();
+    let room_index = this.findRoomHoldsVertex(this.vertexService.start_vertex_id);
+    // @ts-ignore
+    if(room_index !== this.current_room_index && this.roomService.room_images[room_index].unlocked){
+      // @ts-ignore
+      this.showRoom(room_index);
+    }
+  }
+
    resetRoom()
   {
     this.modalService.dismissAll('New Path selected');
@@ -685,6 +721,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     this.resetInventory();
 
     this.resetHiddenVertices();
+    this.resetUnlockedRooms();
   }
 
   private getDismissReason(reason: any): string {
@@ -771,6 +808,20 @@ export class SimulationComponent implements OnInit, OnDestroy {
       }
     }
 
+  }
+
+  private resetUnlockedRooms()
+  {
+
+    let curr_rooms = this.roomService.room_images;
+
+    for(let i = 0; i < this.roomService.room_images.length; i++)
+    {
+      if(i !== this.findRoomHoldsVertex(this.vertexService.start_vertex_id))
+      {
+        curr_rooms[i].unlocked = false;
+      }
+    }
   }
 
   private renderPathModal()

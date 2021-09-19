@@ -7,10 +7,12 @@ import {Vertex} from "../models/vertex.model";
 export class RoomService {
   private _counter: number;
   private _room_images : RoomImage[];
+  private _outOfBounds: Vertex[];
 
   constructor() {
     this._counter = 0;
     this._room_images = [];
+    this._outOfBounds = [];
   }
 
   addRoomImage(id: number, pos_x: number, pos_y: number, width: number, height: number, src: string){
@@ -26,6 +28,10 @@ export class RoomService {
   resetRoom(){
     this._counter = 0;
     this._room_images = [];
+  }
+
+  get outOfBounds(): Vertex[] {
+    return this._outOfBounds;
   }
 
   //well set the vertex to room image
@@ -48,6 +54,8 @@ export class RoomService {
         }
       }
     }
-    //TODO: check if array is empty and if not say what needs to be placed
+    // If there are any vertices out of bounds set the out of bounds array to a deep copy of vertex array
+    if(vertexArray.length > 0)
+      this._outOfBounds = [...vertexArray];
   }
 }

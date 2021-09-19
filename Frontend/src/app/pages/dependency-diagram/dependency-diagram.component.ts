@@ -35,7 +35,7 @@ export class DependencyDiagramComponent implements OnInit {
       // Create and store all the graph vertices
       for (let vertex of this.vertexService.vertices) {
         if (vertex.exists())
-          graphVertices.push(graph.insertVertex(parent, vertex.local_id, vertex.type, 0, 0, 60, 80));
+          graphVertices.push(graph.insertVertex(parent, vertex.local_id, vertex.name, 0, 0, 60, 80));
       }
 
       // Loop through all the graph vertices
