@@ -49,7 +49,7 @@ Five Stack
 * 📝 [Architectural Design](https://www.overleaf.com/read/qfgwxdhnmzkb)
 * 📝 [User Manual](https://www.overleaf.com/read/xzvcgxtrxxhb)
 * 📝 [Installation Guide](https://www.overleaf.com/read/kccmqpkpxmgd)
-* 📝 [Coding Standards]()
+* 📝 [Coding Standards](https://www.overleaf.com/9221754327dhkbvtkktwhm)
 ### Demo 4
 * 📝 [SRS](https://www.overleaf.com/read/yjhhhnvcgmmf)
 * 📝 [Architectural Design]()
