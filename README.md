@@ -13,66 +13,69 @@
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=sqale_index)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=COS301-SE-2021_Escape-Room-Planner&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=COS301-SE-2021_Escape-Room-Planner)
 
-# Project Name: Escape-Room-Planner <br>
+<hr>
+<a href="https://www.epiuselabs.com/"><img src="https://i.imgur.com/l669i13.png" title="source: imgur.com" /></a>
+<hr>
 
-Project Owner: EPI-USE Labs <br>
-
-Project Description:
+# Escape-Room-Planner <br>
+## Project Description:
 
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
-<br>
-Team:Five Stack <br>
-SRS Document: https://www.overleaf.com/read/wkfykfynsmzm <br>
-Architectural Design Document: https://www.overleaf.com/read/ctwwpzfmfpng <br>
-Installation guide: https://www.overleaf.com/read/kccmqpkpxmgd <br>
-User Manual: https://www.overleaf.com/read/xzvcgxtrxxhb <br>
-Coding Standards: https://www.overleaf.com/9221754327dhkbvtkktwhm <br> 
-Github Project Board: https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1
+<hr>
 
+### Team
+Five Stack
+<hr>
 
-Demo 1 Video
+## Project Managment Tools
+* 📋 [Github Project Board](https://github.com/COS301-SE-2021/Escape-Room-Planner/projects/1)
+<hr>
 
-<a href="https://drive.google.com/file/d/1Em9AlEbCi5XUoBylOSh817M6wGMkWlOJ/view?usp=sharing"> D1 </a>
+## Videos
+* 🎬 [Demo 1](https://drive.google.com/file/d/1Em9AlEbCi5XUoBylOSh817M6wGMkWlOJ/view?usp=sharing)
+* 🎬 [Demo 2](https://drive.google.com/file/d/1uy35Gb0zIIfnhL9dCspSV_aeQDtsN8_1/view?usp=sharing)
+* 🎬 [Demo 3](https://drive.google.com/file/d/18C6vxLCTuvy_rBk-ZNHq3pq2yRfKYChr/view?usp=sharing)
+* 🎬 [Demo 4](https://drive.google.com/file/d/1OdiXpLWId0hjEatChQOsvnfT58tW5PBU/view?usp=sharing)
+<hr>
 
-Demo 2 Video 
+## Documentation
+### Demo 1
+* 📝 [SRS](https://www.overleaf.com/read/scwrrchtjrdv)
+### Demo 2
+* 📝 [SRS](https://www.overleaf.com/read/qycbxywmqbdk)
+* 📝 [Architectural Design](https://www.overleaf.com/read/frwpzvzjwpbf)
+### Demo 3
+* 📝 [SRS](https://www.overleaf.com/read/pfqdkhjsynhc)
+* 📝 [Architectural Design](https://www.overleaf.com/read/qfgwxdhnmzkb)
+* 📝 [User Manual](https://www.overleaf.com/read/xzvcgxtrxxhb)
+* 📝 [Installation Guide](https://www.overleaf.com/read/kccmqpkpxmgd)
+* 📝 [Coding Standards]()
+### Demo 4
+* 📝 [SRS](https://www.overleaf.com/read/yjhhhnvcgmmf)
+* 📝 [Architectural Design]()
+* 📝 [User Manual](https://www.overleaf.com/read/xzvcgxtrxxhb)
+* 📝 [Installation Guide](https://www.overleaf.com/read/chwkfxbsxsmf)
+* 📝 [Testing Policy](https://www.overleaf.com/read/mncvchsyhrth)
+### Collections
+* 📂 [SRS Collection](https://www.overleaf.com/read/wkfykfynsmzm)
+* 📂 [Architectural Design Collection](https://www.overleaf.com/read/ctwwpzfmfpng)
+* 📂 [Installation Guide Collection](https://www.overleaf.com/read/wtyzymntfrbg)
+<hr>
 
-<a href="https://drive.google.com/file/d/1uy35Gb0zIIfnhL9dCspSV_aeQDtsN8_1/view?usp=sharing"> D2 </a>
-
-Demo 3 Video
-
-<a href="https://drive.google.com/file/d/18C6vxLCTuvy_rBk-ZNHq3pq2yRfKYChr/view?usp=sharing"> D3 </a>
+## Team Memebers
+| **Team Member** | **Profiles** |
+| :----------: | :----------: |
+| <figcaption>Patric Edwards</figcaption>
+<img src="https://i.imgur.com/OwGQZGT.jpg" alt="drawing" width="200"/> | [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][1] <a href='https://github.com/PatricEdwards'><img src='https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png' width='25px'>|
+| <figcaption>Donavan Tristan Roux</figcaption>
+<img src="https://i.imgur.com/RbRjbDh.jpg" alt="drawing" width="200"/> | [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][2] <a href='https://github.com/KALLAHARIKID'><img src='https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png' width='25px'>|
+| <figcaption>Egor Kharatyan</figcaption>
+<img src="https://i.imgur.com/E8B2wer.jpg" alt="drawing" width="200"/> | [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][3] <a href='https://github.com/PurryFury'><img src='https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png' width='25px'>|
+| <figcaption>Kayla Latty</figcaption>
+<img src="https://i.imgur.com/aCB6kPd.jpg" alt="drawing" width="200"/> | [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][4] <a href='https://github.com/u17360812'><img src='https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png' width='25px'>|
+| <figcaption>Maseko Nqedile</figcaption>
+<img src="https://i.imgur.com/5Zjq2jM.jpg" alt="drawing" width="200"/> | [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][5] <a href='https://github.com/NQ-edile'><img src='https://cdn0.iconfinder.com/data/icons/shift-logotypes/32/Github-512.png' width='25px'>|
  
-<figcaption>Patric Edwards</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C4E03AQFQKbfxwCC34w/profile-displayphoto-shrink_200_200/0/1618567484082?e=1634774400&v=beta&t=DA1foKTnr8GwnyIK1hFocHMtkc50ic4dnCjKXhjxEHI" alt="drawing" width="200"/>
-
-<br>
-<figcaption>Donavan Tristan Roux</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C5603AQEn75RL-BbDYg/profile-displayphoto-shrink_200_200/0/1622747131588?e=1634774400&v=beta&t=lWvYIR300quJGS3vEawa-Ogs8W7dGLIUEc1rzSkN7-M" alt="drawing" width="200"/>
-
-<br>
-<figcaption>Egor Kharatyan</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C4E03AQFI5fEMgKr8iw/profile-displayphoto-shrink_200_200/0/1623079202329?e=1629936000&v=beta&t=VC8fd9I-Jz-6q_1wbRazvNIQLSJR8AymeBiPoLhvUKg" alt="drawing" width="200"/>
-
-<br>
-<figcaption>Kayla Latty</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C4E03AQHh0m-cWuPkwA/profile-displayphoto-shrink_200_200/0/1618642120802?e=1634774400&v=beta&t=dAUPs-kvP_BDOEYPY__mkGzt_f4AIBulHokNoz-FpLw" alt="drawing" width="200"/>
-
-<br>
-<figcaption>Maseko Nqedile</figcaption>
-<img src="https://media-exp1.licdn.com/dms/image/C5603AQGcFkisbO4ACQ/profile-displayphoto-shrink_200_200/0/1618731388530?e=1634774400&v=beta&t=TUvGyESDUy0QVSkjiRnF5aAY5IxcpboVZzQ8yqvs4tA" alt="drawing" width="200"/>
-
-## Profiles
-
-Patric Edwards [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][1].
-
-Donavan Tristan Roux [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][2].
-
-Egor Kharatyan [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][3].
-
-Kayla Latty [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][4].
-
-Maseko Nqedile [<img src="https://pngmind.com/wp-content/uploads/2019/08/Linkedin-Logo-Png-Transparent-Background-1.png" width="25px"/>][5].
-
 [1]: https://www.linkedin.com/in/patric-edwards-220879204/
 [2]: https://www.linkedin.com/in/donavan-roux-940b3120b/
 [3]: https://www.linkedin.com/in/egor-kharatyan-37a86620b/
