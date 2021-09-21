@@ -23,6 +23,9 @@
 Escape Room Planner intends to solve an organisational problem that user’s face when constructing an escape room. The system will allow users to simulate custom escape rooms that can be implemented in the real world<br>
 <hr>
 
+## Project Link
+* 🔗 [Escape Room Planner](https://escape-room-planner-front-end.herokuapp.com/)
+
 ### Team
 Five Stack
 <hr>
