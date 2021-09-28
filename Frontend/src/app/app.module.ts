@@ -18,6 +18,7 @@ import { VerifySuccessComponent } from './pages/verify-success/verify-success.co
 import { VerifyFailedComponent } from './pages/verify-failed/verify-failed.component';
 import { DependencyDiagramComponent } from './pages/dependency-diagram/dependency-diagram.component';
 import { SimulationComponent } from './pages/simulation/simulation.component';
+import { PublicEscapeRoomsComponent } from './pages/public-escape-rooms/public-escape-rooms.component';
 
 const routes: Routes = [
   // { path: '', component: AppComponent },
@@ -31,6 +32,7 @@ const routes: Routes = [
   { path: 'verify-success', component: VerifySuccessComponent},
   { path: 'verify-failure', component: VerifyFailedComponent},
   { path: 'simulation', component: SimulationComponent},
+  { path: 'public-escape-rooms', component: PublicEscapeRoomsComponent},
   // otherwise redirect to login
   { path: '**', redirectTo: '' }
 ];
@@ -49,7 +51,8 @@ const routes: Routes = [
     VerifySuccessComponent,
     VerifyFailedComponent,
     DependencyDiagramComponent,
-    SimulationComponent
+    SimulationComponent,
+    PublicEscapeRoomsComponent
   ],
     imports: [
         BrowserModule,

@@ -1,0 +1,9 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.main_div{
+  position: relative;
+  top: 56px;
+}
