@@ -117,7 +117,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.addClass(button, 'text-success');
     this.renderer.addClass(button, 'm-1');
     this.renderer.appendChild(button, this.renderer.createText('Play'));
-    this.renderer.setAttribute(button, 'escape-room-id', id.toString());
+    this.renderer.listen(button,'click',(event) => this.getRoomObjects(id));
 
     // append all children together
 
@@ -136,6 +136,107 @@ export class PublicEscapeRoomsComponent implements OnInit {
 
     this.renderer.appendChild(this.col_div[this.card_number%4], card);
     this.card_number++;
+  }
+
+  getRoomObjects(id: number){
+    this.httpClient.get<any>(environment.api + '/api/v1/room_image/'+id, {"headers": this.headers}).subscribe(
+      response =>{
+        this.roomService.resetRoom();
+        for ( let room_image of response.data){
+          this.roomService.addRoomImage(
+            room_image.room_image.id,
+            room_image.room_image.pos_x,
+            room_image.room_image.pos_y,
+            room_image.room_image.width,
+            room_image.room_image.height,
+            room_image.src
+          );
+        }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+
+    //http request to rails api
+    this.httpClient.get<any>(environment.api + "/api/v1/vertex/" + id, {"headers": this.headers}).subscribe(
+      response => {
+        this.vertexService.reset_array();
+        for (let vertex_t of response.data) {
+          //spawn objects out;
+          let vertex = vertex_t.vertex
+          let vertex_type = vertex_t.type;
+          let vertex_connections = vertex_t.connections;
+          let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
+            vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
+            vertex.description, vertex.clue, vertex.z_index);
+          if(vertex_t.position === "start") {
+            this.vertexService.start_vertex_id = current_id;
+          }
+          else if (vertex_t.position === "end") {
+            this.vertexService.end_vertex_id = current_id;
+          }
+          // @ts-ignore
+          for (let vertex_connection of vertex_connections)
+            this.vertexService.addVertexConnection(current_id, vertex_connection);
+
+        }
+
+        // converts real connection to local connection
+        for (let vertex of this.vertexService.vertices) {
+          let vertex_connections = vertex.getConnections();
+
+          for (let vertex_connection of vertex_connections) {
+            // go through all the connections
+            // for each location locate the vertex with that real id and use its local id in place of real one
+            for (let vertex_to of this.vertexService.vertices) {
+              if (vertex_to.id === vertex_connection) {
+                this.vertexService.removeVertexConnection(vertex.local_id, vertex_connection);
+                this.addLocalConnection(vertex.local_id, vertex_to.local_id);
+                break; // so that not the whole array is traversed
+              }
+            }
+          }
+        }
+        console.log(this.vertexService.vertices);
+        console.log(this.roomService.room_images);
+        // todo: change to only run once both api calls are done
+        setTimeout(() => {this.play(id)}, 5000);
+      },
+      //Error retrieving vertices message
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  addLocalConnection(from_vertex_id: number, to_vertex_id: number){
+    this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
+    this.vertexService.addVertexPreviousConnection(to_vertex_id, from_vertex_id);
+  }
+
+  play(id: number){
+    let paths = {
+      operation: "ReturnPaths",
+      roomid: id
+    };
+    this.httpClient.post<any>(environment.api+"/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
+      response => {
+        let string_array = response.data.vertices;
+        let int_array = [];
+        //convert to local id
+        for (let i = 0; i < string_array.length; i++) {
+          int_array[i] = this.vertexService.convertToLocalID(string_array[i].split(","));
+        }
+        this.vertexService.possible_paths = int_array;
+        this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
+        if(this.roomService.outOfBounds.length === 0)
+          this.router.navigate(['/simulation']).then(r => console.log('simulate redirect' + r));
+      },
+      error => {
+        console.log(error);
+      }
+    );
   }
 
 }
