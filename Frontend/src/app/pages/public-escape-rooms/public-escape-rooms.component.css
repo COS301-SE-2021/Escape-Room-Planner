@@ -28,6 +28,11 @@
   margin: 2px;
 }
 
+.form-control:focus {
+  outline: none;
+  border: none;
+}
+
 .searcher input {
   flex-grow: 2;
   padding-left: 2px;
