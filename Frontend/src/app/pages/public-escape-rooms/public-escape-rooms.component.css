@@ -33,7 +33,7 @@
   padding-left: 2px;
   background: #010409;
   color: #ffffff;
-  border: none;
+  border: none !important;
   text-indent: 2px;
 }
 
@@ -63,11 +63,6 @@
 .dropdown-item {
   color: white;
   margin: 5px;
-}
-
-.dropdown:focus {
-  outline: none;
-  border: none;
 }
 
 .the-drop {

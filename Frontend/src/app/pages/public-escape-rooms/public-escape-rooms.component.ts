@@ -107,8 +107,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
     // add col values
     this.renderer.appendChild(inner_col[0], this.renderer.createText('10:20'));
     this.renderer.appendChild(inner_col[1], this.renderer.createText('3.5'));
-    this.renderer.appendChild(inner_col[2], this.renderer.createText('Best Time'));
-    this.renderer.appendChild(inner_col[3], this.renderer.createText('Rating'));
+    this.renderer.appendChild(inner_col[2], this.renderer.createText('best time'));
+    this.renderer.appendChild(inner_col[3], this.renderer.createText('rating'));
 
     let button = this.renderer.createElement('button');
     // add button bootstrap
