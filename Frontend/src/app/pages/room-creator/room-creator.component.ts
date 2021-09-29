@@ -606,9 +606,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newP);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
-    this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
     this.renderer.listen(newObject,"click", (event) => this.vertexOperation(event));
-    this.renderer.listen(newObject,"mousemove", (event) => this.updateTag(newP, newObject));
+    this.renderer.listen(newObject, "change", (event) => this.updateTag(newP, newObject));
     // double click to show Attribute Menu
     this.renderer.listen(newObject,"dblclick", (event) => {
       this._is_single_click = false;
@@ -864,8 +863,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
     this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
     //add event to listen to mouse event of only connected vertices
-    to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-    from_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+    to_vertex.addEventListener("change", () => this.updateLine(from_vertex_id));
+    from_vertex.addEventListener("change", () => this.updateLine(to_vertex_id));
     // store on array
   }
 
@@ -1138,12 +1137,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.setAttribute(newButton, 'type', 'button');
     this.renderer.setAttribute(newButton, 'data-bs-dismiss', 'alert');
     this.renderer.setAttribute(newButton, 'aria-label', 'Close');
-
     // make it <div><strong><button>
     this.renderer.appendChild(newDiv,newButton);
     this.renderer.appendChild(newDiv, newStrong);
     // append to div alertElementError
+    this.renderer.listen(newButton, 'click', () => {setTimeout(()=> {this.updateAllLines()}, 300)});
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
+    this.updateAllLines();
+  }
+
+  public updateAllLines() : void{
+    for (let line of this.lines){
+      if (line !== null)
+        line.position();
+    }
   }
 
   changeCurrentZ(i : number): void{
