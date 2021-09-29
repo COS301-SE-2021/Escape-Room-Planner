@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
@@ -18,7 +27,7 @@ declare let LeaderLine: any;
   templateUrl: './room-creator.component.html',
   styleUrls: ['./room-creator.component.css'],
 })
-export class RoomCreatorComponent implements OnInit, AfterViewInit {
+export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
   public lastPos : number = 0; // used to populate new objects in line
   // @ts-ignore
   public escapeRooms: EscapeRoomArray; // array of escape rooms used to populate drop down
@@ -91,6 +100,10 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.solveComponent?.setRoom(this.currentRoomId);
     this.solveComponent?.getInitialVertices();
     this.test();
+  }
+
+  ngOnDestroy(): void{
+    this.removeLeaderLines();
   }
 
   // todo
@@ -186,7 +199,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
             //checks if no more rooms
             this._room_count--;
+
             if(this._room_count === 0) {
+              this.removeLeaderLines();
               this.hasRooms = false;
             }else{
               this.currentRoomId = this.escapeRoomListRef?.nativeElement.children[0].children[0].children[0]
@@ -244,11 +259,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       // resets the vertices on room switch
       this.vertexService.reset_array();
       // resets the lines array
-      for (let line of this.lines) {
-        if (line !== null)
-          line.remove();
-      }
-      this.lines = [];
+      this.removeLeaderLines();
 
       // gets room images
       this.httpClient.get<any>(environment.api + '/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
@@ -1262,7 +1273,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   // ZOOM test
-  // TODO: remove from prod
   scale(): void{
     let children = this.escapeRoomDivRef?.nativeElement.childNodes;
     //resize the main  block
@@ -1437,10 +1447,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
                 }
                 this.vertexService.possible_paths = int_array;
                 // swap to simulation
-                for (let line of this.lines) {
-                  if (line !== null)
-                    line.remove();
-                }
+                this.removeLeaderLines();
+
                 this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
                 if(this.roomService.outOfBounds.length === 0)
                   this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
@@ -1462,6 +1470,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         }
       );
     }
+  }
+
+  private removeLeaderLines():void{
+    for (let line of this.lines) {
+      if (line !== null)
+        line.remove();
+    }
+    this.lines = [];
   }
 }
 
