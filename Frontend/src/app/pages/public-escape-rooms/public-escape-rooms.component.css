@@ -3,7 +3,6 @@
   margin: 0;
 }
 
-
 .main_div{
   position: relative;
   top: 56px;
@@ -31,7 +30,7 @@
 
 .searcher input {
   flex-grow: 2;
-  padding-left: 2px;
+  padding-left: 10px;
   background: #010409;
   color: #ffffff;
   border: none !important;
@@ -40,11 +39,6 @@
 
 .searcher button {
   width: 60px;
-}
-
-.btn-success:focus {
-  border: none !important;
-  outline: none !important;
 }
 
 .dropdown-toggle {
