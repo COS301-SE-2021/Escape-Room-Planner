@@ -67,14 +67,14 @@ export class PublicEscapeRoomsComponent implements OnInit {
     // set card bootstrap
     this.renderer.addClass(card, 'card');
     this.renderer.addClass(card, 'text-white');
-    this.renderer.addClass(card, 'bg-secondary');
+    this.renderer.addClass(card, 'the-background');
     this.renderer.addClass(card, 'mb-3');
     this.renderer.addClass(card, 'h-100');
 
     let card_header = this.renderer.createElement('div');
     // set card-header bootstrap
     this.renderer.addClass(card_header, 'card-header');
-    this.renderer.addClass(card_header, 'bg-dark');
+    // this.renderer.addClass(card_header, 'bg-dark');
     this.renderer.appendChild(card_header, this.renderer.createText(name));
 
     let card_body = this.renderer.createElement('div');
@@ -113,8 +113,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
     let button = this.renderer.createElement('button');
     // add button bootstrap
     this.renderer.addClass(button, 'btn');
-    this.renderer.addClass(button, 'btn-dark');
-    this.renderer.addClass(button, 'text-success');
+    this.renderer.addClass(button, 'play-button');
+    // this.renderer.addClass(button, 'text-success');
     this.renderer.addClass(button, 'm-1');
     this.renderer.appendChild(button, this.renderer.createText('Play'));
     this.renderer.listen(button,'click',(event) => this.getRoomObjects(id));

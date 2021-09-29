@@ -1,9 +1,33 @@
 <div class="main_div">
+  <div class="container-fluid">
+    <div class="row search">
+      <div class="col-sm-8 col-centered">
+        <div class="searcher">
+          <input type="text" class="form-control" placeholder="Search for a room">
+          <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+      <div class="col-sm-2 the-drop">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"
+          style="outline: none">
+            Filter Rooms
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">Best Completion Time</a></li>
+            <li><a class="dropdown-item" href="#">Name of Planner</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container-fluid" #escape_room_cards>
     <div class="row justify-content-evenly text-center">
       <div class="col-2">
-        <div class="card text-white bg-secondary mb-3 h-100">
-          <div class="card-header bg-dark"><h5>Room 1</h5></div>
+        <div class="card text-white the-background mb-3 h-100">
+          <div class="card-header"><h5>Room 1</h5></div>
           <div class="card-body">
             <h5 class="card-title mt-1">Don</h5>
             <div class="row justify-content-evenly text-center mt-2">
@@ -23,14 +47,14 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-dark text-success m-1" type="button">
+          <button class="btn m-1 play-button" type="button">
             Play
           </button>
         </div>
       </div>
       <div class="col-2">
-        <div class="card text-white bg-secondary mb-3 h-100">
-          <div class="card-header bg-dark"><h5>Room 3</h5></div>
+        <div class="card text-white the-background mb-3 h-100">
+          <div class="card-header"><h5>Room 3</h5></div>
           <div class="card-body">
             <h5 class="card-title mt-1">Josh1234</h5>
             <div class="row justify-content-evenly text-center mt-2">
@@ -50,14 +74,14 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-dark text-success m-1" type="button">
+          <button class="btn play-button m-1" type="button">
             Play
           </button>
         </div>
       </div>
       <div class="col-2">
-        <div class="card text-white bg-secondary mb-3 h-100">
-          <div class="card-header bg-dark"><h5>Room 3</h5></div>
+        <div class="card text-white the-background mb-3 h-100">
+          <div class="card-header"><h5>Room 3</h5></div>
           <div class="card-body">
             <h5 class="card-title mt-1">Josh1234</h5>
             <div class="row justify-content-evenly text-center mt-2">
@@ -77,14 +101,14 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-dark text-success m-1" type="button">
+          <button class="btn play-button m-1" type="button">
             Play
           </button>
         </div>
       </div>
       <div class="col-2">
-        <div class="card text-white bg-secondary mb-3 h-100">
-          <div class="card-header bg-dark"><h5>Room 3</h5></div>
+        <div class="card text-white the-background mb-3 h-100">
+          <div class="card-header"><h5>Room 3</h5></div>
           <div class="card-body">
             <h5 class="card-title mt-1">Josh1234</h5>
             <div class="row justify-content-evenly text-center mt-2">
@@ -104,7 +128,7 @@
               </div>
             </div>
           </div>
-          <button class="btn btn-dark text-success m-1" type="button">
+          <button class="btn play-button m-1" type="button">
             Play
           </button>
         </div>
