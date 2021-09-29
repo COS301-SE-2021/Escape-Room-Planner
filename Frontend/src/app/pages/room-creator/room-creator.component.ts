@@ -106,10 +106,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.removeLeaderLines();
   }
 
-  // todo
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
-    //TODO: only do this if the position changed ?
     let update_lines = this.vertexService.getLineIndex(vertex_index);
 
     for (let line_index of update_lines){
@@ -135,7 +133,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.is_disconnect = true;
   }
 
-  // todo
   // adds an object to drag on our 'canvas'
   addObjects(event:any): void{
     if (event.type === 'Room'){
@@ -151,7 +148,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     //spawns object on plane
   }
 
-  // todo
   //use get to get all the rooms stored in db
   getEscapeRooms(): void{
     //http request to rails api
@@ -185,7 +181,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  // todo
   deleteRoom(event: any): void{
     //confirmation box on deleting room
     let confirmation = confirm("Are you sure you want to delete this room?");
@@ -227,7 +222,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // todo
   changeRoom(event: any): void{
     //reset the zoom values
     // @ts-ignore
@@ -248,7 +242,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.solveComponent?.getInitialVertices();
   }
 
-  // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
     this._target_start = undefined;
@@ -357,7 +350,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // todo
   // POST to create new room for a user
   createEscapeRoom(ai_enabled:boolean): void{
 
@@ -446,7 +438,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  // todo
   isNewEscapeRoomNameValid():void{
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -454,7 +445,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.newEscapeRoomNameValid = regexResult !== null;
   }
 
-  // todo
   //just renders new room text in the list
   renderNewRoom(id:number, name:string): void{
     // <li><div><div> class="dropdown-item">ROOM 1</div><div><button></button><img></div></div></li>-->
@@ -502,7 +492,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
 
-  // todo
   //creates Vertex of type with scale at position x,y
   createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
                inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: number,
@@ -571,7 +560,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
     let newP = this.renderer.createElement("p"); // create the name tag
@@ -753,7 +741,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  // todo
   //checks if in a operation for a vertex
   vertexOperation(event: any): void{
     this._is_single_click = true;
@@ -767,7 +754,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     },250);
   }
 
-  // todo
   //disconnects two vertex logically and visually
   disconnectConnection(event: any):void {
     let to_vertex_id = event.target.getAttribute('vertex-id');
@@ -787,7 +773,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.is_disconnect = false;
   }
 
-  // todo
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
     let real_from_id = this.vertexService.vertices[from_vertex].id;
     this.vertexService.removeVertexPreviousConnection(to_vertex, from_vertex);
@@ -824,7 +809,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  // todo
   //makes a connection between two vertices
   makeConnection(event: any): void{
     let to_vertex = event.target;
@@ -871,7 +855,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  // todo
   private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
     this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
@@ -886,7 +869,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     // store on array
   }
 
-  // todo
   // shows a context menu when right button clicked over the vertex
   showContextMenu(event: any): void{
     this._target_vertex = event.target;
@@ -972,7 +954,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // todo
   // updates the position on db from user moving it
   updateVertex(event: any): void{
     let targetVertex = event.target;
@@ -1006,14 +987,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
           if (this.router.routerState.snapshot.url !== '/login' &&
             this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
         }else {
-          this.renderAlertError("There was an Error Updating Vertex Position"); // todo also try to reset the old position
+          this.renderAlertError("There was an Error Updating Vertex Position");
         }
       }
       //console.error('There was an error while updating the vertex', error)
     );
   }
 
-  // todo
   //DELETES VERTEX FROM BACKEND AND REMOVES ON SCREEN
   removeVertex(): void{
     let local_target_id = this._target_vertex.getAttribute('vertex-id');
@@ -1059,7 +1039,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   checkSolvable(): void{
     if(this._target_start !== undefined && this._target_end !== undefined) {
-      // TODO: check if vertex been deleted
       // @ts-ignore
       this.solveComponent?.checkSolvable(this.vertexService.vertices[this._target_start].id,
         this.vertexService.vertices[this._target_end].id, this.currentRoomId);
@@ -1084,7 +1063,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
         this.vertexService.start_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-primary')
       },
-      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      error => this.renderAlertError("Vertex could not update")
       //console.error('There was an error while updating the vertex', error)
     );
   }
@@ -1105,12 +1084,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
         this.vertexService.end_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-info');
       },
-      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      error => this.renderAlertError("Vertex could not update")
       //console.error('There was an error while updating the vertex', error)
     );
   }
 
-  // todo
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
     let incoming_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
@@ -1416,7 +1394,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   simulate(): void {
-    // TODO: change this to be called when simulate button is clicked
     if (this.vertexService.start_vertex_id === -1) {
       this.renderAlertError("Set start vertex");
     } else if (this.vertexService.end_vertex_id === -1) {
@@ -1446,14 +1423,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
                   int_array[i] = this.vertexService.convertToLocalID(string_array[i].split(","));
                 }
                 this.vertexService.possible_paths = int_array;
-                // swap to simulation
-                this.removeLeaderLines();
 
                 this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
-                if(this.roomService.outOfBounds.length === 0)
+                if(this.roomService.outOfBounds.length === 0) {
+                  // swap to simulation
+                  this.removeLeaderLines();
                   this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
-                else
+                } else {
                   this.renderAlertError("Cannot simulate when objects are outside rooms");
+                }
 
               },
               error => {
