@@ -3,6 +3,7 @@
   margin: 0;
 }
 
+
 .main_div{
   position: relative;
   top: 56px;
@@ -39,6 +40,11 @@
 
 .searcher button {
   width: 60px;
+}
+
+.btn-success:focus {
+  border: none !important;
+  outline: none !important;
 }
 
 .dropdown-toggle {

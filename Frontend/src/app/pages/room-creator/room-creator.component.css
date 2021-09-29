@@ -86,7 +86,15 @@ input::-webkit-inner-spin-button {
 }
 
 #droppy {
-  width: 720px;
+  width: 775px;
+}
+
+#droppy:hover {
+  background: #010409;
+}
+
+.dropdown:hover {
+  background: #010409;
 }
 
 /*.dropdown-menu:hover {*/
