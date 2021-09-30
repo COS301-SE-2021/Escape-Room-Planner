@@ -21,7 +21,7 @@ module Api
         end
 
 
-        if (params[:operation] == "AddPublic")
+        if params[:operation] == "AddPublic"
           if params[:RoomID].nil?
             render json: { status: 'Failed', message: 'RoomID cannot be null' }, status: :bad_request
             return
