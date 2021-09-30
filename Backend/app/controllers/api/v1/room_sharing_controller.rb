@@ -19,7 +19,20 @@ module Api
           render json: { status: 'Failed', message: 'Specify operation' }, status: :bad_request
           return
         end
-        room=PublicRoom.new()
+
+
+        if (params[:operation] == "AddPublic")
+          if params[:RoomID].nil?
+            render json: { status: 'Failed', message: 'RoomID cannot be null' }, status: :bad_request
+            return
+          end
+
+          room = PublicRoom.new(RoomID: params[:RoomID])
+          room.save
+        end
+
+      rescue StandardError
+        render json: { status: 'Fail', message: 'Unknown Error' }, status: :not_found
       end
 
     end
