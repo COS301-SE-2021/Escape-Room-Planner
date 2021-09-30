@@ -8,7 +8,9 @@ require './app/Services/RoomSubsystem/Response/get_rooms_response'
 module Api
   module V1
     class RoomSharingController < ApplicationController
+      def index
 
+      end
     end
   end
 end
