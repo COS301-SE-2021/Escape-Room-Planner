@@ -68,6 +68,9 @@ export class SimulationComponent implements OnInit, OnDestroy {
   @ViewChild("help") helpRef: NgbModal | undefined;
   @ViewChild("escapeRoomCompleted") escapeRoomCompletedRef: NgbModal | undefined;
 
+  //public simulation
+  public isPublic: boolean = true;
+
 
   constructor(private elementRef: ElementRef,  private renderer: Renderer2,
               private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService, private modalService: NgbModal, private router:Router) {

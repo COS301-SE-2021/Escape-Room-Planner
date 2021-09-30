@@ -5,7 +5,7 @@
     </div>
     <div  class="modal-body">
       <div>
-        <h4>Manual:</h4>
+        <h4 *ngIf="!isPublic; else controls">Manual:</h4>
         <div class="m-2">
           <div class="row justify-content-evenly ml-5 p-2 custom-row">
             <span class=" col-6">A</span>
@@ -40,18 +40,23 @@
             <span class=" col-6">Open Help Menu</span>
           </div>
         </div>
-        <h4>Auto Sim:</h4>
-        <div class="m-2">
-          <div class="row justify-content-evenly ml-5 p-2 custom-row">
-            <span class=" col-6">Q</span>
-            <span class=" col-6">Open auto-simulation menu</span>
-          </div>
-          <div class="row justify-content-evenly ml-5 p-2 custom-row">
-            <span class=" col-6">T</span>
-            <span class=" col-6">Stop auto-simulation menu</span>
+        <div *ngIf="!isPublic">
+          <h4>Auto Sim:</h4>
+          <div class="m-2">
+            <div class="row justify-content-evenly ml-5 p-2 custom-row">
+              <span class=" col-6">Q</span>
+              <span class=" col-6">Open auto-simulation menu</span>
+            </div>
+            <div class="row justify-content-evenly ml-5 p-2 custom-row">
+              <span class=" col-6">T</span>
+              <span class=" col-6">Stop auto-simulation menu</span>
+            </div>
           </div>
         </div>
       </div>
+      <ng-template #controls>
+        <h4>Controls:</h4>
+      </ng-template>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-outline-dark custom-btn" (click)="modal.close('Save click')">exit</button>
