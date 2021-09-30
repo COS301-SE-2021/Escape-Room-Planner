@@ -8,9 +8,20 @@ require './app/Services/RoomSubsystem/Response/get_rooms_response'
 module Api
   module V1
     class RoomSharingController < ApplicationController
-      def index
 
+      def index
+        rooms = PublicRoom.all
+        render json: { status: 'success', data: rooms }, status: :ok
       end
+
+      def update
+        if params[:operation].nil?
+          render json: { status: 'Failed', message: 'Specify operation' }, status: :bad_request
+          return
+        end
+        room=PublicRoom.new()
+      end
+
     end
   end
 end
