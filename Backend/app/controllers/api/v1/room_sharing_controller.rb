@@ -34,7 +34,7 @@ module Api
         when 'add_public'
           if authorise(request)
             auth_token = request.headers['Authorization1'].split(' ').last
-            req = AddPublicRoomRequest(auth_token, params['escape_room_id'])
+            req = AddPublicRoomRequest.new(auth_token, params['escape_room_id'])
             resp = @@serv.add_public_room(req)
             render json: { success: resp.success, message: resp.message }, status: :ok
           end
@@ -62,7 +62,7 @@ module Api
         when 'remove_public'
           if authorise(request)
             auth_token = request.headers['Authorization1'].split(' ').last
-            req = RemovePublicRoomRequest(auth_token, params['escape_room_id'])
+            req = RemovePublicRoomRequest.new(auth_token, params['escape_room_id'])
             resp = @@serv.add_public_room(req)
             render json: { success: resp.success, message: resp.message }, status: :ok
           end
