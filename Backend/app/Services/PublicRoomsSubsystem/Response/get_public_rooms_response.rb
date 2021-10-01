@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# a response structure of public room get request
 class GetPublicRoomsResponse
   attr_accessor :success, :message, :data
 

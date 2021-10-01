@@ -21,4 +21,18 @@ class PublicRoomServices
     puts e
     GetPublicRoomsResponse.new(false, 'Error occurred while getting Public Rooms', nil)
   end
+
+  # adds public room such that all users can access
+  def add_public_room(request)
+    decoded_token = JsonWebToken.decode(request.token)
+    if EscapeRoom.find_by_id(request.room_id).user_id == decoded_token['id']
+      room = PublicRoom.new
+      room.escape_room_id = request.room_id
+      return AddPublicRoomResponse.new(true, 'Room set to public') if room.save!
+    end
+    AddPublicRoomResponse.new(false, 'Account not registered to room')
+  rescue StandardError => e
+    puts e
+    AddPublicRoomResponse.new(false, 'Error occurred while setting room public')
+  end
 end

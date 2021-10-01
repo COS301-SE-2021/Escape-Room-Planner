@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require './app/Services/room_services'
 require './app/Services/services_helper'
 require './app/Services/create_escaperoom_request'
@@ -10,6 +11,8 @@ require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_estim
 require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 require './app/Services/PublicRoomsSubsystem/public_rooms_service'
 require './app/Services/PublicRoomsSubsystem/Response/get_public_rooms_response'
+require './app/Services/PublicRoomsSubsystem/Request/add_public_room_request'
+require './app/Services/PublicRoomsSubsystem/Response/add_public_room_response'
 
 module Api
   module V1
@@ -22,25 +25,19 @@ module Api
         render json: { success: resp.success, message: resp.message, data: resp.data }, status: :ok
       end
 
+      # post request to create operations
       def create
-        if params[:operation].nil?
-          render json: { status: 'Failed', message: 'Specify operation' }, status: :bad_request
-          return
-        end
-
-        if params[:operation] == 'addPublic'
-          if params[:roomID].nil?
-            render json: { status: 'Failed', message: 'RoomID cannot be null' }, status: :bad_request
-            return
+        operation = params[:operation]
+        case operation
+        when 'add_public'
+          if authorise(request)
+            auth_token = request.headers['Authorization1'].split(' ').last
+            req = AddPublicRoomRequest(auth_token, params['escape_room_id'])
+            resp = @@serv.add_public_room(req)
+            render json: { success: resp.success, message: resp.message }, status: :ok
           end
-
-          room = PublicRoom.new
-          room.RoomID = params[:roomID]
-          if room.save!
-            render json: { status: 'Success', message: 'Room added to public' }, status: :ok
-          else
-            render json: { status: 'Failed', message: 'could not add room' }, status: :bad_request
-          end
+        else
+          render json: { success: false, message: 'Operation does not exist' }, status: :bad_request
         end
 
         if params[:operation] == 'removePublic'
