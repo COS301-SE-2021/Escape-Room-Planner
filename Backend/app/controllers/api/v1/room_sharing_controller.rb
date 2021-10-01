@@ -8,10 +8,18 @@ require './app/Services/RoomSubsystem/Response/get_rooms_response'
 module Api
   module V1
     class RoomSharingController < ApplicationController
-
+      #Get vertices
       def index
+        #Room rating username time
         rooms = PublicRoom.all
-        render json: { status: 'success', data: rooms }, status: :ok
+
+        return_array = Array.new( rooms.size) { Array.new(4) }
+        return_array[0] = rooms
+
+        #Default rating for now
+    
+
+        render json: { status: 'success', data: return_array }, status: :ok
       end
 
       def update
