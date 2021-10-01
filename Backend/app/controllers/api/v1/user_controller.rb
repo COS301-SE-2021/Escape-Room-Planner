@@ -36,8 +36,13 @@ module Api
             return
           end
 
-          if User.where('username = ?', username).count >= 1
-            render json: { status: 'FAILED', message: 'User already exists', data: "Created: false" }, status: :bad_request
+          if User.find_by_username(username)
+            render json: { status: 'FAILED', message: 'Username is taken', data: "Created: false" }, status: :conflict
+            return
+          end
+
+          if User.find_by_email(email)
+            render json: { status: 'FAILED', message: 'Email is taken', data: "Created: false" }, status: :conflict
             return
           end
 

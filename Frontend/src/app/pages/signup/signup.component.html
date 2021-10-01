@@ -24,6 +24,7 @@
                    class="form-control form-control-sm" [class.is-invalid]="username.invalid && username.touched"
                    autocomplete="off">
             <small *ngIf="(username.errors?.required && username.touched )|| usernameEmpty">Username is required.</small>
+            <small *ngIf="usernameTaken">This Username is taken. Try another one</small>
 <!--            <small [style-display="display"]>Username is taken.</small>-->
           </div>
 
@@ -34,6 +35,7 @@
                    pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" autocomplete="off">
             <small *ngIf="(email.errors?.required && email.touched )|| emailEmpty">Email is required.</small>
             <small *ngIf="email.errors?.pattern && email.touched">Please enter a valid email.</small>
+            <small *ngIf="emailTaken">This email is taken. Try another one</small>
           </div>
 
           <div class="form-group">
