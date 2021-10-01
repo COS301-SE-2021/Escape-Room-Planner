@@ -1,0 +1,2 @@
+class RoomRating < ApplicationRecord
+end
