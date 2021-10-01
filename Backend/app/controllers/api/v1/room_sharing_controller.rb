@@ -26,7 +26,7 @@ module Api
           escape_room = EscapeRoom.find_by(room.RoomID)
 
 
-          return_array[i_count][2]= escape_room.user_id
+          return_array[i_count][2] = escape_room.user_id
 
           s_s = SolvabilityService.new
           req = CalculateEstimatedTimeRequest.new(escape_room.startVertex, escape_room.endVertex)
@@ -58,6 +58,28 @@ module Api
           room = PublicRoom.new(RoomID: params[:RoomID])
           room.save
         end
+
+        if params[:operation] == 'RemovePublic'
+          room=PublicRoom.find_by(RoomID: params[:RoomID])
+          if room.destroy
+            render json: { status: 'Success', message: 'RoomDestroyed' }, status: :ok
+          else
+            render json: { status: 'Failed', message: 'could not destroy room' }, status: :bad_request
+          end
+        end
+
+        if params[:operation] == 'AddRating'
+          rating = RoomRating.new(RoomID: params[:RoomID], Rating: params[:Rating])
+          unless rating.save
+            render json: { status: 'Failed', message: 'could not save room' }, status: :bad_request
+          else
+            render json: { status: 'Success', message: 'RoomAdded' }, status: :ok
+          end
+
+
+        end
+
+
 
       rescue StandardError
         render json: { status: 'Fail', message: 'Unknown Error' }, status: :not_found
