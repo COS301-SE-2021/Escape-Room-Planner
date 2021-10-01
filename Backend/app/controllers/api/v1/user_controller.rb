@@ -55,9 +55,9 @@ module Api
           res = serv.register_user(req)
 
         when 'Login'
-          if username.nil? || password.nil?
+          if username.empty? || password.empty?
             # return token
-            render json: { status: 'FAILED', message: 'Ensure correct parameters are given for login' }, status: :not_found
+            render json: { status: 'FAILED', message: 'Empty values' }, status: :not_found
             return
           end
           req = LoginRequest.new(username, password)
