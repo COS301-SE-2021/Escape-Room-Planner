@@ -153,6 +153,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
   }
 
   changeRating(public_room_id: number): void{
+    // use this to update the ratings
     console.log(public_room_id);
     return;
   }
@@ -171,58 +172,55 @@ export class PublicEscapeRoomsComponent implements OnInit {
             room_image.src
           );
         }
-      },
-      error => {
-        console.log(error);
-      }
-    );
 
-    //http request to rails api
-    this.httpClient.get<any>(environment.api + "/api/v1/vertex/" + id, {"headers": this.headers}).subscribe(
-      response => {
-        this.vertexService.reset_array();
-        for (let vertex_t of response.data) {
-          //spawn objects out;
-          let vertex = vertex_t.vertex
-          let vertex_type = vertex_t.type;
-          let vertex_connections = vertex_t.connections;
-          let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
-            vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
-            vertex.description, vertex.clue, vertex.z_index);
-          if(vertex_t.position === "start") {
-            this.vertexService.start_vertex_id = current_id;
-          }
-          else if (vertex_t.position === "end") {
-            this.vertexService.end_vertex_id = current_id;
-          }
-          // @ts-ignore
-          for (let vertex_connection of vertex_connections)
-            this.vertexService.addVertexConnection(current_id, vertex_connection);
+        //http request to rails api
+        this.httpClient.get<any>(environment.api + "/api/v1/vertex/" + id, {"headers": this.headers}).subscribe(
+          response => {
+            this.vertexService.reset_array();
+            for (let vertex_t of response.data) {
+              //spawn objects out;
+              let vertex = vertex_t.vertex
+              let vertex_type = vertex_t.type;
+              let vertex_connections = vertex_t.connections;
+              let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
+                vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
+                vertex.description, vertex.clue, vertex.z_index);
+              if(vertex_t.position === "start") {
+                this.vertexService.start_vertex_id = current_id;
+              }
+              else if (vertex_t.position === "end") {
+                this.vertexService.end_vertex_id = current_id;
+              }
+              // @ts-ignore
+              for (let vertex_connection of vertex_connections)
+                this.vertexService.addVertexConnection(current_id, vertex_connection);
 
-        }
+            }
 
-        // converts real connection to local connection
-        for (let vertex of this.vertexService.vertices) {
-          let vertex_connections = vertex.getConnections();
+            // converts real connection to local connection
+            for (let vertex of this.vertexService.vertices) {
+              let vertex_connections = vertex.getConnections();
 
-          for (let vertex_connection of vertex_connections) {
-            // go through all the connections
-            // for each location locate the vertex with that real id and use its local id in place of real one
-            for (let vertex_to of this.vertexService.vertices) {
-              if (vertex_to.id === vertex_connection) {
-                this.vertexService.removeVertexConnection(vertex.local_id, vertex_connection);
-                this.addLocalConnection(vertex.local_id, vertex_to.local_id);
-                break; // so that not the whole array is traversed
+              for (let vertex_connection of vertex_connections) {
+                // go through all the connections
+                // for each location locate the vertex with that real id and use its local id in place of real one
+                for (let vertex_to of this.vertexService.vertices) {
+                  if (vertex_to.id === vertex_connection) {
+                    this.vertexService.removeVertexConnection(vertex.local_id, vertex_connection);
+                    this.addLocalConnection(vertex.local_id, vertex_to.local_id);
+                    break; // so that not the whole array is traversed
+                  }
+                }
               }
             }
+            this.play(id);
+          },
+          //Error retrieving vertices message
+          error => {
+            console.log(error);
           }
-        }
-        console.log(this.vertexService.vertices);
-        console.log(this.roomService.room_images);
-        // todo: change to only run once both api calls are done
-        setTimeout(() => {this.play(id)}, 5000);
+        );
       },
-      //Error retrieving vertices message
       error => {
         console.log(error);
       }
@@ -239,6 +237,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
       operation: "ReturnPaths",
       roomid: id
     };
+    // todo: check if room solvable, copy/paste in backend
     this.httpClient.post<any>(environment.api+"/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
       response => {
         let string_array = response.data.vertices;
@@ -251,6 +250,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
         this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
         if(this.roomService.outOfBounds.length === 0)
           this.router.navigate(['/simulation']).then(r => console.log('simulate redirect' + r));
+        else
+          alert('It seems like a room is not ready');
       },
       error => {
         console.log(error);

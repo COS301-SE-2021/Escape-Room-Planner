@@ -470,7 +470,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.addClass(newUploadButton, 'btn-primary');
     this.renderer.appendChild(newUploadButton, newUploadImage);
     this.renderer.setAttribute(newUploadButton,'escape-room-id',id.toString());
-    this.renderer.listen(newUploadButton,'click',(event) => this.uploadRoom(event));
+    this.renderer.listen(newUploadButton,'click',() => this.uploadRoom(id));
 
     //add boostrap class to <button>
     this.renderer.addClass(newButton, 'btn');
@@ -508,9 +508,30 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // upload the room to public library
-  uploadRoom(event: any):void{
-    // idk how to change the colour here as well
-    // need tto change the colour when response passes properly
+  uploadRoom(escape_room_id: number):void{
+    // todo: change button icon as well
+
+    let uploadRoomBody = {
+      operation: 'add_public',
+      escape_room_id: escape_room_id
+    }
+
+    this.httpClient.post<any>(environment.api + "/api/v1/room_sharing/", uploadRoomBody, {"headers": this.headers}).subscribe(
+      response =>{
+        if(response.success)
+          this.renderAlertError('Your room has been uploaded for everyone to see');
+        else
+          this.renderAlertError('Your room was already uploaded');
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else {
+          console.error('There was an error uploading the room your room', error);
+          this.renderAlertError("Couldn't upload your room");
+        }
+      });
   }
 
   //creates Vertex of type with scale at position x,y
