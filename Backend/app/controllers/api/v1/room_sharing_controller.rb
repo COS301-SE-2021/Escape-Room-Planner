@@ -21,7 +21,21 @@ module Api
 
         rooms.each do |room|
           return_array[i_count][0] = room
-          return_array[i_count][1] = 3.5
+
+          ratings_for_room = RoomRating.find_by(RoomID: room.RoomID)
+          r_total = 0
+          if ratings_for_room.nil? || (ratings_for_room.size = 0)
+            return_array[i_count][1] = 0
+          else
+            ratings_for_room.each do |r|
+              r_total += r.Rating
+            end
+            r_total= r_total/ ratings_for_room.size
+
+            return_array[i_count][1]=r_total
+          end
+
+
 
           escape_room = EscapeRoom.find_by(room.RoomID)
 
