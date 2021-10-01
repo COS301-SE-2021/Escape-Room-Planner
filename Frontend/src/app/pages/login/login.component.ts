@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   onSubmit(data:any) {
     this.display = 'none';
     let extra_data = {
-      username: data["username"],
+      username: data["username"].toLowerCase(),
       password: data["password_digest"],
       operation: 'Login'
     };
