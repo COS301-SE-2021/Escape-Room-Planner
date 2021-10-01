@@ -11,6 +11,7 @@ require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 module Api
   module V1
     class RoomSharingController < ApplicationController
+     protect_from_forgery with: :null_session
       # Get vertices
       def index
         # Room rating username time
@@ -56,29 +57,30 @@ module Api
         render json: { status: 'Fail', message: 'Unknown Error' }, status: :not_found
       end
 
-      def update
+      def create
         if params[:operation].nil?
           render json: { status: 'Failed', message: 'Specify operation' }, status: :bad_request
           return
         end
 
 
-        if params[:operation] == 'AddPublic'
-          if params[:RoomID].nil?
+        if params[:operation] == 'addPublic'
+          if params[:roomID].nil?
             render json: { status: 'Failed', message: 'RoomID cannot be null' }, status: :bad_request
             return
           end
 
-          room = PublicRoom.new(RoomID: params[:RoomID])
-          if room.save
+          room = PublicRoom.new
+          room.RoomID = params[:roomID]
+          if room.save!
             render json: { status: 'Success', message: 'Room added to public' }, status: :ok
           else
             render json: { status: 'Failed', message: 'could not add room' }, status: :bad_request
           end
         end
 
-        if params[:operation] == 'RemovePublic'
-          room = PublicRoom.find_by(RoomID: params[:RoomID])
+        if params[:operation] == 'removePublic'
+          room = PublicRoom.find_by(RoomID: params[:roomID])
           if room.destroy
             render json: { status: 'Success', message: 'RoomDestroyed' }, status: :ok
           else
@@ -86,10 +88,10 @@ module Api
           end
         end
 
-        if params[:operation] == 'AddRating'
-          rating = RoomRating.new(RoomID: params[:RoomID], Rating: params[:Rating])
+        if params[:operation] == 'addRating'
+          rating = RoomRating.new(RoomID: params[:roomID], Rating: params[:rating])
           if rating.save
-            render json: { status: 'Success', message: 'RoomAdded' }, status: :ok
+            render json: { status: 'Success', message: 'Room Rating Added' }, status: :ok
           else
             render json: { status: 'Failed', message: 'could not save room' }, status: :bad_request
           end
@@ -98,7 +100,7 @@ module Api
         end
 
       rescue StandardError
-        render json: { status: 'Fail', message: 'Unknown Error' }, status: :not_found
+        render json: { success: false, message: 'System Error' }, status: 500
       end
 
       def show
