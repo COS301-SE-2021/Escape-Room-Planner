@@ -23,7 +23,7 @@
             <input type="text" id="username" ngModel required name="username" #username="ngModel"
                    class="form-control form-control-sm" [class.is-invalid]="username.invalid && username.touched"
                    autocomplete="off">
-            <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
+            <small *ngIf="(username.errors?.required && username.touched )|| usernameEmpty">Username is required.</small>
 <!--            <small [style-display="display"]>Username is taken.</small>-->
           </div>
 
@@ -32,7 +32,7 @@
             <input type="email" id="email" ngModel required #email="ngModel" name="email"
                    class="form-control form-control-sm" [class.is-invalid]="email.invalid && email.touched"
                    pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" autocomplete="off">
-            <small *ngIf="email.errors?.required && email.touched">Email is required.</small>
+            <small *ngIf="(email.errors?.required && email.touched )|| emailEmpty">Email is required.</small>
             <small *ngIf="email.errors?.pattern && email.touched">Please enter a valid email.</small>
           </div>
 
@@ -42,7 +42,7 @@
                    class="form-control form-control-sm" [class.is-invalid]="password.invalid && password.touched"
                    pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?#&])[A-Za-z\d$@$!%*?#&].{7,}"
                    required>
-            <small *ngIf="password.errors?.required && password.touched">Password is required.</small>
+            <small *ngIf="(password.errors?.required && password.touched)|| passwordEmpty">Password is required.</small>
             <small *ngIf="password.errors?.pattern && password.touched">
               Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters.
             </small>
@@ -50,9 +50,9 @@
           <div class="form-group">
             <label for="confirm">Confirm Password</label>
             <input type="password" id="confirm" ngModel #confirm="ngModel" name="confirm"
-                   class="form-control form-control-sm" required
+                   class="form-control form-control-sm" [class.is-invalid]="confirm.invalid && confirm.touched" required
                    (keyup)="(checkSomething(password.value, confirm.value))">
-            <small *ngIf="confirm.errors?.required && confirm.touched">Confirm password is required.</small>
+            <small *ngIf="(confirm.errors?.required && confirm.touched )|| confirmEmpty ">Confirm password is required.</small>
             <small>{{errorMessage}}</small>
           </div>
           <button type="submit" class="btn btn-outline-success btn-block">Sign Up</button>

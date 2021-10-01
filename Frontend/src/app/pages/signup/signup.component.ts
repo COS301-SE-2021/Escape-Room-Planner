@@ -10,6 +10,10 @@ import {environment} from "../../../environments/environment";
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
+  public usernameEmpty: boolean = false;
+  public passwordEmpty: boolean = false;
+  public emailEmpty: boolean = false;
+  public confirmEmpty: boolean = false;
 
   constructor(private http:HttpClient, private router:Router) { }
   ngOnInit(): void {}
@@ -42,6 +46,23 @@ export class SignupComponent implements OnInit {
           });
       },
           error => {
+
+            if(data["username"] === "")
+            {
+              this.usernameEmpty = true
+            }
+            if(!data["password"])
+            {
+              this.passwordEmpty = true
+            }
+            if(data["email"] === "")
+            {
+              this.emailEmpty = true
+            }
+            if(data["confirm"] === "")
+            {
+              this.confirmEmpty = true
+            }
             if (error["message"] == "User already exists")
               this.display = 'block';
         })
