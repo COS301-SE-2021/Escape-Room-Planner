@@ -61,9 +61,11 @@ ActiveRecord::Schema.define(version: 2021_09_30_072432) do
   end
 
   create_table "public_rooms", force: :cascade do |t|
-    t.integer "RoomID"
+    t.bigint "best_time"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "escape_room_id", null: false
+    t.index ["escape_room_id"], name: "index_public_rooms_on_escape_room_id"
   end
 
   create_table "room_images", force: :cascade do |t|
@@ -77,10 +79,13 @@ ActiveRecord::Schema.define(version: 2021_09_30_072432) do
   end
 
   create_table "room_ratings", force: :cascade do |t|
-    t.integer "RoomID"
-    t.integer "Rating"
+    t.integer "rating"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.bigint "public_room_id", null: false
+    t.index ["public_room_id"], name: "index_room_ratings_on_public_room_id"
+    t.index ["user_id"], name: "index_room_ratings_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -122,6 +127,9 @@ ActiveRecord::Schema.define(version: 2021_09_30_072432) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "escape_rooms", "users"
+  add_foreign_key "public_rooms", "escape_rooms"
   add_foreign_key "room_images", "escape_rooms"
+  add_foreign_key "room_ratings", "public_rooms"
+  add_foreign_key "room_ratings", "users"
   add_foreign_key "vertices", "escape_rooms"
 end
