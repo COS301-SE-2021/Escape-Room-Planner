@@ -30,10 +30,11 @@ export class PublicEscapeRoomsComponent implements OnInit {
   }
 
   getPublicEscapeRooms(){
-    this.httpClient.get<any>(environment.api + "/api/v1/room/", {"headers": this.headers}).subscribe(
+    this.httpClient.get<any>(environment.api + "/api/v1/room_sharing/", {"headers": this.headers}).subscribe(
       response => {
+        console.log(response);
         for (let er of response.data){
-          this.renderPublicEscapeRooms(er.id, er.name);
+          this.renderPublicEscapeRooms(er.room_name, er.username, er.best_time, er.rating, er.escape_room_id, er.public_room_id);
         }
       },
       //Render error if bad request
@@ -45,7 +46,9 @@ export class PublicEscapeRoomsComponent implements OnInit {
 
 
   // renders all cards on page
-  renderPublicEscapeRooms(id: number, name: string, ){
+  renderPublicEscapeRooms(room_name: string, username: string, best_time: number,
+                          rating: number, escape_room_id: number, public_room_id: number)
+  {
     if(this.card_number % 4 == 0){
       let row = this.renderer.createElement('div');
       this.renderer.addClass(row, 'row');
@@ -72,10 +75,21 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.addClass(card, 'h-100');
 
     let card_header = this.renderer.createElement('div');
+    // <input type="range" class="form-range" min="1.0" max="5.0" step="0.5" value="1">
+    let rating_slider = this.renderer.createElement('input');
     // set card-header bootstrap
     this.renderer.addClass(card_header, 'card-header');
     this.renderer.addClass(card_header, 'bg-dark');
-    this.renderer.appendChild(card_header, this.renderer.createText(name));
+    this.renderer.appendChild(card_header, this.renderer.createText(room_name));
+
+    // rating slider
+    this.renderer.setAttribute(rating_slider, 'type', 'range');
+    this.renderer.setAttribute(rating_slider, 'min', '1.0');
+    this.renderer.setAttribute(rating_slider, 'max', '5.0');
+    this.renderer.setAttribute(rating_slider, 'step', '0.5');
+    this.renderer.setAttribute(rating_slider, 'value', '1');
+    this.renderer.addClass(rating_slider, 'form-range');
+    this.renderer.listen(rating_slider, 'change', () => this.changeRating(public_room_id));
 
     let card_body = this.renderer.createElement('div');
     // set card-body bootstrap
@@ -85,8 +99,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     // set title bootstrap
     this.renderer.addClass(card_title, 'card-title');
     this.renderer.addClass(card_title, 'mt-1');
-    // @ts-ignore
-    this.renderer.appendChild(card_title, this.renderer.createText(localStorage.getItem('username')));
+    this.renderer.appendChild(card_title, this.renderer.createText(username));
 
     let inner_row = [];
     for(let i = 0; i < 2; i++){
@@ -105,8 +118,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
       this.renderer.addClass(inner_col[i], 'col-5');
     }
     // add col values
-    this.renderer.appendChild(inner_col[0], this.renderer.createText('10:20'));
-    this.renderer.appendChild(inner_col[1], this.renderer.createText('3.5'));
+    this.renderer.appendChild(inner_col[0], this.renderer.createText(String(best_time)));
+    this.renderer.appendChild(inner_col[1], this.renderer.createText(String(rating)));
     this.renderer.appendChild(inner_col[2], this.renderer.createText('Best Time'));
     this.renderer.appendChild(inner_col[3], this.renderer.createText('Rating'));
 
@@ -117,7 +130,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.addClass(button, 'text-success');
     this.renderer.addClass(button, 'm-1');
     this.renderer.appendChild(button, this.renderer.createText('Play'));
-    this.renderer.listen(button,'click',(event) => this.getRoomObjects(id));
+    this.renderer.listen(button,'click',(event) => this.getRoomObjects(escape_room_id));
 
     // append all children together
 
@@ -129,6 +142,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.appendChild(card_body, card_title);
     this.renderer.appendChild(card_body, inner_row[0]);
     this.renderer.appendChild(card_body, inner_row[1]);
+    this.renderer.appendChild(card_body, rating_slider);
 
     this.renderer.appendChild(card, card_header);
     this.renderer.appendChild(card, card_body);
@@ -136,6 +150,11 @@ export class PublicEscapeRoomsComponent implements OnInit {
 
     this.renderer.appendChild(this.col_div[this.card_number%4], card);
     this.card_number++;
+  }
+
+  changeRating(public_room_id: number): void{
+    console.log(public_room_id);
+    return;
   }
 
   getRoomObjects(id: number){
