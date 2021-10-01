@@ -15,24 +15,31 @@ module Api
       def index
         # Room rating username time
 
-
-        return_array = Array.new( rooms.size) { Array.new(4) }
-        
-        # Populate rooms
-        i_count = 0
         rooms = PublicRoom.all
+        return_array = Array.new(rooms.size) { Array.new(4) }
+        i_count = 0
+
         rooms.each do |room|
           return_array[i_count][0] = room
           return_array[i_count][1] = 3.5
 
-          escape_room=EscapeRoom.find_by(room.RoomID)
-          return_array[i_count][2] = escapeRoom.
+          escape_room = EscapeRoom.find_by(room.RoomID)
+
+
+          return_array[i_count][2]= escape_room.user_id
+
+          s_s = SolvabilityService.new
+          req = CalculateEstimatedTimeRequest.new(escape_room.startVertex, escape_room.endVertex)
+          resp = s_s.calculate_estimated_time(req)
+          return_array[i_count][3] = resp.time
 
           i_count += 1
         end
 
 
         render json: { status: 'success', data: return_array }, status: :ok
+      rescue StandardError
+        render json: { status: 'Fail', message: 'Unknown Error' }, status: :not_found
       end
 
       def update
