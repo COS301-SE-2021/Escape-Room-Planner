@@ -102,6 +102,12 @@ module Api
       end
 
       def show
+        room = PublicRoom.find_by(RoomID: params[:RoomID])
+        if room.nil?
+          render json: { status: 'Failed', message: 'Room needs to be public' }, status: :bad_request
+          return
+        end
+
         req = GetVerticesRequest.new(params[:RoomID])
         serv = RoomServices.new
         res = serv.get_vertices(req)
