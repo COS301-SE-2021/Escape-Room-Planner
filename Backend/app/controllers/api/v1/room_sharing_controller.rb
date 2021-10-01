@@ -30,9 +30,9 @@ module Api
             ratings_for_room.each do |r|
               r_total += r.Rating
             end
-            r_total= r_total/ ratings_for_room.size
+            r_total /= ratings_for_room.size
 
-            return_array[i_count][1]=r_total
+            return_array[i_count][1] = r_total
           end
 
 
@@ -97,13 +97,20 @@ module Api
 
         end
 
-
-
       rescue StandardError
         render json: { status: 'Fail', message: 'Unknown Error' }, status: :not_found
       end
 
+      def show
+        req = GetVerticesRequest.new(params[:RoomID])
+        serv = RoomServices.new
+        res = serv.get_vertices(req)
+        render json: { success: res.success, message: res.message, data: res.data }, status: :ok
+      end
+
     end
+
+
   end
 end
 
