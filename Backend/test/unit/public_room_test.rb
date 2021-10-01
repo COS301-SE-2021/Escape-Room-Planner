@@ -5,6 +5,8 @@ require './app/Services/PublicRoomsSubsystem/public_rooms_service'
 require './app/Services/PublicRoomsSubsystem/Response/get_public_rooms_response'
 require './app/Services/PublicRoomsSubsystem/Request/add_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/add_public_room_response'
+require './app/Services/PublicRoomsSubsystem/Request/remove_public_room_request'
+require './app/Services/PublicRoomsSubsystem/Response/remove_public_room_response'
 
 # unit test all services for public rooms
 class PublicRoomTest < ActiveSupport::TestCase
@@ -21,5 +23,13 @@ class PublicRoomTest < ActiveSupport::TestCase
     serv = PublicRoomServices.new
     resp = serv.add_public_room(req)
     assert_equal('Room set to public', resp.message)
+  end
+
+  # test if user can add public room
+  test 'can remove public room' do
+    req = RemovePublicRoomRequest.new(login_for_test, 8)
+    serv = PublicRoomServices.new
+    resp = serv.remove_public_room(req)
+    assert_equal('Room Removed', resp.message)
   end
 end

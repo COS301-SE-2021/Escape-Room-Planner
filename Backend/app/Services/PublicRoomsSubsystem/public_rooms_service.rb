@@ -35,4 +35,21 @@ class PublicRoomServices
     puts e
     AddPublicRoomResponse.new(false, 'Error occurred while setting room public')
   end
+
+  # removes public room from database
+  def remove_public_room(request)
+    decoded_token = JsonWebToken.decode(request.token)
+    if EscapeRoom.find_by_id(request.room_id).user_id == decoded_token['id']
+      room = PublicRoom.find_by_escape_room_id(request.room_id)
+      if room.nil?
+        return AddPublicRoomResponse.new(false, 'Public room not found')
+      elsif room.destroy
+        return AddPublicRoomResponse.new(true, 'Room Removed')
+      end
+    end
+    RemovePublicRoomResponse.new(false, 'Can not remove from public')
+  rescue StandardError => e
+    puts e
+    AddPublicRoomResponse.new(false, 'Error occurred while removing public room')
+  end
 end

@@ -7,3 +7,7 @@ one:
 two:
   id: 2
   escape_room_id: 2
+
+three:
+  id: 3
+  escape_room_id: 8

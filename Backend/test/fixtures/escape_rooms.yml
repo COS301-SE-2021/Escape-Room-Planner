@@ -41,3 +41,10 @@ five:
   endVertex: 912
   name: two
   user_id: 2
+
+six:
+  id: 8
+  startVertex: 901
+  endVertex: 912
+  name: two
+  user_id: 2
