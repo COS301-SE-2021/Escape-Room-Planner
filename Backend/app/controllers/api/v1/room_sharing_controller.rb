@@ -56,11 +56,15 @@ module Api
           end
 
           room = PublicRoom.new(RoomID: params[:RoomID])
-          room.save
+          if room.save
+            render json: { status: 'Success', message: 'Room added to public' }, status: :ok
+          else
+            render json: { status: 'Failed', message: 'could not add room' }, status: :bad_request
+          end
         end
 
         if params[:operation] == 'RemovePublic'
-          room=PublicRoom.find_by(RoomID: params[:RoomID])
+          room = PublicRoom.find_by(RoomID: params[:RoomID])
           if room.destroy
             render json: { status: 'Success', message: 'RoomDestroyed' }, status: :ok
           else
@@ -70,10 +74,10 @@ module Api
 
         if params[:operation] == 'AddRating'
           rating = RoomRating.new(RoomID: params[:RoomID], Rating: params[:Rating])
-          unless rating.save
-            render json: { status: 'Failed', message: 'could not save room' }, status: :bad_request
-          else
+          if rating.save
             render json: { status: 'Success', message: 'RoomAdded' }, status: :ok
+          else
+            render json: { status: 'Failed', message: 'could not save room' }, status: :bad_request
           end
 
 
