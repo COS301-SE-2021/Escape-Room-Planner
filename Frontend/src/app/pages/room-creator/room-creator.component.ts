@@ -453,26 +453,41 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     let newDivCol1 = this.renderer.createElement('div');
     let newDivCol2 = this.renderer.createElement('div');
     let newButton = this.renderer.createElement('button');
+    let newUploadButton = this.renderer.createElement('button');
     let newImage = this.renderer.createElement('img');
+    let newUploadImage = this.renderer.createElement('img');
 
     //add src to <img>
     this.renderer.setAttribute(newImage, 'src', './assets/svg/trash-fill.svg');
     this.renderer.setAttribute(newImage,'escape-room-id',id.toString());
 
+    //add src to upload <img>
+    this.renderer.setAttribute(newUploadImage, 'src', './assets/svg/cloud-arrow-up-fill.svg');
+    this.renderer.setAttribute(newUploadImage,'escape-room-id',id.toString());
+
+    //add boostrap class to upload <button>
+    this.renderer.addClass(newUploadButton, 'btn');
+    this.renderer.addClass(newUploadButton, 'btn-primary');
+    this.renderer.appendChild(newUploadButton, newUploadImage);
+    this.renderer.setAttribute(newUploadButton,'escape-room-id',id.toString());
+    this.renderer.listen(newUploadButton,'click',(event) => this.uploadRoom(event));
+
     //add boostrap class to <button>
     this.renderer.addClass(newButton, 'btn');
     this.renderer.addClass(newButton, 'btn-dark');
+    this.renderer.addClass(newButton, 'me-1');
     this.renderer.appendChild(newButton, newImage);
     this.renderer.setAttribute(newButton,'escape-room-id',id.toString());
     this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event));
 
     //add bootstrap class to <div col2>
-    this.renderer.addClass(newDivCol2, 'col-1');
+    this.renderer.addClass(newDivCol2, 'col-2');
     this.renderer.addClass(newDivCol2, 'text-end');
     this.renderer.appendChild(newDivCol2, newButton);
+    this.renderer.appendChild(newDivCol2, newUploadButton);
 
     //add bootstrap class to <div col1>
-    this.renderer.addClass(newDivCol1, 'col-11');
+    this.renderer.addClass(newDivCol1, 'col-10');
     this.renderer.addClass(newDivCol1, 'text-white');
     this.renderer.appendChild(newDivCol1, this.renderer.createText(name));
     this.renderer.setAttribute(newDivCol1,'escape-room-id',id.toString());
@@ -490,6 +505,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.setAttribute(newRoom,'room-id',id.toString());
     // append to the dropdown menu
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
+  }
+
+  // upload the room to public library
+  uploadRoom(event: any):void{
+    // idk how to change the colour here as well
+    // need tto change the colour when response passes properly
   }
 
   //creates Vertex of type with scale at position x,y
