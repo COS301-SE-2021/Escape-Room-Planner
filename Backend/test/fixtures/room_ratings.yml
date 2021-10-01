@@ -6,8 +6,8 @@ one:
   user_id: 1
 
 two:
-  rating: 3
-  public_room_id: 1
+  rating: 4
+  public_room_id: 2
   user_id: 2
 
 
