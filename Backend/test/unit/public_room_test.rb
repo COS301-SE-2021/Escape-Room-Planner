@@ -7,6 +7,8 @@ require './app/Services/PublicRoomsSubsystem/Request/add_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/add_public_room_response'
 require './app/Services/PublicRoomsSubsystem/Request/remove_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/remove_public_room_response'
+require './app/Services/PublicRoomsSubsystem/Request/add_rating_request'
+require './app/Services/PublicRoomsSubsystem/Response/add_rating_response'
 
 # unit test all services for public rooms
 class PublicRoomTest < ActiveSupport::TestCase
@@ -31,5 +33,22 @@ class PublicRoomTest < ActiveSupport::TestCase
     serv = PublicRoomServices.new
     resp = serv.remove_public_room(req)
     assert_equal('Room Removed', resp.message)
+  end
+
+  test 'update rating' do
+    token = JsonWebToken.encode(id: 1)
+    req = AddRatingRequest.new(1, token, 4)
+    serv = PublicRoomServices.new
+    resp = serv.add_rating(req)
+    puts resp.message
+    assert_equal('Rating Updated', resp.message)
+  end
+
+  test 'create rating' do
+    token = JsonWebToken.encode(id: 1)
+    req = AddRatingRequest.new(2, token, 2)
+    serv = PublicRoomServices.new
+    resp = serv.add_rating(req)
+    assert_equal('Successfully added rating', resp.message)
   end
 end

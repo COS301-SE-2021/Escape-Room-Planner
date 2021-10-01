@@ -43,13 +43,18 @@ module Api
         end
 
         if params[:operation] == 'addRating'
-          rating = RoomRating.new(RoomID: params[:roomID], Rating: params[:rating])
-          if rating.save
-            render json: { status: 'Success', message: 'Room Rating Added' }, status: :ok
-          else
-            render json: { status: 'Failed', message: 'could not save room' }, status: :bad_request
+          if (params[:roomID].nil? || params[:rating] || params[:token].nil?)
+            render json: { status: 'FAILED', message: 'Empty Values' }, status: :bad_request
           end
 
+          req = AddRatingRequest(params[:roomID], params[:token], params[:rating])
+          resp = @@serv.add_rating(req)
+
+          if(resp.success)
+            render json: { status: 'SUCCESS', message: resp.message }, status: :ok
+          else
+            render json: { status: 'FAILED', message: resp.message }, status: :bad_request
+          end
         end
       rescue StandardError
         render json: { success: false, message: 'System Error' }, status: 500
