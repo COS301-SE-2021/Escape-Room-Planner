@@ -17,7 +17,7 @@ class PublicRoomTest < ActiveSupport::TestCase
   test 'can get all public rooms' do
     req = GetPublicRoomsRequest.new(nil, nil, nil, nil)
     serv = PublicRoomServices.new
-    resp = serv.public_rooms(req)
+    resp = serv.public_rooms(req, nil)
     assert_equal('testUser', resp.data[0][:username])
   end
 
