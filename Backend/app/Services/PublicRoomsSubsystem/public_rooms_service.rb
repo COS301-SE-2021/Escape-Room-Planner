@@ -149,8 +149,7 @@ class PublicRoomServices
   def set_best_time(escape_room_id, best_time)
     public_room = PublicRoom.find_by_escape_room_id(escape_room_id)
     return AddRatingResponse.new(false, 'Public Room does not exist') if public_room.nil?
-    return AddRatingResponse.new(false, 'Best time worse') if public_room.best_time < best_time
-
+    return AddRatingResponse.new(false, 'Best time worse') if public_room.best_time < best_time && public_room.best_time != nil
     return AddRatingResponse.new(true, 'Time Updated')  if public_room.update(best_time: best_time)
 
     AddRatingResponse.new(false, 'Public Room failed to update')
