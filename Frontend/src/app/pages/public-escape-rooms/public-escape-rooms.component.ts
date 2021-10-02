@@ -11,7 +11,7 @@ import {environment} from "../../../environments/environment";
   styleUrls: ['./public-escape-rooms.component.css']
 })
 export class PublicEscapeRoomsComponent implements OnInit {
-
+  private logged_in: boolean = true;
   private headers: HttpHeaders = new HttpHeaders();
   private card_number: number = 0;
   private col_div: Element[] = [];
@@ -27,6 +27,9 @@ export class PublicEscapeRoomsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(localStorage.getItem('token') ==  null) {
+      this.logged_in = false;
+    }
   }
 
   getPublicEscapeRooms(){
@@ -34,7 +37,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
       response => {
         console.log(response);
         for (let er of response.data){
-          this.renderPublicEscapeRooms(er.room_name, er.username, er.best_time, er.rating, er.escape_room_id, er.public_room_id);
+          this.renderPublicEscapeRooms(er.room_name, er.username, er.best_time, er.rating, er.escape_room_id, er.public_room_id, er.user_rating);
         }
       },
       //Render error if bad request
@@ -44,11 +47,11 @@ export class PublicEscapeRoomsComponent implements OnInit {
     );
   }
 
-
   // renders all cards on page
   renderPublicEscapeRooms(room_name: string, username: string, best_time: number,
-                          rating: number, escape_room_id: number, public_room_id: number)
+                          rating: number, escape_room_id: number, public_room_id: number, user_rating: number|undefined)
   {
+
     if(this.card_number % 4 == 0){
       let row = this.renderer.createElement('div');
       this.renderer.addClass(row, 'row');
@@ -86,10 +89,11 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.setAttribute(rating_slider, 'type', 'range');
     this.renderer.setAttribute(rating_slider, 'min', '1.0');
     this.renderer.setAttribute(rating_slider, 'max', '5.0');
-    this.renderer.setAttribute(rating_slider, 'step', '0.5');
-    this.renderer.setAttribute(rating_slider, 'value', '1');
+    this.renderer.setAttribute(rating_slider, 'step', '1');
+    this.renderer.setAttribute(rating_slider, 'value', String(user_rating));
     this.renderer.addClass(rating_slider, 'form-range');
-    this.renderer.listen(rating_slider, 'change', () => this.changeRating(public_room_id));
+    this.renderer.addClass(rating_slider, 'px-md-3');
+    this.renderer.listen(rating_slider, 'change', () => this.changeRating(public_room_id, rating_slider.value));
 
     let card_body = this.renderer.createElement('div');
     // set card-body bootstrap
@@ -142,8 +146,9 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.appendChild(card_body, card_title);
     this.renderer.appendChild(card_body, inner_row[0]);
     this.renderer.appendChild(card_body, inner_row[1]);
-    this.renderer.appendChild(card_body, rating_slider);
-
+    if (this.logged_in) {
+      this.renderer.appendChild(card_body, rating_slider);
+    }
     this.renderer.appendChild(card, card_header);
     this.renderer.appendChild(card, card_body);
     this.renderer.appendChild(card, button);
@@ -152,10 +157,24 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.card_number++;
   }
 
-  changeRating(public_room_id: number): void{
+  changeRating(public_room_id: number, rating: number): void{
     // use this to update the ratings
-    console.log(public_room_id);
-    return;
+    let rateRoomBody = {
+      operation: 'add_rating',
+      roomID: public_room_id,
+      rating: rating
+    }
+    console.log('RATING');
+    this.httpClient.post<any>(environment.api + "/api/v1/room_sharing/", rateRoomBody, {"headers": this.headers}).subscribe(
+      response =>{
+        console.info('ratting has been registered');
+      },
+      error => {
+        if (error.status === 401){
+          if (this.router.routerState.snapshot.url !== '/login' &&
+            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        }else console.error('rating failed to update');
+      });
   }
 
   getRoomObjects(id: number){
@@ -253,6 +272,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
           alert('It seems like a room is not ready');
       },
       error => {
+        alert('It seems like a room is not ready');
         console.log(error);
       }
     );

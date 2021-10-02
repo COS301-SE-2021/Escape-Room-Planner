@@ -5,11 +5,14 @@ require './app/Services/services_helper'
 require './app/Services/RoomSubsystem/Request/get_rooms_request'
 require './app/Services/RoomSubsystem/Response/get_rooms_response'
 require './app/Services/PublicRoomsSubsystem/public_rooms_service'
+require './app/Services/PublicRoomsSubsystem/Request/get_public_rooms_request'
 require './app/Services/PublicRoomsSubsystem/Response/get_public_rooms_response'
 require './app/Services/PublicRoomsSubsystem/Request/add_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/add_public_room_response'
 require './app/Services/PublicRoomsSubsystem/Request/remove_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/remove_public_room_response'
+require './app/Services/PublicRoomsSubsystem/Request/add_rating_request'
+require './app/Services/PublicRoomsSubsystem/Response/add_rating_response'
 
 module Api
   module V1
@@ -18,7 +21,12 @@ module Api
       @@serv = PublicRoomServices.new
       # Get vertices
       def index
-        resp = @@serv.public_rooms
+        req = GetPublicRoomsRequest.new(params[:search], params[:filter], nil, nil)
+        resp = if authorise(request)
+                 @@serv.public_rooms(req, JsonWebToken.decode(request.headers['Authorization1'].split(' ').last)['id'])
+               else
+                 @@serv.public_rooms(req, nil)
+               end
         render json: { success: resp.success, message: resp.message, data: resp.data }, status: :ok
       end
 
@@ -34,7 +42,8 @@ module Api
             render json: { success: resp.success, message: resp.message }, status: :ok
           end
         when 'add_rating'
-          req = AddRatingRequest(params[:roomID], params[:token], params[:rating])
+          auth_token = request.headers['Authorization1'].split(' ').last
+          req = AddRatingRequest.new(params[:roomID], auth_token, params[:rating])
           resp = @@serv.add_rating(req)
           render json: { success: resp.success, message: resp.message }, status: :ok
         else

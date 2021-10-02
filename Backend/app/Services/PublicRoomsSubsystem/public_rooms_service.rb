@@ -3,19 +3,66 @@
 # all services related to public rooms
 class PublicRoomServices
   # will return all public rooms
-  def public_rooms
-    rooms = PublicRoom.all
-    rating = RoomRating.group(:public_room_id).average(:rating)
-    data = rooms.map do |room|
-      escape_room = EscapeRoom.find_by_id(room.escape_room_id)
-      username = User.find_by_id(escape_room.user_id).username
-      { username: username,
-        escape_room_id: room.escape_room_id,
-        public_room_id: room.id,
-        room_name: escape_room.name,
-        rating: rating[room.id].to_f,
-        best_time: room.best_time }
+  def public_rooms(request, user_id)
+    rooms = PublicRoom.select('public_rooms.id, escape_room_id, best_time, avg(room_ratings.rating) as average')
+                      .left_outer_joins(:room_ratings)
+                      .group('public_rooms.id')
+    unless request.filter.nil?
+      case request.filter
+      when 'best_time'
+        rooms = rooms.order(:best_time)
+      when 'rating'
+        rooms = PublicRoom.select('public_rooms.id, escape_room_id, best_time, coalesce(avg(room_ratings.rating), 0) as average')
+                          .left_outer_joins(:room_ratings)
+                          .group('public_rooms.id').order('average desc')
+      end
     end
+    # data = rooms.map do |room|
+    #   escape_room = EscapeRoom.find_by_id(room.escape_room_id)
+    #   username = User.find_by_id(escape_room.user_id).username
+    #   if request.search.nil? || username == request.search || escape_room.name == request.search
+    #     { username: username,
+    #       escape_room_id: room.escape_room_id,
+    #       public_room_id: room.id,
+    #       room_name: escape_room.name,
+    #       rating: room.average.to_f.round(1),
+    #       best_time: room.best_time }
+    #   end
+    # end
+    data = if !user_id.nil?
+             rooms.map do |room|
+               escape_room = EscapeRoom.find_by_id(room.escape_room_id)
+               username = User.find_by_id(escape_room.user_id).username
+               user_rating = RoomRating.find_by(user_id: user_id, public_room_id: room.id)
+
+               if request.search.nil? || username == request.search || escape_room.name == request.search
+                 { username: username,
+                   escape_room_id: room.escape_room_id,
+                   public_room_id: room.id,
+                   room_name: escape_room.name,
+                   rating: room.average.to_f.round(1),
+                   best_time: room.best_time,
+                   user_rating: if user_rating.nil?
+                                  0
+                                else
+                                  user_rating.rating
+                                end }
+               end
+             end
+           else
+             rooms.map do |room|
+               escape_room = EscapeRoom.find_by_id(room.escape_room_id)
+               username = User.find_by_id(escape_room.user_id).username
+               if request.search.nil? || username == request.search || escape_room.name == request.search
+                 { username: username,
+                   escape_room_id: room.escape_room_id,
+                   public_room_id: room.id,
+                   room_name: escape_room.name,
+                   rating: room.average.to_f.round(1),
+                   best_time: room.best_time }
+               end
+             end
+           end
     GetPublicRoomsResponse.new(true, 'Public Room Response', data)
   rescue StandardError => e
     puts e
