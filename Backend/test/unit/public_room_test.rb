@@ -51,4 +51,10 @@ class PublicRoomTest < ActiveSupport::TestCase
     resp = serv.add_rating(req)
     assert_equal('Successfully added rating', resp.message)
   end
+
+  test 'update best time' do
+    serv = PublicRoomServices.new
+    resp = serv.set_best_time(1, 50)
+    assert_equal('Time Updated', resp.message)
+  end
 end
