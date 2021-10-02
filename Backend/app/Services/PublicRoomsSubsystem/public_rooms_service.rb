@@ -55,23 +55,24 @@ class PublicRoomServices
 
   def add_rating(request)
     return AddRatingResponse.new(false, 'Null Request') if request.nil?
+
     decoded_token = JsonWebToken.decode(request.token)
 
     @user_id = decoded_token['id']
-    #check user actually exists
+    # check user actually exists
     return AddRatingResponse.new(false, 'User does not exit') if User.find_by_id(@user_id).nil?
 
     @rating = request.rating
     @room_id = request.room_id
 
-    #check room exits in public room
+    # check room exits in public room
     return AddRatingResponse.new(false, 'Public room does not exist') if PublicRoom.find_by_id(@room_id).nil?
 
-    #check if update
+    # check if update
     if RoomRating.find_by(user_id: @user_id, public_room_id: @room_id)
       @update_rating = RoomRating.find_by(user_id: @user_id, public_room_id: @room_id)
       @update_rating.update(rating: @rating)
-      
+
       if @update_rating.save!
         AddRatingResponse.new(true, 'Rating Updated')
       else
@@ -95,5 +96,19 @@ class PublicRoomServices
   rescue StandardError => e
     puts e
     AddRatingResponse.new(false, 'Standard Error')
+  end
+
+  # add best time to public room
+  def set_best_time(escape_room_id, best_time)
+    public_room = PublicRoom.find_by_escape_room_id(escape_room_id)
+    return AddRatingResponse.new(false, 'Public Room does not exist') if public_room.nil?
+    return AddRatingResponse.new(false, 'Best time worse') if public_room.best_time < best_time
+
+    return AddRatingResponse.new(true, 'Time Updated')  if public_room.update(best_time: best_time)
+
+    AddRatingResponse.new(false, 'Public Room failed to update')
+  rescue StandardError => e
+    puts e
+    AddRatingResponse.new(false, 'Error occurred while setting best time')
   end
 end

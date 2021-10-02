@@ -2,13 +2,8 @@
 
 require './app/Services/room_services'
 require './app/Services/services_helper'
-require './app/Services/create_escaperoom_request'
-require './app/Services/create_escaperoom_response'
 require './app/Services/RoomSubsystem/Request/get_rooms_request'
 require './app/Services/RoomSubsystem/Response/get_rooms_response'
-require './app/Services/SolvabilitySubsystem/RequestSolvability/calculate_estimated_time_request'
-require './app/Services/SolvabilitySubsystem/ResponseSolvability/calculate_estimated_time_response'
-require './app/Services/SolvabilitySubsystem/SolvabilityServices'
 require './app/Services/PublicRoomsSubsystem/public_rooms_service'
 require './app/Services/PublicRoomsSubsystem/Response/get_public_rooms_response'
 require './app/Services/PublicRoomsSubsystem/Request/add_public_room_request'
@@ -38,26 +33,13 @@ module Api
             resp = @@serv.add_public_room(req)
             render json: { success: resp.success, message: resp.message }, status: :ok
           end
+        when 'add_rating'
+          req = AddRatingRequest(params[:roomID], params[:token], params[:rating])
+          resp = @@serv.add_rating(req)
+          render json: { success: resp.success, message: resp.message }, status: :ok
         else
           render json: { success: false, message: 'Operation does not exist' }, status: :bad_request
         end
-
-        if params[:operation] == 'addRating'
-          if (params[:roomID].nil? || params[:rating] || params[:token].nil?)
-            render json: { status: 'FAILED', message: 'Empty Values' }, status: :bad_request
-          end
-
-          req = AddRatingRequest(params[:roomID], params[:token], params[:rating])
-          resp = @@serv.add_rating(req)
-
-          if(resp.success)
-            render json: { status: 'SUCCESS', message: resp.message }, status: :ok
-          else
-            render json: { status: 'FAILED', message: resp.message }, status: :bad_request
-          end
-        end
-      rescue StandardError
-        render json: { success: false, message: 'System Error' }, status: 500
       end
 
       # delete api call to remove room
@@ -87,6 +69,18 @@ module Api
         serv = RoomServices.new
         res = serv.get_vertices(req)
         render json: { success: res.success, message: res.message, data: res.data }, status: :ok
+      end
+
+      # put request to update operations
+      def update
+        operation = params[:operation]
+        case operation
+        when 'set_best_time'
+          resp = @@serv.set_best_time(params['escape_room_id'], params['best_time'])
+          render json: { success: resp.success, message: resp.message }, status: :ok
+        else
+          render json: { success: false, message: 'Operation can not be preformed' }, status: :bad_request
+        end
       end
     end
   end
