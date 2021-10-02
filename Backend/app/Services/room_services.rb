@@ -244,7 +244,16 @@ class RoomServices
     @response = if user.nil?
                   GetRoomsResponse.new(false, 'User can not be found', nil)
                 else
-                  data = EscapeRoom.select(:id, :name).where(user_id: decoded_token['id'])
+                  public_room = EscapeRoom.joins(:public_room).where(user_id: decoded_token['id'])
+                  data = EscapeRoom.select(:id, :name).where(user_id: decoded_token['id']).map do |room|
+                    is_public = true
+                    is_public = false if public_room.find_by(id: room.id).nil?
+                    {
+                      id: room.id,
+                      name: room.name,
+                      is_public: is_public
+                    }
+                  end
                   GetRoomsResponse.new(true, 'Rooms obtained', data)
                 end
   rescue StandardError => e
