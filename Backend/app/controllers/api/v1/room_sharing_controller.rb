@@ -11,6 +11,8 @@ require './app/Services/PublicRoomsSubsystem/Request/add_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/add_public_room_response'
 require './app/Services/PublicRoomsSubsystem/Request/remove_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/remove_public_room_response'
+require './app/Services/PublicRoomsSubsystem/Request/add_rating_request'
+require './app/Services/PublicRoomsSubsystem/Response/add_rating_response'
 
 module Api
   module V1
@@ -36,7 +38,8 @@ module Api
             render json: { success: resp.success, message: resp.message }, status: :ok
           end
         when 'add_rating'
-          req = AddRatingRequest(params[:roomID], params[:token], params[:rating])
+          auth_token = request.headers['Authorization1'].split(' ').last
+          req = AddRatingRequest.new(params[:roomID], auth_token, params[:rating])
           resp = @@serv.add_rating(req)
           render json: { success: resp.success, message: resp.message }, status: :ok
         else
@@ -52,7 +55,7 @@ module Api
           if authorise(request)
             auth_token = request.headers['Authorization1'].split(' ').last
             req = RemovePublicRoomRequest.new(auth_token, params['escape_room_id'])
-            resp = @@serv.add_public_room(req)
+            resp = @@serv.remove_public_room(req)
             render json: { success: resp.success, message: resp.message }, status: :ok
           end
         else

@@ -153,21 +153,21 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     //http request to rails api
     this.httpClient.get<EscapeRoomArray>(environment.api + "/api/v1/room/", {"headers": this.headers}).subscribe(
       response => {
-          //rendering <li> elements by using response
-          this.escapeRooms = response;
-          //render all the rooms
-          if(response.data[0] !== undefined) {
-            this.currentRoomId = response.data[0].id;
-            this.getVertexFromRoom();
-          }else{
-            this.currentRoomId = -1;
-            this._room_count = 0;
-            this.hasRooms = false;
-          }
-          for (let er of response.data){
-            this.renderNewRoom(er.id, er.name);
-            this._room_count++;
-          }
+        //rendering <li> elements by using response
+        this.escapeRooms = response;
+        //render all the rooms
+        if(response.data[0] !== undefined) {
+          this.currentRoomId = response.data[0].id;
+          this.getVertexFromRoom();
+        }else{
+          this.currentRoomId = -1;
+          this._room_count = 0;
+          this.hasRooms = false;
+        }
+        for (let er of response.data){
+          this.renderNewRoom(er.id, er.name, er.is_public);
+          this._room_count++;
+        }
       },
         //Render error if bad request
         error => {
@@ -374,7 +374,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
       this.httpClient.post<any>(environment.api + "/api/v1/room/", createRoomBody, {"headers": this.headers}).subscribe(
         response => {
           //rendering <li> elements by using render function
-          this.renderNewRoom(response.data.id, response.data.name);
+          this.renderNewRoom(response.data.id, response.data.name, false);
           this.hasRooms = true;
           // @ts-ignore
           this.escapeRoomDivRef?.nativeElement.textContent = "";
@@ -446,7 +446,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   //just renders new room text in the list
-  renderNewRoom(id:number, name:string): void{
+  renderNewRoom(id:number, name:string, is_public: boolean): void{
     // <li><div><div> class="dropdown-item">ROOM 1</div><div><button></button><img></div></div></li>-->
     let newRoom = this.renderer.createElement('li');
     let newDivRow = this.renderer.createElement('div');
@@ -467,10 +467,22 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
     //add boostrap class to upload <button>
     this.renderer.addClass(newUploadButton, 'btn');
-    this.renderer.addClass(newUploadButton, 'btn-primary');
+
+    let new_button_class, new_button_attr: string;
+    if (is_public){
+      new_button_attr = 'true';
+      new_button_class = 'btn-danger';
+    }
+    else{
+      new_button_attr = 'false';
+      new_button_class = 'btn-success';
+    }
+
+    this.renderer.setAttribute(newUploadButton, 'is_public', new_button_attr);
+    this.renderer.addClass(newUploadButton, new_button_class);
     this.renderer.appendChild(newUploadButton, newUploadImage);
     this.renderer.setAttribute(newUploadButton,'escape-room-id',id.toString());
-    this.renderer.listen(newUploadButton,'click',() => this.uploadRoom(id));
+    this.renderer.listen(newUploadButton,'click',() => this.uploadRoom(id, newUploadButton));
 
     //add boostrap class to <button>
     this.renderer.addClass(newButton, 'btn');
@@ -508,30 +520,62 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // upload the room to public library
-  uploadRoom(escape_room_id: number):void{
-    // todo: change button icon as well
+  uploadRoom(escape_room_id: number, uploadButton: HTMLButtonElement):void{
+    let is_public = uploadButton.getAttribute('is_public');
 
     let uploadRoomBody = {
       operation: 'add_public',
       escape_room_id: escape_room_id
     }
 
-    this.httpClient.post<any>(environment.api + "/api/v1/room_sharing/", uploadRoomBody, {"headers": this.headers}).subscribe(
-      response =>{
-        if(response.success)
-          this.renderAlertError('Your room has been uploaded for everyone to see');
-        else
-          this.renderAlertError('Your room was already uploaded');
-      },
-      error => {
-        if (error.status === 401){
-          if (this.router.routerState.snapshot.url !== '/login' &&
-            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
-        }else {
-          console.error('There was an error uploading the room your room', error);
-          this.renderAlertError("Couldn't upload your room");
-        }
+    if (is_public === 'true'){
+      if (confirm('This action will remove your room from being viewed by public')){
+        //remove form public library
+        uploadRoomBody.operation = 'remove_public';
+
+        this.httpClient.delete<any>(environment.api + "/api/v1/room_sharing/0",
+                            {"headers": this.headers, "params" : uploadRoomBody})
+          .subscribe(
+          response =>{
+            if(response.success){
+              this.renderAlertError('Your room has been removed from public library');
+              this.renderer.setStyle(uploadButton, 'background-color', '#28a745');
+              this.renderer.setStyle(uploadButton, 'border-color', '#28a745');
+              this.renderer.setAttribute(uploadButton, 'is_public', 'false');
+            }
+          },
+          error => {
+            if (error.status === 401){
+              if (this.router.routerState.snapshot.url !== '/login' &&
+                this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+            }else {
+              console.error('There was an error removing your room from public library', error);
+              this.renderAlertError("Couldn't upload your room");
+            }
+          });
+      }
+    }else{ // make room public
+      this.httpClient.post<any>(environment.api + "/api/v1/room_sharing/", uploadRoomBody, {"headers": this.headers}).subscribe(
+        response =>{
+          if(response.success){
+            this.renderAlertError('Your room has been uploaded for everyone to see');
+            this.renderer.setStyle(uploadButton, 'background-color', '#dc3545');
+            this.renderer.setStyle(uploadButton, 'border-color', '#dc3545');
+            this.renderer.setAttribute(uploadButton, 'is_public', 'true');
+          }
+          else
+            this.renderAlertError('Your room was already uploaded');
+        },
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else {
+            console.error('There was an error uploading your room', error);
+            this.renderAlertError("Couldn't upload your room");
+          }
       });
+    }
   }
 
   //creates Vertex of type with scale at position x,y
@@ -858,7 +902,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     let to_vertex_id = to_vertex.getAttribute('vertex-id');
 
     if(!this.vertexService.getVertexConnections(from_vertex_id).includes(+to_vertex_id)){
-      console.log("added a connection");
       let connection = {
         operation: 'connection',
         from_vertex_id: this.vertexService.vertices[from_vertex_id].id, //convert local to real id
@@ -1543,4 +1586,5 @@ interface EscapeRoomArray {
 interface EscapeRoom{
   id: number;
   name: string;
+  is_public: boolean;
 }
