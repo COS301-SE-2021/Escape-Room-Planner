@@ -237,7 +237,6 @@ export class PublicEscapeRoomsComponent implements OnInit {
       operation: "ReturnPaths",
       roomid: id
     };
-    // todo: check if room solvable, copy/paste in backend
     this.httpClient.post<any>(environment.api+"/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
       response => {
         let string_array = response.data.vertices;

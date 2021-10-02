@@ -50,7 +50,7 @@ module Api
           if authorise(request)
             auth_token = request.headers['Authorization1'].split(' ').last
             req = RemovePublicRoomRequest.new(auth_token, params['escape_room_id'])
-            resp = @@serv.add_public_room(req)
+            resp = @@serv.remove_public_room(req)
             render json: { success: resp.success, message: resp.message }, status: :ok
           end
         else
