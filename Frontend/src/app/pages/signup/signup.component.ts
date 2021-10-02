@@ -24,27 +24,27 @@ export class SignupComponent implements OnInit {
 
 
   onSubmit(data:any) {
-    this.display = 'none';
-    let extra_data = {
-      username: data["username"],
-      email: data["email"],
-      password: data["password_digest"],
-      new_password: data["confirm"],
-      operation: 'Register'
-    };
-    console.log(extra_data);
+      this.display = 'none';
+      if (data["password_digest"] == "") return;
+      let extra_data = {
+        username: data["username"].toLowerCase(),
+        email: data["email"].toLowerCase(),
+        password: data["password_digest"],
+        new_password: data["confirm"],
+        operation: 'Register'
+      };
 
-    this.http.post<any>(environment.api + '/api/v1/user', extra_data)
-      .subscribe((response)=> {
-          sessionStorage.setItem("email", data["email"]);
-          this.router.navigate(['/verify']).then(r => {
-            console.log("Success");
-          });
-      },
+      this.http.post<any>(environment.api + '/api/v1/user', extra_data)
+        .subscribe((response)=> {
+            sessionStorage.setItem("email", data["email"]);
+            this.router.navigate(['/verify']).then(r => {
+              console.log("Success");
+            });
+          },
           error => {
             if (error["message"] == "User already exists")
               this.display = 'block';
-        })
+          })
   }
 }
 
