@@ -541,8 +541,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
           response =>{
             if(response.success){
               this.renderAlertError('Your room has been removed from public library');
-              this.renderer.setStyle(uploadButton, 'background-color', '#28a745');
-              this.renderer.setStyle(uploadButton, 'border-color', '#28a745');
+              this.renderer.setStyle(uploadButton, 'background-color', '#198754');
+              this.renderer.setStyle(uploadButton, 'border-color', '#198754');
               this.renderer.setAttribute(uploadButton, 'is_public', 'false');
               this.renderer.setAttribute(uploadImage, 'src', './assets/svg/cloud-arrow-up-fill.svg');
             }
