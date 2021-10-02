@@ -37,7 +37,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
       response => {
         console.log(response);
         for (let er of response.data){
-          this.renderPublicEscapeRooms(er.room_name, er.username, er.best_time, er.rating, er.escape_room_id, er.public_room_id);
+          this.renderPublicEscapeRooms(er.room_name, er.username, er.best_time, er.rating, er.escape_room_id, er.public_room_id, er.user_rating);
         }
       },
       //Render error if bad request
@@ -49,8 +49,9 @@ export class PublicEscapeRoomsComponent implements OnInit {
 
   // renders all cards on page
   renderPublicEscapeRooms(room_name: string, username: string, best_time: number,
-                          rating: number, escape_room_id: number, public_room_id: number)
+                          rating: number, escape_room_id: number, public_room_id: number, user_rating: number|undefined)
   {
+
     if(this.card_number % 4 == 0){
       let row = this.renderer.createElement('div');
       this.renderer.addClass(row, 'row');
@@ -89,7 +90,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.setAttribute(rating_slider, 'min', '1.0');
     this.renderer.setAttribute(rating_slider, 'max', '5.0');
     this.renderer.setAttribute(rating_slider, 'step', '1');
-    this.renderer.setAttribute(rating_slider, 'value', '1');
+    this.renderer.setAttribute(rating_slider, 'value', String(user_rating));
     this.renderer.addClass(rating_slider, 'form-range');
     this.renderer.addClass(rating_slider, 'px-md-3');
     this.renderer.listen(rating_slider, 'change', () => this.changeRating(public_room_id, rating_slider.value));

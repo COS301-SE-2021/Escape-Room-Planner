@@ -22,7 +22,11 @@ module Api
       # Get vertices
       def index
         req = GetPublicRoomsRequest.new(params[:search], params[:filter], nil, nil)
-        resp = @@serv.public_rooms(req)
+        resp = if authorise(request)
+                 @@serv.public_rooms(req, JsonWebToken.decode(request.headers['Authorization1'].split(' ').last)['id'])
+               else
+                 @@serv.public_rooms(req, nil)
+               end
         render json: { success: resp.success, message: resp.message, data: resp.data }, status: :ok
       end
 
