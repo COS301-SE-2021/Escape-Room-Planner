@@ -16,14 +16,21 @@ module Api
           operation = params[:operation]
 
           if operation == "Reset Password"
-            if params[:email].nil?
+            if params[:email].empty?
               render json: { status: 'FAILED', message: 'No email received' }, status: 400
               return
-            else
-              resp = reset_password(params[:email])
-              render json: { status: 'Response received', message: resp.message}, status: :ok
             end
 
+            req = SendEmailNotificationRequest.new('resetPassword', params[:email])
+            serv = NotificationServices.new
+            resp = serv.send_email_notification(req)
+            if(resp.success)
+              render json: { status: 'Response received', message: resp.message}, status: :ok
+              return
+            else
+              render json: { status: 'FAILED', message: resp.message}, status: :conflict
+              return
+            end
           end
 
           if operation == "Verify Account"

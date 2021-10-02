@@ -1520,7 +1520,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
                 if(this.roomService.outOfBounds.length === 0) {
                   // swap to simulation
                   this.removeLeaderLines();
-                  this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
+                  this.router.navigate(['/simulation'], {state: {isPublic: false, roomID: -1}}).then(r => console.log('simulate redirect'));
                 } else {
                   this.renderAlertError("Cannot simulate when objects are outside rooms");
                 }

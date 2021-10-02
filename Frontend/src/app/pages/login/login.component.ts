@@ -9,6 +9,8 @@ import {environment} from "../../../environments/environment";
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  public usernameError: boolean = false;
+  public passwordError: boolean = false;
 
   constructor(private http:HttpClient, private router:Router) { }
 
@@ -17,6 +19,7 @@ export class LoginComponent implements OnInit {
 
   display = 'none';
   onSubmit(data:any) {
+    this.resetBool();
     this.display = 'none';
     let extra_data = {
       username: data["username"].toLowerCase(),
@@ -32,9 +35,22 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/escape-room']).then(r => location.reload());
         },
           error => {
-            this.display = 'block';
+
+            if(error["error"]["message"] === "Username does not exist")
+              this.usernameError = true;
+            else if(error["error"]["message"] === "Password is incorrect")
+              this.passwordError = true;
+            else
+              this.display = 'block';
           }
         )
+  }
+
+  private resetBool()
+  {
+    this.usernameError = false;
+    this.passwordError = false;
+
   }
 
 }
