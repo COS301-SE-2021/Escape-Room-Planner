@@ -275,7 +275,9 @@ export class PublicEscapeRoomsComponent implements OnInit {
         this.vertexService.possible_paths = int_array;
         this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
         if(this.roomService.outOfBounds.length === 0)
-          this.router.navigate(['/simulation']).then(r => console.log('simulate redirect' + r));
+        {
+          this.router.navigate(['/simulation'],{state: {isPublic: true, roomID: id}}).then(r => console.log('simulate redirect' + r));
+        }
         else
           alert('It seems like a room is not ready');
       },
