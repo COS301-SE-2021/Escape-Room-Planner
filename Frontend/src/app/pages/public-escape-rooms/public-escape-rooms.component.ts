@@ -80,6 +80,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
     let card_header = this.renderer.createElement('div');
     // <input type="range" class="form-range" min="1.0" max="5.0" step="0.5" value="1">
     let rating_slider = this.renderer.createElement('input');
+    //
+    let rating_p = this.renderer.createElement('p');
     // set card-header bootstrap
     this.renderer.addClass(card_header, 'card-header');
     this.renderer.addClass(card_header, 'bg-dark');
@@ -94,6 +96,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.addClass(rating_slider, 'form-range');
     this.renderer.addClass(rating_slider, 'px-md-3');
     this.renderer.listen(rating_slider, 'change', () => this.changeRating(public_room_id, rating_slider.value));
+    this.renderer.listen(rating_slider, 'input', () => this.updateRatingValue(rating_p, rating_slider.value));
 
     let card_body = this.renderer.createElement('div');
     // set card-body bootstrap
@@ -147,6 +150,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.appendChild(card_body, inner_row[0]);
     this.renderer.appendChild(card_body, inner_row[1]);
     if (this.logged_in) {
+      this.renderer.appendChild(rating_p, this.renderer.createText('Your rating: ' + String(user_rating)));
+      this.renderer.appendChild(card_body, rating_p);
       this.renderer.appendChild(card_body, rating_slider);
     }
     this.renderer.appendChild(card, card_header);
@@ -157,6 +162,10 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.card_number++;
   }
 
+  updateRatingValue(rating_p: HTMLParagraphElement, rating: number){
+    rating_p.innerText = 'Your rating: ' + String(rating);
+  }
+
   changeRating(public_room_id: number, rating: number): void{
     // use this to update the ratings
     let rateRoomBody = {
@@ -164,7 +173,6 @@ export class PublicEscapeRoomsComponent implements OnInit {
       roomID: public_room_id,
       rating: rating
     }
-    console.log('RATING');
     this.httpClient.post<any>(environment.api + "/api/v1/room_sharing/", rateRoomBody, {"headers": this.headers}).subscribe(
       response =>{
         console.info('ratting has been registered');
