@@ -521,10 +521,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // upload the room to public library
   uploadRoom(escape_room_id: number, uploadButton: HTMLButtonElement):void{
-    // todo: change button icon as well
-    // todo: if green then do normal one, if red then remove
-    // success colour #28a745
-    // danger colour #dc3545
     let is_public = uploadButton.getAttribute('is_public');
 
     let uploadRoomBody = {
@@ -534,7 +530,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (is_public === 'true'){
       if (confirm('This action will remove your room from being viewed by public')){
-        // // unmake room public
+        //remove form public library
         uploadRoomBody.operation = 'remove_public';
 
         this.httpClient.delete<any>(environment.api + "/api/v1/room_sharing/0",
@@ -578,7 +574,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
             console.error('There was an error uploading your room', error);
             this.renderAlertError("Couldn't upload your room");
           }
-        });
+      });
     }
   }
 
