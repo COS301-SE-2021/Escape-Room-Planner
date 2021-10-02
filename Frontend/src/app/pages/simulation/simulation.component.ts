@@ -621,6 +621,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
           this.messageMenu("Escaped Escape Room!");
           this.character_lock = true;
           this.simulate_toggle = false;
+          if(this.isPublic)
+          {
+            this.sendBestTime(this.calculateTimeInSeconds())
+          }
           this.escapeRoomCompleted(this.escapeRoomCompletedRef);
         }
         //update time values
@@ -863,11 +867,9 @@ export class SimulationComponent implements OnInit, OnDestroy {
   exitSimulation()
   {
     this.modalService.dismissAll();
-    console.log(this.calculateTimeInSeconds())
     delay(5000);
     if(this.isPublic)
     {
-      this.sendBestTime(this.calculateTimeInSeconds())
       this.router.navigate(['/public-escape-rooms']).then(() => location.reload)
     }
     else
@@ -892,7 +894,7 @@ export class SimulationComponent implements OnInit, OnDestroy {
     };
     this.httpClient.put<any>(environment.api + "/api/v1/room_sharing/" + this.escapeRoomID, extra_data).subscribe(
       response => {
-        console.log("it works: "+ response);
+        console.log(response);
       },
       //Render error if bad request
       error => {

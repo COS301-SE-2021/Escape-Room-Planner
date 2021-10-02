@@ -33,20 +33,20 @@ export class SignupComponent implements OnInit {
     this.resetBool();
     this.display = 'none';
     let extra_data = {
-      username: data["username"],
-      email: data["email"],
+      username: data["username"].toLowerCase(),
+      email: data["email"].toLowerCase(),
       password: data["password_digest"],
       new_password: data["confirm"],
       operation: 'Register'
     };
 
-    this.http.post<any>(environment.api + '/api/v1/user', extra_data)
-      .subscribe((response)=> {
-          sessionStorage.setItem("email", data["email"]);
-          this.router.navigate(['/verify']).then(r => {
-            console.log("Success");
-          });
-      },
+      this.http.post<any>(environment.api + '/api/v1/user', extra_data)
+        .subscribe((response)=> {
+            sessionStorage.setItem("email", data["email"]);
+            this.router.navigate(['/verify']).then(r => {
+              console.log("Success");
+            });
+          },
           error => {
             //check if data is empty
             if(data["username"] === "")
@@ -77,7 +77,7 @@ export class SignupComponent implements OnInit {
             }
             if (error["message"] == "User already exists")
               this.display = 'block';
-        })
+          })
   }
 
   private resetBool()
