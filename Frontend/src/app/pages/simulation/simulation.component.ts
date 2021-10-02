@@ -68,6 +68,9 @@ export class SimulationComponent implements OnInit, OnDestroy {
   @ViewChild("help") helpRef: NgbModal | undefined;
   @ViewChild("escapeRoomCompleted") escapeRoomCompletedRef: NgbModal | undefined;
 
+  //public simulation
+  public isPublic: boolean = true;
+
 
   constructor(private elementRef: ElementRef,  private renderer: Renderer2,
               private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService, private modalService: NgbModal, private router:Router) {
@@ -135,20 +138,26 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }else if(event.code === 'KeyI'){
       this.inventory_menu = !this.inventory_menu;
     }else if(event.code === 'KeyQ'){
-      this.movement.a = false;
-      this.movement.d = false;
-      this.movement.w = false;
-      this.movement.s = false;
-      if(!this.modalService.hasOpenModals())
-        this.selectPath(this.pathRef);
+      if(!this.isPublic)
+      {
+        this.movement.a = false;
+        this.movement.d = false;
+        this.movement.w = false;
+        this.movement.s = false;
+        if(!this.modalService.hasOpenModals())
+          this.selectPath(this.pathRef);
+      }
     }
     else if(event.code === 'KeyT')
     {
-      this.movement.a = false;
-      this.movement.d = false;
-      this.movement.w = false;
-      this.movement.s = false;
-      this.simulate_toggle = !this.simulate_toggle;
+      if(!this.isPublic)
+      {
+        this.movement.a = false;
+        this.movement.d = false;
+        this.movement.w = false;
+        this.movement.s = false;
+        this.simulate_toggle = !this.simulate_toggle;
+      }
     }
     else if(event.code === 'KeyH')
     {

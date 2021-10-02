@@ -23,6 +23,7 @@
                    class="form-control form-control-sm" ngModel required name="username" autocomplete="off"
                    [class.is-invalid]="username.invalid && username.touched" #username="ngModel">
             <small [class.d-none]="username.valid || username.untouched">Username is required.</small>
+            <small *ngIf="usernameError">This username does not exist.</small>
           </div>
           <div class="form-group">
             <label for="password">Password</label>
@@ -32,6 +33,7 @@
                    ngModel #password="ngModel" [class.is-invalid]="password.invalid && password.touched" required>
             <small [class.d-none]="password.valid || password.untouched">Password is required.</small>
             <small [style.display]="display">Username or password is incorrect.</small>
+            <small *ngIf="passwordError">Password is incorrect.</small>
           </div>
           <button type="submit" class="btn btn-outline-success btn-block">Sign in</button>
           <div class="signup">
