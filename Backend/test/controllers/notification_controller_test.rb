@@ -22,5 +22,4 @@ class NotificationControllerTest < ActionDispatch::IntegrationTest
     response = JSON.parse(@response.body)
     assert_response :bad_request
   end
-
 end

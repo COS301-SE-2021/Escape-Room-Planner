@@ -42,7 +42,6 @@ class PublicRoomTest < ActiveSupport::TestCase
     req = AddRatingRequest.new(1, token, 4)
     serv = PublicRoomServices.new
     resp = serv.add_rating(req)
-    puts resp.message
     assert_equal('Rating Updated', resp.message)
   end
 

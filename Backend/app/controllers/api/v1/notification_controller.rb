@@ -16,7 +16,7 @@ module Api
           operation = params[:operation]
 
           if operation == "Reset Password"
-            if params[:email].empty?
+            if params[:email].nil? || params[:email].empty?
               render json: { status: 'FAILED', message: 'No email received' }, status: 400
               return
             end
