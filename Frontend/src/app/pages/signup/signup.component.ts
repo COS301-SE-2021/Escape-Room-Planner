@@ -33,7 +33,7 @@ export class SignupComponent implements OnInit {
     this.resetBool();
     this.display = 'none';
     let extra_data = {
-      username: data["username"].toLowerCase(),
+      username: data["username"],
       email: data["email"].toLowerCase(),
       password: data["password_digest"],
       new_password: data["confirm"],

@@ -612,8 +612,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
             this.objects['vertex' + connections].visible = true
           }
         }
-        if(this.vertexService.possible_paths[this.path_choice][this.current_path_index] === vertex.local_id)
-          this.current_path_index++;
+        if(!this.isPublic) {
+          if (this.vertexService.possible_paths[this.path_choice][this.current_path_index] === vertex.local_id)
+            this.current_path_index++;
+        }
         vertex.toggleCompleted();
         this.checkUnlockRoom(vertex.getConnections());
         if(vertex.local_id === this.vertexService.end_vertex_id){
@@ -894,7 +896,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
     };
     this.httpClient.put<any>(environment.api + "/api/v1/room_sharing/" + this.escapeRoomID, extra_data).subscribe(
       response => {
-        console.log(response);
+        if(response.success)
+          alert("New Record Made");
       },
       //Render error if bad request
       error => {

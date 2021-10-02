@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     this.resetBool();
     this.display = 'none';
     let extra_data = {
-      username: data["username"].toLowerCase(),
+      username: data["username"],
       password: data["password_digest"],
       operation: 'Login'
     };

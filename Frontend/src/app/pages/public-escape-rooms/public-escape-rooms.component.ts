@@ -15,29 +15,34 @@ export class PublicEscapeRoomsComponent implements OnInit {
   private headers: HttpHeaders = new HttpHeaders();
   private card_number: number = 0;
   private col_div: Element[] = [];
+  private query_search = '';
+  private query_filter = '';
 
-  @ViewChild("escape_room_cards") escapeRoomCardsRef : ElementRef | undefined;
+  @ViewChild("escape_room_cards") escapeRoomCardsRef: ElementRef | undefined;
 
   constructor(private renderer: Renderer2, private httpClient: HttpClient,
               private vertexService: VertexService, private roomService: RoomService,
               private router: Router) {
     this.headers = this.headers.set('Authorization1', 'Bearer ' + localStorage.getItem('token'))
-      .set("Authorization2",'Basic ' + localStorage.getItem('username'));
-    this.getPublicEscapeRooms();
+      .set("Authorization2", 'Basic ' + localStorage.getItem('username'));
+    this.getPublicEscapeRooms({});
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('token') ==  null) {
+    if (localStorage.getItem('token') == null) {
       this.logged_in = false;
     }
   }
 
-  getPublicEscapeRooms(){
-    this.httpClient.get<any>(environment.api + "/api/v1/room_sharing/", {"headers": this.headers}).subscribe(
+  getPublicEscapeRooms(query: any) {
+    this.httpClient.get<any>(environment.api + "/api/v1/room_sharing/", {
+      "headers": this.headers,
+      "params": query
+    }).subscribe(
       response => {
-        console.log(response);
-        for (let er of response.data){
-          this.renderPublicEscapeRooms(er.room_name, er.username, er.best_time, er.rating, er.escape_room_id, er.public_room_id, er.user_rating);
+        for (let er of response.data) {
+          if (er != null)
+            this.renderPublicEscapeRooms(er.room_name, er.username, er.best_time, er.rating, er.escape_room_id, er.public_room_id, er.user_rating);
         }
       },
       //Render error if bad request
@@ -47,19 +52,72 @@ export class PublicEscapeRoomsComponent implements OnInit {
     );
   }
 
+  searchRooms(value: any) {
+    // @ts-ignore
+    this.escapeRoomCardsRef.nativeElement?.innerHTML = "";
+    this.col_div = [];
+    this.card_number = 0;
+    this.query_search = value;
+    if (value != '') {
+      let searchQuery = {
+        search: this.query_search,
+        filter: this.query_filter
+      }
+      this.getPublicEscapeRooms(searchQuery);
+    } else {
+      this.getPublicEscapeRooms({});
+    }
+  }
+
+  filterRooms(value: any, tag: HTMLAnchorElement, from_tag: HTMLAnchorElement) {
+    // @ts-ignore
+    this.escapeRoomCardsRef.nativeElement?.innerHTML = "";
+    this.col_div = [];
+    this.card_number = 0;
+
+    if (this.query_filter == value) {
+      if (value === 'rating')
+        tag.innerText = 'Rating';
+      else
+        tag.innerText = 'Best Time';
+      this.query_filter = '';
+      this.getPublicEscapeRooms({});
+      return
+    }
+
+    tag.innerHTML += '<img src="./assets/svg/check2.svg" style="float: right">';
+    if (value === 'rating')
+      from_tag.innerText = 'Best Time';
+    else
+      from_tag.innerText = 'Rating';
+
+    this.query_filter = value;
+    if (this.query_search == '') {
+      let filterQuery = {
+        filter: this.query_filter
+      }
+      this.getPublicEscapeRooms(filterQuery);
+    } else {
+      let filterQuery = {
+        search: this.query_search,
+        filter: this.query_filter
+      }
+      this.getPublicEscapeRooms(filterQuery);
+    }
+  }
+
   // renders all cards on page
   renderPublicEscapeRooms(room_name: string, username: string, best_time: number,
-                          rating: number, escape_room_id: number, public_room_id: number, user_rating: number|undefined)
-  {
+                          rating: number, escape_room_id: number, public_room_id: number, user_rating: number | undefined) {
 
-    if(this.card_number % 4 == 0){
+    if (this.card_number % 4 == 0) {
       let row = this.renderer.createElement('div');
       this.renderer.addClass(row, 'row');
       this.renderer.addClass(row, 'justify-content-evenly');
       this.renderer.addClass(row, 'text-center');
       this.renderer.addClass(row, 'mt-3');
       this.renderer.appendChild(this.escapeRoomCardsRef?.nativeElement, row);
-      for(let i = 0; i < 4; i++){
+      for (let i = 0; i < 4; i++) {
         this.col_div[i] = this.renderer.createElement('div');
         this.renderer.addClass(this.col_div[i], 'col-2');
         this.renderer.appendChild(row, this.col_div[i]);
@@ -109,7 +167,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.appendChild(card_title, this.renderer.createText(username));
 
     let inner_row = [];
-    for(let i = 0; i < 2; i++){
+    for (let i = 0; i < 2; i++) {
       inner_row.push(this.renderer.createElement('div'));
       // set row bootstrap
       this.renderer.addClass(inner_row[i], 'row');
@@ -119,13 +177,18 @@ export class PublicEscapeRoomsComponent implements OnInit {
     }
 
     let inner_col = [];
-    for(let i = 0; i < 4; i++){
+    for (let i = 0; i < 4; i++) {
       inner_col.push(this.renderer.createElement('div'));
       // add class to each col
       this.renderer.addClass(inner_col[i], 'col-5');
     }
     // add col values
-    this.renderer.appendChild(inner_col[0], this.renderer.createText(String(best_time)));
+    let min = ~~(best_time/60);
+    let sec = best_time%60;
+    if(sec < 10)
+      this.renderer.appendChild(inner_col[0], this.renderer.createText(String(min)+":0"+String(sec)));
+    else
+      this.renderer.appendChild(inner_col[0], this.renderer.createText(String(min)+":"+String(sec)));
     this.renderer.appendChild(inner_col[1], this.renderer.createText(String(rating)));
     this.renderer.appendChild(inner_col[2], this.renderer.createText('Best Time'));
     this.renderer.appendChild(inner_col[3], this.renderer.createText('Rating'));
@@ -137,7 +200,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     // this.renderer.addClass(button, 'text-success');
     this.renderer.addClass(button, 'm-1');
     this.renderer.appendChild(button, this.renderer.createText('Play'));
-    this.renderer.listen(button,'click',(event) => this.getRoomObjects(escape_room_id));
+    this.renderer.listen(button, 'click', (event) => this.getRoomObjects(escape_room_id));
 
     // append all children together
 
@@ -158,15 +221,15 @@ export class PublicEscapeRoomsComponent implements OnInit {
     this.renderer.appendChild(card, card_body);
     this.renderer.appendChild(card, button);
 
-    this.renderer.appendChild(this.col_div[this.card_number%4], card);
+    this.renderer.appendChild(this.col_div[this.card_number % 4], card);
     this.card_number++;
   }
 
-  updateRatingValue(rating_p: HTMLParagraphElement, rating: number){
+  updateRatingValue(rating_p: HTMLParagraphElement, rating: number) {
     rating_p.innerText = 'Your rating: ' + String(rating);
   }
 
-  changeRating(public_room_id: number, rating: number): void{
+  changeRating(public_room_id: number, rating: number): void {
     // use this to update the ratings
     let rateRoomBody = {
       operation: 'add_rating',
@@ -174,22 +237,22 @@ export class PublicEscapeRoomsComponent implements OnInit {
       rating: rating
     }
     this.httpClient.post<any>(environment.api + "/api/v1/room_sharing/", rateRoomBody, {"headers": this.headers}).subscribe(
-      response =>{
+      response => {
         console.info('ratting has been registered');
       },
       error => {
-        if (error.status === 401){
+        if (error.status === 401) {
           if (this.router.routerState.snapshot.url !== '/login' &&
-            this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
-        }else console.error('rating failed to update');
+            this.router.routerState.snapshot.url !== '/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+        } else console.error('rating failed to update');
       });
   }
 
-  getRoomObjects(id: number){
-    this.httpClient.get<any>(environment.api + '/api/v1/room_image/'+id, {"headers": this.headers}).subscribe(
-      response =>{
+  getRoomObjects(id: number) {
+    this.httpClient.get<any>(environment.api + '/api/v1/room_image/' + id, {"headers": this.headers}).subscribe(
+      response => {
         this.roomService.resetRoom();
-        for ( let room_image of response.data){
+        for (let room_image of response.data) {
           this.roomService.addRoomImage(
             room_image.room_image.id,
             room_image.room_image.pos_x,
@@ -212,10 +275,9 @@ export class PublicEscapeRoomsComponent implements OnInit {
               let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
                 vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
                 vertex.description, vertex.clue, vertex.z_index);
-              if(vertex_t.position === "start") {
+              if (vertex_t.position === "start") {
                 this.vertexService.start_vertex_id = current_id;
-              }
-              else if (vertex_t.position === "end") {
+              } else if (vertex_t.position === "end") {
                 this.vertexService.end_vertex_id = current_id;
               }
               // @ts-ignore
@@ -254,38 +316,25 @@ export class PublicEscapeRoomsComponent implements OnInit {
     );
   }
 
-  addLocalConnection(from_vertex_id: number, to_vertex_id: number){
+  addLocalConnection(from_vertex_id: number, to_vertex_id: number) {
     this.vertexService.addVertexConnection(from_vertex_id, to_vertex_id);
     this.vertexService.addVertexPreviousConnection(to_vertex_id, from_vertex_id);
   }
 
-  play(id: number){
+  play(id: number) {
     let paths = {
       operation: "ReturnPaths",
       roomid: id
     };
-    this.httpClient.post<any>(environment.api+"/api/v1/solvability/", paths, {"headers": this.headers}).subscribe(
-      response => {
-        let string_array = response.data.vertices;
-        let int_array = [];
-        //convert to local id
-        for (let i = 0; i < string_array.length; i++) {
-          int_array[i] = this.vertexService.convertToLocalID(string_array[i].split(","));
+    this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
+    if (this.roomService.outOfBounds.length === 0) {
+      this.router.navigate(['/simulation'], {
+        state: {
+          isPublic: true,
+          roomID: id
         }
-        this.vertexService.possible_paths = int_array;
-        this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
-        if(this.roomService.outOfBounds.length === 0)
-        {
-          this.router.navigate(['/simulation'],{state: {isPublic: true, roomID: id}}).then(r => console.log('simulate redirect' + r));
-        }
-        else
-          alert('It seems like a room is not ready');
-      },
-      error => {
-        alert('It seems like a room is not ready');
-        console.log(error);
-      }
-    );
+      }).then(r => console.log('simulate redirect' + r));
+    } else
+      alert('It seems like a room is not ready');
   }
-
 }

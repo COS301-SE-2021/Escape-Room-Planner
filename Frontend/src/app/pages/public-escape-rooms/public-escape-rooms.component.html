@@ -3,19 +3,18 @@
     <div class="row search">
       <div class="col-sm-8 col-centered">
         <div class="searcher">
-          <input type="text" style="font-size:24px;" class="form-control" placeholder="Search for a room">
-          <button class="btn btn-primary"><i class="fa fa-search"></i></button>
+          <input #attribute type="text" style="font-size:24px;" class="form-control" name="attribute_search" placeholder="Search for a room">
+          <button class="btn btn-primary" (click)="searchRooms(attribute.value)"><i class="fa fa-search"></i></button>
         </div>
       </div>
       <div class="col-sm-2 the-drop">
         <div class="dropdown">
-          <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+          <button  class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
             Filter Rooms
           </button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-            <li><a class="dropdown-item" href="#">Best Completion Time</a></li>
-            <li><a class="dropdown-item" href="#">Name of Planner</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" (click)="filterRooms('rating', rating_a, best_time_a)" #rating_a>Rating</a></li>
+            <li><a class="dropdown-item" (click)="filterRooms('best_time', best_time_a, rating_a)" #best_time_a>Best Time</a></li>
           </ul>
         </div>
       </div>
@@ -23,117 +22,6 @@
   </div>
 
   <div class="container-fluid" #escape_room_cards>
-    <div class="row justify-content-evenly text-center">
-      <div class="col-2">
-        <div class="card text-white the-background mb-3 h-100">
-          <div class="card-header"><h5>Room 1</h5></div>
-          <div class="card-body">
-            <h5 class="card-title mt-1">Don</h5>
-            <div class="row justify-content-evenly text-center mt-2">
-              <div class="col-5">
-                <h5>10:20</h5>
-              </div>
-              <div class="col-5">
-                <h5>3.5</h5>
-              </div>
-            </div>
-            <div class="row justify-content-evenly text-center">
-              <div class="col-5">
-                <a>best time</a>
-              </div>
-              <div class="col-5">
-                <a>rating</a>
-              </div>
-            </div>
-            <input type="range" class="form-range px-md-3" min="1.0" max="5.0" step="0.5" value="1">
-          </div>
-          <button class="btn m-1 play-button" type="button">
-            Play
-          </button>
-        </div>
-      </div>
-      <div class="col-2">
-        <div class="card text-white the-background mb-3 h-100">
-          <div class="card-header"><h5>Room 3</h5></div>
-          <div class="card-body">
-            <h5 class="card-title mt-1">Josh1234</h5>
-            <div class="row justify-content-evenly text-center mt-2">
-              <div class="col-5">
-                <h5>10:20</h5>
-              </div>
-              <div class="col-5">
-                <h5>3.5</h5>
-              </div>
-            </div>
-            <div class="row justify-content-evenly text-center">
-              <div class="col-5">
-                <a>best time</a>
-              </div>
-              <div class="col-5">
-                <a>rating</a>
-              </div>
-            </div>
-          </div>
-          <button class="btn play-button m-1" type="button">
-            Play
-          </button>
-        </div>
-      </div>
-      <div class="col-2">
-        <div class="card text-white the-background mb-3 h-100">
-          <div class="card-header"><h5>Room 3</h5></div>
-          <div class="card-body">
-            <h5 class="card-title mt-1">Josh1234</h5>
-            <div class="row justify-content-evenly text-center mt-2">
-              <div class="col-5">
-                <h5>10:20</h5>
-              </div>
-              <div class="col-5">
-                <h5>3.5</h5>
-              </div>
-            </div>
-            <div class="row justify-content-evenly text-center">
-              <div class="col-5">
-                <a>best time</a>
-              </div>
-              <div class="col-5">
-                <a>rating</a>
-              </div>
-            </div>
-          </div>
-          <button class="btn play-button m-1" type="button">
-            Play
-          </button>
-        </div>
-      </div>
-      <div class="col-2">
-        <div class="card text-white the-background mb-3 h-100">
-          <div class="card-header"><h5>Room 3</h5></div>
-          <div class="card-body">
-            <h5 class="card-title mt-1">Josh1234</h5>
-            <div class="row justify-content-evenly text-center mt-2">
-              <div class="col-5">
-                <h5>10:20</h5>
-              </div>
-              <div class="col-5">
-                <h5>3.5</h5>
-              </div>
-            </div>
-            <div class="row justify-content-evenly text-center">
-              <div class="col-5">
-                <a>best time</a>
-              </div>
-              <div class="col-5">
-                <a>rating</a>
-              </div>
-            </div>
-          </div>
-          <button class="btn play-button m-1" type="button">
-            Play
-          </button>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
