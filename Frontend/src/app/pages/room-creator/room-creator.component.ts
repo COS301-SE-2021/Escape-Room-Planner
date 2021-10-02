@@ -461,28 +461,30 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
     this.renderer.setAttribute(newImage, 'src', './assets/svg/trash-fill.svg');
     this.renderer.setAttribute(newImage,'escape-room-id',id.toString());
 
-    //add src to upload <img>
-    this.renderer.setAttribute(newUploadImage, 'src', './assets/svg/cloud-arrow-up-fill.svg');
-    this.renderer.setAttribute(newUploadImage,'escape-room-id',id.toString());
 
     //add boostrap class to upload <button>
     this.renderer.addClass(newUploadButton, 'btn');
 
-    let new_button_class, new_button_attr: string;
+    let new_button_class, new_button_attr, img_src: string;
     if (is_public){
       new_button_attr = 'true';
       new_button_class = 'btn-danger';
+      img_src = './assets/svg/cloud-arrow-down-fill.svg';
     }
     else{
       new_button_attr = 'false';
       new_button_class = 'btn-success';
+      img_src = './assets/svg/cloud-arrow-up-fill.svg';
     }
+    //add src to upload <img>
+    this.renderer.setAttribute(newUploadImage, 'src', img_src);
+    this.renderer.setAttribute(newUploadImage,'escape-room-id',id.toString());
 
     this.renderer.setAttribute(newUploadButton, 'is_public', new_button_attr);
     this.renderer.addClass(newUploadButton, new_button_class);
     this.renderer.appendChild(newUploadButton, newUploadImage);
     this.renderer.setAttribute(newUploadButton,'escape-room-id',id.toString());
-    this.renderer.listen(newUploadButton,'click',() => this.uploadRoom(id, newUploadButton));
+    this.renderer.listen(newUploadButton,'click',() => this.uploadRoom(id, newUploadButton, newUploadImage));
 
     //add boostrap class to <button>
     this.renderer.addClass(newButton, 'btn');
@@ -520,7 +522,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   // upload the room to public library
-  uploadRoom(escape_room_id: number, uploadButton: HTMLButtonElement):void{
+  uploadRoom(escape_room_id: number, uploadButton: HTMLButtonElement, uploadImage: HTMLImageElement):void{
     let is_public = uploadButton.getAttribute('is_public');
 
     let uploadRoomBody = {
@@ -542,6 +544,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
               this.renderer.setStyle(uploadButton, 'background-color', '#28a745');
               this.renderer.setStyle(uploadButton, 'border-color', '#28a745');
               this.renderer.setAttribute(uploadButton, 'is_public', 'false');
+              this.renderer.setAttribute(uploadImage, 'src', './assets/svg/cloud-arrow-up-fill.svg');
             }
           },
           error => {
@@ -562,6 +565,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
             this.renderer.setStyle(uploadButton, 'background-color', '#dc3545');
             this.renderer.setStyle(uploadButton, 'border-color', '#dc3545');
             this.renderer.setAttribute(uploadButton, 'is_public', 'true');
+            this.renderer.setAttribute(uploadImage, 'src', './assets/svg/cloud-arrow-down-fill.svg');
           }
           else
             this.renderAlertError('Your room was already uploaded');
