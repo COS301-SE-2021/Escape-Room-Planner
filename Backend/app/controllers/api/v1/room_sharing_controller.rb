@@ -5,6 +5,7 @@ require './app/Services/services_helper'
 require './app/Services/RoomSubsystem/Request/get_rooms_request'
 require './app/Services/RoomSubsystem/Response/get_rooms_response'
 require './app/Services/PublicRoomsSubsystem/public_rooms_service'
+require './app/Services/PublicRoomsSubsystem/Request/get_public_rooms_request'
 require './app/Services/PublicRoomsSubsystem/Response/get_public_rooms_response'
 require './app/Services/PublicRoomsSubsystem/Request/add_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/add_public_room_response'
@@ -18,7 +19,8 @@ module Api
       @@serv = PublicRoomServices.new
       # Get vertices
       def index
-        resp = @@serv.public_rooms
+        req = GetPublicRoomsRequest.new(params[:search], params[:filter], nil, nil)
+        resp = @@serv.public_rooms(req)
         render json: { success: resp.success, message: resp.message, data: resp.data }, status: :ok
       end
 
