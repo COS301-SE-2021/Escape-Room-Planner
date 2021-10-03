@@ -4,15 +4,21 @@ require 'test_helper'
 require './app/Services/room_services'
 require './app/Services/create_escaperoom_request'
 require './app/Services/create_escaperoom_response'
-require './app/models/Keys'
-require './app/models/Container'
+require './app/models/keys'
+require './app/models/container'
+require './app/Services/RoomSubsystem/Request/get_vertices_request'
+require './app/Services/RoomSubsystem/Response/get_vertices_response'
+require './app/Services/RoomSubsystem/Request/get_rooms_request'
+require './app/Services/RoomSubsystem/Response/get_rooms_response'
+require './app/Services/RoomSubsystem/Request/update_attribute_request'
+require './app/Services/RoomSubsystem/Response/update_attribute_response'
 
 # rubocop:disable Metrics/ClassLength
 class ErTest < ActiveSupport::TestCase
   # test if escape room can be made (good case)
   test 'test create escape room' do
     before_test = EscapeRoom.count
-    req = CreateEscapeRoomRequest.new('test name')
+    req = CreateEscapeRoomRequest.new('test name', login_for_test)
     rs = RoomServices.new
     rs.create_escape_room(req)
 
@@ -40,7 +46,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if the service return a correct response on failure (bad case)
   test 'does\'t remove non-existent vertex' do
-    req = RemoveVertexRequest.new(6) # send vertex id that doesn't exist
+    req = RemoveVertexRequest.new(7)
     rs = RoomServices.new
     res = rs.remove_vertex(req)
 
@@ -139,7 +145,7 @@ class ErTest < ActiveSupport::TestCase
     width = 25
     height = 26
 
-    req = UpdateVertexRequest.new(vertex_id, pos_x, pos_y, width, height)
+    req = UpdateVertexRequest.new(vertex_id, pos_x, pos_y, width, height, 10)
     rs = RoomServices.new # creates a room service object to test it's functionality
     res = rs.update_vertex(req)
 
@@ -161,7 +167,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if update service doesn't update when vertex doesn't exist
   test 'can handle non-existent vertex when updating a vertex' do
-    req = UpdateVertexRequest.new(9, 5, 5, 5, 5)
+    req = UpdateVertexRequest.new(9, 5, 5, 5, 5, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -171,7 +177,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative height is given (bad case)
   test 'cannot update vertex when negative height is used' do
-    req = UpdateVertexRequest.new(1, 5, 5, 5, -1)
+    req = UpdateVertexRequest.new(1, 5, 5, 5, -1, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -183,7 +189,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative width is given (bad case)
   test 'cannot update vertex when negative width is used' do
-    req = UpdateVertexRequest.new(1, 5, 5, -1, 1)
+    req = UpdateVertexRequest.new(1, 5, 5, -1, 1, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -195,7 +201,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when incorrect type is given (bad case)
   test 'cannot update vertex when incorrect type is used' do
-    req = UpdateVertexRequest.new(1, 123, 5, -1, 1)
+    req = UpdateVertexRequest.new(1, 123, 5, -1, 1, 20)
     rs = RoomServices.new
     res = rs.update_vertex(req)
     vertex = Vertex.find_by_id(1)
@@ -209,7 +215,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative x coordinate is given (bad case)
   test 'cannot update vertex when negative x coordinate is used' do
-    req = UpdateVertexRequest.new(1, -5, 5, 1, 1)
+    req = UpdateVertexRequest.new(1, -5, 5, 1, 1, 20)
 
     rs = RoomServices.new
     res = rs.update_vertex(req)
@@ -221,7 +227,7 @@ class ErTest < ActiveSupport::TestCase
 
   # test if vertex is not update when negative y coordinate is given (bad case)
   test 'cannot update vertex when negative y coordinate is used' do
-    req = UpdateVertexRequest.new(1, 5, -5, 1, 1)
+    req = UpdateVertexRequest.new(1, 5, -5, 1, 1, 10)
     rs = RoomServices.new
     res = rs.update_vertex(req)
 
@@ -242,7 +248,7 @@ class ErTest < ActiveSupport::TestCase
 
   # check that returns correct response when from vertex not exist when connecting two vertices
   test 'from vertex not exist when connect vertex' do
-    req = ConnectVerticesRequest.new(5, 1)
+    req = ConnectVerticesRequest.new(-1, 1)
     rs = RoomServices.new
     resp = rs.connect_vertex(req)
 
@@ -252,7 +258,7 @@ class ErTest < ActiveSupport::TestCase
 
   # check that returns correct response when to vertex not exist when connecting two vertices
   test 'to vertex not exist when connect vertex' do
-    req = ConnectVerticesRequest.new(1, 5)
+    req = ConnectVerticesRequest.new(1, -1)
     rs = RoomServices.new
     resp = rs.connect_vertex(req)
 
@@ -260,6 +266,92 @@ class ErTest < ActiveSupport::TestCase
     assert_equal(resp.message, 'To vertex could not be found')
   end
 
+  test 'can get vertices' do
+    req = GetVerticesRequest.new(1)
+    rs = RoomServices.new
+    resp = rs.get_vertices(req)
+    assert_equal(resp.message, 'Vertices Obtained')
+    assert_not_nil(resp.data)
+  end
 
+  test 'get correct start and end vertex' do
+    req = GetVerticesRequest.new(3)
+    rs = RoomServices.new
+    resp = rs.get_vertices(req)
+    assert_equal(resp.data[0][:position], 'start')
+    assert_equal(resp.data[11][:position], 'end')
+  end
+  # TODO: Test get vertices fully
+
+  test 'can get rooms' do
+    req = GetRoomsRequest.new(login_for_test)
+    rs = RoomServices.new
+    resp = rs.get_rooms(req)
+    assert_equal(resp.message, 'Rooms obtained')
+  end
+
+  test 'can update vertex name' do
+    req = UpdateAttributeRequest.new(1, 'vertex1', nil, nil, nil)
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert(resp.success)
+    assert_equal(Vertex.find_by_id(1).name, 'vertex1')
+  end
+
+  test 'can update vertex time' do
+    req = UpdateAttributeRequest.new(1, nil, 1000, nil, nil)
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert(resp.success)
+    assert_equal(Vertex.find_by_id(1).estimatedTime, 1000)
+  end
+
+  test 'can update vertex clue' do
+    req = UpdateAttributeRequest.new(1, nil, nil, 'Look between objects above', nil)
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert(resp.success)
+    assert_equal(Vertex.find_by_id(1).clue, 'Look between objects above')
+  end
+
+  test 'can update vertex description' do
+    req = UpdateAttributeRequest.new(6, nil, nil, nil, 'Sudoku Puzzle')
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert(resp.success)
+    assert_equal(Vertex.find_by_id(6).description, 'Sudoku Puzzle')
+  end
+
+  test 'can update multiple attributes' do
+    req = UpdateAttributeRequest.new(6, 'Sudoku', 1000, nil, 'Sudoku Puzzle')
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert(resp.success)
+    vertex = Vertex.find_by_id(6)
+    assert_equal(vertex.name, 'Sudoku')
+    assert_equal(vertex.estimatedTime, 1000)
+    assert_equal(vertex.description, 'Sudoku Puzzle')
+  end
+
+  test 'wont update vertex with no attributes given' do
+    req = UpdateAttributeRequest.new(6, nil, nil, nil, nil)
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert_equal(resp.message, 'Incorrect vertex attributes given')
+  end
+
+  test 'vertex does not exist when update attribute' do
+    req = UpdateAttributeRequest.new(9999, nil, nil, nil, nil)
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert_equal(resp.message, 'Vertex id not valid')
+  end
+
+  test 'nil id passed when update attribute' do
+    req = UpdateAttributeRequest.new(nil, nil, nil, nil, nil)
+    rs = RoomServices.new
+    resp = rs.update_attribute(req)
+    assert_equal(resp.message, 'Vertex id not valid')
+  end
 end
 # rubocop:enable Metrics/ClassLength

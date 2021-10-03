@@ -11,6 +11,11 @@ require './app/Services/remove_vertex_request'
 require './app/Services/remove_vertex_response'
 require './app/Services/update_vertex_request'
 require './app/Services/update_vertex_response'
+require './app/Services/services_helper'
+require './app/Services/RoomSubsystem/Request/get_vertices_request'
+require './app/Services/RoomSubsystem/Response/get_vertices_response'
+require './app/Services/RoomSubsystem/Request/update_attribute_request'
+require './app/Services/RoomSubsystem/Response/update_attribute_response'
 
 # rubocop:disable Metrics/ClassLength
 module Api
@@ -19,48 +24,67 @@ module Api
     # Controller that maps http requests to functions to execute
     class VertexController < ApplicationController
       protect_from_forgery with: :null_session
+      # class variable
+      @@room_service = RoomServices.new
+      # userService instance to be used for authorization
 
       # PUT request http://host:port/api/v1/vertex/vertex_id, json
       # @return [JSON object with a status code or error message]
       def update
-        # operation parameter tells what put operation should be done on vertex
-        operation = params[:operation]
-
-        case operation
-        when 'connection'
-          update_connection(params[:from_vertex_id], params[:to_vertex_id])
-        when 'transformation'
-          update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width], params[:height])
+        # checks if user is authorized
+        if authorise(request)
+          # operation parameter tells what put operation should be done on vertex
+          operation = params[:operation]
+          case operation
+          when 'connection'
+            update_connection(params[:from_vertex_id], params[:to_vertex_id])
+          when 'transformation'
+            update_transformation(params[:id], params[:pos_x], params[:pos_y], params[:width],
+                                  params[:height], params[:z_index])
+          when 'attribute'
+            update_attribute(params[:id], params[:name], params[:estimated_time], params[:clue],
+                             params[:description])
+          else
+            render json: { success: false, message: 'Operation does not exist' }, status: :bad_request
+          end
         else
-          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+          render json: { success: false, message: 'Unauthorized' }, status: 401
         end
       end
 
+      # used as update method that does transformation updates
       # @param [ActionController::Parameters] id
       # @param [ActionController::Parameters] pos_x
       # @param [ActionController::Parameters] pos_y
       # @param [ActionController::Parameters] width
       # @param [ActionController::Parameters] height
+      # @param [ActionController::Parameters] z_index
       # @return JSON
-      def update_transformation(id, pos_x, pos_y, width, height)
-        # used as update method that does transformation updates
-        # todo remake the tests, and add extra ones
-        if id.nil? || pos_y.nil? || pos_x.nil? || width.nil? || height.nil?
+      def update_transformation(id, pos_x, pos_y, width, height, z_index)
+        if id.nil? || pos_y.nil? || pos_x.nil? || width.nil? || height.nil? || z_index.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
         end
-
-        req = UpdateVertexRequest.new(id, pos_x, pos_y, width, height)
-        serv = RoomServices.new
-        resp = serv.update_vertex(req)
-
-        unless resp.success
-          render json: { status: 'FAILED', message: 'Vertex might not exist', data: resp }, status: :ok
-          return
-        end
-        render json: { status: 'SUCCESS', message: 'Vertex updates', data: resp }, status: :ok
+        req = UpdateVertexRequest.new(id, pos_x, pos_y, width, height, z_index)
+        resp = @@room_service.update_vertex(req)
+        render json: { success: resp.success, message: resp.message }, status: :ok
       rescue StandardError
-        render json: { status: 'FAILED', message: 'Vertex might not exist' }, status: :bad_request
+        render json: { success: false, message: 'Vertex might not exist' }, status: :bad_request
+      end
+
+      # used as update method that does attribute updates
+      # @param [ActionController::Parameters] id
+      # @param [ActionController::Parameters] name
+      # @param [ActionController::Parameters] estimated_time
+      # @param [ActionController::Parameters] clue
+      # @param [ActionController::Parameters] description
+      # @return JSON
+      def update_attribute(id, name, estimated_time, clue, description)
+        req = UpdateAttributeRequest.new(id, name, estimated_time, clue, description)
+        resp = @@room_service.update_attribute(req)
+        render json: { success: resp.success, message: resp.message }, status: :ok
+      rescue StandardError
+        render json: { success: false, message: 'Server Error when Updating' }, status: :bad_request
       end
 
       # calls service to connect two vertices
@@ -82,32 +106,25 @@ module Api
 
           render json: { status: 'SUCCESS', message: 'Vertex connection updates', data: resp }, status: :ok
         end
-
       rescue StandardError
         render json: { status: 'FAILED', message: 'Internal Error' }, status: :bad_request
       end
 
-      def index
-        vertices = Vertex.all
-        render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
-      end
-
+      # returns all the vertices for a specific room id
       def show
-        id = params[:id]
-
-        if EscapeRoom.find_by(id: id).nil?
-          render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
-          return
+        if authorise(request)
+          req = GetVerticesRequest.new(params[:id])
+          serv = RoomServices.new
+          res = serv.get_vertices(req)
+          render json: { success: res.success, message: res.message, data: res.data }, status: :ok
+        else
+          render json: { success: 'FAILED', message: 'Unauthorized', data: nil }, status: 401
         end
-
-        vertices = Vertex.where(escape_room_id: id)
-        render json: { status: 'SUCCESS', message: 'Vertices', data: vertices }, status: :ok
-      rescue StandardError
-        render json: { status: 'FAILED', message: 'Room might not exist' }, status: :bad_request
       end
 
       # POST api/v1/vertex
       def create
+        # if authorise(request)
         type = params[:type]
 
         name = params[:name]
@@ -130,6 +147,8 @@ module Api
 
         roomid = params[:roomid]
 
+        blob_id = params[:blob_id]
+
         if name.nil? || graphicid.nil? || posy.nil? || posx.nil? || width.nil? || height.nil? || roomid.nil?
           render json: { status: 'FAILED', message: 'Ensure correct parameters are given' }, status: :bad_request
           return
@@ -145,15 +164,16 @@ module Api
             return
           end
 
-          req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description, roomid)
+          req = CreatePuzzleRequest.new(name, posx, posy, width, height, graphicid, estimated_time, description,
+                                        roomid, blob_id)
           res = serv.create_puzzle(req)
 
-        when 'Key'
-          req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid)
+        when 'Keys'
+          req = CreateKeyRequest.new(name, posx, posy, width, height, graphicid, roomid, blob_id)
           res = serv.create_key(req)
 
         when 'Container'
-          req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name)
+          req = CreateContainerRequest.new(posx, posy, width, height, graphicid, roomid, name, blob_id)
           res = serv.create_container(req)
 
         when 'Clue'
@@ -162,7 +182,7 @@ module Api
             return
           end
 
-          req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid)
+          req = CreateClueRequest.new(name, posx, posy, width, height, graphicid, clue, roomid, blob_id)
           res = serv.create_clue(req)
 
         else
@@ -171,14 +191,35 @@ module Api
         end
 
         render json: { status: 'SUCCESS', message: 'Vertex:', data: res }, status: :ok
+      #  else
+      #  render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+      #  end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end
       # end create
 
+      # delete api call http://host/api/v1/vertex/"+real_target_id
       def destroy
-        id = params[:id]
+        # if authorise(request)
+        operation = params[:operation]
+        case operation
+        when 'remove_vertex'
+          delete_vertex(params[:id])
+        when 'disconnect_vertex'
+          delete_connection(params[:from_vertex_id], params[:to_vertex_id])
+        else
+          render json: { status: 'FAILED', message: 'Operation does not exist' }, status: :bad_request
+        end
+        # else
+        # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        #  end
+      end
 
+      # @param [ActionController::Parameters] id
+      # @return JSON
+      def delete_vertex(id)
+        # if authorise(request)
         if id.nil?
           render json: { status: 'FAILED', message: 'Delete needs an id to be passed in' }, status: :bad_request
           return
@@ -189,11 +230,38 @@ module Api
         resp = serv.remove_vertex(req)
 
         unless resp.success
-          render json: { status: 'FAILED', message: 'Unspecified error', data: resp }, status: :ok
+          render json: { status: 'FAILED', message: 'Unable to remove vertex', data: resp }, status: :ok
           return
         end
 
         render json: { status: 'SUCCESS', message: 'Vertex:', data: "Deleted: #{id}" }, status: :ok
+      #  else
+      # render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+      # end
+      rescue StandardError
+        render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
+      end
+
+      # @param [ActionController::Parameters] from_vertex_id
+      # @param [ActionController::Parameters] to_vertex_id
+      # @return JSON
+      def delete_connection(from_vertex_id, to_vertex_id)
+        if authorise(request)
+          if from_vertex_id.nil? || to_vertex_id.nil?
+            render json: { status: 'FAILED', message: 'Pass in correct parameters' }, status: :bad_request
+            return
+          end
+          serv = RoomServices.new
+          req = DisconnectVerticesRequest.new(from_vertex_id, to_vertex_id)
+          resp = serv.disconnect_vertices(req)
+          unless resp.success
+            render json: { status: 'FAILED', message: resp.message }, status: :ok
+            return
+          end
+          render json: { status: 'SUCCESS', message: resp.message }, status: :ok
+        else
+          render json: { status: 'FAILED', message: 'Unauthorized' }, status: 401
+        end
       rescue StandardError
         render json: { status: 'FAILED', message: 'Unspecified error' }, status: :bad_request
       end

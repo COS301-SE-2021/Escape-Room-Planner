@@ -1,0 +1,29 @@
+#delete_but > button:hover {
+  background-color: #a31818;
+  color: black;
+}
+
+.modal-body {
+  border-radius: 8px;
+}
+
+.button_icons {
+  height: 22px;
+  width: 22px;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+#generate {
+  /*float: right;*/
+  height: 35px;
+  background: none;
+  outline: none;
+  border-radius: 5px;
+  border: 2px solid #3BA55D;
+  margin: 4px 8px 6px 8px;
+  color: #3BA55D;
+  text-align: center;
+  font-family: "UniSansThin", monospace;
+  font-weight: bold;
+}

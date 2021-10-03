@@ -1,1 +1,40 @@
-/* You can add global styles to this file, and also import other style files */
+@font-face {
+  font-family: UniSansThin;
+  src: url("./assets/fonts/uni-sans-thin.ttf");
+}
+
+:root {
+  --main-bg: #010409;
+  --sec-bg: #161b22;
+  --green: #49D091;
+}
+
+small {
+  color: #ff6666;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #010409;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #363B42;
+  border-radius: 10px;
+}
+
+body {
+  background: #010409 !important;
+  height: 100%;
+  /*font-family: "Roboto", sans-serif;*/
+  /*overflow-x: hidden;*/
+  font-family: "UniSansThin", monospace;
+  font-weight: bold;
+}
+
+.navbar {
+  background: #161b22;
+}

@@ -5,3 +5,134 @@ one:
 two:
   from_vertex_id: 1
   to_vertex_id: 3
+
+three:
+  from_vertex_id: 3
+  to_vertex_id: 5
+
+four:
+  from_vertex_id: 5
+  to_vertex_id: 4
+
+five:
+  from_vertex_id: 4
+  to_vertex_id: 6
+
+#For illegal move tests
+  #key to key test
+six:
+  from_vertex_id: 700
+  to_vertex_id: 701
+
+  #key to puzzle test
+seven:
+  from_vertex_id: 702
+  to_vertex_id: 703
+
+  #container to puzzle test
+eight:
+  from_vertex_id: 704
+  to_vertex_id: 705
+
+  #container to container
+nine:
+  from_vertex_id: 706
+  to_vertex_id: 707
+
+  #puzzle to not container
+ten:
+  from_vertex_id: 708
+  to_vertex_id: 709
+
+  #puzzle to container
+eleven:
+  from_vertex_id: 710
+  to_vertex_id: 711
+
+#test with circle
+c1_to_c2:
+  from_vertex_id: 801
+  to_vertex_id: 802
+
+c2_to_c3:
+  from_vertex_id: 802
+  to_vertex_id: 803
+
+c3_to_c4:
+  from_vertex_id: 803
+  to_vertex_id: 804
+
+c4_to_c2:
+  from_vertex_id: 804
+  to_vertex_id: 802
+
+#complex graph
+k1_to_k3:
+  from_vertex_id: 901
+  to_vertex_id: 903
+
+k1_to_k2:
+  from_vertex_id: 901
+  to_vertex_id: 902
+
+k2_to_k4:
+  from_vertex_id: 902
+  to_vertex_id: 904
+
+k2_to_k5:
+  from_vertex_id: 902
+  to_vertex_id: 905
+
+k3_to_k6:
+  from_vertex_id: 903
+  to_vertex_id: 906
+
+k6_to_k7:
+  from_vertex_id: 906
+  to_vertex_id: 907
+
+k6_to_k8:
+  from_vertex_id: 906
+  to_vertex_id: 908
+
+k8_to_k9:
+  from_vertex_id: 908
+  to_vertex_id: 909
+
+k5_to_k10:
+  from_vertex_id: 905
+  to_vertex_id: 910
+
+k10_to_k11:
+  from_vertex_id: 910
+  to_vertex_id: 911
+
+k11_to_k12:
+  from_vertex_id: 911
+  to_vertex_id: 912
+
+k9_to_k12:
+  from_vertex_id: 909
+  to_vertex_id: 912
+
+
+#GA graph edges
+G1:
+  from_vertex_id: 201
+  to_vertex_id: 202
+
+G2:
+  from_vertex_id: 201
+  to_vertex_id: 203
+
+G3:
+  from_vertex_id: 203
+  to_vertex_id: 205
+
+G4:
+  from_vertex_id: 205
+  to_vertex_id: 204
+
+G5:
+  from_vertex_id: 204
+  to_vertex_id: 206

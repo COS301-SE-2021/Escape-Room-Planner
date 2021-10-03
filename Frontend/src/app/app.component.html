@@ -1,27 +1,47 @@
-<nav class="navbar navbar-expand-sm navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-sm navbar-dark fixed-top">
   <div class="container-fluid d-lg-flex">
-    <a class="navbar-brand" routerLink="/">Escape Room Planner</a>
+    <a class="navbar-brand" routerLink="**" (click)="verifyJWT()">Escape Room Planner</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link"  routerLink="/public-escape-rooms">Public Rooms</a>
+        </li>
+      </ul>
       <ul class="navbar-nav flex-row flex-wrap ms-lg-auto">
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Account
           </a>
-          <ul class="dropdown-menu  dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
-            <li>
-              <p class="dropdown-item">You are not logged in!</p>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-              <a class="dropdown-item" routerLink="/login"> Login </a>
-            </li>
-            <li>
-              <a class="dropdown-item" routerLink="/signup"> Sign-Up </a>
-            </li>
-          </ul>
+          <div *ngIf="isUserValid(); then logged_in else logged_out"></div>
+          <ng-template #logged_out>
+            <ul class="dropdown-menu  dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <p class="dropdown-item">You are not logged in!</p>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" routerLink="/login"> Login </a>
+              </li>
+              <li>
+                <a class="dropdown-item" routerLink="/signup"> Sign-Up </a>
+              </li>
+            </ul>
+          </ng-template>
+          <!-- If user is logged in -->
+          <ng-template #logged_in>
+            <ul style="background: #363B42;" class="dropdown-menu  dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li>
+                <p class="dropdown-item">Hi, {{username}}</p>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <a class="dropdown-item" (click)="quit()" routerLink="/login"> Sign-Out </a>
+              </li>
+            </ul>
+          </ng-template>
         </li>
       </ul>
     </div>

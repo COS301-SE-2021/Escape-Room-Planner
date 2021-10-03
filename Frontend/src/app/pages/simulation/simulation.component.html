@@ -1,0 +1,161 @@
+<div  class="container">
+  <ng-template #help let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Help</h4>
+    </div>
+    <div  class="modal-body">
+      <div>
+        <h4 *ngIf="!isPublic; else controls">Manual:</h4>
+        <div class="m-2">
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">A</span>
+            <span class=" col-6">Move left</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">W</span>
+            <span class=" col-6">Move up</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">S</span>
+            <span class=" col-6">Move down</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">D</span>
+            <span class=" col-6">Move right</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">E</span>
+            <span class=" col-6">Interact with object</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">I</span>
+            <span class=" col-6">Open Invetory</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">F</span>
+            <span class=" col-6">Change between unlocked rooms</span>
+          </div>
+          <div class="row justify-content-evenly ml-5 p-2 custom-row">
+            <span class=" col-6">H</span>
+            <span class=" col-6">Open Help Menu</span>
+          </div>
+        </div>
+        <div *ngIf="!isPublic">
+          <h4>Auto Sim:</h4>
+          <div class="m-2">
+            <div class="row justify-content-evenly ml-5 p-2 custom-row">
+              <span class=" col-6">Q</span>
+              <span class=" col-6">Open auto-simulation menu</span>
+            </div>
+            <div class="row justify-content-evenly ml-5 p-2 custom-row">
+              <span class=" col-6">T</span>
+              <span class=" col-6">Stop auto-simulation menu</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #controls>
+        <h4>Controls:</h4>
+      </ng-template>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark custom-btn" (click)="modal.close('Save click')">exit</button>
+    </div>
+  </ng-template>
+</div>
+<div  class="container">
+  <ng-template #path let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title">Select Path</h4>
+    </div>
+    <div  class="modal-body">
+      <div id="pathBody">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark custom-btn" (click)="modal.close('Save click')">exit</button>
+    </div>
+  </ng-template>
+</div>
+<div  class="container">
+  <ng-template #escapeRoomCompleted let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Congratulations you have escaped the room!</h4>
+      <button type="button" class="btn-close-white" aria-label="Close" (click)="resetManualRoom()">
+        <span aria-hidden="true">X</span>
+      </button>
+    </div>
+    <div  class="modal-body">
+      <div class="align-content-center">
+        <h5>Estimated Time:</h5>
+        <h6>{{time_hour}}:{{time_min}}:{{time_sec}}</h6>
+      </div>
+      <div>
+        Would you like to reset the room and restart a manual simulation?
+        <button type="button" class="btn btn-outline-dark custom-btn" (click)="resetManualRoom()">Reset Room</button>
+      </div>
+      <div *ngIf="!isPublic">
+        Would you like to select a new path to automatically simulate?
+        <button type="button" class="btn btn-outline-dark custom-btn" (click)="selectNewPath()">Select New Path</button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark custom-btn" (click)="exitSimulation()">Exit Simulation</button>
+    </div>
+  </ng-template>
+</div>
+<div class="timer">
+  <div class="container-fluid bg-dark border border-3 border-secondary rounded">
+    <div class="row justify-content-evenly text-white text-center mt-2 mb-2">
+      <div class="col-4">
+        <h6>Time: </h6>
+      </div>
+      <div class="col-6">
+        <h6>{{time_hour}}:{{time_min}}:{{time_sec}}</h6>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="status_menu">
+  <div class="row">
+    <div class="col" [hidden]="status_menu_show">
+      <div class="container-fluid bg-dark border border-3 border-secondary rounded">
+        <div class="row">
+          <div class="col-2">
+            <div class="spinner-grow text-info mt-2 mb-1 ms-1" style="width: 1rem; height: 1rem;" role="status"></div>
+          </div>
+          <div class="col-10 text-white mt-2 mb-1">
+            <h6>{{status_menu_text}}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col" [hidden]="message_menu_show">
+      <div class="container-fluid bg-dark border border-3 border-secondary rounded">
+        <div class="row">
+          <div class="col text-white mt-2 mb-1 ms-1">
+            <h6>{{message_menu_text}}</h6>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="inventory" [hidden]="inventory_menu">
+  <div class="container-fluid bg-dark border border-3 border-secondary rounded text-white text-center">
+    <h2 class=" border-bottom border-secondary">Inventory</h2>
+    <div #inventory>
+      <div class="row justify-content-evenly mt-2 mb-2">
+        <div class="col-2" name="inventory_menu"></div>
+        <div class="col-2" name="inventory_menu"></div>
+        <div class="col-2" name="inventory_menu"></div>
+        <div class="col-2" name="inventory_menu"></div>
+        <div class="col-2" name="inventory_menu"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

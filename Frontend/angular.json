@@ -24,13 +24,17 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "src/assets/", "output": "/assets/" },
+              { "glob": "favicon.ico", "input": "/src", "output": "/" },
+              { "glob": "**/*", "input": "./node_modules/mxgraph/javascript/src", "output": "/assets/mxgraph" }
             ],
             "styles": [
               "src/styles.css"
             ],
             "scripts": [
-              "./node_modules/leader-line/leader-line.min.js"
+              "./node_modules/leader-line/leader-line.min.js",
+              "node_modules/mxgraph/javascript/mxClient.js"
             ]
           },
           "configurations": {
@@ -38,8 +42,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -64,7 +68,7 @@
               "namedChunks": true
             }
           },
-          "defaultConfiguration": "production"
+          "defaultConfiguration": "development"
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -73,8 +77,7 @@
               "browserTarget": "NewEscapeRoomPlanner:build:production"
             },
             "development": {
-              "browserTarget": "NewEscapeRoomPlanner:build",
-              "proxyConfig": "src/proxy.conf.json"
+              "browserTarget": "NewEscapeRoomPlanner:build"
             }
           },
           "defaultConfiguration": "development"

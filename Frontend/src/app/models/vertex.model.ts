@@ -11,8 +11,12 @@ export class Vertex {
   private _width: number;
   private _height: number;
   private _graphic_id: string;
+  private _estimated_time: number;
+  private _z_index: number;
   private _deleted: boolean; // a flag to see if the vertex was deleted in the current session
+  private _completed: boolean;
   private _connections: any[] = [];
+  private previous_connections: any[] = [];
   private _connected_lines: any[] = [];
   private _responsible_lines: any[] = [];
 
@@ -24,7 +28,9 @@ export class Vertex {
               pos_y: number,
               width: number,
               height: number,
-              graphic_id: string) {
+              graphic_id: string,
+              estimated_time: number,
+              z_index: number) {
       this._local_id = local_id;
       this._id = id;
       this._name = name;
@@ -34,7 +40,10 @@ export class Vertex {
       this._width = width;
       this._height = height;
       this._graphic_id = graphic_id;
+      this._estimated_time = estimated_time;
       this._deleted = false; // default is false since user would need to create the vertex or it comes from db
+      this._completed = false;
+      this._z_index = z_index;
   }
 
 
@@ -110,6 +119,21 @@ export class Vertex {
     this._graphic_id = value;
   }
 
+  get estimated_time(): number {
+    return this._estimated_time;
+  }
+
+  set estimated_time(value: number) {
+    this._estimated_time = value;
+  }
+
+  set z_index(value: number) {
+    this._z_index = value;
+  }
+  get z_index(): number {
+    return this._z_index;
+  }
+
   /*
     returns true is deleted flag is not set
   */
@@ -126,12 +150,17 @@ export class Vertex {
 
   //add connections to vertex
   public addConnection(to_vertex: number){
-    this._connections.push(to_vertex);
+    this._connections.unshift(to_vertex);
+  }
+
+  //add connections to vertex
+  public addPreviousConnection(to_vertex: number){
+    this.previous_connections.push(to_vertex);
   }
 
   //add connected lines from this vertex
   public addConnectedLine(line_index: number){
-    this._connected_lines.push(line_index);
+    this._connected_lines.unshift(line_index);
   }
 
   //add connected lines from another vertex to this vertex
@@ -142,6 +171,11 @@ export class Vertex {
   //gets all connections from this vertex
   public getConnections(){
     return this._connections;
+  }
+
+  //gets all previous connections from this vertex
+  public getPreviousConnections(){
+    return this.previous_connections;
   }
 
   //gets all line indices from this vertex
@@ -159,6 +193,11 @@ export class Vertex {
     if(this._connections.length > index)  this._connections.splice(index, 1);
   }
 
+  //removes a connection from previous vertex to this vertex
+  public removePreviousConnection(index: number){
+    if(this.previous_connections.length > index)  this.previous_connections.splice(index, 1);
+  }
+
   //removes connected lines from this vertex to next
   public removeConnectedLine(index: number){
     if(this._connected_lines.length > index)  this._connected_lines.splice(index, 1);
@@ -168,4 +207,17 @@ export class Vertex {
   public removeResponsibleLine(index: number){
     if(this._responsible_lines.length > index) this._responsible_lines.splice(index, 1);
   }
+
+  public isCompleted(){
+    return this._completed;
+  }
+
+  public toggleCompleted(){
+    this._completed = true;
+  }
+
+  public  resetCompleted(){
+    this._completed = false;
+  }
+
 }

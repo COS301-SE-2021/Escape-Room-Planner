@@ -40,6 +40,11 @@ jobs:
       run: |
         sudo apt-get -yqq install libpq-dev
     
+    - name: Remove  Gemfile.lock
+      run: |
+        sudo rm Gemfile.lock
+      if: github.event.pull_request.base.ref == 'master' || (contains(github.ref, 'master') && github.event_name == 'push')
+    
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -61,3 +66,23 @@ jobs:
         bundle exec rake db:create
         bundle exec rake db:migrate
         bundle exec rake test
+        
+    - name: Deploy API to heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        working-directory: Backend
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        appdir: "Backend"
+      if: contains(github.ref, 'master') && github.event_name == 'push'
+      
+    - name: Deploy GA to heroku
+      uses: akhileshns/heroku-deploy@v3.12.12
+      with:
+        working-directory: Backend
+        heroku_api_key: ${{ secrets.HEROKU_API_KEY_GA }}
+        heroku_app_name: ${{ secrets.HEROKU_APP_NAME_GA }}
+        heroku_email: ${{ secrets.HEROKU_EMAIL_GA }}
+        appdir: "Backend"
+      if: contains(github.ref, 'master') && github.event_name == 'push'

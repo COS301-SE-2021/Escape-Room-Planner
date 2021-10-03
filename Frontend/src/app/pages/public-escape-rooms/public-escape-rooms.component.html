@@ -1,0 +1,28 @@
+<div class="main_div">
+  <div class="container-fluid">
+    <div class="row search">
+      <div class="col-sm-8 col-centered">
+        <div class="searcher">
+          <input #attribute type="text" style="font-size:24px;" class="form-control" name="attribute_search" placeholder="Search for a room">
+          <button class="btn btn-primary" (click)="searchRooms(attribute.value)"><em class="fa fa-search"></em></button>
+        </div>
+      </div>
+      <div class="col-sm-2 the-drop">
+        <div class="dropdown">
+          <button  class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+            Filter Rooms
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" (click)="filterRooms('rating', rating_a, best_time_a)" #rating_a>Rating</a></li>
+            <li><a class="dropdown-item" (click)="filterRooms('best_time', best_time_a, rating_a)" #best_time_a>Best Time</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid" #escape_room_cards>
+  </div>
+</div>
+
+
