@@ -244,7 +244,16 @@ class RoomServices
     @response = if user.nil?
                   GetRoomsResponse.new(false, 'User can not be found', nil)
                 else
-                  data = EscapeRoom.select(:id, :name).where(user_id: decoded_token['id'])
+                  public_room = EscapeRoom.joins(:public_room).where(user_id: decoded_token['id'])
+                  data = EscapeRoom.select(:id, :name).where(user_id: decoded_token['id']).map do |room|
+                    is_public = true
+                    is_public = false if public_room.find_by(id: room.id).nil?
+                    {
+                      id: room.id,
+                      name: room.name,
+                      is_public: is_public
+                    }
+                  end
                   GetRoomsResponse.new(true, 'Rooms obtained', data)
                 end
   rescue StandardError => e
@@ -291,5 +300,35 @@ class RoomServices
   rescue StandardError => error
     puts error
     UpdateAttributeResponse.new(false, 'Error occurred while updating vertex attributes')
+  end
+
+  # get room images needed
+  def room_images(request)
+    room_images = RoomImage.select(
+      :id,
+      :pos_x,
+      :pos_y,
+      :width,
+      :height,
+      :blob_id
+    ).where(escape_room_id: request.escape_room_id)
+
+    return GetRoomImagesResponse.new(false, 'Could not get rooms', nil) if room_images.nil?
+
+    user = User.find_by_id(EscapeRoom.find_by_id(request.escape_room_id).user_id)
+    data = room_images.map do |k|
+      blob_url = if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
+                   Rails.application.routes.url_helpers.polymorphic_url(
+                     user.graphic.blobs.find_by_id(k.blob_id), host: ENV.fetch('BLOB_HOST', 'localhost:3000')
+                   )
+                 else
+                   './assets/images/room1.png'
+                 end
+      { room_image: k,
+        src: blob_url }
+    end
+    GetRoomImagesResponse.new(true, 'Room Images Obtained', data)
+  rescue StandardError
+    GetRoomImagesResponse.new(false, 'Could not get room images', nil)
   end
 end

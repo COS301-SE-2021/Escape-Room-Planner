@@ -1,0 +1,108 @@
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 0.8; /* Firefox */
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.main_div{
+  position: relative;
+  top: 56px;
+}
+
+.search {
+  background: #161b22;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  height: 45px;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.searcher {
+  display: flex;
+  flex-direction: row;
+  padding: 2px;
+  height: 90%;
+  margin: 2px;
+}
+
+.searcher input {
+  flex-grow: 2;
+  padding-left: 10px;
+  background: #010409;
+  color: #ffffff;
+  border: none !important;
+  text-indent: 2px;
+}
+
+.searcher button {
+  width: 60px;
+}
+
+.dropdown-toggle {
+  height: 35px;
+  margin: 5px;
+  width: 80%;
+  background: #3BA55D;
+  font-weight: bold;
+}
+
+.dropdown-menu {
+  width: 80%;
+  background: #161b22;
+  padding: 5px;
+}
+
+.dropdown-item:hover {
+  color: #3BA55D;
+  background: none;
+}
+
+.dropdown-item {
+  color: white;
+  margin: 5px;
+}
+
+.the-drop {
+  margin-left: -230px;
+}
+
+.play-button {
+  background: #1A73E8;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.card-body {
+  background: #161b22;
+}
+
+.the-background {
+  background: #161b22;
+}
+
+.card-header {
+  background: #161b22;
+  border-bottom: 2px;
+}
+
+.card-header h5 {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.card-title {
+  color: #3BA55D;
+  font-weight: bold;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  background: #198754;
+}
