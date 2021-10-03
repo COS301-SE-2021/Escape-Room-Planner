@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PublicEscapeRoomsComponent } from './public-escape-rooms.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('PublicEscapeRoomsComponent', () => {
   let component: PublicEscapeRoomsComponent;
@@ -8,7 +10,13 @@ describe('PublicEscapeRoomsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PublicEscapeRoomsComponent ]
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule
+      ],
+      declarations: [
+        PublicEscapeRoomsComponent
+      ]
     })
     .compileComponents();
   });
