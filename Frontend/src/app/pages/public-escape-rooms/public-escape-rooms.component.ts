@@ -183,12 +183,12 @@ export class PublicEscapeRoomsComponent implements OnInit {
       this.renderer.addClass(inner_col[i], 'col-5');
     }
     // add col values
-    let min = ~~(best_time/60);
-    let sec = best_time%60;
-    if(sec < 10)
-      this.renderer.appendChild(inner_col[0], this.renderer.createText(String(min)+":0"+String(sec)));
+    let min = ~~(best_time / 60);
+    let sec = best_time % 60;
+    if (sec < 10)
+      this.renderer.appendChild(inner_col[0], this.renderer.createText(String(min) + ":0" + String(sec)));
     else
-      this.renderer.appendChild(inner_col[0], this.renderer.createText(String(min)+":"+String(sec)));
+      this.renderer.appendChild(inner_col[0], this.renderer.createText(String(min) + ":" + String(sec)));
     this.renderer.appendChild(inner_col[1], this.renderer.createText(String(rating)));
     this.renderer.appendChild(inner_col[2], this.renderer.createText('Best Time'));
     this.renderer.appendChild(inner_col[3], this.renderer.createText('Rating'));
@@ -249,10 +249,10 @@ export class PublicEscapeRoomsComponent implements OnInit {
   }
 
   getRoomObjects(id: number) {
-    this.httpClient.get<any>(environment.api + '/api/v1/room_image/' + id, {"headers": this.headers}).subscribe(
+    this.httpClient.get<any>(environment.api + '/api/v1/room_sharing/' + id, {"headers": this.headers}).subscribe(
       response => {
         this.roomService.resetRoom();
-        for (let room_image of response.data) {
+        for (let room_image of response.data_room_images) {
           this.roomService.addRoomImage(
             room_image.room_image.id,
             room_image.room_image.pos_x,
@@ -262,53 +262,43 @@ export class PublicEscapeRoomsComponent implements OnInit {
             room_image.src
           );
         }
-
-        //http request to rails api
-        this.httpClient.get<any>(environment.api + "/api/v1/vertex/" + id, {"headers": this.headers}).subscribe(
-          response => {
-            this.vertexService.reset_array();
-            for (let vertex_t of response.data) {
-              //spawn objects out;
-              let vertex = vertex_t.vertex
-              let vertex_type = vertex_t.type;
-              let vertex_connections = vertex_t.connections;
-              let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
-                vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
-                vertex.description, vertex.clue, vertex.z_index);
-              if (vertex_t.position === "start") {
-                this.vertexService.start_vertex_id = current_id;
-              } else if (vertex_t.position === "end") {
-                this.vertexService.end_vertex_id = current_id;
-              }
-              // @ts-ignore
-              for (let vertex_connection of vertex_connections)
-                this.vertexService.addVertexConnection(current_id, vertex_connection);
-
-            }
-
-            // converts real connection to local connection
-            for (let vertex of this.vertexService.vertices) {
-              let vertex_connections = vertex.getConnections();
-
-              for (let vertex_connection of vertex_connections) {
-                // go through all the connections
-                // for each location locate the vertex with that real id and use its local id in place of real one
-                for (let vertex_to of this.vertexService.vertices) {
-                  if (vertex_to.id === vertex_connection) {
-                    this.vertexService.removeVertexConnection(vertex.local_id, vertex_connection);
-                    this.addLocalConnection(vertex.local_id, vertex_to.local_id);
-                    break; // so that not the whole array is traversed
-                  }
-                }
-              }
-            }
-            this.play(id);
-          },
-          //Error retrieving vertices message
-          error => {
-            console.log(error);
+        this.vertexService.reset_array();
+        for (let vertex_t of response.data_vertex) {
+          //spawn objects out;
+          let vertex = vertex_t.vertex
+          let vertex_type = vertex_t.type;
+          let vertex_connections = vertex_t.connections;
+          let current_id = this.vertexService.addVertex(vertex.id, vertex_type, vertex.name, vertex.graphicid,
+            vertex.posy, vertex.posx, vertex.width, vertex.height, vertex.estimatedTime,
+            vertex.description, vertex.clue, vertex.z_index);
+          if (vertex_t.position === "start") {
+            this.vertexService.start_vertex_id = current_id;
+          } else if (vertex_t.position === "end") {
+            this.vertexService.end_vertex_id = current_id;
           }
-        );
+          // @ts-ignore
+          for (let vertex_connection of vertex_connections)
+            this.vertexService.addVertexConnection(current_id, vertex_connection);
+
+        }
+
+        // converts real connection to local connection
+        for (let vertex of this.vertexService.vertices) {
+          let vertex_connections = vertex.getConnections();
+
+          for (let vertex_connection of vertex_connections) {
+            // go through all the connections
+            // for each location locate the vertex with that real id and use its local id in place of real one
+            for (let vertex_to of this.vertexService.vertices) {
+              if (vertex_to.id === vertex_connection) {
+                this.vertexService.removeVertexConnection(vertex.local_id, vertex_connection);
+                this.addLocalConnection(vertex.local_id, vertex_to.local_id);
+                break; // so that not the whole array is traversed
+              }
+            }
+          }
+        }
+        this.play(id);
       },
       error => {
         console.log(error);

@@ -69,17 +69,18 @@ module Api
         end
       end
 
+      # api/v1/room_sharing/id
       # get method that will get room_images and room vertex
       def show
-        room = PublicRoom.find_by_escape_room_id(params[:escape_room_id])
+        room = PublicRoom.find_by_escape_room_id(params[:id])
         if room.nil?
           render json: { success: false, message: 'Room needs to be public' }, status: :bad_request
           return
         end
         room_serv = RoomServices.new
-        req_vertex = GetVerticesRequest.new(params[:escape_room_id])
+        req_vertex = GetVerticesRequest.new(params[:id])
         res_vertex = room_serv.get_vertices(req_vertex)
-        req_room_images = GetRoomImagesRequest.new(params[:escape_room_id])
+        req_room_images = GetRoomImagesRequest.new(params[:id])
         res_room_images = room_serv.room_images(req_room_images)
         render json: { success_vertex: res_room_images.success, message_vertex: res_vertex.message,
                        data_vertex: res_vertex.data, success_room_images: res_room_images.success,

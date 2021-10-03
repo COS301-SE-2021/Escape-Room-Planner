@@ -327,7 +327,7 @@ class RoomServices
       { room_image: k,
         src: blob_url }
     end
-    GetRoomImagesResponse.new(true, 'Could not get rooms', data)
+    GetRoomImagesResponse.new(true, 'Room Images Obtained', data)
   rescue StandardError
     GetRoomImagesResponse.new(false, 'Could not get room images', nil)
   end
