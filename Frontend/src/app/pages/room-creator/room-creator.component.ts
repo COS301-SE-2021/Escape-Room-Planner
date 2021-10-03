@@ -1,4 +1,13 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {HttpHeaders} from "@angular/common/http";
 import {VertexService} from "../../services/vertex.service";
@@ -18,7 +27,7 @@ declare let LeaderLine: any;
   templateUrl: './room-creator.component.html',
   styleUrls: ['./room-creator.component.css'],
 })
-export class RoomCreatorComponent implements OnInit, AfterViewInit {
+export class RoomCreatorComponent implements OnInit, AfterViewInit, OnDestroy {
   public lastPos : number = 0; // used to populate new objects in line
   // @ts-ignore
   public escapeRooms: EscapeRoomArray; // array of escape rooms used to populate drop down
@@ -93,10 +102,12 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.test();
   }
 
-  // todo
+  ngOnDestroy(): void{
+    this.removeLeaderLines();
+  }
+
   //updates all lines connected to this vertex
   updateLine(vertex_index: number):void{
-    //TODO: only do this if the position changed ?
     let update_lines = this.vertexService.getLineIndex(vertex_index);
 
     for (let line_index of update_lines){
@@ -122,7 +133,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.is_disconnect = true;
   }
 
-  // todo
   // adds an object to drag on our 'canvas'
   addObjects(event:any): void{
     if (event.type === 'Room'){
@@ -138,27 +148,26 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     //spawns object on plane
   }
 
-  // todo
   //use get to get all the rooms stored in db
   getEscapeRooms(): void{
     //http request to rails api
     this.httpClient.get<EscapeRoomArray>(environment.api + "/api/v1/room/", {"headers": this.headers}).subscribe(
       response => {
-          //rendering <li> elements by using response
-          this.escapeRooms = response;
-          //render all the rooms
-          if(response.data[0] !== undefined) {
-            this.currentRoomId = response.data[0].id;
-            this.getVertexFromRoom();
-          }else{
-            this.currentRoomId = -1;
-            this._room_count = 0;
-            this.hasRooms = false;
-          }
-          for (let er of response.data){
-            this.renderNewRoom(er.id, er.name);
-            this._room_count++;
-          }
+        //rendering <li> elements by using response
+        this.escapeRooms = response;
+        //render all the rooms
+        if(response.data[0] !== undefined) {
+          this.currentRoomId = response.data[0].id;
+          this.getVertexFromRoom();
+        }else{
+          this.currentRoomId = -1;
+          this._room_count = 0;
+          this.hasRooms = false;
+        }
+        for (let er of response.data){
+          this.renderNewRoom(er.id, er.name, er.is_public);
+          this._room_count++;
+        }
       },
         //Render error if bad request
         error => {
@@ -172,7 +181,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // todo
   deleteRoom(event: any): void{
     //confirmation box on deleting room
     let confirmation = confirm("Are you sure you want to delete this room?");
@@ -186,7 +194,9 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
             document.querySelectorAll('[room-id="'+room_id+'"]')[0].remove();
             //checks if no more rooms
             this._room_count--;
+
             if(this._room_count === 0) {
+              this.removeLeaderLines();
               this.hasRooms = false;
             }else{
               this.currentRoomId = this.escapeRoomListRef?.nativeElement.children[0].children[0].children[0]
@@ -212,7 +222,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // todo
   changeRoom(event: any): void{
     //reset the zoom values
     // @ts-ignore
@@ -233,7 +242,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.solveComponent?.getInitialVertices();
   }
 
-  // todo
   //Get to get all vertex for room
   getVertexFromRoom(): void{
     this._target_start = undefined;
@@ -244,11 +252,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       // resets the vertices on room switch
       this.vertexService.reset_array();
       // resets the lines array
-      for (let line of this.lines) {
-        if (line !== null)
-          line.remove();
-      }
-      this.lines = [];
+      this.removeLeaderLines();
 
       // gets room images
       this.httpClient.get<any>(environment.api + '/api/v1/room_image/'+this.currentRoomId, {"headers": this.headers}).subscribe(
@@ -346,7 +350,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // todo
   // POST to create new room for a user
   createEscapeRoom(ai_enabled:boolean): void{
 
@@ -371,7 +374,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
       this.httpClient.post<any>(environment.api + "/api/v1/room/", createRoomBody, {"headers": this.headers}).subscribe(
         response => {
           //rendering <li> elements by using render function
-          this.renderNewRoom(response.data.id, response.data.name);
+          this.renderNewRoom(response.data.id, response.data.name, false);
           this.hasRooms = true;
           // @ts-ignore
           this.escapeRoomDivRef?.nativeElement.textContent = "";
@@ -435,7 +438,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   }
 
-  // todo
   isNewEscapeRoomNameValid():void{
     let patternRegEx: RegExp = new RegExp("([\\w\\d!@#$%^&\\*\\(\\)_\\+\\-=;'\"?>/\\\\|<,\\[\\].:{}`~]+( )?)+",'g');
     let regexResult = patternRegEx.exec(this.newEscapeRoomName);
@@ -443,35 +445,63 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.newEscapeRoomNameValid = regexResult !== null;
   }
 
-  // todo
   //just renders new room text in the list
-  renderNewRoom(id:number, name:string): void{
+  renderNewRoom(id:number, name:string, is_public: boolean): void{
     // <li><div><div> class="dropdown-item">ROOM 1</div><div><button></button><img></div></div></li>-->
     let newRoom = this.renderer.createElement('li');
     let newDivRow = this.renderer.createElement('div');
     let newDivCol1 = this.renderer.createElement('div');
     let newDivCol2 = this.renderer.createElement('div');
     let newButton = this.renderer.createElement('button');
+    let newUploadButton = this.renderer.createElement('button');
     let newImage = this.renderer.createElement('img');
+    let newUploadImage = this.renderer.createElement('img');
 
     //add src to <img>
     this.renderer.setAttribute(newImage, 'src', './assets/svg/trash-fill.svg');
     this.renderer.setAttribute(newImage,'escape-room-id',id.toString());
 
+
+    //add boostrap class to upload <button>
+    this.renderer.addClass(newUploadButton, 'btn');
+
+    let new_button_class, new_button_attr, img_src: string;
+    if (is_public){
+      new_button_attr = 'true';
+      new_button_class = 'btn-danger';
+      img_src = './assets/svg/cloud-arrow-down-fill.svg';
+    }
+    else{
+      new_button_attr = 'false';
+      new_button_class = 'btn-success';
+      img_src = './assets/svg/cloud-arrow-up-fill.svg';
+    }
+    //add src to upload <img>
+    this.renderer.setAttribute(newUploadImage, 'src', img_src);
+    this.renderer.setAttribute(newUploadImage,'escape-room-id',id.toString());
+
+    this.renderer.setAttribute(newUploadButton, 'is_public', new_button_attr);
+    this.renderer.addClass(newUploadButton, new_button_class);
+    this.renderer.appendChild(newUploadButton, newUploadImage);
+    this.renderer.setAttribute(newUploadButton,'escape-room-id',id.toString());
+    this.renderer.listen(newUploadButton,'click',() => this.uploadRoom(id, newUploadButton, newUploadImage));
+
     //add boostrap class to <button>
     this.renderer.addClass(newButton, 'btn');
     this.renderer.addClass(newButton, 'btn-dark');
+    this.renderer.addClass(newButton, 'me-1');
     this.renderer.appendChild(newButton, newImage);
     this.renderer.setAttribute(newButton,'escape-room-id',id.toString());
     this.renderer.listen(newButton,'click',(event) => this.deleteRoom(event));
 
     //add bootstrap class to <div col2>
-    this.renderer.addClass(newDivCol2, 'col-1');
+    this.renderer.addClass(newDivCol2, 'col-2');
     this.renderer.addClass(newDivCol2, 'text-end');
     this.renderer.appendChild(newDivCol2, newButton);
+    this.renderer.appendChild(newDivCol2, newUploadButton);
 
     //add bootstrap class to <div col1>
-    this.renderer.addClass(newDivCol1, 'col-11');
+    this.renderer.addClass(newDivCol1, 'col-10');
     this.renderer.addClass(newDivCol1, 'text-white');
     this.renderer.appendChild(newDivCol1, this.renderer.createText(name));
     this.renderer.setAttribute(newDivCol1,'escape-room-id',id.toString());
@@ -491,7 +521,67 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.escapeRoomListRef?.nativeElement, newRoom);
   }
 
-  // todo
+  // upload the room to public library
+  uploadRoom(escape_room_id: number, uploadButton: HTMLButtonElement, uploadImage: HTMLImageElement):void{
+    let is_public = uploadButton.getAttribute('is_public');
+
+    let uploadRoomBody = {
+      operation: 'add_public',
+      escape_room_id: escape_room_id
+    }
+
+    if (is_public === 'true'){
+      if (confirm('This action will remove your room from being viewed by public')){
+        //remove form public library
+        uploadRoomBody.operation = 'remove_public';
+
+        this.httpClient.delete<any>(environment.api + "/api/v1/room_sharing/0",
+                            {"headers": this.headers, "params" : uploadRoomBody})
+          .subscribe(
+          response =>{
+            if(response.success){
+              this.renderAlertError('Your room has been removed from public library');
+              this.renderer.setStyle(uploadButton, 'background-color', '#198754');
+              this.renderer.setStyle(uploadButton, 'border-color', '#198754');
+              this.renderer.setAttribute(uploadButton, 'is_public', 'false');
+              this.renderer.setAttribute(uploadImage, 'src', './assets/svg/cloud-arrow-up-fill.svg');
+            }
+          },
+          error => {
+            if (error.status === 401){
+              if (this.router.routerState.snapshot.url !== '/login' &&
+                this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+            }else {
+              console.error('There was an error removing your room from public library', error);
+              this.renderAlertError("Couldn't upload your room");
+            }
+          });
+      }
+    }else{ // make room public
+      this.httpClient.post<any>(environment.api + "/api/v1/room_sharing/", uploadRoomBody, {"headers": this.headers}).subscribe(
+        response =>{
+          if(response.success){
+            this.renderAlertError('Your room has been uploaded for everyone to see');
+            this.renderer.setStyle(uploadButton, 'background-color', '#dc3545');
+            this.renderer.setStyle(uploadButton, 'border-color', '#dc3545');
+            this.renderer.setAttribute(uploadButton, 'is_public', 'true');
+            this.renderer.setAttribute(uploadImage, 'src', './assets/svg/cloud-arrow-down-fill.svg');
+          }
+          else
+            this.renderAlertError('Your room was already uploaded');
+        },
+        error => {
+          if (error.status === 401){
+            if (this.router.routerState.snapshot.url !== '/login' &&
+              this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
+          }else {
+            console.error('There was an error uploading your room', error);
+            this.renderAlertError("Couldn't upload your room");
+          }
+      });
+    }
+  }
+
   //creates Vertex of type with scale at position x,y
   createVertex(inType: string, inName: string, inGraphicID: string, inPos_y: number,
                inPos_x: number, inWidth: number, inHeight: number, inEstimated_time: number,
@@ -560,7 +650,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // todo
   //used to spawn objects onto plane
   spawnObjects(local_id: number): void{
     let newP = this.renderer.createElement("p"); // create the name tag
@@ -607,9 +696,8 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.appendChild(this.escapeRoomDivRef?.nativeElement, newP);
     // Event listener
     this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
-    this.renderer.listen(newObject,"mouseup", (event) => this.updateVertex(event));
     this.renderer.listen(newObject,"click", (event) => this.vertexOperation(event));
-    this.renderer.listen(newObject,"mousemove", (event) => this.updateTag(newP, newObject));
+    this.renderer.listen(newObject, "change", (event) => this.updateTag(newP, newObject));
     // double click to show Attribute Menu
     this.renderer.listen(newObject,"dblclick", (event) => {
       this._is_single_click = false;
@@ -742,7 +830,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // todo
   //checks if in a operation for a vertex
   vertexOperation(event: any): void{
     this._is_single_click = true;
@@ -756,7 +843,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     },250);
   }
 
-  // todo
   //disconnects two vertex logically and visually
   disconnectConnection(event: any):void {
     let to_vertex_id = event.target.getAttribute('vertex-id');
@@ -776,7 +862,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.is_disconnect = false;
   }
 
-  // todo
   disconnectLines(line_index: number, from_vertex: number, to_vertex: number): void{
     let real_from_id = this.vertexService.vertices[from_vertex].id;
     this.vertexService.removeVertexPreviousConnection(to_vertex, from_vertex);
@@ -813,7 +898,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // todo
   //makes a connection between two vertices
   makeConnection(event: any): void{
     let to_vertex = event.target;
@@ -822,7 +906,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     let to_vertex_id = to_vertex.getAttribute('vertex-id');
 
     if(!this.vertexService.getVertexConnections(from_vertex_id).includes(+to_vertex_id)){
-      console.log("added a connection");
       let connection = {
         operation: 'connection',
         from_vertex_id: this.vertexService.vertices[from_vertex_id].id, //convert local to real id
@@ -860,7 +943,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   }
 
-  // todo
   private renderLines(from_vertex_id:number, from_vertex:any, to_vertex_id:number, to_vertex:any):void{
     this.lines.push(new LeaderLine(from_vertex, to_vertex, {dash: {animation: true}}));
     this.lines[this.lines.length - 1].color = 'rgba(0,0,0,1.0)';
@@ -870,12 +952,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.vertexService.addVertexConnectedLine(from_vertex_id, this.lines.length - 1);
     this.vertexService.addVertexResponsibleLine(to_vertex_id, this.lines.length - 1);
     //add event to listen to mouse event of only connected vertices
-    to_vertex.addEventListener("mousemove", () => this.updateLine(from_vertex_id));
-    from_vertex.addEventListener("mousemove", () => this.updateLine(to_vertex_id));
+    to_vertex.addEventListener("change", () => this.updateLine(from_vertex_id));
+    from_vertex.addEventListener("change", () => this.updateLine(to_vertex_id));
     // store on array
   }
 
-  // todo
   // shows a context menu when right button clicked over the vertex
   showContextMenu(event: any): void{
     this._target_vertex = event.target;
@@ -961,7 +1042,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // todo
   // updates the position on db from user moving it
   updateVertex(event: any): void{
     let targetVertex = event.target;
@@ -995,14 +1075,13 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
           if (this.router.routerState.snapshot.url !== '/login' &&
             this.router.routerState.snapshot.url !=='/signup') this.router.navigate(['login']).then(r => console.log('login redirect'));
         }else {
-          this.renderAlertError("There was an Error Updating Vertex Position"); // todo also try to reset the old position
+          this.renderAlertError("There was an Error Updating Vertex Position");
         }
       }
       //console.error('There was an error while updating the vertex', error)
     );
   }
 
-  // todo
   //DELETES VERTEX FROM BACKEND AND REMOVES ON SCREEN
   removeVertex(): void{
     let local_target_id = this._target_vertex.getAttribute('vertex-id');
@@ -1048,7 +1127,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
 
   checkSolvable(): void{
     if(this._target_start !== undefined && this._target_end !== undefined) {
-      // TODO: check if vertex been deleted
       // @ts-ignore
       this.solveComponent?.checkSolvable(this.vertexService.vertices[this._target_start].id,
         this.vertexService.vertices[this._target_end].id, this.currentRoomId);
@@ -1073,7 +1151,7 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.vertexService.start_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-primary')
       },
-      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      error => this.renderAlertError("Vertex could not update")
       //console.error('There was an error while updating the vertex', error)
     );
   }
@@ -1094,12 +1172,11 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         this.vertexService.end_vertex_id = local_id;
         this._target_vertex.setAttribute('class', 'resize-drag border border-3 border-info');
       },
-      error => this.renderAlertError("Vertex could not update") // todo also try to reset the old position
+      error => this.renderAlertError("Vertex could not update")
       //console.error('There was an error while updating the vertex', error)
     );
   }
 
-  // todo
   removeLines(vertex_id: number): void{
     let all_the_lines = this.vertexService.getLineIndex(vertex_id);
     let incoming_lines = this.vertexService.vertices[vertex_id].getResponsibleLines();
@@ -1149,12 +1226,20 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
     this.renderer.setAttribute(newButton, 'type', 'button');
     this.renderer.setAttribute(newButton, 'data-bs-dismiss', 'alert');
     this.renderer.setAttribute(newButton, 'aria-label', 'Close');
-
     // make it <div><strong><button>
     this.renderer.appendChild(newDiv,newButton);
     this.renderer.appendChild(newDiv, newStrong);
     // append to div alertElementError
+    this.renderer.listen(newButton, 'click', () => {setTimeout(()=> {this.updateAllLines()}, 300)});
     this.renderer.appendChild(this.alertElementErrorRef?.nativeElement, newDiv);
+    this.updateAllLines();
+  }
+
+  public updateAllLines() : void{
+    for (let line of this.lines){
+      if (line !== null)
+        line.position();
+    }
   }
 
   changeCurrentZ(i : number): void{
@@ -1262,7 +1347,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   // ZOOM test
-  // TODO: remove from prod
   scale(): void{
     let children = this.escapeRoomDivRef?.nativeElement.childNodes;
     //resize the main  block
@@ -1406,7 +1490,6 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
   }
 
   simulate(): void {
-    // TODO: change this to be called when simulate button is clicked
     if (this.vertexService.start_vertex_id === -1) {
       this.renderAlertError("Set start vertex");
     } else if (this.vertexService.end_vertex_id === -1) {
@@ -1436,16 +1519,15 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
                   int_array[i] = this.vertexService.convertToLocalID(string_array[i].split(","));
                 }
                 this.vertexService.possible_paths = int_array;
-                // swap to simulation
-                for (let line of this.lines) {
-                  if (line !== null)
-                    line.remove();
-                }
+
                 this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
-                if(this.roomService.outOfBounds.length === 0)
-                  this.router.navigate(['/simulation']).then(r => console.log('simulate redirect'));
-                else
+                if(this.roomService.outOfBounds.length === 0) {
+                  // swap to simulation
+                  this.removeLeaderLines();
+                  this.router.navigate(['/simulation'], {state: {isPublic: false, roomID: -1}}).then(r => console.log('simulate redirect'));
+                } else {
                   this.renderAlertError("Cannot simulate when objects are outside rooms");
+                }
 
               },
               error => {
@@ -1462,6 +1544,14 @@ export class RoomCreatorComponent implements OnInit, AfterViewInit {
         }
       );
     }
+  }
+
+  private removeLeaderLines():void{
+    for (let line of this.lines) {
+      if (line !== null)
+        line.remove();
+    }
+    this.lines = [];
   }
 }
 
@@ -1500,4 +1590,5 @@ interface EscapeRoomArray {
 interface EscapeRoom{
   id: number;
   name: string;
+  is_public: boolean;
 }

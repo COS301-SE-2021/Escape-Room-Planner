@@ -36,6 +36,7 @@ export class RoomService {
 
   //well set the vertex to room image
   RoomImageContainsVertex(vertices: Vertex[]){
+    this._outOfBounds = [];
     //deep copy of array
     let vertexArray = [...vertices];
     for(let room_image of this._room_images){

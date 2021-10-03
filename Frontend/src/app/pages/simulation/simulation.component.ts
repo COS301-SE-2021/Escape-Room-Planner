@@ -17,7 +17,9 @@ import { Inventory } from "../../models/simulation/inventory.model";
 import { Vertex } from "../../models/vertex.model";
 import {delay, min} from "rxjs/operators";
 import {NgbModal, ModalDismissReasons, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {environment} from "../../../environments/environment";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-simulation',
@@ -68,13 +70,21 @@ export class SimulationComponent implements OnInit, OnDestroy {
   @ViewChild("help") helpRef: NgbModal | undefined;
   @ViewChild("escapeRoomCompleted") escapeRoomCompletedRef: NgbModal | undefined;
 
+  //public simulation
+  public isPublic: boolean = false;
+  private escapeRoomID: number = -1;
 
-  constructor(private elementRef: ElementRef,  private renderer: Renderer2,
-              private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService, private modalService: NgbModal, private router:Router) {
+
+  constructor(private elementRef: ElementRef, private httpClient: HttpClient,  private renderer: Renderer2,
+              private ngZone: NgZone, private  roomService: RoomService,private vertexService: VertexService, private modalService: NgbModal, private router:Router, private route: ActivatedRoute) {
     this.rooms = [];
     this.current_room_index = 0;
     this.character_inventory = new Inventory();
     this.status_menu_show = false;
+    // @ts-ignore
+    this.isPublic = this.router.getCurrentNavigation()?.extras.state.isPublic || false;
+    // @ts-ignore
+    this.escapeRoomID = this.router.getCurrentNavigation()?.extras.state.roomID || -1;
   }
 
   init() {
@@ -135,20 +145,26 @@ export class SimulationComponent implements OnInit, OnDestroy {
     }else if(event.code === 'KeyI'){
       this.inventory_menu = !this.inventory_menu;
     }else if(event.code === 'KeyQ'){
-      this.movement.a = false;
-      this.movement.d = false;
-      this.movement.w = false;
-      this.movement.s = false;
-      if(!this.modalService.hasOpenModals())
-        this.selectPath(this.pathRef);
+      if(!this.isPublic)
+      {
+        this.movement.a = false;
+        this.movement.d = false;
+        this.movement.w = false;
+        this.movement.s = false;
+        if(!this.modalService.hasOpenModals())
+          this.selectPath(this.pathRef);
+      }
     }
     else if(event.code === 'KeyT')
     {
-      this.movement.a = false;
-      this.movement.d = false;
-      this.movement.w = false;
-      this.movement.s = false;
-      this.simulate_toggle = !this.simulate_toggle;
+      if(!this.isPublic)
+      {
+        this.movement.a = false;
+        this.movement.d = false;
+        this.movement.w = false;
+        this.movement.s = false;
+        this.simulate_toggle = !this.simulate_toggle;
+      }
     }
     else if(event.code === 'KeyH')
     {
@@ -287,8 +303,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.app.loader.onComplete.add(()=>{
         setTimeout(()=>{this.status_menu_show = true},1000);
         this.loadRooms();
-
-        this.help(this.helpRef);
+        setTimeout(()=>{ this.messageMenu('Press H for Help');}, 1500);
+        //this.help(this.helpRef);
       });
       //shows error when loading
       this.app.loader.onError.add((e) => {
@@ -596,8 +612,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
             this.objects['vertex' + connections].visible = true
           }
         }
-        if(this.vertexService.possible_paths[this.path_choice][this.current_path_index] === vertex.local_id)
-          this.current_path_index++;
+        if(!this.isPublic) {
+          if (this.vertexService.possible_paths[this.path_choice][this.current_path_index] === vertex.local_id)
+            this.current_path_index++;
+        }
         vertex.toggleCompleted();
         this.checkUnlockRoom(vertex.getConnections());
         if(vertex.local_id === this.vertexService.end_vertex_id){
@@ -605,6 +623,10 @@ export class SimulationComponent implements OnInit, OnDestroy {
           this.messageMenu("Escaped Escape Room!");
           this.character_lock = true;
           this.simulate_toggle = false;
+          if(this.isPublic)
+          {
+            this.sendBestTime(this.calculateTimeInSeconds())
+          }
           this.escapeRoomCompleted(this.escapeRoomCompletedRef);
         }
         //update time values
@@ -848,6 +870,39 @@ export class SimulationComponent implements OnInit, OnDestroy {
   {
     this.modalService.dismissAll();
     delay(5000);
-    this.router.navigate(['/escape-room']).then(() => location.reload());
+    if(this.isPublic)
+    {
+      this.router.navigate(['/public-escape-rooms']).then(() => location.reload)
+    }
+    else
+      this.router.navigate(['/escape-room']).then(() => location.reload());
+  }
+
+  private calculateTimeInSeconds(): number
+  {
+    let seconds = 0
+    seconds += this.hour * Math.pow(60, 2);
+    seconds += this.min * 60;
+    seconds += this.sec
+    return seconds;
+  }
+
+  private sendBestTime(bestTime: number)
+  {
+    let extra_data = {
+      escape_room_id: this.escapeRoomID,
+      best_time: bestTime,
+      operation: "set_best_time"
+    };
+    this.httpClient.put<any>(environment.api + "/api/v1/room_sharing/" + this.escapeRoomID, extra_data).subscribe(
+      response => {
+        if(response.success)
+          alert("New Record Made");
+      },
+      //Render error if bad request
+      error => {
+        console.log(error);
+      }
+    );
   }
 }
