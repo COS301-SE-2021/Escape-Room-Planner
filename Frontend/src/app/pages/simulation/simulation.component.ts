@@ -644,6 +644,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
 
   // timer for how long simulation takes
   timer(interval: number){
+    if(this.timer_id != undefined)
+      clearInterval(this.timer_id);
     this.timer_id = setInterval( () =>{
       this.sec++;
       if(this.sec >= 60){
