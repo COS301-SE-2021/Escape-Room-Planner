@@ -303,8 +303,8 @@ export class SimulationComponent implements OnInit, OnDestroy {
       this.app.loader.onComplete.add(()=>{
         setTimeout(()=>{this.status_menu_show = true},1000);
         this.loadRooms();
-
-        this.help(this.helpRef);
+        setTimeout(()=>{ this.messageMenu('Press H for Help');}, 1500);
+        //this.help(this.helpRef);
       });
       //shows error when loading
       this.app.loader.onError.add((e) => {
