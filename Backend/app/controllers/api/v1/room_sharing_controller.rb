@@ -13,6 +13,8 @@ require './app/Services/PublicRoomsSubsystem/Request/remove_public_room_request'
 require './app/Services/PublicRoomsSubsystem/Response/remove_public_room_response'
 require './app/Services/PublicRoomsSubsystem/Request/add_rating_request'
 require './app/Services/PublicRoomsSubsystem/Response/add_rating_response'
+require './app/Services/RoomSubsystem/Request/get_room_images.request'
+require './app/Services/RoomSubsystem/Response/get_room_images.response'
 
 module Api
   module V1
@@ -67,17 +69,24 @@ module Api
         end
       end
 
+      # get method that will get room_images and room vertex
       def show
-        room = PublicRoom.find_by(RoomID: params[:RoomID])
+        room = PublicRoom.find_by_escape_room_id(params[:escape_room_id])
         if room.nil?
-          render json: { status: 'Failed', message: 'Room needs to be public' }, status: :bad_request
+          render json: { success: false, message: 'Room needs to be public' }, status: :bad_request
           return
         end
-
-        req = GetVerticesRequest.new(params[:RoomID])
-        serv = RoomServices.new
-        res = serv.get_vertices(req)
-        render json: { success: res.success, message: res.message, data: res.data }, status: :ok
+        room_serv = RoomServices.new
+        req_vertex = GetVerticesRequest.new(params[:escape_room_id])
+        res_vertex = room_serv.get_vertices(req_vertex)
+        req_room_images = GetRoomImagesRequest.new(params[:escape_room_id])
+        res_room_images = room_serv.room_images(req_room_images)
+        render json: { success_vertex: res_room_images.success, message_vertex: res_vertex.message,
+                       data_vertex: res_vertex.data, success_room_images: res_room_images.success,
+                       message_room_images: res_room_images.message,
+                       data_room_images: res_room_images.data }, status: :ok
+      rescue StandardError
+        render json: { success: false, message: 'Error internally' }, status: 500
       end
 
       # put request to update operations

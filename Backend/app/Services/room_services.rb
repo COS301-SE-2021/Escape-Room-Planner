@@ -301,4 +301,34 @@ class RoomServices
     puts error
     UpdateAttributeResponse.new(false, 'Error occurred while updating vertex attributes')
   end
+
+  # get room images needed
+  def room_images(request)
+    room_images = RoomImage.select(
+      :id,
+      :pos_x,
+      :pos_y,
+      :width,
+      :height,
+      :blob_id
+    ).where(escape_room_id: request.escape_room_id)
+
+    return GetRoomImagesResponse.new(false, 'Could not get rooms', nil) if room_images.nil?
+
+    user = User.find_by_id(EscapeRoom.find_by_id(request.escape_room_id).user_id)
+    data = room_images.map do |k|
+      blob_url = if (k.blob_id != 0) && !ActiveStorageBlobs.find_by_id(k.blob_id).nil?
+                   Rails.application.routes.url_helpers.polymorphic_url(
+                     user.graphic.blobs.find_by_id(k.blob_id), host: ENV.fetch('BLOB_HOST', 'localhost:3000')
+                   )
+                 else
+                   './assets/images/room1.png'
+                 end
+      { room_image: k,
+        src: blob_url }
+    end
+    GetRoomImagesResponse.new(true, 'Could not get rooms', data)
+  rescue StandardError
+    GetRoomImagesResponse.new(false, 'Could not get room images', nil)
+  end
 end
