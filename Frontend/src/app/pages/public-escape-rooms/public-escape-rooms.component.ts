@@ -140,6 +140,7 @@ export class PublicEscapeRoomsComponent implements OnInit {
     let rating_slider = this.renderer.createElement('input');
     //
     let rating_p = this.renderer.createElement('p');
+    this.renderer.addClass(rating_p, 'mt-2');
     // set card-header bootstrap
     this.renderer.addClass(card_header, 'card-header');
     this.renderer.addClass(card_header, 'bg-dark');
@@ -249,6 +250,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
   }
 
   getRoomObjects(id: number) {
+    this.vertexService.start_vertex_id = -1;
+    this.vertexService.end_vertex_id = -1;
     this.httpClient.get<any>(environment.api + '/api/v1/room_sharing/' + id, {"headers": this.headers}).subscribe(
       response => {
         this.roomService.resetRoom();
@@ -312,12 +315,8 @@ export class PublicEscapeRoomsComponent implements OnInit {
   }
 
   play(id: number) {
-    let paths = {
-      operation: "ReturnPaths",
-      roomid: id
-    };
     this.roomService.RoomImageContainsVertex(this.vertexService.vertices);
-    if (this.roomService.outOfBounds.length === 0) {
+    if (this.roomService.outOfBounds.length === 0 && this.vertexService.start_vertex_id != -1 && this.vertexService.end_vertex_id != -1){
       this.router.navigate(['/simulation'], {
         state: {
           isPublic: true,

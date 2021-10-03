@@ -103,3 +103,6 @@
   font-weight: bold;
 }
 
+input[type=range]::-webkit-slider-runnable-track {
+  background: #198754;
+}
