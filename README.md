@@ -42,23 +42,12 @@ Five Stack
 <hr>
 
 ## Documentation
-### Demo 1
-* 📝 [SRS](https://www.overleaf.com/read/scwrrchtjrdv)
-### Demo 2
-* 📝 [SRS](https://www.overleaf.com/read/qycbxywmqbdk)
-* 📝 [Architectural Design](https://www.overleaf.com/read/frwpzvzjwpbf)
-### Demo 3
-* 📝 [SRS](https://www.overleaf.com/read/pfqdkhjsynhc)
-* 📝 [Architectural Design](https://www.overleaf.com/read/qfgwxdhnmzkb)
-* 📝 [User Manual](https://www.overleaf.com/read/xzvcgxtrxxhb)
-* 📝 [Installation Guide](https://www.overleaf.com/read/kccmqpkpxmgd)
-* 📝 [Coding Standards](https://www.overleaf.com/9221754327dhkbvtkktwhm)
-### Demo 4
-* 📝 [SRS](https://www.overleaf.com/read/yjhhhnvcgmmf)
-* 📝 [Architectural Design]()
-* 📝 [User Manual](https://www.overleaf.com/read/xzvcgxtrxxhb)
-* 📝 [Installation Guide](https://www.overleaf.com/read/chwkfxbsxsmf)
-* 📝 [Testing Policy](https://www.overleaf.com/read/mncvchsyhrth)
+* 📝 [SRS](https://drive.google.com/file/d/17SCru_KeIQuoqA97aMH_hQdQK0jowDeJ/view?usp=sharing)
+* 📝 [Architectural Design](https://drive.google.com/file/d/1xv86U8a0bN4zfceFk02DQwDDub2AdAlr/view?usp=sharing)
+* 📝 [User Manual](https://drive.google.com/file/d/1R5SJuwAO-UlHSyKgaJ0NrCFcMoP0v1tE/view?usp=sharing)
+* 📝 [Installation Guide](https://drive.google.com/file/d/1EHuypPFqC1401g1GWxkHRecqMRlg7By2/view?usp=sharing)
+* 📝 [Testing Policy](https://drive.google.com/file/d/1Y-_fakx9drgVgUQa1Wf57DxmyiQVFxLP/view?usp=sharing)
+* 📝 [Coding Standards](https://drive.google.com/file/d/1dW-juFNiy83iuv8u-fhmqO4K56MBu0vi/view?usp=sharing)
 ### Collections
 * 📂 [SRS Collection](https://www.overleaf.com/read/wkfykfynsmzm)
 * 📂 [Architectural Design Collection](https://www.overleaf.com/read/ctwwpzfmfpng)
